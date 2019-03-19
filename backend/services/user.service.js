@@ -1,6 +1,7 @@
 const mongoService = require('./mongo.service');
 
 const ObjectId = require('mongodb').ObjectId;
+var bcrypt = require('bcryptjs');
 
 module.exports = {
     query,
@@ -14,7 +15,7 @@ module.exports = {
 const usersCollection = 'users';
 
 function query() {
-    
+
 
     return mongoService.connect()
         .then(db => db.collection(usersCollection)
@@ -29,12 +30,14 @@ function login(credentials) {
 
     return mongoService.connect()
         .then(db => db.collection(usersCollection)
-            .findOne(credentials)
+            .findOne({email: credentials.email})
         )
         .then(user => {
             if (!user) return null;
-            delete user.password;
-            return user;
+            return bcrypt.compare(credentials.password, user.password,(err, res) => {
+                delete user.password;
+                return user;
+            });
         });
 }
 
@@ -54,7 +57,14 @@ function signup(user) {
         .then(db =>
             db.collection(usersCollection).findOne({ email: user.email })
                 .then(res => {
-                    if (!res) return db.collection(usersCollection).insertOne(user)
+                    if (!res) {
+                        return bcrypt.genSalt(10, function (err, salt) {
+                            bcrypt.hash(user.password, salt, (err, hash) => {
+                                user.password = hash;
+                                return db.collection(usersCollection).insertOne(user);
+                            });
+                        });
+                    }
                     else throw ('Username already taken');
                 }))
         .then(mongoRes => {
