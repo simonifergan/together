@@ -14,14 +14,12 @@ module.exports = {
 const usersCollection = 'users';
 
 function query() {
-    sortBy = {
-        username: 1
-    }
+    
 
     return mongoService.connect()
         .then(db => db.collection(usersCollection)
             .find({})
-            .sort(sortBy)
+            .sort()
             .toArray()
         );
 
@@ -51,10 +49,10 @@ function getById(id) {
 }
 
 function signup(user) {
-    console.log(user.username)
+    console.log(user.email)
     return mongoService.connect()
         .then(db =>
-            db.collection(usersCollection).findOne({ username: user.username })
+            db.collection(usersCollection).findOne({ email: user.email })
                 .then(res => {
                     if (!res) return db.collection(usersCollection).insertOne(user)
                     else throw ('Username already taken');
