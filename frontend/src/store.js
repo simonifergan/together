@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import TripStore from'./TripStore'
-import UserStore from'./UserStore'
+import TripStore from '@/stores/TripStore'
+import UserStore from '@/stores/UserStore'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  strict: true,
   state: {
 
   },

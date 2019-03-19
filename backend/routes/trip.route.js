@@ -1,6 +1,7 @@
 const tripService = require('../services/trip.service');
 
 const BASE_URL = '/api/trip'
+
 module.exports = (app) => {
     // Query trips' list
     app.get(BASE_URL, (req, res) => {
@@ -24,7 +25,7 @@ module.exports = (app) => {
     }
 
     // Delete by Id
-    app.delete(`${BASE_URL}/:tripId`, checkAdmin, (req, res) => {
+    app.delete(`${BASE_URL}/:tripId`, (req, res) => {
 
         const { tripId } = req.params;
         tripService.remove(tripId)
@@ -34,16 +35,16 @@ module.exports = (app) => {
     });
 
     // Add a new trip
-    app.post(BASE_URL, checkAdmin, (req, res) => {
+    app.post(BASE_URL, (req, res) => {
         const trip = req.body;
         tripService.add(trip)
             .then(trip => {
                 res.json(trip);
             })
     });
-    
+
     // Update existing trip
-    app.put(`${BASE_URL}/:tripId`, checkAdmin, (req, res) => {
+    app.put(`${BASE_URL}/:tripId`, (req, res) => {
         const trip = req.body;
         tripService.update(trip)
             .then((updatedToy) => {

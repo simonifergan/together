@@ -1,7 +1,6 @@
 const mongoService = require('./mongo.service');
-
 const ObjectId = require('mongodb').ObjectId;
-var bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 
 module.exports = {
     query,
@@ -32,12 +31,13 @@ function login(credentials) {
         .then(db => db.collection(usersCollection)
             .findOne({ email: credentials.email })
         )
-        .then(user => {
+        .then(async user => {
             if (!user) return null;
-            return bcrypt.compare(credentials.password, user.password, (err, res) => {
+            const isAuth = await bcrypt.compare(credentials.password, user.password)
+            if (isAuth) {
                 delete user.password;
                 return user;
-            });
+            } else return null;
         });
 }
 
@@ -51,27 +51,53 @@ function getById(id) {
         });
 }
 
-function signup(user) {
-    console.log(user.email)
-    return mongoService.connect()
-        .then(db =>
-            db.collection(usersCollection).findOne({ email: user.email })
-                .then(res => {
-                    if (!res) {
-                        return bcrypt.genSalt(10, (err, salt) => {
-                            bcrypt.hash(user.password, salt, (err, hash) => {
-                                user.password = hash;
-                                return db.collection(usersCollection).insertOne(user);
-                            });
-                        });
-                    }
-                    else throw ('Username already taken');
-                }))
-        .then(mongoRes => {
+async function signup(user) {
+    const db = await mongoService.connect();
+    const userInDB = await db.collection(usersCollection).findOne({ email: user.email })
+    if (!userInDB) {
+        try {
+            const salt = await bcrypt.genSalt(10)
+            const hashedPassword = await bcrypt.hash(user.password, salt);
+            user.password = hashedPassword;
+            const {insertedId} = await db.collection(usersCollection).insertOne(user);
+            user._id = insertedId;
             delete user.password;
             return user;
-        });
+        } catch {
+            throw ('Fail');
+        }
+    }
+    else throw ('Username already taken');
+
+
+
 }
+// async function signup(user) {
+//     console.log(user.email)
+//     return mongoService.connect()
+//         .then(db =>
+//             db.collection(usersCollection).findOne({ email: user.email })
+//                 .then(async res => {
+//                     if (!res) {
+//                         try {
+
+//                             const salt = await bcrypt.genSalt(10)
+//                             const hashedPassword = await bcrypt.hash(user.password, salt);
+//                             user.password = hashedPassword;
+//                             console.log('hashish', hashedPassword)
+//                             return db.collection(usersCollection).insertOne(user);
+//                         } catch {
+//                             throw ('Fail');
+//                         }
+
+//                     }
+//                     else throw ('Username already taken');
+//                 }))
+//         .then(mongoRes => {
+//             delete user.password;
+//             return user;
+//         });
+// }
 
 function update(user) {
     const strId = user._id;

@@ -2,7 +2,7 @@
   <section class="home">
     <h2>Home</h2>
 
-    <trip-list v-if="trips" :trips="trips" />
+    <trip-list :trips="trips" />
   </section>
 </template>
 
