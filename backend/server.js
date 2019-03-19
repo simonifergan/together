@@ -10,7 +10,7 @@ const session = require('express-session');
 
 
 // Import Routes
-const toyRoute = require('./routes/toy.route.js')
+const proposalRoute = require('./routes/proposal.route.js')
 const userRoute = require('./routes/user.route.js')
 const reviewRoute = require('./routes/review.route.js')
 const chatService = require('./services/chat.service.js')
@@ -32,7 +32,7 @@ app.use(session({
 
 app.use(express.static('public'));
 // Use routes
-toyRoute(app);
+proposalRoute(app);
 userRoute(app);
 reviewRoute(app);
 
@@ -41,7 +41,7 @@ app.get('/', (req, res) => {
 })
 
 // Init sockets
-const server = app.listen(PORT, () => console.log(`Toy app listening on port ${PORT}`))
+const server = app.listen(PORT, () => console.log(`Bridge app listening on port ${PORT}`))
 const io = require('socket.io')(server);
 
 // Use socket services
