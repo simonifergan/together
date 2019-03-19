@@ -34,6 +34,7 @@ export default {
         },
         async deleteTrip({ commit }, { trip }) {
             const msg = await TripService.deleteTrip(trip)
+            console.log(msg);
             commit({ type: 'deleteTrip', trip })
         }
     }
