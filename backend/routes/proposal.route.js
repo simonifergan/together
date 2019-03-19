@@ -1,6 +1,6 @@
 const proposalService = require('../services/proposal.service');
 
-const BASE_URL = '/proposal'
+const BASE_URL = '/api/proposal'
 module.exports = (app) => {
     // Query proposals' list
     app.get(BASE_URL, (req, res) => {
