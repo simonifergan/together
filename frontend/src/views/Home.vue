@@ -2,7 +2,7 @@
   <section class="home">
     <h2>Home</h2>
 
-    <trip-list :trips="trips" />
+    <trip-list v-if="trips" :trips="trips" />
   </section>
 </template>
 
@@ -21,7 +21,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispath({type: 'loadTrips'})
+    this.$store.dispatch({type: 'loadTrips'})
   }
 }
 </script>
