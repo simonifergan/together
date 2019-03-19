@@ -12,6 +12,12 @@ import TripPreview from '@/components/TripPreview'
 
 export default {
   name: 'trip-list',
+  props: {
+    trips: {
+      type: Array,
+      required: true
+    }
+  },
   components: {
     TripPreview
   }
