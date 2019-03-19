@@ -1,15 +1,16 @@
 const userService = require('../services/user.service');
 
+const BASE = '/api';
 
 module.exports = (app) => {
     // all users
-    app.get('/user', (req, res) => {
+    app.get(`${BASE}/user`, (req, res) => {
         userService.query()
             .then(users => res.json(users))
             .catch(err => res.end(err));
     });
 
-    app.get('/user/:userId', (req, res) => {
+    app.get(`${BASE}/user/:userId`, (req, res) => {
         const {userId} = req.params;
         userService.getById(userId)
         .then(user => {
@@ -18,7 +19,7 @@ module.exports = (app) => {
         })
     });
 
-    app.post('/login', (req, res) => {
+    app.post(`${BASE}/login`, (req, res) => {
         const credentials = req.body;
         userService.login(credentials)
             .then((user) => {
@@ -29,7 +30,7 @@ module.exports = (app) => {
             .catch(err => res.end(err));
     });
 
-    app.post('/signup', (req, res) => {
+    app.post(`${BASE}/signup`, (req, res) => {
         const newUser = req.body;
         userService.signup(newUser)
             .then(user => {
@@ -39,7 +40,7 @@ module.exports = (app) => {
             .catch(err => res.status(409).end());
     });
 
-    app.post('/logout', (req, res) => {
+    app.post(`${BASE}/logout`, (req, res) => {
         req.session.user = null;
         res.end();
     });

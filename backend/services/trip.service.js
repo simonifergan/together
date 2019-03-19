@@ -10,7 +10,7 @@ module.exports = {
     remove
 }
 
-const proposalsCollection = 'proposals';
+const tripsCollection = 'trips';
 
 
 function query() {
@@ -41,7 +41,7 @@ function query() {
 
 
     return mongoService.connect()
-        .then(db => db.collection(proposalsCollection)
+        .then(db => db.collection(tripsCollection)
             .find({})
             .sort()
             .toArray()
@@ -52,33 +52,33 @@ function query() {
 function getById(id) {
     const _id = new ObjectId(id);
     return mongoService.connect()
-        .then(db => db.collection(proposalsCollection).findOne({ _id }));
+        .then(db => db.collection(tripsCollection).findOne({ _id }));
 }
 
-function add(proposal) {
+function add(trip) {
     return mongoService.connect()
-        .then(db => db.collection(proposalsCollection).insertOne(proposal))
+        .then(db => db.collection(tripsCollection).insertOne(trip))
         .then(mongoRes => {
-            proposal._id = mongoRes.insertedId;
-            return proposal;
+            trip._id = mongoRes.insertedId;
+            return trip;
         });
 }
 
-function update(proposal) {
-    const strId = proposal._id;
-    proposal._id = new ObjectId(proposal._id);
+function update(trip) {
+    const strId = trip._id;
+    trip._id = new ObjectId(trip._id);
 
     return mongoService.connect()
-        .then(db => db.collection(proposalsCollection).updateOne({ _id: proposal._id }, { $set: proposal }))
+        .then(db => db.collection(tripsCollection).updateOne({ _id: trip._id }, { $set: trip }))
         .then(mongoRes => {
-            proposal._id = strId;
-            return proposal;
+            trip._id = strId;
+            return trip;
         });
 }
 
 function remove(id) {
     const _id = new ObjectId(id);
     return mongoService.connect()
-        .then(db => db.collection(proposalsCollection).remove({ _id }));
+        .then(db => db.collection(tripsCollection).remove({ _id }));
 }
 
