@@ -10,7 +10,7 @@ const session = require('express-session');
 
 
 // Import Routes
-const proposalRoute = require('./routes/proposal.route.js')
+const tripRoute = require('./routes/trip.route.js')
 const userRoute = require('./routes/user.route.js')
 const reviewRoute = require('./routes/review.route.js')
 const chatService = require('./services/chat.service.js')
@@ -32,7 +32,7 @@ app.use(session({
 
 app.use(express.static('public'));
 // Use routes
-proposalRoute(app);
+tripRoute(app);
 userRoute(app);
 reviewRoute(app);
 
