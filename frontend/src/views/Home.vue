@@ -2,7 +2,7 @@
   <section class="home">
     <h2>Home</h2>
 
-    <trip-list />
+    <trip-list :trips="trips" />
   </section>
 </template>
 
@@ -14,6 +14,14 @@ export default {
   name: 'home',
   components: {
     TripList
+  },
+  computed: {
+    trips() {
+      return this.$store.getters.trips;
+    }
+  },
+  created() {
+    this.$store.dispath({type: 'loadTrips'})
   }
 }
 </script>
