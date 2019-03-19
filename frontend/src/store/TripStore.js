@@ -7,6 +7,14 @@ export default {
     mutations: {
         setTrips(state, { trips }) {
             state.trips = trips
+        },
+        addTrip(state, { trip }) {
+            state.trips.unshift(trip)
+        },
+        updateTrip(state, {trip}) {
+            let trips = state.trips
+            let idx = trips.findIndex(currTrip => currTrip._id = trip._id)
+            trips.splice(idx, 1, trip)
         }
     },
     getters: {
@@ -15,9 +23,18 @@ export default {
         }
     },
     actions: {
-        async getTrips({commit}) {
+        async loadTrips({ commit }) {
             const trips = await TripService.query()
-            commit({type: 'setTrips', trips})
+            commit({ type: 'setTrips', trips })
+        },
+        async saveTrip({ commit }, { trip }) {
+            const newTrip = await TripService.saveTrip(trip)
+            if (trip._id) commit({ type: 'updateTrip', trip: newTrip })
+            else commit({ type: 'addTrip', trip: newTrip })
+        },
+        async deleteTrip({ commit }, { trip }) {
+            const msg = await TripService.deleteTrip(trip)
+            commit({ type: 'deleteTrip', trip })
         }
     }
 }

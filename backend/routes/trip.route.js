@@ -1,6 +1,6 @@
 const tripService = require('../services/trip.service');
 
-const BASE_URL = 'api/trip'
+const BASE_URL = '/api/trip'
 module.exports = (app) => {
     // Query trips' list
     app.get(BASE_URL, (req, res) => {
