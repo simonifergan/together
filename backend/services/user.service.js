@@ -30,11 +30,11 @@ function login(credentials) {
 
     return mongoService.connect()
         .then(db => db.collection(usersCollection)
-            .findOne({email: credentials.email})
+            .findOne({ email: credentials.email })
         )
         .then(user => {
             if (!user) return null;
-            return bcrypt.compare(credentials.password, user.password,(err, res) => {
+            return bcrypt.compare(credentials.password, user.password, (err, res) => {
                 delete user.password;
                 return user;
             });
@@ -58,7 +58,7 @@ function signup(user) {
             db.collection(usersCollection).findOne({ email: user.email })
                 .then(res => {
                     if (!res) {
-                        return bcrypt.genSalt(10, function (err, salt) {
+                        return bcrypt.genSalt(10, (err, salt) => {
                             bcrypt.hash(user.password, salt, (err, hash) => {
                                 user.password = hash;
                                 return db.collection(usersCollection).insertOne(user);
