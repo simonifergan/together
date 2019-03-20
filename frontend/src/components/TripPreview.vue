@@ -10,6 +10,7 @@ export default {
   name: 'trip-preview',
   props: {
     trip: Object,
+    required: true
   },
   components: {
     
