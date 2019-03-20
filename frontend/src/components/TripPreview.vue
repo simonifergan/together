@@ -1,7 +1,8 @@
 <template>
   <router-link tag="section" :to="'/trip/' + trip._id" class="trip-preview">
     <!-- {{trip}} -->
-    <img v-if="trip.user" :src="trip.user.profilePic" alt="">
+    <div class="profile-img" :style="profilPic"></div>
+    <!-- <img v-if="trip.user" :src="trip.user.profilePic" alt=""> -->
     <p>{{trip.userId}}</p>
     <p>{{dests}}</p>
     <p>{{trip.startsAt.month}} {{trip.startsAt.year}}, {{trip.duration[0]}}</p>
@@ -15,12 +16,16 @@ export default {
     trip: {
       type: Object,
       required: true
-    },
+    }
   },
   computed: {
     dests() {
       return this.trip.destinations[0].continent;
+    },
+    profilPic() {
+      return { "background-image": `url('${this.trip.user.profilePic}')` };
     }
   }
 };
 </script>
+
