@@ -22,40 +22,38 @@ async function query() {
             {
                 $lookup:
                 {
-                    from: "users",
-                    localField: "userId",
-                    foreignField: "_id",
-                    as: "user"
+                    from: 'users',
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'user'
 
                 }
 
-            }, { $unwind: "$user" }
+            },
+            {
+                $project: {
+                    user: {
+                        _id: 0,
+                        password: 0,
+                        email: 0,
+                        tripPreferences: 0,
+                        interestedIn: 0,
+                        proposals: 0,
+                        tripPrefs: 0,
+                        birthdate: 0,
+                    }
+                   
+                },
+            },
+            { 
+                $unwind: '$user' 
+            }
         ]).toArray()
         return trips;
     } catch {
 
     }
 }
-
-// function query() {
-//     return mongoService.connectToDb()
-//         .then(db => {
-//             const collection = db.collection('trips');
-//             return collection.aggregate([
-//                 {
-//                     $lookup:
-//                     {
-//                         from: "users",
-//                         localField: "userId",
-//                         foreignField: "_id",
-//                         as: "user"
- 
-//                     }
- 
-//                 }, { "$unwind": "$user" }
-//             ]).toArray()
-//         })
-//  }
 
 function getById(id) {
     const _id = new ObjectId(id);
@@ -64,10 +62,13 @@ function getById(id) {
 }
 
 function add(trip) {
+    const userId = trip.userId;
+    trip.userId = new ObjectId(userId);
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).insertOne(trip))
         .then(mongoRes => {
             trip._id = mongoRes.insertedId;
+            trip.userId = userId;
             return trip;
         });
 }
