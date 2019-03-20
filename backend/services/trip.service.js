@@ -11,43 +11,51 @@ module.exports = {
 }
 
 const tripsCollection = 'trips';
+const usersCollection = 'users';
 
 
-function query() {
-    // // default sortBy descending title
-    // let sortBy = { title: 1 };
+async function query() {
 
-    // // try with mongo 
-    // filterBy.title = (filterBy.title) ? new RegExp(filterBy.title, 'gi') : { $exists: true };
-    // filterBy.type = (filterBy.type) ? new RegExp(filterBy.type, 'gi') : { $exists: true };
-    // filterBy.price = (filterBy.price) ? { $lte: parseInt(filterBy.price) } : { $exists: true };
-    // if (filterBy.inStock === 'true') filterBy.inStock = true;
-    // else if (filterBy.inStock === 'false') filterBy.inStock = false;
-    // else filterBy.inStock = { $exists: true };
-    // if (filterBy.sortBy && filterBy.order) sortBy = { [filterBy.sortBy]: parseInt(filterBy.order) };
+    try {
+        const db = await mongoService.connect()
+        const trips = await db.collection(tripsCollection).aggregate([
+            {
+                $lookup:
+                {
+                    from: "users",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "user"
 
+                }
 
-    // filterBy = {
-    //     $and: [
+            }, { $unwind: "$user" }
+        ]).toArray()
+        return trips;
+    } catch {
 
-    //         {
-    //             $or: [{ title: filterBy.title }, { type: filterBy.type }]
-    //         },
-    //         { price: filterBy.price },
-    //         { inStock: filterBy.inStock }
-    //     ]
-    // }
-
-
-
-    return mongoService.connect()
-        .then(db => db.collection(tripsCollection)
-            .find({})
-            .sort()
-            .toArray()
-        );
-
+    }
 }
+
+// function query() {
+//     return mongoService.connectToDb()
+//         .then(db => {
+//             const collection = db.collection('trips');
+//             return collection.aggregate([
+//                 {
+//                     $lookup:
+//                     {
+//                         from: "users",
+//                         localField: "userId",
+//                         foreignField: "_id",
+//                         as: "user"
+ 
+//                     }
+ 
+//                 }, { "$unwind": "$user" }
+//             ]).toArray()
+//         })
+//  }
 
 function getById(id) {
     const _id = new ObjectId(id);
