@@ -26,9 +26,7 @@ async function query() {
                     localField: "userId",
                     foreignField: "_id",
                     as: "user"
-
                 }
-
             }, { $unwind: "$user" }
         ]).toArray()
         return trips;
