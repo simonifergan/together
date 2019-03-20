@@ -20,12 +20,11 @@ async function query() {
     return data;
 }
 
-// PUT request to mongo does not return the updated object, so just return what you sent to it on success
-// POST does return the object with it's correct id
+
 async function save(trip) {
     if (trip._id) {
-        await axios.put(`${TRIP_API}/${trip._id}`, trip);
-        return trip;
+        const {data} = await axios.put(`${TRIP_API}/${trip._id}`, trip);
+        return data;
     }
     else {
         trip.createdAt = Date.now()
