@@ -19,6 +19,9 @@ export default {
       isHome: true,
     };
   },
+  created() {
+    if (this.$route.name !== 'home') this.isHome = false;
+  },
   computed: {
     isAbsolute() {
       return {'on-homepage': this.isHome}
