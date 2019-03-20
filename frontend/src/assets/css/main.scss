@@ -3,10 +3,15 @@
 @import 'mixins';
 
 // import main app layout 
-@import 'app.scss';
+@import 'app';
 // import views
-@import './views/Home.scss';
-@import './views/TripDetails.scss';
+@import './views/Home';
+@import './views/TripDetails';
+@import url('https://use.fontawesome.com/releases/v5.7.2/css/all.css');
+
+html {
+    font-family: 'Open Sans';
+}
 
 img {
     width: 100%;

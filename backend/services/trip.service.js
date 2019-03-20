@@ -42,11 +42,11 @@ async function query() {
                         tripPrefs: 0,
                         birthdate: 0,
                     }
-                   
+
                 },
             },
-            { 
-                $unwind: '$user' 
+            {
+                $unwind: '$user'
             }
         ]).toArray()
         return trips;
@@ -55,10 +55,23 @@ async function query() {
     }
 }
 
-function getById(id) {
+async function getById(id) {
     const _id = new ObjectId(id);
-    return mongoService.connect()
-        .then(db => db.collection(tripsCollection).findOne({ _id }));
+    try {
+        const db = await mongoService.connect();
+        const trip = await db.collection(tripsCollection).findOne({ _id });
+        const userId = new ObjectId(trip.userId);
+        const user = await db.collection(usersCollection).findOne({ _id: userId });
+        delete user._id;
+        delete user.password;
+        trip.user = user;
+        return trip;
+    } catch {
+        return null;
+    }
+
+    // .then(db => db.collection(tripsCollection).findOne({ _id }));
+
 }
 
 function add(trip) {

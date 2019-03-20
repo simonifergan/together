@@ -2,6 +2,7 @@
   <div id="app" class="app-container">
     <main-header />
     <router-view />
+    <!-- <upload-image /> -->
   </div>
 </template>
 
