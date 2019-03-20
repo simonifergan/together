@@ -11,42 +11,48 @@ module.exports = {
 }
 
 const tripsCollection = 'trips';
+const usersCollection = 'users';
 
 
-function query() {
-    // // default sortBy descending title
-    // let sortBy = { title: 1 };
+async function query() {
 
-    // // try with mongo 
-    // filterBy.title = (filterBy.title) ? new RegExp(filterBy.title, 'gi') : { $exists: true };
-    // filterBy.type = (filterBy.type) ? new RegExp(filterBy.type, 'gi') : { $exists: true };
-    // filterBy.price = (filterBy.price) ? { $lte: parseInt(filterBy.price) } : { $exists: true };
-    // if (filterBy.inStock === 'true') filterBy.inStock = true;
-    // else if (filterBy.inStock === 'false') filterBy.inStock = false;
-    // else filterBy.inStock = { $exists: true };
-    // if (filterBy.sortBy && filterBy.order) sortBy = { [filterBy.sortBy]: parseInt(filterBy.order) };
+    try {
+        const db = await mongoService.connect()
+        const trips = await db.collection(tripsCollection).aggregate([
+            {
+                $lookup:
+                {
+                    from: 'users',
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'user'
 
+                }
 
-    // filterBy = {
-    //     $and: [
+            },
+            {
+                $project: {
+                    user: {
+                        _id: 0,
+                        password: 0,
+                        email: 0,
+                        tripPreferences: 0,
+                        interestedIn: 0,
+                        proposals: 0,
+                        tripPrefs: 0,
+                        birthdate: 0,
+                    }
+                   
+                },
+            },
+            { 
+                $unwind: '$user' 
+            }
+        ]).toArray()
+        return trips;
+    } catch {
 
-    //         {
-    //             $or: [{ title: filterBy.title }, { type: filterBy.type }]
-    //         },
-    //         { price: filterBy.price },
-    //         { inStock: filterBy.inStock }
-    //     ]
-    // }
-
-
-
-    return mongoService.connect()
-        .then(db => db.collection(tripsCollection)
-            .find({})
-            .sort()
-            .toArray()
-        );
-
+    }
 }
 
 function getById(id) {
@@ -56,10 +62,13 @@ function getById(id) {
 }
 
 function add(trip) {
+    const userId = trip.userId;
+    trip.userId = new ObjectId(userId);
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).insertOne(trip))
         .then(mongoRes => {
             trip._id = mongoRes.insertedId;
+            trip.userId = userId;
             return trip;
         });
 }
@@ -67,6 +76,7 @@ function add(trip) {
 function update(trip) {
     const strId = trip._id;
     trip._id = new ObjectId(trip._id);
+    trip.userId = new ObjectId(trip.userId);
 
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).updateOne({ _id: trip._id }, { $set: trip }))
