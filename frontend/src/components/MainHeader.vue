@@ -1,7 +1,14 @@
 <template>
-  <div class="main-header">
-    <h1>MainHeader</h1>
-  </div>
+  <header class="main-header">
+    <router-link title="Homepage" tag="h1" to="/">Bridge</router-link>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">About</a>
+      <a href="#">Placeholder</a>
+      <a href="#">Sign up</a>
+      <a href="#">Log in</a>
+    </nav>
+  </header>
 </template>
 
 <script>

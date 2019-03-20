@@ -1,6 +1,8 @@
 <template>
   <section class="home">
-    <h2>Home</h2>
+    <header>
+      <img src="@/assets/img/home/header.jpg" alt="">
+    </header>
 
     <trip-list :trips="trips" />
   </section>

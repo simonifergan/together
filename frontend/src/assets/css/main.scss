@@ -1,0 +1,34 @@
+@import 'reset';
+@import 'fonts';
+@import 'mixins';
+
+// import main app layout 
+@import 'app.scss';
+// import views
+@import './views/home.scss';
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+iframe, audio {
+    width: 100%;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+a {
+    cursor: pointer;
+    color: blue;
+}
+
+a:hover {
+    color: red;
+}
+
+a:visited {
+    color:inherit;
+}
