@@ -58,6 +58,10 @@ export default {
             const msg = await TripService.remove(trip._id)
             console.log(msg);
             commit({ type: 'removeTrip', tripId: trip._id })
+        },
+        async joinTrip({getters}, {tripId}) {
+            const msg = await TripService.joinTrip(getters.currLoggedUser._id, tripId)
+            return msg
         }
     }
 }

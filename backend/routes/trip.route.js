@@ -9,6 +9,13 @@ module.exports = (app) => {
             .then(trips => res.json(trips))
             .catch(err => res.end(err));
     });
+    
+    // testing the query DONT USE THIS FUNCTION IN PRODUCTION
+        app.get(BASE_URL + 'y', (req, res) => {
+            tripService.query1()
+                .then(trips => res.json(trips))
+                .catch(err => res.end(err));
+        });
 
     // Get single trip by id
     app.get(`${BASE_URL}/:tripId`, (req, res) => {
@@ -51,4 +58,9 @@ module.exports = (app) => {
                 res.json(updatedToy);
             })
     });
+
+    app.post(`${BASE_URL}/:jointrip`, (req, res) => {
+        const {tripId, userId} = req.body
+        //TODO: add join request using userId, tripId
+    })
 }

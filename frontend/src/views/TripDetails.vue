@@ -35,15 +35,21 @@
 </template>
 
 <script>
+import UserDetails from "../components/UserDetails.vue";
 export default {
   name: "trip-details",
-  components: {},
+  components: { UserDetails },
   computed: {
     trip() {
       return this.$store.getters.tripToDisplay;
     },
     profilePic() {
       return { "background-image": `url('${this.trip.user.profilePic}')` };
+    }
+  },
+  methods: {
+    joinTrip() {
+      this.$store.dispatch({type: 'joinTrip', tripId: this.trip._id})
     }
   },
   created() {
