@@ -14,6 +14,7 @@ export default {
   name: 'trip-list',
   props: {
     trips: Array,
+    required: true
   },
   components: {
     TripPreview
