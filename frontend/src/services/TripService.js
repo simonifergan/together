@@ -6,6 +6,7 @@ const axios = Axios.create({
 
 export default {
     query,
+    getById,
     save,
     remove,
     getEmpty
@@ -20,6 +21,10 @@ async function query() {
     return data;
 }
 
+async function getById(id) {
+    const {data} = await axios.get(`${TRIP_API}/${id}`);
+    return data;
+}
 
 async function save(trip) {
     if (trip._id) {
