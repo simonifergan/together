@@ -30,7 +30,7 @@ module.exports = (app) => {
         const { tripId } = req.params;
         tripService.remove(tripId)
             .then(() => {
-                res.end(`Toy: ${tripId} was successfully deleted.`);
+                res.json(`Trip: ${tripId} was successfully deleted.`);
             })
     });
 

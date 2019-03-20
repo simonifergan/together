@@ -59,45 +59,15 @@ async function signup(user) {
             const salt = await bcrypt.genSalt(10)
             const hashedPassword = await bcrypt.hash(user.password, salt);
             user.password = hashedPassword;
-            const {insertedId} = await db.collection(usersCollection).insertOne(user);
+            const { insertedId } = await db.collection(usersCollection).insertOne(user);
             user._id = insertedId;
             delete user.password;
             return user;
         } catch {
-            throw ('Fail');
+            throw (401);
         }
-    }
-    else throw ('Username already taken');
-
-
-
+    } else throw (409);
 }
-// async function signup(user) {
-//     console.log(user.email)
-//     return mongoService.connect()
-//         .then(db =>
-//             db.collection(usersCollection).findOne({ email: user.email })
-//                 .then(async res => {
-//                     if (!res) {
-//                         try {
-
-//                             const salt = await bcrypt.genSalt(10)
-//                             const hashedPassword = await bcrypt.hash(user.password, salt);
-//                             user.password = hashedPassword;
-//                             console.log('hashish', hashedPassword)
-//                             return db.collection(usersCollection).insertOne(user);
-//                         } catch {
-//                             throw ('Fail');
-//                         }
-
-//                     }
-//                     else throw ('Username already taken');
-//                 }))
-//         .then(mongoRes => {
-//             delete user.password;
-//             return user;
-//         });
-// }
 
 function update(user) {
     const strId = user._id;

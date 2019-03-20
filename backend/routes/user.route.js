@@ -38,7 +38,10 @@ module.exports = (app) => {
                 req.session.user = user;
                 res.json(user);
             })
-            .catch(err => res.status(409).end());
+            .catch(err => {
+                if (err === 409) return res.status(409).end();
+                else if (err === 401) return res.status(401).end();
+            });
     });
 
     app.post(`${BASE}/logout`, (req, res) => {
