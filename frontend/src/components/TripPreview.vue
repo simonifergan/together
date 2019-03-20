@@ -1,7 +1,7 @@
 <template>
   <router-link tag="section" :to="'/trip/' + trip._id" class="trip-preview">
     <!-- {{trip}} -->
-    <img src="https://via.placeholder.com/250x170" alt="">
+    <img v-if="trip.user" :src="trip.user.profilePic" alt="">
     <p>{{trip.userId}}</p>
     <p>{{dests}}</p>
     <p>{{trip.startsAt.month}} {{trip.startsAt.year}}, {{trip.duration[0]}}</p>
