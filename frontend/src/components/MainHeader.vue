@@ -29,7 +29,7 @@ export default {
   },
   watch: {
     $route: {
-      handler(newRoute, oldRoute) {
+      handler(newRoute) {
         if (newRoute.name !== 'home') this.isHome = false;
         else this.isHome = true;
       }

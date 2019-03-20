@@ -4,6 +4,7 @@ const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
     query,
+    query1,
     getById,
     add,
     update,
@@ -45,21 +46,68 @@ async function query() {
 
                 },
             },
-            // {
-            //     $unwind: '$user'
-            // },
-            // {
-            //     $unwid: 'members',
-            // },
-            // {
-            //     $lookup: {
-            //         from: usersCollection,
-            //         localField: 'member.userId',
-            //         foreignField: '_id',
-            //         as: 'member'
-            //     }
-            // }
+            {
+                $unwind: '$user'
+            },
         ]).toArray()
+        return trips;
+    } catch {
+
+    }
+}
+
+async function query1() {
+
+    try {
+        const db = await mongoService.connect()
+        const trips = await db.collection(tripsCollection).aggregate([
+            {
+                $lookup:
+                {
+                    from: 'users',
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'user'
+
+                }
+            },
+            {
+                $project: {
+                    user: {
+                        _id: 0,
+                        password: 0,
+                        email: 0,
+                        tripPreferences: 0,
+                        interestedIn: 0,
+                        proposals: 0,
+                        tripPrefs: 0,
+                        birthdate: 0,
+                    },
+
+                },
+            },
+            {
+                $map:
+                {
+                    input: '$members',
+                    as: 'userId',
+                    in: {
+                        $lookup: {
+                            from: 'users',
+                            localField: '$$userId',
+                            foreignField: '_id',
+                            as: 'user'
+                        }
+                    }
+                }
+
+            },
+            {
+                $unwind: '$user'
+            },
+
+        ]).toArray()
+        console.log('Hi trips', trips)
         return trips;
     } catch {
 
@@ -89,7 +137,7 @@ function add(trip) {
     const userId = trip.userId;
     const members = [...trip.members];
     trip.userId = new ObjectId(userId);
-    trip.members.map(member => new ObjectId(member));
+    trip.members = trip.members.map(userId => new ObjectId(userId));
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).insertOne(trip))
         .then(mongoRes => {
@@ -104,7 +152,7 @@ function update(trip) {
     const strId = trip._id;
     trip._id = new ObjectId(trip._id);
     trip.userId = new ObjectId(trip.userId);
-    trip.membeers.map(member => new ObjectId(member));
+    trip.members = trip.members.map(member => new ObjectId(member));
 
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).updateOne({ _id: trip._id }, { $set: trip }))
