@@ -1,15 +1,12 @@
 <template>
-  <section class="trip-details">
-      <div class="top-fold">
-        <img src="https://api.adorable.io/avatars/285/abott@adorable.png" class="user-avatar">
-        <h1>Title</h1>
-        <h2>{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</h2>
-        <button><i class="far fa-comment-alt"></i></button>
-      </div>
+  <section class="trip-details" v-if="trip">
+    <div class="trip-details-main">
+      <h1>Title</h1>
+      <button class="send-msg-btn"><i class="far fa-comment-alt"></i></button>
       <ul>Interested users
-        <li v-for="user in interestedUsers" :key="user._id">
-          <!-- {{user.userName}} NAME OF PROP? -->
-        </li>
+        <!-- <li v-for="user in interestedUsers" :key="user._id">
+          {{user.userName}} NAME OF PROP?
+        </li> -->
       </ul>
       <p>{{trip.desc}}</p>
       <div class="destinations">
@@ -20,19 +17,27 @@
           >{{destination.region}}, {{destination.country}}</li>
         </ul>
       </div>
-      <div class="comments">
-        <h3>comments</h3>
-      </div>
+      <button @click="joinTrip">
+        join trip
+      </button>
+    </div>
+    <user-details :user="trip.user"/>
   </section>
 </template>
 
 <script>
+import UserDetails from "../components/UserDetails.vue";
 export default {
   name: "trip-details",
-  components: {},
+  components: { UserDetails },
   computed: {
     trip() {
       return this.$store.getters.tripToDisplay;
+    }
+  },
+  methods: {
+    joinTrip() {
+      this.$store.dispatch({type: 'joinTrip', tripId: this.trip._id})
     }
   },
   created() {

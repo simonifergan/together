@@ -2,11 +2,11 @@
   <header class="main-header" :class="isAbsolute">
     <router-link title="Homepage" tag="h1" to="/">Bridge</router-link>
     <nav>
-      <a href="#">Home</a>
+      <router-link to="/">Home</router-link>
       <a href="#">About</a>
       <a href="#">Placeholder</a>
-      <a href="#">Sign up</a>
-      <a href="#">Log in</a>
+      <router-link to="/signup">Sign up</router-link>
+      <router-link to="/login">Log in</router-link>
     </nav>
   </header>
 </template>
