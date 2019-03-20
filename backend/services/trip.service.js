@@ -29,7 +29,6 @@ async function query() {
                     as: 'user'
 
                 }
-
             },
             {
                 $project: {
@@ -57,7 +56,6 @@ async function query() {
 }
 
 async function query1() {
-
     try {
         const db = await mongoService.connect()
         const trips = await db.collection(tripsCollection).aggregate([
