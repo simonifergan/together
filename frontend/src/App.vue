@@ -2,7 +2,7 @@
   <div id="app" class="app-container">
     <main-header />
     <router-view />
-    <upload-image />
+    <!-- <upload-image /> -->
   </div>
 </template>
 
@@ -12,7 +12,7 @@ import UploadImage from '@/components/UploadImage'
 export default {
   name: 'home',
   components: {
-    MainHeader, UploadImage,
+    MainHeader,
   }
 }
 </script>
