@@ -4,9 +4,11 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        position: absolute;
         padding: 10px 20px;
         width: 100%;
+        &.on-homepage {
+            position: absolute;
+        }
         h1 {
             font-family: $font-pacifico;
             cursor: pointer;
