@@ -1,12 +1,29 @@
 .home {
+    header {
+        img {
+            height: 100vh;
+        }
+    }
     .trip-list {
         margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
         h2 {
             font-family: $font-open-sans;
-            font-weight: 700;
+            font-weight: 1000;
+            margin: 10px;
+            font-size: 1.1em;
         }
-        .trip-preview {
-            margin-bottom: 20px;
+        .trip-items {
+            display: flex;
+            .trip-preview {
+                margin: 5px;
+                padding: 5px;
+                border: 1px solid black;
+                img {
+                    width: unset;
+                }
+            }
         }
     }
 }

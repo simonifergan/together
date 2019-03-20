@@ -1,8 +1,9 @@
 <template>
   <section class="trip-list">
     <h2>{{title}}</h2>
-
-    <trip-preview v-for="trip in trips" :key="trip._id" :trip="trip" />
+    <div class="trip-items">
+      <trip-preview v-for="trip in trips" :key="trip._id" :trip="trip" />
+    </div>
   </section>
 </template>
 
