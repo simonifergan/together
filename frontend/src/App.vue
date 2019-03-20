@@ -12,7 +12,8 @@ import UploadImage from '@/components/UploadImage'
 export default {
   name: 'home',
   components: {
-    MainHeader,
+    MainHeader, 
+    UploadImage
   }
 }
 </script>
