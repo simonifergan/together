@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="app-container">
     <main-header />
     <router-view />
   </div>
@@ -7,10 +7,11 @@
 
 <script>
 import mainHeader from '@/components/MainHeader'
+import UploadImage from '@/components/UploadImage'
 export default {
   name: 'home',
   components: {
-    mainHeader
+    mainHeader, UploadImage,
   }
 }
 </script>

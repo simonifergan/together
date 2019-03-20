@@ -1,8 +1,10 @@
 <template>
   <section class="home">
-    <h2>Home</h2>
+    <header>
+      <img src="@/assets/img/home/header.jpg" alt="">
+    </header>
 
-    <trip-list v-if="trips" :trips="trips" />
+    <trip-list :trips="trips" title="Trips you might like" />
   </section>
 </template>
 

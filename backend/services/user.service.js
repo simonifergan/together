@@ -1,6 +1,6 @@
 const mongoService = require('./mongo.service');
-
 const ObjectId = require('mongodb').ObjectId;
+const bcrypt = require('bcryptjs');
 
 module.exports = {
     query,
@@ -14,7 +14,7 @@ module.exports = {
 const usersCollection = 'users';
 
 function query() {
-    
+
 
     return mongoService.connect()
         .then(db => db.collection(usersCollection)
@@ -29,12 +29,15 @@ function login(credentials) {
 
     return mongoService.connect()
         .then(db => db.collection(usersCollection)
-            .findOne(credentials)
+            .findOne({ email: credentials.email })
         )
-        .then(user => {
+        .then(async user => {
             if (!user) return null;
-            delete user.password;
-            return user;
+            const isAuth = await bcrypt.compare(credentials.password, user.password)
+            if (isAuth) {
+                delete user.password;
+                return user;
+            } else return null;
         });
 }
 
@@ -48,19 +51,22 @@ function getById(id) {
         });
 }
 
-function signup(user) {
-    console.log(user.email)
-    return mongoService.connect()
-        .then(db =>
-            db.collection(usersCollection).findOne({ email: user.email })
-                .then(res => {
-                    if (!res) return db.collection(usersCollection).insertOne(user)
-                    else throw ('Username already taken');
-                }))
-        .then(mongoRes => {
+async function signup(user) {
+    const db = await mongoService.connect();
+    const userInDB = await db.collection(usersCollection).findOne({ email: user.email })
+    if (!userInDB) {
+        try {
+            const salt = await bcrypt.genSalt(10)
+            const hashedPassword = await bcrypt.hash(user.password, salt);
+            user.password = hashedPassword;
+            const { insertedId } = await db.collection(usersCollection).insertOne(user);
+            user._id = insertedId;
             delete user.password;
             return user;
-        });
+        } catch {
+            throw (401);
+        }
+    } else throw (409);
 }
 
 function update(user) {

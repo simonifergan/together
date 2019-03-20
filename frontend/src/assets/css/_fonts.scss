@@ -1,0 +1,39 @@
+@font-face {
+    font-family: 'Pacifico';
+    src: url('../fonts/Pacifico/Pacifico-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    src: url('../fonts/Open_Sans/OpenSans-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('../fonts/Ubuntu/Ubuntu-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Raleway';
+    src: url('../fonts/Raleway/Raleway-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Raleway Bold';
+    src: url('../fonts/Raleway/Raleway-Bold.ttf');
+}
+
+@font-face {
+    font-family: 'Raleway Semi Bold';
+    src: url('../fonts/Raleway/Raleway-SemiBold.ttf');
+}
+
+$font-pacifico: 'Pacifico', cursive;
+$font-lobster: 'Lobster', cursive;
+$font-lato: 'Lato', sans-serif;
+$font-open-sans: 'Open Sans', sans-serif;
+$font-maven-pro: 'Maven Pro', sans-serif;
+$font-ubuntu: 'Ubuntu', sans-serif;
+$font-raleway: 'Raleway', sans-serif;
+$font-raleway-bold: 'Raleway Bold', sans-serif;
+$font-raleway-s-bold: 'Raleway Semi Bold', sans-serif;

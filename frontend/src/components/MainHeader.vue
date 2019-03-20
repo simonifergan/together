@@ -1,14 +1,39 @@
 <template>
-  <div class="main-header">
-    <h1>MainHeader</h1>
-  </div>
+  <header class="main-header" :class="isAbsolute">
+    <router-link title="Homepage" tag="h1" to="/">Bridge</router-link>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">About</a>
+      <a href="#">Placeholder</a>
+      <a href="#">Sign up</a>
+      <a href="#">Log in</a>
+    </nav>
+  </header>
 </template>
 
 <script>
 export default {
   name: 'MainHeader',
-  props: {
-    
+  data() {
+    return {
+      isHome: true,
+    };
+  },
+  created() {
+    if (this.$route.name !== 'home') this.isHome = false;
+  },
+  computed: {
+    isAbsolute() {
+      return {'on-homepage': this.isHome}
+    }
+  },
+  watch: {
+    $route: {
+      handler(newRoute, oldRoute) {
+        if (newRoute.name !== 'home') this.isHome = false;
+        else this.isHome = true;
+      }
+    }
   }
 }
 </script>
