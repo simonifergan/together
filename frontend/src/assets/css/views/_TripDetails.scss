@@ -1,0 +1,34 @@
+.trip-details {
+    padding: 50px;
+    .main-header-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 52px;
+        background-color: #A2C5D8;
+    }
+    .top-fold {
+        margin-bottom: 20px;
+        display: grid;
+        grid-template: 3fr 2fr / 60px 1fr;
+        height: 60px;
+        h1, h2 {
+            font-family: 'Raleway Bold';
+            margin-left: 30px;
+        }
+        h1 {
+            font-size: 1.5em;
+        }
+        h2 {
+            font-size: 1.2em;
+            color: #606060;
+        }
+
+        img {
+            border-radius: 50%;
+            width: 60px;
+            grid-row: span 2;
+        }
+    }
+}

@@ -1,8 +1,37 @@
 .home {
     font-family: $font-raleway-bold;
     header {
-        img {
-            height: 100vh;
+        position: relative;
+        height: 100vh;
+        background-image: url('../img/home/header.jpg');
+        background-size: cover;
+        background-position: 0 -100px;
+        .intro-form {
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 30px;
+                color:#484848;
+            }
+            form {
+                input {
+                    width: 70%;
+                    @include input()
+                }
+                button {
+                    @include button()
+                }
+                @include flex(row, space-between, center)
+            }
+            font-family: 'Raleway Bold';
+            background: #ffffff;
+            border-radius: 4px;
+            padding: 32px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+            width: 400px;
+            height: 150px;
+            position: absolute;
+            top: 20%;
+            left: 10%;
         }
     }
     .trip-list {

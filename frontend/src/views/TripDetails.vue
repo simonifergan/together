@@ -1,6 +1,5 @@
 <template>
   <section class="trip-details">
-    <div class="main-header-background"></div>
     <div class="top-fold">
       <img src="https://api.adorable.io/avatars/285/abott@adorable.png" class="user-avatar">
       <h1>Title</h1>
