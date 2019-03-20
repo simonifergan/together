@@ -2,7 +2,7 @@
   <section v-if="trip" class="trip-details">
     <div class="top-fold">
       <div class="profile-img" :style="profilePic"/>
-      <h1>Title</h1>
+      <h1>{{trip.title}}</h1>
       <h2>{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</h2>
       <button>
         <i class="far fa-comment-alt"></i>
@@ -11,10 +11,12 @@
 
     <div class="trip-members">
       <button class="btn-join-trip">Ask to join</button>
-      <!-- <p>Interested users:</p>
+      <p>Group members:</p>
       <ul>
-        <li v-for="user in interestedUsers" :key="user._id"></li>
-      </ul>-->
+        <li v-for="user in trip.members" :key="user._id">
+          {{user}}
+        </li>
+      </ul>
     </div>
 
     <p class="trip-desc">{{trip.desc}}</p>
@@ -57,7 +59,7 @@ export default {
     if (tripId) this.$store.dispatch({ type: "loadTrip", tripId });
     else this.$router.go(-1);
   },
-  destroy() {
+  beforeDestroy() {
     this.$store.commit({ type: "clearTrip" });
   }
 };

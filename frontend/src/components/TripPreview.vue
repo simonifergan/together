@@ -3,8 +3,19 @@
     <!-- {{trip}} -->
     <div class="profile-img" :style="profilePic"></div>
     <p>{{trip.user.firstname}} {{trip.user.lastname}}</p>
-    <p>{{destinations}}</p>
+    <p>{{trip.title}}</p>
     <p>{{trip.startsAt.month}} {{trip.startsAt.year}}, {{trip.duration[0]}}</p>
+    <div class="members-container">
+      <div
+        class="member-img"
+        v-for="member in trip.members" 
+        :key="member._id"
+        :style="{ backgroundImage: `url('${member.profilePic}')` }"
+        :title="member.firstname"
+        />
+        <div class="placeholder-div"></div>
+        <div class="members-txt">joined so far.</div>
+    </div>
   </router-link>
 </template>
 
@@ -23,7 +34,7 @@ export default {
     },
     profilePic() {
       return { "background-image": `url('${this.trip.user.profilePic}')` };
-    }
+    },
   }
 };
 </script>

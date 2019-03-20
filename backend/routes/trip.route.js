@@ -10,13 +10,6 @@ module.exports = (app) => {
             .catch(err => res.end(err));
     });
     
-    // testing the query DONT USE THIS FUNCTION IN PRODUCTION
-        app.get(BASE_URL + 'y', (req, res) => {
-            tripService.query1()
-                .then(trips => res.json(trips))
-                .catch(err => res.end(err));
-        });
-
     // Get single trip by id
     app.get(`${BASE_URL}/:tripId`, (req, res) => {
         const { tripId } = req.params;

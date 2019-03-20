@@ -4,7 +4,6 @@ const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
     query,
-    query1,
     getById,
     add,
     update,
@@ -15,54 +14,16 @@ const tripsCollection = 'trips';
 const usersCollection = 'users';
 
 
+
+
 async function query() {
-
     try {
         const db = await mongoService.connect()
         const trips = await db.collection(tripsCollection).aggregate([
             {
                 $lookup:
                 {
-                    from: 'users',
-                    localField: 'userId',
-                    foreignField: '_id',
-                    as: 'user'
-
-                }
-            },
-            {
-                $project: {
-                    user: {
-                        _id: 0,
-                        password: 0,
-                        email: 0,
-                        tripPreferences: 0,
-                        interestedIn: 0,
-                        proposals: 0,
-                        tripPrefs: 0,
-                        birthdate: 0,
-                    }
-
-                },
-            },
-            {
-                $unwind: '$user'
-            },
-        ]).toArray()
-        return trips;
-    } catch {
-
-    }
-}
-
-async function query1() {
-    try {
-        const db = await mongoService.connect()
-        const trips = await db.collection(tripsCollection).aggregate([
-            {
-                $lookup:
-                {
-                    from: 'users',
+                    from: usersCollection,
                     localField: 'userId',
                     foreignField: '_id',
                     as: 'user'
@@ -85,25 +46,30 @@ async function query1() {
                 },
             },
             {
-                $map:
-                {
-                    input: '$members',
-                    as: 'userId',
-                    in: {
-                        $lookup: {
-                            from: 'users',
-                            localField: '$$userId',
-                            foreignField: '_id',
-                            as: 'user'
-                        }
-                    }
-                }
-
-            },
-            {
                 $unwind: '$user'
             },
-
+            {
+                $lookup: {
+                    "from": usersCollection,
+                    "foreignField": "_id",
+                    "localField": "members",
+                    "as": "members",
+                  }
+            },
+            {
+                $project: {
+                    members: {
+                        password: 0,
+                        email: 0,
+                        tripPreferences: 0,
+                        interestedIn: 0,
+                        proposals: 0,
+                        tripPrefs: 0,
+                        birthdate: 0,
+                    }
+                }
+            }
+       
         ]).toArray()
         console.log('Hi trips', trips)
         return trips;
