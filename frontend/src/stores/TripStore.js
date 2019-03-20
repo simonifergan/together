@@ -3,10 +3,17 @@ import TripService from '@/services/TripService'
 export default {
     state: {
         trips: [],
+        tripToDisplay: null
     },
     mutations: {
         loadTrips(state, { trips }) {
             state.trips = trips
+        },
+        loadTrip(state, {trip}) {
+            state.tripToDisplay = trip;
+        },
+        clearTrip(state) {
+            state.tripToDisplay = null;
         },
         addTrip(state, { trip }) {
             state.trips.unshift(trip)
@@ -24,6 +31,12 @@ export default {
     getters: {
         trips(state) {
             return state.trips
+        },
+        tripToDisplay(state) {
+            return state.tripToDisplay;
+        },
+        tripToEdit(state) {
+            return JSON.parse(JSON.stringify(state.tripToDisplay));
         }
     },
     actions: {
@@ -31,6 +44,10 @@ export default {
         async loadTrips({ commit }) {
             const trips = await TripService.query()
             commit({ type: 'loadTrips', trips })
+        },
+        async loadTrip({ commit }, {tripId}) {
+            const trip = await TripService.getById(tripId);
+            commit({type: 'loadTrip', trip});
         },
         async saveTrip({ commit }, { trip }) {
             const newTrip = await TripService.save(trip)

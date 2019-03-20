@@ -1,4 +1,5 @@
 .home {
+    font-family: $font-raleway-bold;
     header {
         img {
             height: 100vh;
@@ -6,22 +7,32 @@
     }
     .trip-list {
         margin-bottom: 10px;
-        display: flex;
-        flex-direction: column;
+        @include flex(column);
         h2 {
-            font-family: $font-open-sans;
             font-weight: 1000;
-            margin: 10px;
-            font-size: 1.1em;
+            margin: 50px 0 10px 20px;
+            font-size: 1.8em;
         }
         .trip-items {
-            display: flex;
+            @include flex();
             .trip-preview {
+                @include flex(column);
+                font-family: $font-raleway;
                 margin: 5px;
                 padding: 5px;
-                border: 1px solid black;
+                line-height: 20px;
+                cursor: pointer;
                 img {
                     width: unset;
+                }
+                p:nth-of-type(1) {
+                    font-family: $font-raleway-s-bold;
+                    color: #888;
+                    text-transform: uppercase;
+                }
+                p:nth-of-type(2) {
+                    font-family: $font-raleway-bold;
+                    font-size: 1.2em;
                 }
             }
         }

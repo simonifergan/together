@@ -1,11 +1,11 @@
 <template>
-  <section class="trip-preview">
+  <router-link tag="section" :to="'/trip/' + trip._id" class="trip-preview">
     <!-- {{trip}} -->
-    <img src="https://via.placeholder.com/150" alt="">
-    <p>username: {{trip.userId}}</p>
+    <img src="https://via.placeholder.com/250x170" alt="">
+    <p>{{trip.userId}}</p>
     <p>{{dests}}</p>
     <p>{{trip.startsAt.month}} {{trip.startsAt.year}}, {{trip.duration[0]}}</p>
-  </section>
+  </router-link>
 </template>
 
 <script>
