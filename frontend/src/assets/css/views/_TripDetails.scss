@@ -1,42 +1,58 @@
 .trip-details {
     padding: 50px;
+    line-height: 150%;
     @include wrapper();
     .top-fold {
         position: relative;
         margin-bottom: 20px;
         display: grid;
-        grid-template: 3fr 2fr / 60px 1fr;
-        height: 60px;
-        h1, h2 {
-            font-family: 'Raleway Bold';
-            margin-left: 30px;
-        }
+        grid-template: 3fr 2fr / 80px 1fr;
+        grid-column-gap: 20px;
         h1 {
+            font-family: 'Raleway Bold';
             font-size: 1.5em;
+            align-self: center;
         }
         h2 {
+            font-family: 'Raleway semi Bold';
             font-size: 1.2em;
             color: #606060;
         }
+        .profile-img {
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            background-size: contain;
+            grid-row: span 2;
+        }
         button {
-            background-color: unset;
+            background-color: transparent;
             border: none;
+            font-size: 1.5em;
             position: absolute;
             top: 0;
             right: 0;
-            width: 48px;
-            height: 48px;
-            font-size: 1.5em;
-        }
-        img {
-            border-radius: 50%;
-            width: 60px;
-            grid-row: span 2;
         }
     }
-    p {
-        line-height: 150%;
-        padding: 20px;
+    .btn-join-trip {
+        font-family: 'Raleway semi Bold';
+        color: #606060;
+        background-color: unset;
+        border: none;
+        font-size: 1em;
+        padding: 10px 15px;
+        box-shadow: 0 0 2px black;
+        border-radius: 2px;
+        transition: .3s;
+        &:hover {
+            color: black;
+        }
+    }
+    .trip-members {
+        margin-bottom: 40px;
+    }
+    .trip-desc {
+        margin-bottom: 20px;
     }
     .destinations {
         background-image: url('../img/TripDetails/hill-view.jpg');

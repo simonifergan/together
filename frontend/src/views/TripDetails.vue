@@ -1,28 +1,36 @@
 <template>
-  <section class="trip-details">
-      <div class="top-fold">
-        <img src="https://api.adorable.io/avatars/285/abott@adorable.png" class="user-avatar">
-        <h1>Title</h1>
-        <h2>{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</h2>
-        <button><i class="far fa-comment-alt"></i></button>
-      </div>
-      <ul>Interested users
-        <li v-for="user in interestedUsers" :key="user._id">
-          <!-- {{user.userName}} NAME OF PROP? -->
-        </li>
+  <section v-if="trip" class="trip-details">
+    <div class="top-fold">
+      <div class="profile-img" :style="profilePic"/>
+      <h1>Title</h1>
+      <h2>{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</h2>
+      <button>
+        <i class="far fa-comment-alt"></i>
+      </button>
+    </div>
+
+    <div class="trip-members">
+      <button class="btn-join-trip">Ask to join</button>
+      <!-- <p>Interested users:</p>
+      <ul>
+        <li v-for="user in interestedUsers" :key="user._id"></li>
+      </ul>-->
+    </div>
+
+    <p class="trip-desc">{{trip.desc}}</p>
+
+    <div class="destinations">
+      <ul>
+        <li
+          v-for="destination in trip.destinations"
+          :key="destination.region"
+        >{{destination.region}}, {{destination.country}}</li>
       </ul>
-      <p>{{trip.desc}}</p>
-      <div class="destinations">
-        <ul>
-          <li
-            v-for="destination in trip.destinations"
-            :key="destination.region"
-          >{{destination.region}}, {{destination.country}}</li>
-        </ul>
-      </div>
-      <div class="comments">
-        <h3>comments</h3>
-      </div>
+    </div>
+
+    <div class="comments">
+      <h3>comments</h3>
+    </div>
   </section>
 </template>
 
@@ -33,6 +41,9 @@ export default {
   computed: {
     trip() {
       return this.$store.getters.tripToDisplay;
+    },
+    profilePic() {
+      return { "background-image": `url('${this.trip.user.profilePic}')` };
     }
   },
   created() {
