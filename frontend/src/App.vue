@@ -8,12 +8,12 @@
 
 <script>
 import MainHeader from '@/components/MainHeader'
-import UploadImage from '@/components/UploadImage'
+// import UploadImage from '@/components/UploadImage'
 export default {
   name: 'home',
   components: {
     MainHeader, 
-    UploadImage
+    // UploadImage
   }
 }
 </script>

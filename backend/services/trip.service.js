@@ -45,20 +45,9 @@ async function query() {
 
                 },
             },
-            // {
-            //     $unwind: '$user'
-            // },
-            // {
-            //     $unwid: 'members',
-            // },
-            // {
-            //     $lookup: {
-            //         from: usersCollection,
-            //         localField: 'member.userId',
-            //         foreignField: '_id',
-            //         as: 'member'
-            //     }
-            // }
+            {
+                $unwind: '$user'
+            },
         ]).toArray()
         return trips;
     } catch {
@@ -104,7 +93,7 @@ function update(trip) {
     const strId = trip._id;
     trip._id = new ObjectId(trip._id);
     trip.userId = new ObjectId(trip.userId);
-    trip.membeers.map(member => new ObjectId(member));
+    trip.members.map(member => new ObjectId(member));
 
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).updateOne({ _id: trip._id }, { $set: trip }))

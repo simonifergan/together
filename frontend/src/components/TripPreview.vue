@@ -1,9 +1,9 @@
 <template>
   <router-link tag="section" :to="'/trip/' + trip._id" class="trip-preview">
     <!-- {{trip}} -->
-    <div class="profile-img" :style="profilPic"></div>
+    <div class="profile-img" :style="profilePic"></div>
     <p>{{trip.user.firstname}} {{trip.user.lastname}}</p>
-    <p>{{dests}}</p>
+    <p>{{destinations}}</p>
     <p>{{trip.startsAt.month}} {{trip.startsAt.year}}, {{trip.duration[0]}}</p>
   </router-link>
 </template>
@@ -18,10 +18,10 @@ export default {
     }
   },
   computed: {
-    dests() {
+    destinations() {
       return this.trip.destinations[0].continent;
     },
-    profilPic() {
+    profilePic() {
       return { "background-image": `url('${this.trip.user.profilePic}')` };
     }
   }
