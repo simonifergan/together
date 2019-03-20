@@ -1,8 +1,7 @@
 <template>
   <section class="trip-details">
-    <h1>trip details</h1>
-
     {{trip}}
+    <!-- <img src="https://via.placeholder.com/250x170" alt=""> -->
   </section>
 </template>
 
@@ -21,6 +20,9 @@ export default {
     var {tripId} = this.$route.params;
     if (tripId) this.$store.dispatch({type: 'loadTrip', tripId});
     else this.$router.go(-1);
+  },
+  destroy() {
+    this.$store.commit({type: 'clearTrip'});
   }
 }
 </script>
