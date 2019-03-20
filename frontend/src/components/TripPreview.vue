@@ -12,8 +12,10 @@
 export default {
   name: 'trip-preview',
   props: {
-    trip: Object,
-    required: true
+    trip : {
+      type: Object,
+      required: true,
+    },
   },
   computed: {
     dests() {
