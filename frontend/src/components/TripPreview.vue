@@ -2,8 +2,7 @@
   <router-link tag="section" :to="'/trip/' + trip._id" class="trip-preview">
     <!-- {{trip}} -->
     <div class="profile-img" :style="profilPic"></div>
-    <!-- <img v-if="trip.user" :src="trip.user.profilePic" alt=""> -->
-    <p>{{trip.userId}}</p>
+    <p>{{trip.user.firstname}} {{trip.user.lastname}}</p>
     <p>{{dests}}</p>
     <p>{{trip.startsAt.month}} {{trip.startsAt.year}}, {{trip.duration[0]}}</p>
   </router-link>
