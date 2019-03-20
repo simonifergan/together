@@ -6,23 +6,24 @@
         padding: 10px 20px;
         width: 100%;
         z-index: 2;
+        color: #333;
         &.on-homepage {
             position: absolute;
+            color: #fff;
+            text-shadow: 0 0 0.5px black;
         }
         h1 {
             font-family: $font-pacifico;
             cursor: pointer;
             font-size: 2em;
-            color: #fff;
-            text-shadow: 0 0 0.5px black;
         }
         nav {
             @include flex(row, space-between, center);
             font-family: $font-open-sans;
             width: 350px;
             font-weight: 550;
-            color: white;
             a {
+                color: inherit;
                 text-decoration: none;
             }
         }
