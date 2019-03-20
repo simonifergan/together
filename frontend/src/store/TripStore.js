@@ -19,7 +19,7 @@ export default {
     },
     getters: {
         trips(state) {
-            return state.trips
+            return [state.trips]
         }
     },
     actions: {
