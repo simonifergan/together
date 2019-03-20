@@ -4,3 +4,19 @@
     justify-content: $justify;
     align-items: $align;
 }
+
+@mixin button() {
+    background-color: #484848;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-family: 'Raleway Bold';
+    cursor: pointer;
+}
+
+@mixin input() {
+    font-size: 1.2em;
+    padding: 4px;
+    color: #484848;
+    font-family: 'Raleway Bold'
+}

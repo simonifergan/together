@@ -1,9 +1,14 @@
 <template>
   <section class="home">
     <header>
-      <img src="@/assets/img/home/header.jpg" alt="">
+      <div class="intro-form">
+      <h1>Where do you want to go?</h1>
+      <form @submit.prevent="">
+        <input type="text">
+        <button type="submit">Search</button>
+      </form>
+      </div>
     </header>
-
     <trip-list :trips="trips" title="Trips you might like" />
   </section>
 </template>
