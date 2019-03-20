@@ -15,7 +15,7 @@ export default {
     trip: {
       type: Object,
       required: true
-    }
+    },
   },
   computed: {
     dests() {
