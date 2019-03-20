@@ -1,6 +1,6 @@
 <template>
   <section class="trip-list">
-    <h2>Trips:</h2>
+    <h2>{{title}}</h2>
 
     <trip-preview v-for="trip in trips" :key="trip._id" :trip="trip" />
   </section>
@@ -13,8 +13,14 @@ import TripPreview from '@/components/TripPreview'
 export default {
   name: 'trip-list',
   props: {
-    trips: Array,
-    required: true
+    trips: {
+      type: Array,
+      required: true
+    },
+    title: {
+      type: String,
+      required: true
+    }
   },
   components: {
     TripPreview

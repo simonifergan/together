@@ -4,7 +4,7 @@
       <img src="@/assets/img/home/header.jpg" alt="">
     </header>
 
-    <trip-list :trips="trips" />
+    <trip-list :trips="trips" title="Trips you might like" />
   </section>
 </template>
 
