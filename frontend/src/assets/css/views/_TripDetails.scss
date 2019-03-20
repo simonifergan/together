@@ -1,5 +1,6 @@
 .trip-details {
     padding: 50px;
+    @include wrapper();
     .main-header-background {
         position: absolute;
         top: 0;
@@ -30,5 +31,16 @@
             width: 60px;
             grid-row: span 2;
         }
+    }
+    p {
+        line-height: 150%;
+        padding: 20px;
+    }
+    .destinations {
+        background-image: url('../img/TripDetails/hill-view.jpg');
+        height: 300px;
+        background-size: cover;
+        background-position: center;
+        margin-bottom: 30px;
     }
 }

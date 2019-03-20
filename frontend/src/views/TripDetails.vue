@@ -3,8 +3,8 @@
     <div class="top-fold">
       <img src="https://api.adorable.io/avatars/285/abott@adorable.png" class="user-avatar">
       <h1>Title</h1>
-      <h2>user name
-        <!-- {{trip.user.userName}} NAME OF PROP? -->
+      <h2>
+        <!-- {{trip.user.firstname}}&nbsp;{{trip.user.lastname}} -->
       </h2>
     </div>
     <ul>
