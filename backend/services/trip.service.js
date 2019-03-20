@@ -67,6 +67,7 @@ function add(trip) {
 function update(trip) {
     const strId = trip._id;
     trip._id = new ObjectId(trip._id);
+    trip.userId = new ObjectId(trip.userId);
 
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).updateOne({ _id: trip._id }, { $set: trip }))
