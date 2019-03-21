@@ -1,6 +1,8 @@
 const mongoService = require('./mongo.service');
 const ObjectId = require('mongodb').ObjectId;
 
+const ObjectId = require('mongodb').ObjectId;
+
 module.exports = {
     query,
     addMsg,
@@ -9,10 +11,18 @@ module.exports = {
 const chatsCollection = 'chats';
 const usersCollection = 'users';
 
-async function query() {
+async function query(userId) {
+    console.log('userId:', userId);
+
+    userId = new ObjectId(userId)
     try {
         const db = await mongoService.connect()
         const chats = await db.collection(chatsCollection).aggregate([
+            {
+                $match: {
+                    users: userId
+                }
+            },
             {
                 $lookup:
                 {

@@ -49,6 +49,9 @@ export default {
         },
         tripToEdit(state) {
             return JSON.parse(JSON.stringify(state.tripToDisplay));
+        },
+        emptyTrip(state) {
+            return TripService.getEmpty();
         }
     },
     actions: {
@@ -72,7 +75,7 @@ export default {
         },
         async joinTrip({ commit, getters }) {
             const backupTripToDisplay = getters.tripToDisplay;
-            const newMember = getters.currLoggedUser;
+            const newMember = getters.loggedUser;
             commit({ type: 'addMember', newMember })
             try {
                 const msg = await TripService.save(getters.tripToDisplay);
@@ -80,12 +83,12 @@ export default {
             } catch {
                 commit({ type: 'updateTripToDisplay', trip: backupTripToDisplay });
             }
-            const msg = await TripService.joinTrip(getters.currLoggedUser._id, tripId)
+            const msg = await TripService.joinTrip(getters.loggedUser._id, tripId)
             return msg
         },
         async leaveTrip({ commit, getters }) {
             const backupTripToDisplay = getters.tripToDisplay;
-            const memberToRemove = getters.currLoggedUser;
+            const memberToRemove = getters.loggedUser;
             commit({ type: 'removeMember', memberToRemove })
             try {
                 const msg = await TripService.save(getters.tripToDisplay);

@@ -27,6 +27,7 @@ export default {
   },
   created() {
     this.$store.dispatch({type: 'socketConnect'});
+    this.$store.dispatch({type: 'getUserChats'});
   }
 
 }
