@@ -3,6 +3,11 @@
         <!-- <div v-if="chatId">{{}}</div> -->
         <h1>Chat</h1>
         <form @submit.prevent="send">
+            <ul>
+                <li v-for="msg in msgs" :key="msg._id">
+                    {{msg.txt}}
+                </li>
+            </ul>
             <el-input v-model="newMsg" placeholder="Write Something"></el-input>
             <button type="submit">Send</button>
         </form>
@@ -16,17 +21,17 @@ export default {
             newMsg: ''
         }
     },
+    computed: {
+        msgs() {
+            return this.chat.msgs
+        }
+    },
     methods: {
         send() {
-            this.$store.dispatch({type: 'socketSendMsg', msg: {text: this.newMsg}})
+            this.$store.dispatch({type: 'socketSendMsg', msg: {text: this.newMsg}, chatId: this.chat._id})
         }
-    }
-    // props: {
-    //     chatId: {
-    //         type: Number,
-    //         // required: true,
-    //     }
-    // }
+    },
+    props: ['chat']
 }
 </script>
 
