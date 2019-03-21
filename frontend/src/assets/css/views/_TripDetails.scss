@@ -6,7 +6,7 @@
         position: relative;
         margin-bottom: 20px;
         display: grid;
-        grid-template: 3fr 2fr / 80px 1fr;
+        grid-template: 3fr 2fr / 100px 1fr;
         grid-column-gap: 20px;
         h1 {
             font-family: 'Raleway Bold';
@@ -20,8 +20,8 @@
         }
         .profile-img {
             border-radius: 50%;
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             background-size: contain;
             grid-row: span 2;
         }
@@ -50,6 +50,14 @@
     }
     .trip-members {
         margin-bottom: 40px;
+        .user-preview {
+            .user-profile-img {
+                width: 60px;
+                height: 60px;
+                background-size: contain;
+                border-radius: 50%;
+            }
+        }
     }
     .trip-desc {
         margin-bottom: 20px;
