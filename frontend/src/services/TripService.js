@@ -52,7 +52,6 @@ async function remove(id) {
 
 function getEmpty() {
     return {
-        userId: null,
         desc: null,
         locations: [],
         tripStart: null,

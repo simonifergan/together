@@ -2,9 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import TripDetails from '@/views/TripDetails.vue'
+import TripEdit from '@/views/TripEdit.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import SignupPage from '@/views/SignupPage.vue'
 import SearchPage from '@/views/SearchPage.vue'
+
 
 Vue.use(Router)
 
@@ -19,6 +21,11 @@ export default new Router({
       path: '/trip/:tripId',
       name: 'tripDetails',
       component: TripDetails
+    },
+    {
+      path: '/trip/edit/:tripId?',
+      name: 'TripEdit',
+      component: TripEdit
     },
     {
       path: '/login',

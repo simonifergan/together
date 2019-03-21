@@ -1,9 +1,9 @@
 .trip-list {
-    margin-bottom: 10px;
+    margin: 20px;
     @include flex(column);
     h2 {
         font-weight: 1000;
-        margin: 50px 0 10px 20px;
+        margin: 50px 0 10px 5px;
         font-size: 1.8em;
     }
     .trip-items {
@@ -11,28 +11,31 @@
         .trip-preview {
             @include flex(column);
             font-family: $font-raleway;
-            margin: 5px;
-            padding: 5px;
+            margin-right: 25px;
             line-height: 20px;
+            width: 200px;
             cursor: pointer;
             .profile-img {
-                
-                width: 250px;
-                height: 220px;
+                width: 200px;
+                height: 180px;
                 background-size: 100%;
                 background-repeat: no-repeat;
                 background-position: center;
-                border-radius: 3px;
+                border-radius: 2px;
             }
             p:nth-of-type(1) {
                 font-family: $font-raleway-s-bold;
+                font-size: .9em;
                 color: #888;
                 text-transform: uppercase;
             }
             p:nth-of-type(2) {
                 font-family: $font-raleway-bold;
-                font-size: 1.2em;
-                width: 250px;
+                font-size: 1.1em;
+            }
+            p:nth-of-type(3) {
+                font-family: $font-raleway;
+                font-size: .9em;
             }
             .members-container {
                 display: grid;
@@ -46,6 +49,7 @@
                 }
                 .members-txt {
                     grid-column: span 10;
+                    font-size: .8em;
                 }
             }
         }

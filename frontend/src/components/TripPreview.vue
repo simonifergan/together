@@ -14,7 +14,7 @@
         :title="member.firstname"
         />
         <div class="placeholder-div"></div>
-        <div class="members-txt">joined so far.</div>
+        <div class="members-txt">joined so far</div>
     </div>
   </router-link>
 </template>
