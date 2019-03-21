@@ -70,7 +70,6 @@ export default {
         async searchTrips({commit}, {searchQuery}) {
             const trips = await TripService.query(searchQuery)
             commit({type: 'loadTrips', trips})
-            commit({type: 'addMember', })
         },
         async leaveTrip(context, {tripId}) {
             const msg = await TripService.leaveTrip(getters.currLoggedUser._id, tripId)
