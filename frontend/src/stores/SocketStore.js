@@ -13,8 +13,8 @@ export default {
             state.isConnected = !state.isConnected;
             console.log('connection status:', state.isConnected);
         },
-        addMsg(state, {msg}) {
-            const chat = state.userChats.find(chat => chat._id = msg.chatId)
+        addMsg(state, {msg, chatId}) {
+            const chat = state.userChats.find(chat => chat._id = chatId)
             chat.isActive = true
             chat.msgs.push(msg)
         },
@@ -40,11 +40,13 @@ export default {
         // socketSubscribe(context, {eventName, cb}){
         //     SocketService.on(eventName, cb);
         // },
-        socketSendMsg({commit}, {msg}) {
+        socketSendMsg({commit}, {msg, chatId}) {
             msg._id = UtilService.makeId()
-            commit({type: 'addMsg', msg})
-            SocketService.emit(SocketService.CHAT_SEND_MSG, msg);
+            commit({type: 'addMsg', msg, chatId})
+            SocketService.emit(SocketService.CHAT_SEND_MSG, {msg, chatId});
         },
+
+
         async getUserChats({commit, getters}) {
             const chats = await ChatService.getChats(getters.loggedUser._id)
             commit({type: 'setUserChats', chats})
