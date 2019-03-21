@@ -4,12 +4,16 @@
       <div class="profile-img" :style="profilePic"/>
       <h1>{{trip.title}}</h1>
       <h2>{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</h2>
-      <button>
+      <button v-if="trip.userId !== loggedInUser._id">
         <i class="far fa-comment-alt"></i>
       </button>
     </div>
 
-    <button class="btn-join-trip">{{actionBtn}}</button>
+    <button 
+      class="btn-join-trip"
+      v-if="trip.userId !== loggedInUser._id">
+        {{actionBtn}}
+    </button>
 
     <div class="trip-members">
       <h3>Group members:</h3>
@@ -49,20 +53,7 @@ export default {
       return this.$store.getters.tripToDisplay;
     },
     loggedInUser() {
-      // return this.$store.getters.currLoggedUser;
-      return {
-        _id: "5c911149e7179a0e4088e8c4",
-        email: "simonifergan239@gmail.com",
-        firstname: "Simon",
-        lastname: "Ifergan",
-        proposals: [],
-        interestedIn: ["5c9115f5e7179a0e4088ebd2"],
-        birthdate: 690825379,
-        gender: "male",
-        tripPrefs: {},
-        profilePic:
-          "https://res.cloudinary.com/dcv2jyqvl/image/upload/v1553112209/user_imgs/simon.jpg"
-      };
+      return this.$store.getters.currLoggedUser;
     },
     profilePic() {
       return { "background-image": `url('${this.trip.user.profilePic}')` };
@@ -70,7 +61,7 @@ export default {
     actionBtn() {
       const loggedInUserId = this.loggedInUser._id;
       const isMemberUser = this.trip.members.some(user => user._id === loggedInUserId);
-      return (isMemberUser)? 'Ask to join' : 'Leave';
+      return (isMemberUser)? 'Leave' : 'Ask to join';
     }
   },
   methods: {
