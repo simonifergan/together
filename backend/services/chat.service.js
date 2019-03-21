@@ -3,10 +3,7 @@
 module.exports = (io) => {
 
     io.on('connection', socket => {
-        socket.on('user-enters', (userId) => {
-            socket.userId = userId;
-            console.log('Hi userId:', socket.userId);
-        });
+      
         console.log('Hi there socket ID:', socket.id);
         io.emit('joinChat', 'Hi there!');
 
@@ -16,8 +13,8 @@ module.exports = (io) => {
         })
 
         socket.on('chat-msg-send', msg => {
-            console.log('got', {...msg, userId: socket.userId})
-            io.emit('chat-msg-receive', {...msg, userId: socket.userId})
+            console.log('got', msg)
+            io.emit('chat-msg-receive', msg);
         })
 
     });

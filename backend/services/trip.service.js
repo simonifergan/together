@@ -14,7 +14,7 @@ module.exports = {
 const tripsCollection = 'trips';
 const usersCollection = 'users';
 
-
+// subscribers: [{ _id, isAprroved:}]
 async function query() {
     try {
         const db = await mongoService.connect()
