@@ -16,10 +16,8 @@ module.exports = (app) => {
     });
 
     app.put('/api/chat/:chatId', async (req, res) => {
-        console.log('Hi, I am here');
         const msg = req.body;
         const { chatId } = req.params;
-        console.log(msg, chatId);
         try {
             const isSuccess = await chatService.addMsg(msg, chatId)
             res.json(isSuccess);

@@ -58,18 +58,19 @@ async function addMsg(msg, chatId) {
     console.log('OBJECT IDS', chatId, msg.sender);
     try {
         console.log('Hi');
+        const db = await mongoService.connect();
         const res = await db.collection(chatsCollection).update(
             { _id: chatId },
             {
                 $push: {
-                    msgs: {
-                        $each: [msg],
-                    }
+                    msgs: msg
                 }
             }
         )
+        console.log(res);
         return res;
-    } catch {
+    } catch(err) {
+        console.log(err);
         return 'We had a problem';
     }
 
