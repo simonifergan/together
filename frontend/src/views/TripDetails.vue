@@ -1,5 +1,6 @@
 <template>
   <section class="trip-details" v-if="trip">
+    {{trip}}
     <div class="trip-details-main">
       <h1>Title</h1>
       <button class="send-msg-btn"><i class="far fa-comment-alt"></i></button>

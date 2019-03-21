@@ -8,7 +8,8 @@ module.exports = {
     getById,
     add,
     update,
-    remove
+    remove,
+    joinTrip
 }
 
 const tripsCollection = 'trips';
@@ -168,3 +169,10 @@ function remove(id) {
         .then(db => db.collection(tripsCollection).remove({ _id }));
 }
 
+async function joinTrip(tripId, userId) {
+    [userId, tripId] = [new ObjectId(userId), new ObjectId(tripId)]
+    const db = await mongoService.connect();
+    const trip = await db.collection(tripsCollection).findOneAndUpdate({ _id: tripId }, { $push: { interestedUsers: userId }}, {returnNewDocument: true})
+    console.log(trip);
+    return trip;
+}
