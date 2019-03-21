@@ -1,8 +1,6 @@
 const mongoService = require('./mongo.service');
 const ObjectId = require('mongodb').ObjectId;
 
-const ObjectId = require('mongodb').ObjectId;
-
 module.exports = {
     query,
     addMsg,
