@@ -26,7 +26,6 @@ module.exports = (app) => {
 
     // Delete by Id
     app.delete(`${BASE_URL}/:tripId`, (req, res) => {
-
         const { tripId } = req.params;
         tripService.remove(tripId)
             .then(() => {
@@ -51,10 +50,4 @@ module.exports = (app) => {
                 res.json(updatedToy);
             })
     });
-
-    // app.put(`${BASE_URL}/jointrip`, (req, res) => {
-    //     const {tripId, userId} = req.body
-    //     tripService.joinTrip(tripId, userId)
-    //         .then(trip => res.json(trip))
-    // })
 }
