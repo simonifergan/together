@@ -4,7 +4,7 @@
     <div class="profile-img" :style="profilePic"></div>
     <p>{{trip.user.firstname}} {{trip.user.lastname}}</p>
     <p>{{trip.title}}</p>
-    <p>{{trip.startsAt.month}} {{trip.startsAt.year}}, {{trip.duration[0]}}</p>
+    <p>{{trip.startsAt.month}} {{trip.startsAt.year}}, {{trip.duration[0]}} trip</p>
     <div class="members-container">
       <div
         class="member-img"
