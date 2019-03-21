@@ -1,7 +1,9 @@
 const mongoService = require('./mongo.service');
+const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
     query,
+    addMsg,
 }
 
 const chatsCollection = 'chats';
@@ -33,10 +35,34 @@ async function query() {
                     },
 
                 },
-            },       
+            },
         ]).toArray()
         return chats;
     } catch {
 
     }
+}
+
+async function addMsg(msg, chatId) {
+    console.log(msg, chatId)
+    chatId = new ObjectId(chatId);
+    msg.sender = new ObjectId(msg.sender);
+    console.log('OBJECT IDS', chatId, msg.sender);
+    try {
+        console.log('Hi');
+        const res = await db.collection(chatsCollection).update(
+            { _id: chatId },
+            {
+                $push: {
+                    msgs: {
+                        $each: [msg],
+                    }
+                }
+            }
+        )
+        return res;
+    } catch {
+        return 'We had a problem';
+    }
+
 }

@@ -35,6 +35,7 @@ app.use(express.static('public'));
 tripRoute(app);
 userRoute(app);
 reviewRoute(app);
+chatRoute(app);
 
 app.get('/', (req, res) => {
     res.send('Hello Toy Backend!')
