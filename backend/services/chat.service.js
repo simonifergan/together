@@ -51,7 +51,7 @@ async function query(userId) {
     }
 }
 
-async function addMsg(msg, chatId) {
+async function addMsg({msg, chatId}) {
     console.log(msg, chatId)
     chatId = new ObjectId(chatId);
     msg.sender = new ObjectId(msg.sender);

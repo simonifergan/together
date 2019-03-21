@@ -31,17 +31,18 @@ export default {
         }
     },
     actions: {
-        socketConnect({commit}) {
-            SocketService.on(SocketService.CHAT_RECEIVE_MSG, (msg) => {
+        socketConnect({commit, getters}) {
+            SocketService.emit(SocketService.SOCKET_CONNECT, getters.loggedUser._id);
+            SocketService.on(SocketService.CHAT_RECEIVE_MSG, ({chatId, msg}) => {
                 // commit({type: 'activateChat', chatId: msg.chatId})
-                commit({type: 'addMsg', msg});
+                commit({type: 'addMsg', msg, chatId});
             })
         },
         // socketSubscribe(context, {eventName, cb}){
         //     SocketService.on(eventName, cb);
         // },
         socketSendMsg({commit}, {msg, chatId}) {
-            msg._id = UtilService.makeId()
+            msg._id = UtilService.generateId()
             commit({type: 'addMsg', msg, chatId})
             SocketService.emit(SocketService.CHAT_SEND_MSG, {msg, chatId});
         },
