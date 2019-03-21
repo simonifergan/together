@@ -132,7 +132,6 @@ async function getById(tripId) {
                         tripPrefs: 0,
                         birthdate: 0,
                     },
-
                 },
             },
             {
@@ -197,11 +196,3 @@ function remove(id) {
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).remove({ _id }));
 }
-
-// async function joinTrip(tripId, userId) {
-//     [userId, tripId] = [new ObjectId(userId), new ObjectId(tripId)]
-//     const db = await mongoService.connect();
-//     const trip = await db.collection(tripsCollection).findOneAndUpdate({ _id: tripId }, { $push: { interestedUsers: userId }}, {returnNewDocument: true})
-//     console.log(trip);
-//     return trip;
-// }

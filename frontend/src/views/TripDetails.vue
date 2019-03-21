@@ -4,20 +4,22 @@
       <div class="profile-img" :style="profilePic"/>
       <h1>{{trip.title}}</h1>
       <h2>{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</h2>
-      <button>
+      <button v-if="trip.userId !== loggedInUser._id">
         <i class="far fa-comment-alt"></i>
       </button>
     </div>
 
-    <button class="btn-join-trip">Ask to join</button>
+    <button
+      class="btn-join-trip"
+      @click="joinLeaveTrip"
+      v-if="trip.userId !== loggedInUser._id">
+        {{(isUserMember)? 'Leave' : 'Ask to join'}}
+    </button>
 
     <div class="trip-members">
       <h3>Group members:</h3>
       <ul>
         <UserPreview v-for="user in trip.members" :key="user._id" :user="user"/>
-        <!-- <li v-for="user in trip.members" :key="user._id">
-          {{user.firstname}}
-        </li>-->
       </ul>
     </div>
 
@@ -51,12 +53,20 @@ export default {
     trip() {
       return this.$store.getters.tripToDisplay;
     },
+    loggedInUser() {
+      return this.$store.getters.currLoggedUser;
+    },
     profilePic() {
       return { "background-image": `url('${this.trip.user.profilePic}')` };
+    },
+    isUserMember() {
+      return this.trip.members.some(user => user._id === this.loggedInUser._id);
     }
   },
   methods: {
-    joinTrip() {
+    joinLeaveTrip() {
+      // if (isUserMember) this.$store.dispatch({ type: "leaveTrip", tripId: this.trip._id });
+      // else this.$store.dispatch({ type: "joinTrip", tripId: this.trip._id });
       this.$store.dispatch({ type: "joinTrip", tripId: this.trip._id });
     }
   },
@@ -69,87 +79,5 @@ export default {
     this.$store.commit({ type: "clearTrip" });
   }
 };
-// [
-//     {
-//         "_id": "5c9115f5e7179a0e4088ebd2",
-//         "userId": "5c9110f3e7179a0e4088e8ad",
-//         "title": "Asia & Latin America for a few months",
-//         "desc": "Hi, my name is Adi. I am looking for two partners for a trip around Asia and Latin America.",
-//         "destinations": [
-//             {
-//                 "continent": "latin america"
-//             },
-//             {
-//                 "continent": "asia"
-//             }
-//         ],
-//         "createdAt": 1553011410491,
-//         "startsAt": {
-//             "month": "january",
-//             "year": 2020
-//         },
-//         "duration": [
-//             "long"
-//         ],
-//         "openTo": {},
-//         "members": [
-//             {
-//                 "_id": "5c9110a9e7179a0e4088e883",
-//                 "firstname": "Yanai",
-//                 "lastname": "Avnet",
-//                 "gender": "male",
-//                 "profilePic": "https://res.cloudinary.com/dcv2jyqvl/image/upload/v1553113637/user_imgs/TF1D96MK6-UF42W4SGG-6885f84ccb72-512.jpg"
-//             },
-//             {
-//                 "_id": "5c911149e7179a0e4088e8c4",
-//                 "firstname": "Simon",
-//                 "lastname": "Ifergan",
-//                 "gender": "male",
-//                 "profilePic": "https://res.cloudinary.com/dcv2jyqvl/image/upload/v1553112209/user_imgs/simon.jpg"
-//             },
-//             {
-//                 "_id": "5c92afe7ffcd3525281f845b",
-//                 "firstname": "John",
-//                 "lastname": "Doe",
-//                 "gender": "male",
-//                 "profilePic": "https://res.cloudinary.com/dcv2jyqvl/image/upload/v1553085562/user_imgs/qaibm9ad351l47s83gcn.jpg"
-//             }
-//         ],
-//         "activities": [
-//             "food",
-//             "exploration",
-//             "festivals"
-//         ],
-//         "groupSize": [
-//             "trio"
-//         ],
-//         "comments": [
-//             {
-//                 "first": {
-//                     "userId": "5c911149e7179a0e4088e8c4",
-//                     "txt": "Hi, I am interested in joining your trip!",
-//                     "at": 1553071205199
-//                 },
-//                 "replies": [
-//                     {
-//                         "userId": "5c9115f5e7179a0e4088ebd2",
-//                         "txt": "Cool, PM me and let's see if it works out :)",
-//                         "at": 1553071205199
-//                     },
-//                     {
-//                         "userId": "5c911149e7179a0e4088e8c4",
-//                         "txt": "Sounds good!",
-//                         "at": 1553071205199
-//                     }
-//                 ]
-//             }
-//         ],
-//         "user": {
-//             "firstname": "Adi",
-//             "lastname": "Binenbaum",
-//             "gender": "female",
-//             "profilePic": "https://res.cloudinary.com/dcv2jyqvl/image/upload/v1553085988/user_imgs/adi.png"
-//         }
-//     }
-// ]
+
 </script>

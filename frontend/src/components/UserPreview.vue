@@ -1,6 +1,5 @@
 <template>
   <li class="user-preview">
-    <!-- {{user}} -->
     <div class="user-profile-img" :style="profilePic"></div>
     <p>{{user.firstname}} {{user.lastname}}</p>
   </li>

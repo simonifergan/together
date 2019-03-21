@@ -54,10 +54,4 @@ module.exports = (app) => {
                 res.json(updatedToy);
             })
     });
-
-    // app.post(`${BASE_URL}/:jointrip`, (req, res) => {
-    //     const {tripId, userId} = req.body
-    //     tripService.joinTrip(tripId, userId)
-    //         .then(trip => res.json(trip))
-    // })
 }
