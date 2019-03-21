@@ -97,7 +97,6 @@ export default {
         async searchTrips({ commit }, { searchQuery }) {
             const trips = await TripService.query(searchQuery)
             commit({ type: 'loadTrips', trips })
-            commit({ type: 'addMember', })
         }
     }
 }
