@@ -68,7 +68,6 @@ async function query() {
                 }
             },       
         ]).toArray()
-        console.log('Hi trips', trips)
         return trips;
     } catch {
 
