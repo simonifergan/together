@@ -1,5 +1,4 @@
 const tripService = require('../services/trip.service');
-
 const BASE_URL = '/api/trip'
 
 module.exports = (app) => {
