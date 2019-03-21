@@ -22,6 +22,9 @@ export default {
         .then(() => {this.trip = this.$store.getters.tripToEdit; console.log('here', this.trip)})
     }
     else this.trip = TripService.getEmpty();
+  },
+  destroy() {
+    
   }
 };
 
