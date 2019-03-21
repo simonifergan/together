@@ -2,27 +2,33 @@
   <div id="app" class="app-container">
     <main-header />
     <router-view />
+    <chat 
+      v-for="chat in activeChats" :key="chat._id" :chatId="chat"
+    />
+    <chat 
+    />
   </div>
 </template>
 
 <script>
 import MainHeader from '@/components/MainHeader';
+import Chat from '@/components/Chat';
 
 export default {
   name: 'home',
   components: {
-    MainHeader, 
+    MainHeader, Chat
     // UploadImage
   },
-  methods: {
-    gotMsg(msg) {
-      console.log('I am in frontend in app compoent and got this from socket', msg);
-    } 
+  computed: {
+    activeChats() {
+      return this.$store.getters.activeChats;
+    }
   },
   created() {
-    this.$store.dispatch({type: 'socketSendMsg', msg: 'Hi there, I am connected?'});
-    this.$store.dispatch({type: 'socketSubscribe', eventName: 'joinChat', cb: this.gotMsg})
+    this.$store.dispatch({type: 'socketConnect'});
   }
+
 }
 </script>
 
