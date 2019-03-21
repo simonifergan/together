@@ -29,7 +29,6 @@ module.exports = (app) => {
 
     // Delete by Id
     app.delete(`${BASE_URL}/:tripId`, (req, res) => {
-
         const { tripId } = req.params;
         tripService.remove(tripId)
             .then(() => {

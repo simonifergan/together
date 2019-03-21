@@ -178,15 +178,18 @@ function add(trip) {
 }
 
 function update(trip) {
-    const strId = trip._id;
+    const tripId = trip._id;
+    const members = [...trip.members];
+    const userId = trip.userId;
     trip._id = new ObjectId(trip._id);
     trip.userId = new ObjectId(trip.userId);
-    trip.members = trip.members.map(member => new ObjectId(member));
-
+    trip.members = trip.members.map(member => new ObjectId(member._id));
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).updateOne({ _id: trip._id }, { $set: trip }))
         .then(mongoRes => {
-            trip._id = strId;
+            trip._id = tripId;
+            trip.userId = userId
+            trip.members = members;
             return trip;
         });
 }

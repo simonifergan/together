@@ -65,9 +65,8 @@ export default {
   },
   methods: {
     joinLeaveTrip() {
-      // if (isUserMember) this.$store.dispatch({ type: "leaveTrip", tripId: this.trip._id });
-      // else this.$store.dispatch({ type: "joinTrip", tripId: this.trip._id });
-      this.$store.dispatch({ type: "joinTrip", tripId: this.trip._id });
+      if (this.isUserMember) this.$store.dispatch({type: "leaveTrip"});
+      else this.$store.dispatch({type: "joinTrip"});
     }
   },
   created() {

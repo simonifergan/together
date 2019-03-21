@@ -6,17 +6,9 @@ export default {
         tripToDisplay: null
     },
     mutations: {
+        // trips section:
         loadTrips(state, { trips }) {
             state.trips = trips
-        },
-        loadTrip(state, {trip}) {
-            state.tripToDisplay = trip;
-        },
-        clearTrip(state) {
-            state.tripToDisplay = null;
-        },
-        addTrip(state, { trip }) {
-            state.trips.unshift(trip)
         },
         updateTrip(state, { trip }) {
             let trips = state.trips
@@ -27,8 +19,25 @@ export default {
             const idx = state.trips.findIndex(trip => trip._id === tripId);
             state.trips.splice(idx, 1);
         },
-        addMember(state, {newMember}) {
-            state.tripToDisplay.newMember.unshift(newMember);
+        ///// trip to display section:
+        loadTrip(state, { trip }) {
+            state.tripToDisplay = trip;
+        },
+        clearTrip(state) {
+            state.tripToDisplay = null;
+        },
+        addTrip(state, { trip }) {
+            state.trips.unshift(trip)
+        },
+        addMember(state, { newMember }) {
+            state.tripToDisplay.members.unshift(newMember);
+        },
+        removeMember(state, { memberToRemove }) {
+            const idx = state.tripToDisplay.members.findIndex(member => member._id === memberToRemove._id);
+            state.tripToDisplay.members.splice(idx, 1);
+        },
+        updateTripToDisplay(state, { trip }) {
+            state.tripToDisplay = trip;
         }
     },
     getters: {
@@ -48,9 +57,9 @@ export default {
             const trips = await TripService.query('')
             commit({ type: 'loadTrips', trips })
         },
-        async loadTrip({ commit }, {tripId}) {
+        async loadTrip({ commit }, { tripId }) {
             const trip = await TripService.getById(tripId);
-            commit({type: 'loadTrip', trip});
+            commit({ type: 'loadTrip', trip });
         },
         async saveTrip({ commit }, { trip }) {
             const newTrip = await TripService.save(trip)
@@ -59,21 +68,35 @@ export default {
         },
         async removeTrip({ commit }, { trip }) {
             const msg = await TripService.remove(trip._id)
-            console.log(msg);
             commit({ type: 'removeTrip', tripId: trip._id })
         },
-        async joinTrip({commit, getters}, {tripId}) {
+        async joinTrip({ commit, getters }) {
             const backupTripToDisplay = getters.tripToDisplay;
+            const newMember = getters.currLoggedUser;
+            commit({ type: 'addMember', newMember })
+            try {
+                const msg = await TripService.save(getters.tripToDisplay);
+                return msg;
+            } catch {
+                commit({ type: 'updateTripToDisplay', trip: backupTripToDisplay });
+            }
             const msg = await TripService.joinTrip(getters.currLoggedUser._id, tripId)
             return msg
         },
-        async searchTrips({commit}, {searchQuery}) {
-            const trips = await TripService.query(searchQuery)
-            commit({type: 'loadTrips', trips})
+        async leaveTrip({ commit, getters }) {
+            const backupTripToDisplay = getters.tripToDisplay;
+            const memberToRemove = getters.currLoggedUser;
+            commit({ type: 'removeMember', memberToRemove })
+            try {
+                const msg = await TripService.save(getters.tripToDisplay);
+                return msg;
+            } catch {
+                commit({ type: 'updateTripToDisplay', trip: backupTripToDisplay });
+            }
         },
-        async leaveTrip(context, {tripId}) {
-            const msg = await TripService.leaveTrip(getters.currLoggedUser._id, tripId)
-            return msg;
+        async searchTrips({ commit }, { searchQuery }) {
+            const trips = await TripService.query(searchQuery)
+            commit({ type: 'loadTrips', trips })
         }
     }
 }
