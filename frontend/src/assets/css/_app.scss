@@ -10,12 +10,13 @@
         &.on-homepage {
             position: absolute;
             color: #fff;
-            text-shadow: 0 0 0.5px black;
+            // text-shadow: 0 0 0.5px black;
         }
         h1 {
             font-family: $font-pacifico;
             cursor: pointer;
-            font-size: 2em;
+            font-size: 2.3em;
+            text-shadow: 0 0 1px black;
         }
         nav {
             @include flex(row, space-between, center);

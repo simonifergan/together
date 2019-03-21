@@ -1,36 +1,66 @@
 .trip-details {
-    .user-details {
-        img {
-            width: 60px;
+    padding: 50px;
+    line-height: 150%;
+    @include wrapper();
+    .top-fold {
+        position: relative;
+        margin-bottom: 20px;
+        display: grid;
+        grid-template: 3fr 2fr / 100px 1fr;
+        grid-column-gap: 20px;
+        h1 {
+            font-family: 'Raleway Bold';
+            font-size: 1.5em;
+            align-self: center;
+        }
+        h2 {
+            font-family: 'Raleway semi Bold';
+            font-size: 1.2em;
+            color: #606060;
+        }
+        .profile-img {
             border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            background-size: contain;
+            grid-row: span 2;
+        }
+        button {
+            background-color: transparent;
+            border: none;
+            font-size: 1.5em;
+            position: absolute;
+            top: 0;
+            right: 0;
         }
     }
-    .trip-details-main {
-    position: relative;
-    }
-    display: grid;
-    grid-template-columns: 3fr 1fr;
-    gap: 50px;
-    padding: 50px;
-    @include wrapper();
-    .send-msg-btn {
+    .btn-join-trip {
+        font-family: 'Raleway semi Bold';
+        color: #606060;
         background-color: unset;
         border: none;
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 48px;
-        height: 48px;
-        font-size: 1.5em;
+        font-size: 1em;
+        padding: 10px 15px;
+        box-shadow: 0 0 2px black;
+        border-radius: 2px;
+        transition: .3s;
+        &:hover {
+            color: black;
+        }
     }
-    h1 {
-        font-family: 'Raleway Bold';
+    .trip-members {
+        margin-bottom: 40px;
+        .user-preview {
+            .user-profile-img {
+                width: 60px;
+                height: 60px;
+                background-size: contain;
+                border-radius: 50%;
+            }
+        }
+    }
+    .trip-desc {
         margin-bottom: 20px;
-        font-size: 1.5em;
-    }
-    p {
-        line-height: 150%;
-        padding: 20px;
     }
     .destinations {
         background-image: url('../img/TripDetails/hill-view.jpg');

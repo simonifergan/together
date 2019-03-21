@@ -1,24 +1,27 @@
 <template>
   <section class="home">
     <header>
+        <h1>Pick your travels,<br>
+          We will bridge the gaps.
+        </h1>
       <div class="intro-form">
-      <h1>Where do you want to go?</h1>
-      <form @submit.prevent="">
-        <input type="text">
-        <button type="submit">Search</button>
-      </form>
+        <h2>Where do you want to go?</h2>
+        <form @submit.prevent>
+          <input type="text">
+          <button type="submit">Search</button>
+        </form>
       </div>
     </header>
-    <trip-list :trips="trips" title="Trips you might like" />
+    <trip-list :trips="trips" title="Trips you might like"/>
   </section>
 </template>
 
 <script>
 // CMPS:
-import TripList from '@/components/TripList'
+import TripList from "@/components/TripList";
 
 export default {
-  name: 'home',
+  name: "home",
   components: {
     TripList
   },
@@ -28,7 +31,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch({type: 'loadTrips'})
+    this.$store.dispatch({ type: "loadTrips" });
   }
-}
+};
 </script>

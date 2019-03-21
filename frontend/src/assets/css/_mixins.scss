@@ -23,8 +23,5 @@
 
 @mixin wrapper() {
     margin: 0 auto;
-    max-width: 1000px;
-    border-left: 1px solid gray;
-    border-right: 1px solid gray;
-    box-shadow: 0 0 1px gray;
+    max-width: 700px;
 }
