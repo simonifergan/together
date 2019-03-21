@@ -1,25 +1,42 @@
+const mongoService = require('./mongo.service');
 
+module.exports = {
+    query,
+}
 
-module.exports = (io) => {
+const chatsCollection = 'chats';
+const usersCollection = 'users';
 
-    io.on('connection', socket => {
-        socket.on('user-enters', (userId) => {
-            socket.userId = userId;
-            console.log('Hi userId:', socket.userId);
-        });
-        console.log('Hi there socket ID:', socket.id);
-        io.emit('joinChat', 'Hi there!');
+async function query() {
+    try {
+        const db = await mongoService.connect()
+        const chats = await db.collection(chatsCollection).aggregate([
+            {
+                $lookup:
+                {
+                    from: usersCollection,
+                    localField: 'users',
+                    foreignField: '_id',
+                    as: 'users'
+                }
+            },
+            {
+                $project: {
+                    users: {
+                        password: 0,
+                        email: 0,
+                        tripPreferences: 0,
+                        interestedIn: 0,
+                        proposals: 0,
+                        tripPrefs: 0,
+                        birthdate: 0,
+                    },
 
-        socket.on('disconnect', () => {
-            console.log('Bye user with socket:', socket.id);
-            socket.broadcast.emit('user-disconnected', 'HE IS GONE');
-        })
+                },
+            },       
+        ]).toArray()
+        return chats;
+    } catch {
 
-        socket.on('chat-msg-send', msg => {
-            console.log('got', {...msg, userId: socket.userId})
-            io.emit('chat-msg-receive', {...msg, userId: socket.userId})
-        })
-
-    });
-
+    }
 }

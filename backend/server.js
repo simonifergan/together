@@ -10,10 +10,10 @@ const session = require('express-session');
 
 
 // Import Routes
-const tripRoute = require('./routes/trip.route.js')
-const userRoute = require('./routes/user.route.js')
-const reviewRoute = require('./routes/review.route.js')
-const chatService = require('./services/chat.service.js')
+const tripRoute = require('./routes/trip.route')
+const userRoute = require('./routes/user.route')
+const reviewRoute = require('./routes/review.route')
+const chatRoute = require('./routes/chat.route')
 
 // app initiation
 const app = express()
@@ -41,9 +41,10 @@ app.get('/', (req, res) => {
 })
 
 // Init sockets
+const socketService = require('./services/socket.service.js')
 const server = app.listen(PORT, () => console.log(`Bridge app listening on port ${PORT}`))
 const io = require('socket.io')(server);
 
 // Use socket services
-chatService(io);
+socketService(io);
 
