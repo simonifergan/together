@@ -126,7 +126,6 @@ async function getById(tripId) {
                         tripPrefs: 0,
                         birthdate: 0,
                     },
-
                 },
             },
             {

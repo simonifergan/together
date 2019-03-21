@@ -49,7 +49,16 @@
         }
     }
     .trip-members {
+        margin-top: 20px;
         margin-bottom: 40px;
+        ul {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 120px);
+            justify-items: center;
+            li {
+                @include flex(column, flex-start, center);
+            }
+        }
         .user-preview {
             .user-profile-img {
                 width: 60px;
