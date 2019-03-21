@@ -6,8 +6,8 @@
         </h1>
       <div class="intro-form">
         <h2>Where do you want to go?</h2>
-        <form @submit.prevent>
-          <input type="text">
+        <form @submit.prevent="search">
+          <input type="text" placeholder="The Sky Is The Limit" v-model="searchQuery">
           <button type="submit">Search</button>
         </form>
       </div>
@@ -25,9 +25,19 @@ export default {
   components: {
     TripList
   },
+  data() {
+    return {
+      searchQuery: ''
+    }
+  },
   computed: {
     trips() {
       return this.$store.getters.trips;
+    }
+  },
+  methods: {
+    search() {
+      this.$router.push('/search?q=' + this.searchQuery)
     }
   },
   created() {

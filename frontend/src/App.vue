@@ -15,7 +15,7 @@ import MainHeader from '@/components/MainHeader';
 import Chat from '@/components/Chat';
 
 export default {
-  name: 'home',
+  name: 'App',
   components: {
     MainHeader, Chat
     // UploadImage

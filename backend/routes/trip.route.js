@@ -3,8 +3,11 @@ const BASE_URL = '/api/trip'
 
 module.exports = (app) => {
     // Query trips' list
-    app.get(BASE_URL, (req, res) => {
-        tripService.query()
+    app.get(BASE_URL, (req, res) => {        
+        let {searchQuery} = req.query
+        console.log('searchQuery:', searchQuery);
+        if (!searchQuery) searchQuery = '';
+        tripService.query(searchQuery)
             .then(trips => res.json(trips))
             .catch(err => res.end(err));
     });
@@ -25,7 +28,6 @@ module.exports = (app) => {
 
     // Delete by Id
     app.delete(`${BASE_URL}/:tripId`, (req, res) => {
-
         const { tripId } = req.params;
         tripService.remove(tripId)
             .then(() => {

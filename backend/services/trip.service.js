@@ -8,14 +8,13 @@ module.exports = {
     add,
     update,
     remove,
-    joinTrip
 }
 
 const tripsCollection = 'trips';
 const usersCollection = 'users';
 
-// subscribers: [{ _id, isAprroved:}]
-async function query() {
+
+async function query(searchQuery) {
     try {
         const db = await mongoService.connect()
         const trips = await db.collection(tripsCollection).aggregate([
@@ -69,7 +68,14 @@ async function query() {
                 }
             },       
         ]).toArray()
-        return trips;
+        const regex = new RegExp(searchQuery, 'i')
+        // console.log('regex', regex)
+        return trips.filter(trip => {
+            return trip.destinations.some(destination => Object.values(destination).some(value => regex.test(value))) ||
+            regex.test(trip.desc) ||
+            regex.test(trip.title) ||
+            trip.activities.some(activity => regex.test(activity))
+        });
     } catch {
 
     }
@@ -172,15 +178,18 @@ function add(trip) {
 }
 
 function update(trip) {
-    const strId = trip._id;
+    const tripId = trip._id;
+    const members = [...trip.members];
+    const userId = trip.userId;
     trip._id = new ObjectId(trip._id);
     trip.userId = new ObjectId(trip.userId);
-    trip.members = trip.members.map(member => new ObjectId(member));
-
+    trip.members = trip.members.map(member => new ObjectId(member._id));
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).updateOne({ _id: trip._id }, { $set: trip }))
         .then(mongoRes => {
-            trip._id = strId;
+            trip._id = tripId;
+            trip.userId = userId
+            trip.members = members;
             return trip;
         });
 }
@@ -190,19 +199,3 @@ function remove(id) {
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).remove({ _id }));
 }
-
-async function joinTrip(tripId, userId) {
-    [userId, tripId] = [new ObjectId(userId), new ObjectId(tripId)]
-    const db = await mongoService.connect();
-    const trip = await db.collection(tripsCollection).updateOne({ _id: tripId }, { $push: { "members": userId }})
-    return trip;
-}
- 
-
-// async function joinTrip(tripId, userId) {
-//     [userId, tripId] = [new ObjectId(userId), new ObjectId(tripId)]
-//     const db = await mongoService.connect();
-//     const trip = await db.collection(tripsCollection).findOneAndUpdate({ _id: tripId }, { $push: { interestedUsers: userId }}, {returnNewDocument: true})
-//     console.log(trip);
-//     return trip;
-// }
