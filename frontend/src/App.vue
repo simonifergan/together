@@ -10,7 +10,7 @@
 import MainHeader from '@/components/MainHeader'
 // import UploadImage from '@/components/UploadImage'
 export default {
-  name: 'home',
+  name: 'App',
   components: {
     MainHeader, 
     // UploadImage

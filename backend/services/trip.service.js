@@ -8,14 +8,13 @@ module.exports = {
     add,
     update,
     remove,
-    joinTrip
 }
 
 const tripsCollection = 'trips';
 const usersCollection = 'users';
 
 
-async function query() {
+async function query(searchQuery) {
     try {
         const db = await mongoService.connect()
         const trips = await db.collection(tripsCollection).aggregate([
@@ -69,8 +68,14 @@ async function query() {
                 }
             },       
         ]).toArray()
-        console.log('Hi trips', trips)
-        return trips;
+        const regex = new RegExp(searchQuery, 'i')
+        // console.log('regex', regex)
+        return trips.filter(trip => {
+            return trip.destinations.some(destination => Object.values(destination).some(value => regex.test(value))) ||
+            regex.test(trip.desc) ||
+            regex.test(trip.title) ||
+            trip.activities.some(activity => regex.test(activity))
+        });
     } catch {
 
     }
@@ -193,10 +198,10 @@ function remove(id) {
         .then(db => db.collection(tripsCollection).remove({ _id }));
 }
 
-async function joinTrip(tripId, userId) {
-    [userId, tripId] = [new ObjectId(userId), new ObjectId(tripId)]
-    const db = await mongoService.connect();
-    const trip = await db.collection(tripsCollection).findOneAndUpdate({ _id: tripId }, { $push: { interestedUsers: userId }}, {returnNewDocument: true})
-    console.log(trip);
-    return trip;
-}
+// async function joinTrip(tripId, userId) {
+//     [userId, tripId] = [new ObjectId(userId), new ObjectId(tripId)]
+//     const db = await mongoService.connect();
+//     const trip = await db.collection(tripsCollection).findOneAndUpdate({ _id: tripId }, { $push: { interestedUsers: userId }}, {returnNewDocument: true})
+//     console.log(trip);
+//     return trip;
+// }

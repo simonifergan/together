@@ -1,9 +1,13 @@
 <template>
     <section class="login-page">
         <form @submit.prevent="login">
-            <input type="email" v-model="email" placeholder="email">
-            <input type="text" v-model="password" placeholder="password">
-            <button type="submit"></button>
+            <label for="">Email<br>
+                <el-input type="email" v-model="email" placeholder="Email" />
+            </label>
+                <label for="">Password<br>
+            <el-input type="password" v-model="password" placeholder="Password" />
+                </label>
+            <button type="submit">Login</button>
         </form>
     </section>
 </template>

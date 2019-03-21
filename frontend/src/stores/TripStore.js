@@ -42,7 +42,7 @@ export default {
     actions: {
         // TODO: implement optimistic updates
         async loadTrips({ commit }) {
-            const trips = await TripService.query()
+            const trips = await TripService.query('')
             commit({ type: 'loadTrips', trips })
         },
         async loadTrip({ commit }, {tripId}) {
@@ -62,6 +62,10 @@ export default {
         async joinTrip({getters}, {tripId}) {
             const msg = await TripService.joinTrip(getters.currLoggedUser._id, tripId)
             return msg
+        },
+        async searchTrips({commit}, {searchQuery}) {
+            const trips = await TripService.query(searchQuery)
+            commit({type: 'loadTrips', trips})
         }
     }
 }
