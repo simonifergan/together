@@ -9,8 +9,7 @@ export default {
     getById,
     save,
     remove,
-    getEmpty,
-    joinTrip
+    getEmpty
 }
 
 const TRIP_API = (process.env.NODE_ENV !== 'development')
@@ -44,11 +43,11 @@ async function remove(id) {
     return data;
 }
 
-async function joinTrip(userId, tripId) {
-    const {data} = await axios.post(`${TRIP_API}/jointrip`, {userId, tripId})
-    console.log(data);
-    return data;
-}
+// async function joinTrip(userId, tripId) {
+//     const {data} = await axios.post(`${TRIP_API}/jointrip`, {userId, tripId})
+//     console.log(data);
+//     return data;
+// }
 
 function getEmpty() {
     return {

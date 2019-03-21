@@ -3,22 +3,22 @@ import UserService from '@/services/UserService'
 export default {
     state: {
         currLoggedUser: {
-            _id: '5c9110f3e7179a0e4088e8ad',
-            email: 'adi.binen@gmail.com',
-            firstname: 'Adi',
-            lastname: 'Binenbaum',
-            proposals: [],
-            interestedIn: [
-                '5c9115f5e7179a0e4088ebd2'
+            "_id": "5c92afe7ffcd3525281f845b",
+            "email": "johndoe@gmail.com",
+            "firstname": "John",
+            "lastname": "Doe",
+            "proposals": [],
+            "interestedIn": [
+                "5c9115f5e7179a0e4088ebd2"
             ],
-            birthdate: 774892500,
-            gender: 'female',
-            tripPrefs: {},
-            profilePic: 'https://res.cloudinary.com/dcv2jyqvl/image/upload/v1553085988/user_imgs/adi.png'
+            "birthdate": 599608800,
+            "gender": "male",
+            "tripPrefs": {},
+            "profilePic": "https://res.cloudinary.com/dcv2jyqvl/image/upload/v1553085562/user_imgs/qaibm9ad351l47s83gcn.jpg"
         }
     },
     mutations: {
-        setCurrLoggedUser(state, {user}) {
+        setCurrLoggedUser(state, { user }) {
             state.currLoggedUser = user;
         }
     },
@@ -31,14 +31,14 @@ export default {
         }
     },
     actions: {
-        async login({commit}, {credentials}) {
+        async login({ commit }, { credentials }) {
             const user = await UserService.login(credentials)
-            commit({type: 'setCurrLoggedUser', user})
+            commit({ type: 'setCurrLoggedUser', user })
         },
 
-        async signup({commit}, {newUser}) {
+        async signup({ commit }, { newUser }) {
             const user = await UserService.signup(newUser)
-            commit({type: 'setCurrLoggedUser', user})
+            commit({ type: 'setCurrLoggedUser', user })
         },
     }
 }
