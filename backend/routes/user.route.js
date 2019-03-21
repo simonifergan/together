@@ -26,6 +26,8 @@ module.exports = (app) => {
             .then((user) => {
                 if (!user) return res.status(401).end();
                 req.session.user = user;
+                // console.log('user logged:', user);
+                
                 res.json(user)
             })
             .catch(err => res.end(err));
