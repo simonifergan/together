@@ -54,6 +54,7 @@ module.exports = (app) => {
 
     app.post(`${BASE_URL}/:jointrip`, (req, res) => {
         const {tripId, userId} = req.body
-        //TODO: add join request using userId, tripId
+        tripService.joinTrip(tripId, userId)
+            .then(trip => res.json(trip))
     })
 }
