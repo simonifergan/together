@@ -29,6 +29,7 @@ export default {
   created() {
     this.$store.dispatch({ type: "socketConnect" });
     this.$store.dispatch({ type: "getUserChats" });
+    this.$store.dispatch({ type: "loadNotification"});
   }
 };
 </script>
