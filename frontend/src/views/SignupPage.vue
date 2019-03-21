@@ -1,21 +1,33 @@
 <template>
     <section class="signup-page">
         <form @submit.prevent="signup">
-            <input type="email" v-model="newUser.email" placeholder="Email">
-            <input type="text" v-model="newUser.password" placeholder="Password">
-            <input type="firstname" v-model="newUser.firstname" placeholder="First Name">
-            <input type="lastname" v-model="newUser.lastname" placeholder="Last Name">
-            <el-date-picker
-                v-model="newUser.birthDate"
-                type="date"
-                value-format="timestamp"
-                placeholder="Pick a day">
-            </el-date-picker>
-            <select v-model="newUser.gender">
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="null">Rather not say</option>
-            </select>
+            <label for="">Email
+                <el-input type="email" v-model="newUser.email" placeholder="Email" />
+            </label>
+            <label for="">Password
+                <el-input type ="password" v-model="newUser.password" placeholder="Password" />
+            </label>
+            <label for="">First Name
+                <el-input v-model="newUser.firstname" placeholder="First Name" />
+            </label>
+            <label for="">Last Name
+                <el-input v-model="newUser.lastname" placeholder="Last Name" />
+            </label>
+            <label for="">Birth Date<br>
+                <el-date-picker
+                    v-model="newUser.birthDate"
+                    type="date"
+                    value-format="timestamp"
+                    placeholder="Pick a day">
+                </el-date-picker>
+            </label><br>
+            <label for="">Gender<br>
+                <el-select v-model="newUser.gender">
+                    <el-option value="Male">Male</el-option>
+                    <el-option value="Female">Female</el-option>
+                    <el-option value="null">Rather not say</el-option>
+                </el-select>
+            </label><br>
             <button type="submit">Sign Up</button>
         </form>
     </section>

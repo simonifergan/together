@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import TripDetails from '@/views/TripDetails.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import SignupPage from '@/views/SignupPage.vue'
+import SearchPage from '@/views/SearchPage.vue'
 
 Vue.use(Router)
 
@@ -29,5 +30,11 @@ export default new Router({
       name: 'SignupPage',
       component: SignupPage
     },
+    {
+      path: '/search',
+      name: 'SearchPage',
+      component: SearchPage
+    },
+    
   ]
 })

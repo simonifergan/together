@@ -1,0 +1,6 @@
+.signup-page, .login-page {
+    @include wrapper();
+    input, select, label {
+        margin: 10px 0;
+    }
+}
