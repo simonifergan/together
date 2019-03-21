@@ -2,7 +2,20 @@ import UserService from '@/services/UserService'
 
 export default {
     state: {
-        currLoggedUser: null
+        currLoggedUser: {
+            _id: '5c9110f3e7179a0e4088e8ad',
+            email: 'adi.binen@gmail.com',
+            firstname: 'Adi',
+            lastname: 'Binenbaum',
+            proposals: [],
+            interestedIn: [
+                '5c9115f5e7179a0e4088ebd2'
+            ],
+            birthdate: 774892500,
+            gender: 'female',
+            tripPrefs: {},
+            profilePic: 'https://res.cloudinary.com/dcv2jyqvl/image/upload/v1553085988/user_imgs/adi.png'
+        }
     },
     mutations: {
         setCurrLoggedUser(state, {user}) {
