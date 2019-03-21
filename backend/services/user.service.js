@@ -14,15 +14,12 @@ module.exports = {
 const usersCollection = 'users';
 
 function query() {
-
-
     return mongoService.connect()
         .then(db => db.collection(usersCollection)
             .find({})
             .sort()
             .toArray()
         );
-
 }
 
 function login(credentials) {

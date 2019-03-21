@@ -42,8 +42,8 @@ export default {
         }
     },
     methods: {
-        login() {
-            this.$store.dispatch({type: 'signup', newUser})
+        signup() {
+            this.$store.dispatch({type: 'signup', newUser: this.newUser})
         }
     },
     created() {

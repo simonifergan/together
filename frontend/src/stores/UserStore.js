@@ -2,7 +2,7 @@ import UserService from '@/services/UserService'
 
 export default {
     state: {
-        currLoggedUser: {
+        loggedUser: {
             "_id": "5c92afe7ffcd3525281f845b",
             "email": "johndoe@gmail.com",
             "firstname": "John",
@@ -18,13 +18,13 @@ export default {
         }
     },
     mutations: {
-        setCurrLoggedUser(state, { user }) {
-            state.currLoggedUser = user;
+        setLoggedUser(state, { user }) {
+            state.loggedUser = user;
         }
     },
     getters: {
-        currLoggedUser(state) {
-            return state.currLoggedUser
+        loggedUser(state) {
+            return state.loggedUser
         },
         getEmptyUser() {
             return UserService.getEmptyUser()
@@ -33,12 +33,12 @@ export default {
     actions: {
         async login({ commit }, { credentials }) {
             const user = await UserService.login(credentials)
-            commit({ type: 'setCurrLoggedUser', user })
+            commit({ type: 'setLoggedUser', user })
         },
 
         async signup({ commit }, { newUser }) {
             const user = await UserService.signup(newUser)
-            commit({ type: 'setCurrLoggedUser', user })
+            commit({ type: 'setLoggedUser', user })
         },
     }
 }

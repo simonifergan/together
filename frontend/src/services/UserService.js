@@ -15,11 +15,13 @@ const API = (process.env.NODE_ENV !== 'development')
     : '//localhost:3003/api';
 
 async function login(credentials) {
-    axios.post(API + 'login', credentials)
+    const {data} = await axios.post(API + '/login', credentials)
+    return data
 }
 
 async function signup(newUser) {
-    axios.post(API + 'signup', newUser)
+    const {data} = await axios.post(API + '/signup', newUser)
+    return data
 }
 
 function getEmptyUser() {
