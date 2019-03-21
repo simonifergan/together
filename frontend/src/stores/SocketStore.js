@@ -1,12 +1,14 @@
 import SocketService from '@/services/SocketService';
 import UtilService from '@/services/UtilService';
 import ChatService from '@/services/ChatService';
+import NotificationService from '@/services/NotificationService';
 
 export default {
     state: {
         isConnected: false,
         // activeChats: [],
         userChats: [],
+        notifications: null
     },
     mutations: {
         setConnection(state) {
@@ -20,6 +22,9 @@ export default {
         },
         setUserChats(state, {chats}) {
             state.userChats = chats
+        },
+        setNotification(state, {notifications}) {
+            state.notifications = notifications;
         }
     },
     getters: {
@@ -45,11 +50,13 @@ export default {
             commit({type: 'addMsg', msg, chatId})
             SocketService.emit(SocketService.CHAT_SEND_MSG, {msg, chatId});
         },
-
-
         async getUserChats({commit, getters}) {
             const chats = await ChatService.getChats(getters.loggedUser._id)
             commit({type: 'setUserChats', chats})
+        },
+        async loadNotification({commit, getters}) {
+            const notifications = await NotificationService.getNotifications(getters.loggedUser._id);
+            commit({type: 'setNotification', notifications});
         }
     }
 }

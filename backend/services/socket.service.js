@@ -5,7 +5,8 @@ const CHAT_JOIN = 'chat-join';
 const CHAT_LEAVE = 'chat-leave';
 const CHAT_SEND_MSG = 'chat-send-msg';
 const CHAT_RECEIVE_MSG = 'chat-receive-msg';
-
+const NOTIFICATION_ADD = 'notification-add';
+const NOTIFICATION_ADDED = 'notification-added';
 
 module.exports = (io) => {
 
@@ -27,6 +28,10 @@ module.exports = (io) => {
         })
 
         // Notifications Funcs
+        socket.on(NOTIFICATION_ADD, notification => {
+            console.log('got', notification)
+            io.emit(NOTIFICATION_ADDED, notification);
+        })
     });
 
 }
