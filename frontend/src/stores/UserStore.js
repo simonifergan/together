@@ -34,7 +34,8 @@ export default {
         async login({ commit, dispatch }, { credentials }) {
             const user = await UserService.login(credentials)
             commit({ type: 'setLoggedUser', user })
-            dispatch({type: 'getUserChats'})
+            dispatch({type: 'socketUserConnect'});
+            dispatch({type: 'getUserChats'});
         },
 
         async signup({ commit }, { newUser }) {

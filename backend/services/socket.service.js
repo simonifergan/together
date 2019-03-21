@@ -21,7 +21,7 @@ module.exports = (io) => {
             socket.userId = userId;
             console.log('Hello user:', userId, 'in socket:', socket.userId);
         })
-        io.emit(CHAT_JOIN, 'Hi there!');
+
 
         socket.on('disconnect', () => {
             console.log('Bye user with socket:', socket.id);
@@ -30,6 +30,7 @@ module.exports = (io) => {
 
         socket.on(CHAT_SEND_MSG, async payload => {
             // console.log('got', msg)
+            payload.msg.sender = socket.userId;
             await chatService.addMsg(payload);
             io.emit(CHAT_RECEIVE_MSG, payload);
         })

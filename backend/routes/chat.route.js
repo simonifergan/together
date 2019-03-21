@@ -7,7 +7,6 @@ module.exports = (app) => {
         // console.log('userId:', userId);
         try {
             const chats = await chatService.query(userId);
-            console.log('chats:', chats);
             res.json(chats);
         } catch {
             res.status(404).end();
