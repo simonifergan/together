@@ -9,10 +9,11 @@
       </button>
     </div>
 
-    <button 
+    <button
       class="btn-join-trip"
+      @click="joinLeaveTrip"
       v-if="trip.userId !== loggedInUser._id">
-        {{actionBtn}}
+        {{(isUserMember)? 'Leave' : 'Ask to join'}}
     </button>
 
     <div class="trip-members">
@@ -58,14 +59,14 @@ export default {
     profilePic() {
       return { "background-image": `url('${this.trip.user.profilePic}')` };
     },
-    actionBtn() {
-      const loggedInUserId = this.loggedInUser._id;
-      const isMemberUser = this.trip.members.some(user => user._id === loggedInUserId);
-      return (isMemberUser)? 'Leave' : 'Ask to join';
+    isUserMember() {
+      return this.trip.members.some(user => user._id === this.loggedInUser._id);
     }
   },
   methods: {
-    joinTrip() {
+    joinLeaveTrip() {
+      // if (isUserMember) this.$store.dispatch({ type: "leaveTrip", tripId: this.trip._id });
+      // else this.$store.dispatch({ type: "joinTrip", tripId: this.trip._id });
       this.$store.dispatch({ type: "joinTrip", tripId: this.trip._id });
     }
   },
@@ -78,4 +79,5 @@ export default {
     this.$store.commit({ type: "clearTrip" });
   }
 };
+
 </script>

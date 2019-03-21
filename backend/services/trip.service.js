@@ -194,7 +194,15 @@ function remove(id) {
 async function joinTrip(tripId, userId) {
     [userId, tripId] = [new ObjectId(userId), new ObjectId(tripId)]
     const db = await mongoService.connect();
-    const trip = await db.collection(tripsCollection).findOneAndUpdate({ _id: tripId }, { $push: { interestedUsers: userId }}, {returnNewDocument: true})
-    console.log(trip);
+    const trip = await db.collection(tripsCollection).updateOne({ _id: tripId }, { $push: { "members": userId }})
     return trip;
 }
+ 
+
+// async function joinTrip(tripId, userId) {
+//     [userId, tripId] = [new ObjectId(userId), new ObjectId(tripId)]
+//     const db = await mongoService.connect();
+//     const trip = await db.collection(tripsCollection).findOneAndUpdate({ _id: tripId }, { $push: { interestedUsers: userId }}, {returnNewDocument: true})
+//     console.log(trip);
+//     return trip;
+// }

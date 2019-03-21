@@ -26,6 +26,9 @@ export default {
         removeTrip(state, { tripId }) {
             const idx = state.trips.findIndex(trip => trip._id === tripId);
             state.trips.splice(idx, 1);
+        },
+        addMember(state, {newMember}) {
+            state.tripToDisplay.newMember.unshift(newMember);
         }
     },
     getters: {
@@ -59,9 +62,15 @@ export default {
             console.log(msg);
             commit({ type: 'removeTrip', tripId: trip._id })
         },
-        async joinTrip({getters}, {tripId}) {
+        async joinTrip({commit, getters}, {tripId}) {
+            const backupTripToDisplay = getters.tripToDisplay;
             const msg = await TripService.joinTrip(getters.currLoggedUser._id, tripId)
             return msg
+            commit({type: 'addMember', })
+        },
+        async leaveTrip(context, {tripId}) {
+            const msg = await TripService.leaveTrip(getters.currLoggedUser._id, tripId)
+            return msg;
         }
     }
 }

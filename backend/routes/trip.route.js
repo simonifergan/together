@@ -52,9 +52,9 @@ module.exports = (app) => {
             })
     });
 
-    app.post(`${BASE_URL}/:jointrip`, (req, res) => {
-        const {tripId, userId} = req.body
-        tripService.joinTrip(tripId, userId)
-            .then(trip => res.json(trip))
-    })
+    // app.put(`${BASE_URL}/jointrip`, (req, res) => {
+    //     const {tripId, userId} = req.body
+    //     tripService.joinTrip(tripId, userId)
+    //         .then(trip => res.json(trip))
+    // })
 }
