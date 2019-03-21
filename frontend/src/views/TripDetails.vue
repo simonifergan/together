@@ -1,27 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <section class="trip-details" v-if="trip">
-    {{trip}}
-    <div class="trip-details-main">
-      <h1>Title</h1>
-      <button class="send-msg-btn"><i class="far fa-comment-alt"></i></button>
-      <ul>Interested users
-        <!-- <li v-for="user in interestedUsers" :key="user._id">
-          {{user.userName}} NAME OF PROP?
-        </li> -->
-      </ul>
-      <p>{{trip.desc}}</p>
-      <div class="destinations">
-        <ul>
-          <li
-            v-for="destination in trip.destinations"
-            :key="destination.region"
-          >{{destination.region}}, {{destination.country}}</li>
-        </ul>
-      </div>
-      <button @click="joinTrip">
-        join trip
-=======
   <section v-if="trip" class="trip-details">
     <div class="top-fold">
       <div class="profile-img" :style="profilePic"/>
@@ -29,7 +6,6 @@
       <h2>{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</h2>
       <button>
         <i class="far fa-comment-alt"></i>
->>>>>>> 78c2c0037bff52d73e83154eb171945a1d539b2e
       </button>
     </div>
 
