@@ -54,7 +54,7 @@ export default {
       return this.$store.getters.tripToDisplay;
     },
     loggedInUser() {
-      return this.$store.getters.currLoggedUser;
+      return this.$store.getters.loggedUser;
     },
     profilePic() {
       return { "background-image": `url('${this.trip.user.profilePic}')` };
