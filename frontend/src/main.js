@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import locale from 'element-ui/lib/locale/lang/en';
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -9,7 +10,7 @@ import '@/assets/css/main.scss';
 
 Vue.config.productionTip = false
 
-Vue.use(ElementUI, {locale: 'en-US'});
+Vue.use(ElementUI, {locale});
 
 new Vue({
   router,

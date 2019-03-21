@@ -44,12 +44,6 @@ async function remove(id) {
     return data;
 }
 
-// async function joinTrip(userId, tripId) {
-//     const {data} = await axios.post(`${TRIP_API}/jointrip`, {userId, tripId})
-//     console.log(data);
-//     return data;
-// }
-
 function getEmpty() {
     return {
         desc: null,

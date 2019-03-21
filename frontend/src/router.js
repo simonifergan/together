@@ -18,14 +18,14 @@ export default new Router({
       component: Home
     },
     {
+      path: '/edit/:tripId?',
+      name: 'TripEdit',
+      component: TripEdit
+    },
+    {
       path: '/trip/:tripId',
       name: 'tripDetails',
       component: TripDetails
-    },
-    {
-      path: '/trip/edit/:tripId?',
-      name: 'TripEdit',
-      component: TripEdit
     },
     {
       path: '/login',
