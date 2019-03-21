@@ -12,7 +12,6 @@ const session = require('express-session');
 // Import Routes
 const tripRoute = require('./routes/trip.route')
 const userRoute = require('./routes/user.route')
-const reviewRoute = require('./routes/review.route')
 const chatRoute = require('./routes/chat.route')
 
 // app initiation
@@ -34,7 +33,7 @@ app.use(express.static('public'));
 // Use routes
 tripRoute(app);
 userRoute(app);
-reviewRoute(app);
+chatRoute(app);
 
 app.get('/', (req, res) => {
     res.send('Hello Toy Backend!')

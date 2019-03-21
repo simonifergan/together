@@ -19,7 +19,6 @@ const CHAT_RECEIVE_MSG = 'chat-receive-msg';
 export default {
     on,
     emit,
-    send,
     // SOCKET EVENTS
     SOCKET_CONNECT, SOCKET_DISCONNECT, CHAT_JOIN, CHAT_LEAVE, CHAT_SEND_MSG, CHAT_RECEIVE_MSG
 }
@@ -31,15 +30,16 @@ export default {
 //     receiverId: String,
 // }
 
-
 function on(eventName, cb) {
     socket.on(eventName, cb)
 }
 
-function emit(event, payload) {
-    socket.emit(event, payload);
+function emit(eventName, payload) {
+    console.log('emittin event:', eventName, 'payload:', payload);
+    
+    socket.emit(eventName, payload);
 }
 
-function send(msg) {
-    socket.emit(CHAT_SEND_MSG, msg)
-}
+// function send(msg) {
+//     socket.emit(CHAT_SEND_MSG, msg)
+// }

@@ -21,7 +21,7 @@ module.exports = (app) => {
 
     app.post(`${BASE}/login`, (req, res) => {
         const credentials = req.body;
-        console.log(credentials);
+        // console.log(credentials);
         userService.login(credentials)
             .then((user) => {
                 if (!user) return res.status(401).end();
