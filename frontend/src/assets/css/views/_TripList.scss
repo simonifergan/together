@@ -8,6 +8,7 @@
     }
     .trip-items {
         @include flex();
+        width: 250px;
         .trip-preview {
             @include flex(column);
             font-family: $font-raleway;
