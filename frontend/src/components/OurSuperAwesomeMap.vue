@@ -306,7 +306,8 @@ export default {
                 y: 0
             },
             clickPos: null,
-            isDragging: false
+            isDragging: false,
+            didDrag: false
         };
     },
     methods: {
@@ -315,6 +316,10 @@ export default {
             this.drag(event)
         },
         selectCountry(ev) {
+            if (this.didDrag) {
+                this.didDrag = false
+                return
+            }
             const id = ev.path[0].id;
             if (!id) return;
             const idx = this.selectedCountries.findIndex(selectedIds => selectedIds === id)
@@ -365,6 +370,7 @@ export default {
             if (!this.isDragging) return
             this.mapView.x = this.clickPos.diffX - event.offsetX*this.mapView.zoom/1000
             this.mapView.y = this.clickPos.diffY - event.offsetY*this.mapView.zoom/1000
+            this.didDrag = true
         },
         stopDrag(event) {
             this.isDragging = false
