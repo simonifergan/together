@@ -7,7 +7,7 @@ import LoginPage from '@/views/LoginPage.vue'
 import SignupPage from '@/views/SignupPage.vue'
 import SearchPage from '@/views/SearchPage.vue'
 
-
+import AwesomeMap from '@/components/OurSuperAwesomeMap.vue';
 Vue.use(Router)
 
 export default new Router({
@@ -42,6 +42,10 @@ export default new Router({
       name: 'SearchPage',
       component: SearchPage
     },
+    {
+      path: '/map',
+      component: AwesomeMap
+    }
     
   ]
 })
