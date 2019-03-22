@@ -6,6 +6,7 @@ import TripEdit from '@/views/TripEdit.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import SignupPage from '@/views/SignupPage.vue'
 import SearchPage from '@/views/SearchPage.vue'
+import UserDetails from '@/views/UserDetails.vue'
 
 import AwesomeMap from '@/components/OurSuperAwesomeMap.vue';
 Vue.use(Router)
@@ -26,6 +27,11 @@ export default new Router({
       path: '/trip/:tripId',
       name: 'tripDetails',
       component: TripDetails
+    },
+    {
+      path: '/user/:userId',
+      name: 'userDetails',
+      component: UserDetails
     },
     {
       path: '/login',

@@ -1,0 +1,33 @@
+.notifications {
+    border: 1px solid black;
+    height: 100vh;
+    width: 250px;
+    .notification {
+        display: flex;
+        margin: 10px 5px;
+        text-decoration: none;
+        .profile-pic {
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            background-size: contain;
+            box-shadow: 0 0 0.5px #4d4d4d;
+            margin-right: 5px;
+        }
+        .notification-details {
+            p {
+                font-size: 0.8em;
+                align-items: center;
+                line-height: 130%;
+                &:first-of-type() {
+                    font-weight: bold;
+                }
+                &:nth-of-type(2) {
+                    color: #666;
+                    font-family: $font-open-sans-light;
+                    font-size: 0.7em;
+                }
+            }
+       }
+     }
+}
