@@ -5,8 +5,12 @@
     <div class="chat-container">
       <chat v-for="(chat,index) in chats" :chat="chat" :key="chat._id+index"/>
     </div>
+    {{notifications}}
     <ul class="notification-container">
-      <li v-for="notification in notifications" :key="notification._id" />
+      <notification 
+        v-for="notification in notifications" 
+        :key="notification._id" 
+        :notification="notification" />
     </ul>
   </div>
 </template>
@@ -14,11 +18,13 @@
 <script>
 import MainHeader from "@/components/MainHeader";
 import Chat from "@/components/Chat";
+import Notification from "@/components/Notification";
 
 export default {
   name: "App",
   components: {
     MainHeader,
+    Notification,
     Chat
   },
   computed: {
