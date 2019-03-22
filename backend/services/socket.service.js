@@ -30,7 +30,17 @@ module.exports = (io) => {
             if (payload.chatId) socket.join(payload.chatId);
             else {
                 // need to create new chat with:
-                console.log(payload);
+                // payload = {
+                //     chatId: null,
+                //     loggedUserId: context.getters.loggedUser._id,
+                //     users: [userId],
+                // };
+                payload.users.push(loggedUserId);
+                let chat = {
+                    users: payload.users,
+                    msgs: [],
+                }
+                
             }
             
         })
