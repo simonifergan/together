@@ -6,10 +6,10 @@
       <a href="#">About</a>
       <router-link to="/signup" v-if="!user">Sign up</router-link>
       <router-link to="/login" v-if="!user">Log in</router-link>
-      <div v-if="user" class="user-dashboard">
+      <div v-if="user" class="user-dashboard" :style="profilePic">
         
       </div>
-      <a href="#">Log out</a>
+      <!-- <a href="#">Log out</a> -->
     </nav>
   </header>
 </template>
@@ -31,7 +31,10 @@ export default {
     },
     user() {
       return this.$store.getters.loggedUser;
-    }
+    },
+    profilePic() {
+      return { "background-image": `url('${this.user.profilePic}')` };
+    },
   },
   watch: {
     $route: {

@@ -9,7 +9,7 @@
         :title="user.firstname"
       />
       <span v-for="(user, index) in chattingWith" :key="user._id+index">{{`${user.firstname} ${user.lastname}`}}</span>
-      <button :class="{'is-focused': isFocused}">
+      <button :class="{'is-focused': isFocused}" @click.stop="closeChat">
         <i class="fas fa-times"></i>
       </button>
     </header>
@@ -54,6 +54,9 @@ export default {
     },
   },
   methods: {
+    closeChat() {
+      this.$store.commit({type: 'closeChat', chatId: this.chat._id})
+    },
     send() {
       this.$store.dispatch({
         type: "socketSendMsg",
