@@ -66,7 +66,7 @@ async function query(searchQuery) {
                         birthdate: 0,
                     }
                 }
-            },       
+            }
         ]).toArray()
         const regex = new RegExp(searchQuery, 'i')
         // console.log('regex', regex)

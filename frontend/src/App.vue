@@ -5,21 +5,20 @@
     <div class="chat-container">
       <chat v-for="(chat,index) in chats" :chat="chat" :key="chat._id+index"/>
     </div>
-    {{getNotifications}}
-    <notifications :notifications="getNotifications" />
+    <notification-list :notifications="getNotifications" />
   </div>
 </template>
 
 <script>
 import MainHeader from "@/components/MainHeader";
 import Chat from "@/components/Chat";
-import Notifications from "@/components/Notifications";
+import NotificationList from "@/components/NotificationList";
 
 export default {
   name: "App",
   components: {
     MainHeader,
-    Notifications,
+    NotificationList,
     Chat
   },
   computed: {
