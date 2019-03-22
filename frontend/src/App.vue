@@ -5,33 +5,28 @@
     <div class="chat-container">
       <chat v-for="(chat,index) in chats" :chat="chat" :key="chat._id+index"/>
     </div>
-    {{notifications}}
-    <ul class="notification-container">
-      <notification 
-        v-for="notification in notifications" 
-        :key="notification._id" 
-        :notification="notification" />
-    </ul>
+    {{getNotifications}}
+    <notifications :notifications="getNotifications" />
   </div>
 </template>
 
 <script>
 import MainHeader from "@/components/MainHeader";
 import Chat from "@/components/Chat";
-import Notification from "@/components/Notification";
+import Notifications from "@/components/Notifications";
 
 export default {
   name: "App",
   components: {
     MainHeader,
-    Notification,
+    Notifications,
     Chat
   },
   computed: {
     chats() {
       return this.$store.getters.userChats;
     },
-    notifications() {
+    getNotifications() {
       return this.$store.getters.notifications;
     }
   },
