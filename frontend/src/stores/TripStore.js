@@ -19,7 +19,7 @@ export default {
             const idx = state.trips.findIndex(trip => trip._id === tripId);
             state.trips.splice(idx, 1);
         },
-        ///// trip to display section:
+        // trip to display section:
         loadTrip(state, { trip }) {
             state.tripToDisplay = trip;
         },
@@ -42,7 +42,7 @@ export default {
     },
     getters: {
         trips(state) {
-            return state.trips
+            return state.trips;
         },
         tripToDisplay(state) {
             return state.tripToDisplay;

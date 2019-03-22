@@ -7,7 +7,7 @@ export default {
     state: {
         isConnected: false,
         userChats: [],
-        notifications: null
+        notifications: []
     },
     mutations: {
         setConnection(state) {
@@ -51,7 +51,7 @@ export default {
             commit({type: 'setUserChats', chats})
         },
         async loadNotification({commit, getters}) {
-            const notifications = await NotificationService.query(getters.loggedUser._id);
+            const notifications = await NotificationService.query();
             commit({type: 'setNotification', notifications});
         }
     }
