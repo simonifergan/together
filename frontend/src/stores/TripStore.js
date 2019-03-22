@@ -94,7 +94,7 @@ export default {
             let newNotification = {
                 userId: getters.loggedUser._id,
                 tripId: tripToDisplay._id,
-                
+                action
             }
             dispatch({type: 'addNotification', })
             try {
