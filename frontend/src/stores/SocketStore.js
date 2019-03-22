@@ -24,11 +24,17 @@ export default {
         },
         setNotification(state, {notifications}) {
             state.notifications = notifications;
+        },
+        addNotification(state, {notification}) {
+            state.notifications.unshift(notification);
         }
     },
     getters: {
         userChats(state) {
             return state.userChats;
+        },
+        notifications(state) {
+            return state.notifications;
         }
     },
     actions: {
@@ -36,6 +42,9 @@ export default {
             context.dispatch({type: 'socketUserConnect'})
             SocketService.on(SocketService.CHAT_RECEIVE_MSG, ({chatId, msg}) => {
                 context.commit({type: 'addMsg', msg, chatId});
+            })
+            SocketService.on(SocketService.NOTIFICATION_ADDED, ({notification}) => {
+                context.commit({type: 'addNotification', notification});
             })
         },
         socketUserConnect({getters}) {
@@ -53,6 +62,9 @@ export default {
         async loadNotification({commit, getters}) {
             const notifications = await NotificationService.query();
             commit({type: 'setNotification', notifications});
+        },
+        addNotification({commit}, {newNotification}) {
+            SocketService.emit(SocketService.NOTIFICATION_ADD, newNotification);
         }
     }
 }

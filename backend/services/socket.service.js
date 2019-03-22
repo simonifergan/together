@@ -1,4 +1,5 @@
 const chatService = require('./chat.service');
+const notificationService = require('./notification.service');
 
 // EVENTS LIST:
 const SOCKET_CONNECT = 'socket-connect';
@@ -22,7 +23,6 @@ module.exports = (io) => {
             console.log('Hello user:', userId, 'in socket:', socket.userId);
         })
 
-
         socket.on('disconnect', () => {
             console.log('Bye user with socket:', socket.id);
             socket.broadcast.emit(SOCKET_DISCONNECT, 'HE IS GONE:', socket.id);
@@ -35,11 +35,13 @@ module.exports = (io) => {
             io.emit(CHAT_RECEIVE_MSG, payload);
         })
 
-        // Notifications Funcs
-        socket.on(NOTIFICATION_ADD, notification => {
-            console.log('got', notification)
+        // Notifications
+        socket.on(NOTIFICATION_ADD, async notification => {
+            notification.createdAt = Date.now();
+            console.log('notification to add:', notification);
+            
+            await notificationService.add(notification)
             io.emit(NOTIFICATION_ADDED, notification);
         })
     });
-
 }

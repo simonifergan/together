@@ -15,12 +15,21 @@ const CHAT_LEAVE = 'chat-leave';
 const CHAT_SEND_MSG = 'chat-send-msg';
 const CHAT_RECEIVE_MSG = 'chat-receive-msg';
 
+const NOTIFICATION_ADD = 'notification-add'
+const NOTIFICATION_ADDED = 'notification-added'
 
 export default {
     on,
     emit,
     // SOCKET EVENTS
-    SOCKET_CONNECT, SOCKET_DISCONNECT, CHAT_JOIN, CHAT_LEAVE, CHAT_SEND_MSG, CHAT_RECEIVE_MSG
+    SOCKET_CONNECT, 
+    SOCKET_DISCONNECT, 
+    CHAT_JOIN, 
+    CHAT_LEAVE, 
+    CHAT_SEND_MSG, 
+    CHAT_RECEIVE_MSG,
+    NOTIFICATION_ADD,
+    NOTIFICATION_ADDED,
 }
 // TODO: All ids should be converted by backend to ObjId, and all msgs should be stored in the DB like this:
 // msgObj: {
@@ -36,7 +45,6 @@ function on(eventName, cb) {
 
 function emit(eventName, payload) {
     console.log('emittin event:', eventName, 'payload:', payload);
-    
     socket.emit(eventName, payload);
 }
 

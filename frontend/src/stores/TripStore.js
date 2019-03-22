@@ -1,4 +1,6 @@
-import TripService from '@/services/TripService'
+import TripService from '@/services/TripService';
+import NotificationService from '@/services/NotificationService';
+import { userInfo } from 'os';
 
 export default {
     state: {
@@ -64,10 +66,21 @@ export default {
             const trip = await TripService.getById(tripId);
             commit({ type: 'loadTrip', trip });
         },
-        async saveTrip({ commit }, { trip }) {
+        async saveTrip({ commit, getters, dispatch}, { trip }) {
             const newTrip = await TripService.save(trip)
-            if (trip._id) commit({ type: 'updateTrip', trip: newTrip })
-            else commit({ type: 'addTrip', trip: newTrip })
+            if (trip._id) {
+                commit({ type: 'updateTrip', trip: newTrip })
+                // userId, trip id, actions - created a trip,
+                let newNotification = {
+                    action: NotificationService.TRIP_MODIFIED,
+                    userId: getters.loggedUser,
+                    tripId: trip._id
+                }
+                dispatch({type: 'addNotification', newNotification})
+            }
+            else {
+                commit({ type: 'addTrip', trip: newTrip })
+            }
         },
         async removeTrip({ commit }, { trip }) {
             const msg = await TripService.remove(trip._id)
