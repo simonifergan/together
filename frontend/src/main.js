@@ -5,6 +5,7 @@ import locale from 'element-ui/lib/locale/lang/en';
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import './filter'
 import './registerServiceWorker'
 import '@/assets/css/main.scss';
 
