@@ -1,5 +1,5 @@
 <template>
-  <aside class="chat-box" @click="focusInput">
+  <aside class="chat-box" @click="focusInput" v-if="chat.isActive">
     <header>
       <div
         class="user-img"

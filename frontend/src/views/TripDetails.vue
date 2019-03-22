@@ -78,6 +78,16 @@ export default {
     isUserMember() {
       return this.trip.members.some(user => user._id === this.loggedInUser._id);
     }
+  },
+    watch: {
+    $route: {
+      handler(newRoute) {
+        const {tripId} = newRoute.params;
+        if (tripId !== this.trip._id) {
+          this.$store.dispatch({ type: "loadTrip", tripId });
+        }
+      }
+    }
   }
 };
 </script>
