@@ -16,7 +16,7 @@
         :title="member.firstname"
         />
         <div class="placeholder-div"></div>
-        <div class="members-txt" v-if="spotsLeft > 0">joined, {{spotsLeft}} spots left!</div>
+        <div class="members-txt" v-if="spotsLeft > 0">joined, {{spotsLeft}} spots remaining!</div>
     </div>
   </router-link>
 </template>

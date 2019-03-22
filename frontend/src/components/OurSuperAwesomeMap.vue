@@ -304,7 +304,6 @@ export default {
         },
         handleTooltip(ev) {
             const id = ev.path[0].id;
-            console.log(ev);
             if (id) {
                 this.toolTipTxt = id;
                 this.mousePos.x = ev.clientX;
@@ -315,16 +314,15 @@ export default {
                 this.mousePos.x = null;
                 this.mousePos.y = null;
             }
-        }
+        },
     },
     computed: {
         tooltipPos() {
-            console.log('COMPUTED', this.mousePos.x, this.mousePos.y);
             return {left: `${this.mousePos.x + 20}px`, top: `${this.mousePos.y-20}px`};
         },
         tooltipVisible() {
             return {show: (this.mousePos.x && this.mousePos.y)}
-        }
+        },
     }
 }
 </script>
@@ -333,6 +331,8 @@ export default {
 .svg-map {
     width: 1026px;
     height: 656px;
+    user-select: none;
+
 }
 .tooltip {
     position: fixed;
