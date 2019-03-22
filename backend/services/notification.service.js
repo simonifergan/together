@@ -6,14 +6,14 @@ module.exports = {
     add
 }
 
-const notificationCollection = 'notifications';
+const notificationsCollection = 'notifications';
 const tripsCollection = 'trips';
 const usersCollection = 'users';
 
 async function query() {
     const db = await mongoService.connect()
     // const notifications = await db.collection(notificationCollection).find({}).toArray()
-    const notifications = await db.collection(notificationCollection)
+    const notifications = await db.collection(notificationsCollection)
         .aggregate([
             {
                 $lookup:
@@ -81,7 +81,9 @@ async function add(notification) {
     const db = await mongoService.connect()
     notification.userId = new ObjectId(notification.userId);
     notification.tripId = new ObjectId(notification.tripId);
-    const res = await db.collection(notificationCollection).insertOne(notification)
-    console.log('notification service backend - addedNotification:', res.ops[0]);
-    return res.ops[0];
+    const { insertedId } = await db.collection(notificationsCollection).insertOne(notification)
+
+    notification._id = insertedId;
+    notification.user = await db.collection(usersCollection).findOne({_id: notification.userId})
+    return notification;
 }
