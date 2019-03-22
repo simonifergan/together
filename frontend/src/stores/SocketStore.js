@@ -39,8 +39,8 @@ export default {
         setNotification(state, { notifications }) {
             state.notifications = notifications;
         },
-        addNotification(state, { notification }) {
-            state.notifications.unshift(notification);
+        addNotification(state, { addedNotification }) {
+            state.notifications.unshift(addedNotification);
         }
     },
     getters: {
