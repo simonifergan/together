@@ -73,7 +73,7 @@ async function query() {
             {
                 $unwind: '$trip'
             },
-        ]).toArray()
+        ]).sort({createdAt: -1}).toArray()
     return notifications;
 }
 

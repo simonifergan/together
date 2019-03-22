@@ -25,7 +25,6 @@
         ref="msgbox"
         v-model="newMsg"
         placeholder="Type a message..."
-        autofocus
         @blur="isFocused = false"
       >
       <button title="Send message" type="submit" :class="{'is-focused': isFocused}"><i class="fas fa-paper-plane"></i></button>
