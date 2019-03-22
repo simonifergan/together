@@ -3,7 +3,16 @@
         <div :style="tooltipPos" class="tooltip" :class="tooltipVisible" >
             {{toolTipTxt}}
         </div>
-        <svg @mousemove="handleTooltip" @click="selectCountry" style="width: 100%; height: 100%;" xmlns="http://www.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+        <map-tools
+        @zoomIn="mapView.zoom -= 100"
+        @zoomOut="mapView.zoom += 100"
+        @panUp="mapView.y -= 100"
+        @panLeft="mapView.x -= 100"
+        @panDown="mapView.y += 100"
+        @panRight="mapView.x += 100"
+        ></map-tools>
+        <svg @wheel.prevent="zoom" @mousedown="startDrag" @mousemove="handleMousemove" @mouseup="stopDrag" @mouseleave="stopDrag" @click="selectCountry" :viewBox="viewBoxVal"
+        width="1000" height="1000" xmlns="http://www1.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
             <defs>
             
 
@@ -278,7 +287,11 @@
 
 <script>
 import UtilService from '@/services/UtilService.js'
+import MapTools from '@/components/MapTools.vue'
 export default {
+    components: {
+        MapTools
+    },
     data() {
         return {
             selectedCountries: [],
@@ -286,10 +299,21 @@ export default {
             mousePos: {
                 x: null,
                 y: null,
-            }
+            },
+            mapView: {
+                zoom: 1000,
+                x: 0,
+                y: 0
+            },
+            clickPos: null,
+            isDragging: false
         };
     },
     methods: {
+        handleMousemove(event) {
+            this.handleTooltip(event)
+            this.drag(event)
+        },
         selectCountry(ev) {
             const id = ev.path[0].id;
             if (!id) return;
@@ -315,6 +339,37 @@ export default {
                 this.mousePos.y = null;
             }
         },
+        zoom(event) {
+            let frX = event.offsetX/1000 //UPDATE WHEN RESPONSIVE
+            let frY = event.offsetY/1000
+            if (event.deltaY > 0) {
+                this.mapView.zoom += 100
+                this.mapView.x -= frX * 100
+                this.mapView.y -= frY * 100
+            }
+            else {
+                if (this.mapView.zoom - 100 <= 0) return
+                this.mapView.zoom -= 100
+                this.mapView.x += frX * 100
+                this.mapView.y += frY * 100
+            }
+            
+        },
+        startDrag(event) {
+            this.clickPos = {diffX: (event.offsetX*this.mapView.zoom/1000 + this.mapView.x),
+                             diffY: (event.offsetY*this.mapView.zoom/1000 + this.mapView.y)}
+            console.log(this.clickPos);
+            this.isDragging = true
+        },
+        drag(event) {
+            if (!this.isDragging) return
+            this.mapView.x = this.clickPos.diffX - event.offsetX*this.mapView.zoom/1000
+            this.mapView.y = this.clickPos.diffY - event.offsetY*this.mapView.zoom/1000
+        },
+        stopDrag(event) {
+            this.isDragging = false
+            this.clickPos = null
+        }
     },
     computed: {
         tooltipPos() {
@@ -323,6 +378,9 @@ export default {
         tooltipVisible() {
             return {show: (this.mousePos.x && this.mousePos.y)}
         },
+        viewBoxVal() {
+            return `${this.mapView.x} ${this.mapView.y} ${this.mapView.zoom} ${this.mapView.zoom}`
+        }
     }
 }
 </script>
