@@ -7,7 +7,7 @@
         width: 100%;
         z-index: 2;
         color: #333;
-        box-shadow: 0px .5px 1px black;  
+        box-shadow: 0px .5px 1px #676767;  
         &.on-homepage {
             box-shadow: none;
             position: absolute;
@@ -29,6 +29,7 @@
             @include flex(row, space-between, center);
             font-family: $font-open-sans;
             font-weight: 550;
+            font-size: 14px;
             *:not(:first-child) {
                 margin-left: 30px;
             }
@@ -36,6 +37,7 @@
                 color: inherit;
                 text-decoration: none;
                 padding: 20px 0;
+                font-weight: 600;
                 &:hover {
                     box-shadow: 0px 3px 0px #333;
                 }
@@ -45,7 +47,39 @@
                 width: 35px;
                 height: 35px;
                 background-size: contain;
+                position: relative;
                 cursor: pointer;
+                .dropdown {
+                    @include flex(column);
+                    z-index: 2;
+                    position: absolute;
+                    background-color: #fff;
+                    padding: 0 10px;
+                    color: #333;
+                    width: 230px;
+                    top: 51px;
+                    right: -5px;
+                    border-radius: 0 0 1px 1px;
+                    box-shadow: 0 0 1px 1px $box-shadow-gray;
+                    * {
+                        margin: 0;
+                    }
+                    a {
+                        font-weight: normal;
+                        color: #676767;
+                        box-shadow: 0 1px 0px $box-shadow-gray;
+                        &:hover {
+                            box-shadow: 0px 1px 0px #333;
+                        }
+                        &:last-child {
+                            box-shadow: none;
+                            margin-bottom: 2px;
+                            &:hover {
+                                box-shadow: 0 1px 0px #333;
+                            }
+                        }
+                    }
+                }
             }
             
         }
