@@ -11,7 +11,7 @@
         width: 250px;
         .trip-preview {
             @include flex(column);
-            font-family: $font-raleway;
+            font-family: $font-ubuntu;
             margin-right: 25px;
             line-height: 20px;
             cursor: pointer;
@@ -31,17 +31,17 @@
                 }
             }
             p:nth-of-type(1) {
-                font-family: $font-raleway-s-bold;
+                font-family: $font-ubuntu-s-bold;
                 font-size: .9em;
                 color: #888;
                 text-transform: uppercase;
             }
             p:nth-of-type(2) {
-                font-family: $font-raleway-bold;
+                font-family: $font-ubuntu-bold;
                 font-size: 1.1em;
             }
             p:nth-of-type(3) {
-                font-family: $font-raleway;
+                font-family: $font-ubuntu;
                 font-size: .9em;
             }
             .members-container {

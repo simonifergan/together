@@ -9,12 +9,12 @@
         grid-template: 3fr 2fr / 100px 1fr;
         grid-column-gap: 20px;
         h1 {
-            font-family: 'Raleway Bold';
+            font-family: $font-ubuntu-bold;
             font-size: 1.5em;
             align-self: center;
         }
         h2 {
-            font-family: 'Raleway semi Bold';
+            font-family: $font-ubuntu;
             font-size: 1.2em;
             color: #606060;
         }
@@ -35,7 +35,7 @@
         }
     }
     .btn-join-trip {
-        font-family: 'Raleway semi Bold';
+        font-family: $font-ubuntu-s-bold;
         color: #606060;
         background-color: unset;
         border: none;
