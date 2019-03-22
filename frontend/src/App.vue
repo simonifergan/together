@@ -23,6 +23,7 @@ export default {
   },
   computed: {
     chats() {
+      console.log(this.$store.getters.userChats)
       return this.$store.getters.userChats;
     },
     getNotifications() {

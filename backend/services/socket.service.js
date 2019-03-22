@@ -4,6 +4,7 @@ const notificationService = require('./notification.service');
 // EVENTS LIST:
 const SOCKET_CONNECT = 'socket-connect';
 const SOCKET_DISCONNECT = 'socket-disconnect';
+const CHAT_REGISTER_ROOMS = 'socket-register-rooms';
 const CHAT_JOIN = 'chat-join';
 const CHAT_JOIN_NEW = 'chat-join-new';
 const CHAT_LEAVE = 'chat-leave';
@@ -19,6 +20,12 @@ module.exports = (io) => {
         socket.on(SOCKET_CONNECT, userId => {
             socket.userId = userId;
             console.log('Hello user:', userId, 'in socket:', socket.userId);
+        })
+
+        socket.on(CHAT_REGISTER_ROOMS, chats => {
+            chats.forEach(chat => {
+                socket.join(chat._id);
+            })
         })
 
         socket.on('disconnect', () => {

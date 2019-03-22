@@ -1,5 +1,5 @@
 <template>
-  <aside class="chat-box" @click="focusInput" v-if="isActive">
+  <aside class="chat-box" @click="focusInput" v-if="chat.isActive">
     <header>
       <div
         class="user-img"
@@ -9,7 +9,7 @@
         :title="user.firstname"
       />
       <span v-for="(user, index) in chattingWith" :key="user._id+index">{{`${user.firstname} ${user.lastname}`}}</span>
-      <button :class="{'is-focused': isFocused}" @click="closeChat">
+      <button :class="{'is-focused': isFocused}" @click.stop="closeChat">
         <i class="fas fa-times"></i>
       </button>
     </header>
@@ -52,9 +52,6 @@ export default {
     loggedUser() {
       return this.$store.getters.loggedUser;
     },
-    isActive() {
-      return !!this.chat.isActive;
-    }
   },
   methods: {
     closeChat() {

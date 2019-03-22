@@ -15,6 +15,7 @@ export default {
             console.log('connection status:', state.isConnected);
         },
         addNewChat(state, { chat }) {
+            chat.isActive = true;
             state.userChats.push(chat);
         },
         activateChat(state, {chatId}) {
@@ -39,6 +40,7 @@ export default {
             state.notifications = notifications;
         },
         addNotification(state, { addedNotification }) {
+            console.log(addedNotification);
             state.notifications.unshift(addedNotification);
         }
     },
@@ -76,18 +78,18 @@ export default {
             SocketService.emit(SocketService.CHAT_SEND_MSG, { msg, chatId });
         },
         socketJoinPrivateChat(context, { userId }) {
-            const chatId = context.getters.userChats.find(chat => {
-                if (chat.users > 2) return false;
-                if (chat.users.some(id => id === userId)) return true;
+            const chat = context.getters.userChats.find(chat => {
+                if (chat.users.length > 2) return false;
+                if (chat.users.some(user => user._id === userId)) return true;
             })
             let payload;
-            if (chatId) {
+            if (chat) {
                 payload = {
-                    chatId,
+                    chatId: chat._id,
                     loggedUserId: context.getters.loggedUser._id,
                     users: [userId],
                 };
-                context.commit({type: 'activateChat', chatId});
+                context.commit({type: 'activateChat', chatId: chat._id});
             } else {
                 payload = {
                     chatId: null,
@@ -99,8 +101,13 @@ export default {
 
         },
         async getUserChats({ commit, getters }) {
-            const chats = await ChatService.getChats(getters.loggedUser._id)
-            commit({ type: 'setUserChats', chats })
+            let chats = await ChatService.getChats(getters.loggedUser._id)
+            chats = chats.map(chat => {
+                chat.isActive = false;
+                return chat;
+            })
+            commit({ type: 'setUserChats', chats });
+            SocketService.emit(SocketService.CHAT_REGISTER_ROOMS, chats);
         },
         async loadNotification({ commit, getters }) {
             const notifications = await NotificationService.query();

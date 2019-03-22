@@ -10,6 +10,7 @@ const socket = io(SOCKET_PORT);
 // BACKEND EVENTS LIST:
 const SOCKET_CONNECT = 'socket-connect';
 const SOCKET_DISCONNECT = 'socket-disconnect';
+const CHAT_REGISTER_ROOMS = 'socket-register-rooms';
 const CHAT_JOIN = 'chat-join';
 const CHAT_JOIN_NEW = 'chat-join-new';
 const CHAT_LEAVE = 'chat-leave';
@@ -25,6 +26,7 @@ export default {
     // SOCKET EVENTS
     SOCKET_CONNECT, 
     SOCKET_DISCONNECT, 
+    CHAT_REGISTER_ROOMS,
     CHAT_JOIN,
     CHAT_JOIN_NEW,
     CHAT_LEAVE,
