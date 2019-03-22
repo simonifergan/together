@@ -21,10 +21,9 @@ export default {
             const chat = state.userChats.find(chat => chat._id === chatId);
             if (chat) chat.isActive = true;
         },
-        removeChat(state, { chatId }) {
-            const idx = state.userChats.find(chat => chat._id === chatId);
-            if (idx === -1) return;
-            state.userChats[idx].isActive = false;
+        closeChat(state, { chatId }) {
+            const chat = state.userChats.find(chat => chat._id === chatId);
+            chat.isActive = false;
         },
         addMsg(state, { msg, chatId }) {
             const chat = state.userChats.find(chat => chat._id === chatId)
