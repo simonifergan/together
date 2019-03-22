@@ -2,8 +2,9 @@
   <ul class="notifications">
     <notification
       v-for="notification in notifications"
+      :key="notification._id"
       :notification="notification"
-      :key="notification._id"/>
+    ></notification>
   </ul>
 </template>
 

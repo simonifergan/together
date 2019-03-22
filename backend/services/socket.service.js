@@ -56,10 +56,8 @@ module.exports = (io) => {
         // Notifications
         socket.on(NOTIFICATION_ADD, async notification => {
             notification.createdAt = Date.now();
-            console.log('notification to add:', notification);
-
-            await notificationService.add(notification)
-            io.emit(NOTIFICATION_ADDED, notification);
+            let addedNotification = await notificationService.add(notification)
+            io.emit(NOTIFICATION_ADDED, addedNotification);
         })
     });
 }

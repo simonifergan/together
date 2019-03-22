@@ -63,8 +63,9 @@ export default {
             SocketService.on(SocketService.CHAT_RECEIVE_MSG, ({ chatId, msg }) => {
                 context.commit({ type: 'addMsg', msg, chatId });
             })
-            SocketService.on(SocketService.NOTIFICATION_ADDED, ({ notification }) => {
-                context.commit({ type: 'addNotification', notification });
+            SocketService.on('notification-added', (addedNotification) => {
+                console.log('NOTIFICATION ADDED:', addedNotification);
+                context.commit({ type: 'addNotification', addedNotification });
             })
         },
         socketUserConnect({ getters }) {
@@ -107,6 +108,7 @@ export default {
             commit({ type: 'setNotification', notifications });
         },
         addNotification(context, { newNotification }) {
+            console.log('socket store');
             SocketService.emit(SocketService.NOTIFICATION_ADD, newNotification);
         }
     }

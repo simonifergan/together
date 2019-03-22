@@ -79,6 +79,9 @@ async function query() {
 
 async function add(notification) {
     const db = await mongoService.connect()
-    const addedNotification = await db.collection(notificationCollection).insert({ notification })
-    return addedNotification;
+    notification.userId = new ObjectId(notification.userId);
+    notification.tripId = new ObjectId(notification.tripId);
+    const res = await db.collection(notificationCollection).insertOne(notification)
+    console.log('notification service backend - addedNotification:', res.ops[0]);
+    return res.ops[0];
 }
