@@ -1,5 +1,5 @@
 <template>
-  <aside class="chat-box" @click="focusInput">
+  <aside class="chat-box" @click="focusInput" v-if="chat.isActive">
     <header>
       <div
         class="user-img"
@@ -9,7 +9,7 @@
         :title="user.firstname"
       />
       <span v-for="(user, index) in chattingWith" :key="user._id+index">{{`${user.firstname} ${user.lastname}`}}</span>
-      <button :class="{'is-focused': isFocused}">
+      <button :class="{'is-focused': isFocused}" @click.stop="closeChat">
         <i class="fas fa-times"></i>
       </button>
     </header>
@@ -25,7 +25,6 @@
         ref="msgbox"
         v-model="newMsg"
         placeholder="Type a message..."
-        autofocus
         @blur="isFocused = false"
       >
       <button title="Send message" type="submit" :class="{'is-focused': isFocused}"><i class="fas fa-paper-plane"></i></button>
@@ -54,6 +53,9 @@ export default {
     },
   },
   methods: {
+    closeChat() {
+      this.$store.commit({type: 'closeChat', chatId: this.chat._id})
+    },
     send() {
       this.$store.dispatch({
         type: "socketSendMsg",

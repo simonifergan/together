@@ -4,8 +4,18 @@
     <nav>
       <router-link to="/">Home</router-link>
       <a href="#">About</a>
-      <router-link to="/signup">Sign up</router-link>
-      <router-link to="/login">Log in</router-link>
+      <router-link to="/signup" v-if="!user">Sign up</router-link>
+      <router-link to="/login" v-if="!user">Log in</router-link>
+      <div v-if="user" class="user-dashboard" :style="profilePic" @click="isShowDropdown = !isShowDropdown">
+        <div class="dropdown" v-if="isShowDropdown" @click.stop="">
+          <a href="#">Profile</a>
+          <a href="#">Account</a>
+          <a href="#">Friends</a>
+          <a href="#">My trips</a>
+          <a href="#">Log out</a>
+        </div>
+      </div>
+      <!-- <a href="#">Log out</a> -->
     </nav>
   </header>
 </template>
@@ -16,6 +26,7 @@ export default {
   data() {
     return {
       isHome: true,
+      isShowDropdown: false,
     };
   },
   created() {
@@ -24,7 +35,13 @@ export default {
   computed: {
     isAbsolute() {
       return {'on-homepage': this.isHome}
-    }
+    },
+    user() {
+      return this.$store.getters.loggedUser;
+    },
+    profilePic() {
+      return { "background-image": `url('${this.user.profilePic}')` };
+    },
   },
   watch: {
     $route: {

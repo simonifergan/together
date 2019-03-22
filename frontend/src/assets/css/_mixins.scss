@@ -10,7 +10,7 @@
     color: white;
     border: none;
     padding: 10px;
-    font-family: 'Raleway Bold';
+    font-family: $font-ubuntu-light;
     cursor: pointer;
 }
 
@@ -18,7 +18,7 @@
     font-size: 1em;
     padding: 4px;
     color: #484848;
-    font-family: 'Raleway Bold'
+    font-family: $font-ubuntu-light;
 }
 
 @mixin wrapper() {

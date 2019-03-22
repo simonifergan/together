@@ -34,7 +34,6 @@ async function query(userId) {
                     users: {
                         password: 0,
                         email: 0,
-                        tripPreferences: 0,
                         interestedIn: 0,
                         proposals: 0,
                         tripPrefs: 0,
@@ -60,7 +59,15 @@ async function createChat(chat) {
             const userInfo =  db.collection(usersCollection).findOne({ _id });
             return userInfo;
         }));
-        console.log(chat);
+        chat.users = chat.users.map(user => {
+            delete user.email;
+            delete user.password;
+            delete user.tripPrefs;
+            delete user.interestedIn;
+            delete user.proposals;
+
+            return user
+        })
         return chat;
     } catch {
         console.log('major error');

@@ -14,8 +14,23 @@
 }
 
 @font-face {
+    font-family: 'Ubuntu Light';
+    src: url('../fonts/Ubuntu/Ubuntu-Light.ttf');
+}
+
+@font-face {
     font-family: 'Ubuntu';
     src: url('../fonts/Ubuntu/Ubuntu-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Ubuntu Semi Bold';
+    src: url('../fonts/Ubuntu/Ubuntu-Bold.ttf');
+}
+
+@font-face {
+    font-family: 'Ubuntu Bold';
+    src: url('../fonts/Ubuntu/Ubuntu-Bold.ttf');
 }
 
 @font-face {
@@ -40,6 +55,9 @@ $font-open-sans: 'Open Sans', sans-serif;
 $font-open-sans-light: 'Open Sans Light', sans-serif;
 $font-maven-pro: 'Maven Pro', sans-serif;
 $font-ubuntu: 'Ubuntu', sans-serif;
+$font-ubuntu-light: 'Ubuntu Light', sans-serif;
+$font-ubuntu-bold: 'Ubuntu Bold', sans-serif;
+$font-ubuntu-s-bold: 'Ubuntu Semi Bold', sans-serif;
 $font-raleway: 'Raleway', sans-serif;
 $font-raleway-bold: 'Raleway Bold', sans-serif;
 $font-raleway-s-bold: 'Raleway Semi Bold', sans-serif;
