@@ -4,7 +4,7 @@
       <div class="profile-img" :style="profilePic"/>
       <h1>{{trip.title}}</h1>
       <h2>{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</h2>
-      <button v-if="trip.userId !== loggedInUser._id">
+      <button v-if="trip.userId !== loggedInUser._id" @click="initChat(trip.userId)">
         <i class="far fa-comment-alt"></i>
       </button>
     </div>
@@ -12,9 +12,8 @@
     <button
       class="btn-join-trip"
       @click="joinLeaveTrip"
-      v-if="trip.userId !== loggedInUser._id">
-        {{(isUserMember)? 'Leave' : 'Ask to join'}}
-    </button>
+      v-if="trip.userId !== loggedInUser._id"
+    >{{(isUserMember)? 'Leave' : 'Ask to join'}}</button>
 
     <div class="trip-members">
       <h3>Group members:</h3>
@@ -41,13 +40,30 @@
 </template>
 
 <script>
-// CPMS
+// CMPS
 import UserPreview from "@/components/UserPreview.vue";
 
 export default {
   name: "trip-details",
   components: {
     UserPreview
+  },
+  methods: {
+    joinLeaveTrip() {
+      if (this.isUserMember) this.$store.dispatch({ type: "leaveTrip" });
+      else this.$store.dispatch({ type: "joinTrip" });
+    }
+  },
+  created() {
+    var { tripId } = this.$route.params;
+    if (tripId) this.$store.dispatch({ type: "loadTrip", tripId });
+    else this.$router.go(-1);
+  },
+  beforeDestroy() {
+    this.$store.commit({ type: "clearTrip" });
+  },
+  initChat(userId) {
+    
   },
   computed: {
     trip() {
@@ -62,21 +78,6 @@ export default {
     isUserMember() {
       return this.trip.members.some(user => user._id === this.loggedInUser._id);
     }
-  },
-  methods: {
-    joinLeaveTrip() {
-      if (this.isUserMember) this.$store.dispatch({type: "leaveTrip"});
-      else this.$store.dispatch({type: "joinTrip"});
-    }
-  },
-  created() {
-    var { tripId } = this.$route.params;
-    if (tripId) this.$store.dispatch({ type: "loadTrip", tripId });
-    else this.$router.go(-1);
-  },
-  beforeDestroy() {
-    this.$store.commit({ type: "clearTrip" });
   }
 };
-
 </script>

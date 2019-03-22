@@ -5,6 +5,7 @@ const notificationService = require('./notification.service');
 const SOCKET_CONNECT = 'socket-connect';
 const SOCKET_DISCONNECT = 'socket-disconnect';
 const CHAT_JOIN = 'chat-join';
+const CHAT_JOIN_NEW = 'chat-join-new';
 const CHAT_LEAVE = 'chat-leave';
 const CHAT_SEND_MSG = 'chat-send-msg';
 const CHAT_RECEIVE_MSG = 'chat-receive-msg';
@@ -14,9 +15,6 @@ const NOTIFICATION_ADDED = 'notification-added';
 module.exports = (io) => {
 
     io.on('connection', socket => {
-        // I AM CONNECTED, HERE IS MY USERSID:
-        //  socket.userId = ^
-        // CHAT Funcs
         console.log('Hi there socket ID:', socket.id);
         socket.on(SOCKET_CONNECT, userId => {
             socket.userId = userId;
@@ -26,6 +24,25 @@ module.exports = (io) => {
         socket.on('disconnect', () => {
             console.log('Bye user with socket:', socket.id);
             socket.broadcast.emit(SOCKET_DISCONNECT, 'HE IS GONE:', socket.id);
+        })
+
+        socket.on(CHAT_JOIN, async payload => {
+            if (payload.chatId) socket.join(payload.chatId);
+            else {
+                // need to create new chat with:
+                // payload = {
+                //     chatId: null,
+                //     loggedUserId: context.getters.loggedUser._id,
+                //     users: [userId],
+                // };
+                payload.users.push(loggedUserId);
+                let chat = {
+                    users: payload.users,
+                    msgs: [],
+                }
+                
+            }
+            
         })
 
         socket.on(CHAT_SEND_MSG, async payload => {

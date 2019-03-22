@@ -14,6 +14,16 @@ module.exports = (app) => {
 
     });
 
+    app.post('/api/chat', async (req,res) => {
+        const chat = req.body;
+        try {
+            const newChat = await chatService.createChat(chat);
+            res.json(newChat);
+        } catch {
+            res.status(404).end();
+        }
+    })
+
     app.put('/api/chat/:chatId', async (req, res) => {
         const msg = req.body;
         const { chatId } = req.params;

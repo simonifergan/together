@@ -11,6 +11,7 @@ const socket = io(SOCKET_PORT);
 const SOCKET_CONNECT = 'socket-connect';
 const SOCKET_DISCONNECT = 'socket-disconnect';
 const CHAT_JOIN = 'chat-join';
+const CHAT_JOIN_NEW = 'chat-join-new';
 const CHAT_LEAVE = 'chat-leave';
 const CHAT_SEND_MSG = 'chat-send-msg';
 const CHAT_RECEIVE_MSG = 'chat-receive-msg';
@@ -24,8 +25,9 @@ export default {
     // SOCKET EVENTS
     SOCKET_CONNECT, 
     SOCKET_DISCONNECT, 
-    CHAT_JOIN, 
-    CHAT_LEAVE, 
+    CHAT_JOIN,
+    CHAT_JOIN_NEW,
+    CHAT_LEAVE,
     CHAT_SEND_MSG, 
     CHAT_RECEIVE_MSG,
     NOTIFICATION_ADD,
