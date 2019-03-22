@@ -6,7 +6,6 @@ import NotificationService from '@/services/NotificationService';
 export default {
     state: {
         isConnected: false,
-        // activeChats: [],
         userChats: [],
         notifications: null
     },
@@ -16,7 +15,7 @@ export default {
             console.log('connection status:', state.isConnected);
         },
         addMsg(state, {msg, chatId}) {
-            const chat = state.userChats.find(chat => chat._id = chatId)
+            const chat = state.userChats.find(chat => chat._id === chatId)
             chat.isActive = true
             chat.msgs.push(msg)
         },
@@ -28,26 +27,23 @@ export default {
         }
     },
     getters: {
-        // activeChats(state) {
-        //     return state.activeChats;
-        // },
         userChats(state) {
             return state.userChats;
         }
     },
     actions: {
-        socketConnect({commit}) {
-            SocketService.on(SocketService.CHAT_RECEIVE_MSG, (msg) => {
-                // commit({type: 'activateChat', chatId: msg.chatId})
-                commit({type: 'addMsg', msg});
+        socketConnect(context) {
+            context.dispatch({type: 'socketUserConnect'})
+            SocketService.on(SocketService.CHAT_RECEIVE_MSG, ({chatId, msg}) => {
+                context.commit({type: 'addMsg', msg, chatId});
             })
         },
-        // socketSubscribe(context, {eventName, cb}){
-        //     SocketService.on(eventName, cb);
-        // },
+        socketUserConnect({getters}) {
+            SocketService.emit(SocketService.SOCKET_CONNECT, getters.loggedUser._id);
+        },
         socketSendMsg({commit}, {msg, chatId}) {
-            msg._id = UtilService.makeId()
-            commit({type: 'addMsg', msg, chatId})
+            msg._id = UtilService.generateId()
+            // commit({type: 'addMsg', msg, chatId})
             SocketService.emit(SocketService.CHAT_SEND_MSG, {msg, chatId});
         },
         async getUserChats({commit, getters}) {
@@ -55,7 +51,7 @@ export default {
             commit({type: 'setUserChats', chats})
         },
         async loadNotification({commit, getters}) {
-            const notifications = await NotificationService.getNotifications(getters.loggedUser._id);
+            const notifications = await NotificationService.query(getters.loggedUser._id);
             commit({type: 'setNotification', notifications});
         }
     }

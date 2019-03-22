@@ -30,4 +30,92 @@
         }
 
     }
+    .chat-container {
+        position: fixed;
+        right: 5%;
+        bottom: 0;
+        @include flex;
+        justify-content: flex-end;
+        .chat-box {
+            display: grid;
+            grid-template-rows: 54px 1fr 40px;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .75);
+            width: 285px;
+            height: 350px;
+            margin-left: 10px;
+            background: #fff;
+            z-index: 2;
+            header {
+                position: relative;
+                width: 100%;
+                padding: 10px 5px 8px 10px;
+                box-shadow: 0 2px 1px rgba(0, 0, 0, .1);
+                @include flex(row, flex-start, center);
+                .user-img {
+                    border-radius: 50%;
+                    width:  30px;
+                    height: 30px;
+                    background-size: contain;
+                    box-shadow: 0 0 0.5px #4d4d4d;
+                }
+                span {
+                    margin-left: 10px;
+                    color: #1c1e21;
+                    font-weight: 600;
+                }
+                button {
+                    background: none;
+                    border: none;
+                    color: #7f8186;
+                    font-size: 1.2em;
+                    position: absolute;
+                    right: 20px;
+                    &.is-focused {
+                        color: #1d2129;
+                        
+                    }
+                }
+            }
+            ul {
+                overflow-y: scroll;
+                font-family: Helvetica, sans-serif;
+                font-size: 14px;
+                @include flex(column);
+                padding: 10px 11px 8px 4px;
+                box-shadow: 0 2px 1px rgba(0, 0, 0, .1);
+                li {
+                    margin-bottom: 2px;
+                    border-radius: 50px;
+                    padding: 5px 10px;
+                    align-self: flex-end;
+                    background: #333;
+                    color: #fff;
+                    &.not-user{
+                        align-self: flex-start;
+                        background: #f2f1f1;
+                        color: #333;
+                    }
+                }
+                
+            }
+            form {
+                padding: 5px 8px 5px 8px;
+
+                input {
+                    border: none;
+                    padding: 8px;
+                    width: 235px;
+                }
+                button {
+                    background: none;
+                    border: none;
+                    color: #7f8186;
+                    &.is-focused{
+                        color: #333;
+                    }
+                }
+            }
+        }
+    }
 }

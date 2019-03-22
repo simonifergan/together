@@ -1,3 +1,5 @@
+const chatService = require('./chat.service');
+
 // EVENTS LIST:
 const SOCKET_CONNECT = 'socket-connect';
 const SOCKET_DISCONNECT = 'socket-disconnect';
@@ -15,16 +17,22 @@ module.exports = (io) => {
         //  socket.userId = ^
         // CHAT Funcs
         console.log('Hi there socket ID:', socket.id);
-        io.emit(CHAT_JOIN, 'Hi there!');
+        socket.on(SOCKET_CONNECT, userId => {
+            socket.userId = userId;
+            console.log('Hello user:', userId, 'in socket:', socket.userId);
+        })
+
 
         socket.on('disconnect', () => {
             console.log('Bye user with socket:', socket.id);
             socket.broadcast.emit(SOCKET_DISCONNECT, 'HE IS GONE:', socket.id);
         })
 
-        socket.on(CHAT_SEND_MSG, msg => {
-            console.log('got', msg)
-            io.emit(CHAT_RECEIVE_MSG, msg);
+        socket.on(CHAT_SEND_MSG, async payload => {
+            // console.log('got', msg)
+            payload.msg.sender = socket.userId;
+            await chatService.addMsg(payload);
+            io.emit(CHAT_RECEIVE_MSG, payload);
         })
 
         // Notifications Funcs
