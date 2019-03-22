@@ -1,21 +1,25 @@
 <template>
   <section class="trip-edit" v-if="trip">
     <h1>{{(trip && trip._id)? 'Edit Trip' : 'Add Trip'}}</h1>
-      {{trip.tripStart}}
+    {{trip.tripStart}}
     <el-input type="textarea" :rows="5" v-model="trip.desc" class="trip-desc"/>
-    <!-- <el-date-picker type="month" v-model="trip.tripStart" value-format="MMMM/yyyy" placeholder="Pick a month"/> -->
-    <el-date-picker
-      v-model="fromMonth"
-      type="month"
-      placeholder="Pick a month">
-    </el-date-picker>
-    <el-date-picker
-      v-model="toMonth"
-      type="month"
-      placeholder="Pick a month">
-    </el-date-picker>
-
-
+    <div class="date-picker">
+      <label><span>From:</span>
+      <el-date-picker
+        v-model="startsAt"
+        type="month"
+        value-format="yyyy-MMMM"
+      ></el-date-picker>
+      </label>
+      <label>
+        <span>To:</span>
+      <el-date-picker
+        v-model="duration"
+        type="month"
+        value-format="yyyy-MMMM"
+      ></el-date-picker>
+      </label>
+    </div>
   </section>
 </template>
 
@@ -27,9 +31,9 @@ export default {
   name: "trip-edit",
   data() {
     return {
-      trip: this.$store.getters.emptyTrip,
-      fromMonth: null,
-      toMonth: null
+      startsAt: '',
+      duration: '',
+      trip: this.$store.getters.emptyTrip
     };
   },
   created() {

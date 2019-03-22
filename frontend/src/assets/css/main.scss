@@ -1,16 +1,20 @@
 @import 'reset';
 @import 'fonts';
 @import 'mixins';
+@import url('https://use.fontawesome.com/releases/v5.7.2/css/all.css');
 
 // import main app layout 
 @import 'app';
+
 // import views
 @import './views/_Home.scss';
 @import './views/_TripDetails.scss';
 @import './views/_TripList.scss';
 @import './views/SignupPage';
 @import './views/TripEdit';
-@import url('https://use.fontawesome.com/releases/v5.7.2/css/all.css');
+
+// import cmps
+@import './components/Notifications.scss';
 
 html {
     font-family: 'Open Sans';

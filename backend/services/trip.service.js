@@ -66,7 +66,7 @@ async function query(searchQuery) {
                         birthdate: 0,
                     }
                 }
-            },       
+            }
         ]).toArray()
         const regex = new RegExp(searchQuery, 'i')
         // console.log('regex', regex)
@@ -143,24 +143,6 @@ async function getById(tripId) {
         return null;
     }
 }
-// async function getById(id) {
-//     const _id = new ObjectId(id);
-//     try {
-//         const db = await mongoService.connect();
-//         const trip = await db.collection(tripsCollection).findOne({ _id });
-//         const userId = new ObjectId(trip.userId);
-//         const user = await db.collection(usersCollection).findOne({ _id: userId });
-//         delete user._id;
-//         delete user.password;
-//         trip.user = user;
-//         return trip;
-//     } catch {
-//         return null;
-//     }
-
-//     // .then(db => db.collection(tripsCollection).findOne({ _id }));
-
-// }
 
 function add(trip) {
     const userId = trip.userId;

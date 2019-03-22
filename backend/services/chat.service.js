@@ -3,6 +3,7 @@ const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
     query,
+    createChat,
     addMsg,
 }
 
@@ -10,8 +11,6 @@ const chatsCollection = 'chats';
 const usersCollection = 'users';
 
 async function query(userId) {
-    console.log('userId:', userId);
-
     userId = new ObjectId(userId)
     try {
         const db = await mongoService.connect()
@@ -51,13 +50,27 @@ async function query(userId) {
     }
 }
 
-async function addMsg(msg, chatId) {
-    console.log(msg, chatId)
+async function createChat(chat) {
+    chat.users = chat.users.map(user => new ObjectId(user));
+    try {
+        const db = await mongoService.connect();
+        const { insertedId } = await db.collection(chatsCollection).insertOne(chat);
+        chat._id = insertedId;
+        chat.users = await Promise.all(chat.users.map(async _id => { 
+            const userInfo =  db.collection(usersCollection).findOne({ _id });
+            return userInfo;
+        }));
+        console.log(chat);
+        return chat;
+    } catch {
+        console.log('major error');
+    }
+}
+
+async function addMsg({ msg, chatId }) {
     chatId = new ObjectId(chatId);
     msg.sender = new ObjectId(msg.sender);
-    console.log('OBJECT IDS', chatId, msg.sender);
     try {
-        console.log('Hi');
         const db = await mongoService.connect();
         const res = await db.collection(chatsCollection).update(
             { _id: chatId },
@@ -67,10 +80,8 @@ async function addMsg(msg, chatId) {
                 }
             }
         )
-        console.log(res);
         return res;
-    } catch(err) {
-        console.log(err);
+    } catch (err) {
         return 'We had a problem';
     }
 

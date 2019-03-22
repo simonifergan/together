@@ -7,13 +7,22 @@ module.exports = (app) => {
         // console.log('userId:', userId);
         try {
             const chats = await chatService.query(userId);
-            console.log('chats:', chats);
             res.json(chats);
         } catch {
             res.status(404).end();
         }
 
     });
+
+    app.post('/api/chat', async (req,res) => {
+        const chat = req.body;
+        try {
+            const newChat = await chatService.createChat(chat);
+            res.json(newChat);
+        } catch {
+            res.status(404).end();
+        }
+    })
 
     app.put('/api/chat/:chatId', async (req, res) => {
         const msg = req.body;

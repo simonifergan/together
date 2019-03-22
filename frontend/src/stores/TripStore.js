@@ -1,4 +1,6 @@
-import TripService from '@/services/TripService'
+import TripService from '@/services/TripService';
+import NotificationService from '@/services/NotificationService';
+import { userInfo } from 'os';
 
 export default {
     state: {
@@ -19,7 +21,7 @@ export default {
             const idx = state.trips.findIndex(trip => trip._id === tripId);
             state.trips.splice(idx, 1);
         },
-        ///// trip to display section:
+        // trip to display section:
         loadTrip(state, { trip }) {
             state.tripToDisplay = trip;
         },
@@ -42,7 +44,7 @@ export default {
     },
     getters: {
         trips(state) {
-            return state.trips
+            return state.trips;
         },
         tripToDisplay(state) {
             return state.tripToDisplay;
@@ -64,25 +66,45 @@ export default {
             const trip = await TripService.getById(tripId);
             commit({ type: 'loadTrip', trip });
         },
-        async saveTrip({ commit }, { trip }) {
+        async saveTrip({ commit, getters, dispatch }, { trip }) {
             const newTrip = await TripService.save(trip)
-            if (trip._id) commit({ type: 'updateTrip', trip: newTrip })
-            else commit({ type: 'addTrip', trip: newTrip })
+            if (trip._id) {
+                commit({ type: 'updateTrip', trip: newTrip })
+                // userId, trip id, actions - created a trip,
+                let newNotification = {
+                    userId: getters.loggedUser,
+                    tripId: trip._id,
+                    action: 'trip_modified'
+                }
+                dispatch({ type: 'addNotification', newNotification })
+            }
+            else {
+                commit({ type: 'addTrip', trip: newTrip })
+            }
         },
         async removeTrip({ commit }, { trip }) {
             const msg = await TripService.remove(trip._id)
             commit({ type: 'removeTrip', tripId: trip._id })
         },
-        async joinTrip({ commit, getters }) {
+        async joinTrip({ commit, getters, dispatch }) {
             const backupTripToDisplay = getters.tripToDisplay;
             const newMember = getters.loggedUser;
             commit({ type: 'addMember', newMember })
+            // notification:
+            let newNotification = {
+                userId: getters.loggedUser._id,
+                tripId: getters.tripToDisplay._id,
+                action: 'trip_joined'
+            }
+            dispatch({ type: 'addNotification', newNotification })
+
             try {
                 const msg = await TripService.save(getters.tripToDisplay);
                 return msg;
             } catch {
                 commit({ type: 'updateTripToDisplay', trip: backupTripToDisplay });
             }
+
             const msg = await TripService.joinTrip(getters.loggedUser._id, tripId)
             return msg
         },

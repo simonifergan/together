@@ -14,8 +14,6 @@ const CHAT_API = (process.env.NODE_ENV !== 'development')
 
 async function getChats(userId) {
     let queryStr = '?userId=' + userId
-    console.log(CHAT_API + queryStr);
-    
     const {data} = await axios.get(CHAT_API + queryStr)
     return data;
 }

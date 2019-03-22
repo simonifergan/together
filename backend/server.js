@@ -13,6 +13,7 @@ const session = require('express-session');
 const tripRoute = require('./routes/trip.route')
 const userRoute = require('./routes/user.route')
 const chatRoute = require('./routes/chat.route')
+const notificationRoute = require('./routes/notification.route')
 
 // app initiation
 const app = express()
@@ -34,6 +35,7 @@ app.use(express.static('public'));
 tripRoute(app);
 userRoute(app);
 chatRoute(app);
+notificationRoute(app);
 
 app.get('/', (req, res) => {
     res.send('Hello Toy Backend!')

@@ -9,6 +9,11 @@
 }
 
 @font-face {
+    font-family: 'Open Sans Light';
+    src: url('../fonts/Open_Sans/OpenSans-Light.ttf');
+}
+
+@font-face {
     font-family: 'Ubuntu';
     src: url('../fonts/Ubuntu/Ubuntu-Regular.ttf');
 }
@@ -32,6 +37,7 @@ $font-pacifico: 'Pacifico', cursive;
 $font-lobster: 'Lobster', cursive;
 $font-lato: 'Lato', sans-serif;
 $font-open-sans: 'Open Sans', sans-serif;
+$font-open-sans-light: 'Open Sans Light', sans-serif;
 $font-maven-pro: 'Maven Pro', sans-serif;
 $font-ubuntu: 'Ubuntu', sans-serif;
 $font-raleway: 'Raleway', sans-serif;
