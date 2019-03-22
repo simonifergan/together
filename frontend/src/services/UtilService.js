@@ -1,3 +1,5 @@
+import worldApi from '../data/world.json';
+
 export default {
     generateId
 }
