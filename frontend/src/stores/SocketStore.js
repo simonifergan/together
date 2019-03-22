@@ -98,7 +98,7 @@ export default {
             const notifications = await NotificationService.query();
             commit({ type: 'setNotification', notifications });
         },
-        addNotification({ commit }, { newNotification }) {
+        addNotification(context, { newNotification }) {
             SocketService.emit(SocketService.NOTIFICATION_ADD, newNotification);
         }
     }

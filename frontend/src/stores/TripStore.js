@@ -86,10 +86,17 @@ export default {
             const msg = await TripService.remove(trip._id)
             commit({ type: 'removeTrip', tripId: trip._id })
         },
-        async joinTrip({ commit, getters }) {
+        async joinTrip({ commit, getters, dispatch }) {
             const backupTripToDisplay = getters.tripToDisplay;
             const newMember = getters.loggedUser;
             commit({ type: 'addMember', newMember })
+            // notification:
+            let newNotification = {
+                userId: getters.loggedUser._id,
+                tripId: tripToDisplay._id,
+                
+            }
+            dispatch({type: 'addNotification', })
             try {
                 const msg = await TripService.save(getters.tripToDisplay);
                 return msg;
