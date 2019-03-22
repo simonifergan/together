@@ -5,10 +5,14 @@
     <el-input type="textarea" :rows="5" v-model="trip.desc" class="trip-desc"/>
     <!-- <el-date-picker type="month" v-model="trip.tripStart" value-format="MMMM/yyyy" placeholder="Pick a month"/> -->
     <el-date-picker
-      type="monthrange"
-      range-separator="To"
-      start-placeholder="Start month"
-      end-placeholder="End month">
+      v-model="fromMonth"
+      type="month"
+      placeholder="Pick a month">
+    </el-date-picker>
+    <el-date-picker
+      v-model="toMonth"
+      type="month"
+      placeholder="Pick a month">
     </el-date-picker>
 
 
@@ -23,7 +27,9 @@ export default {
   name: "trip-edit",
   data() {
     return {
-      trip: this.$store.getters.emptyTrip
+      trip: this.$store.getters.emptyTrip,
+      fromMonth: null,
+      toMonth: null
     };
   },
   created() {
