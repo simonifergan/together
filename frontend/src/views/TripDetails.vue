@@ -52,6 +52,9 @@ export default {
     joinLeaveTrip() {
       if (this.isUserMember) this.$store.dispatch({ type: "leaveTrip" });
       else this.$store.dispatch({ type: "joinTrip" });
+    },
+    initChat(userId) {
+      this.$store.dispatch({ type: "socketJoinPrivateChat", userId });
     }
   },
   created() {
@@ -61,9 +64,6 @@ export default {
   },
   beforeDestroy() {
     this.$store.commit({ type: "clearTrip" });
-  },
-  initChat(userId) {
-    
   },
   computed: {
     trip() {

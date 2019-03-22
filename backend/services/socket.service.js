@@ -22,41 +22,42 @@ module.exports = (io) => {
         })
 
         socket.on('disconnect', () => {
-            console.log('Bye user with socket:', socket.id);
-            socket.broadcast.emit(SOCKET_DISCONNECT, 'HE IS GONE:', socket.id);
+            console.log('Bye user with socket:', socket.id, 'and userId', socket.userId);
         })
 
         socket.on(CHAT_JOIN, async payload => {
+            console.log('ME HERE YOUR PAYLOAD', payload);
             if (payload.chatId) socket.join(payload.chatId);
             else {
-                // need to create new chat with:
-                // payload = {
-                //     chatId: null,
-                //     loggedUserId: context.getters.loggedUser._id,
-                //     users: [userId],
-                // };
-                payload.users.push(loggedUserId);
+                payload.users.push(payload.loggedUserId);
                 let chat = {
                     users: payload.users,
                     msgs: [],
                 }
-                
+                try {
+                    chat = await chatService.createChat(chat);
+                    socket.join(chat._id);
+                    socket.emit(CHAT_JOIN_NEW, chat);
+                } catch {
+
+                }
+
             }
-            
+
         })
 
         socket.on(CHAT_SEND_MSG, async payload => {
-            // console.log('got', msg)
+            console.log('got', payload)
             payload.msg.sender = socket.userId;
             await chatService.addMsg(payload);
-            io.emit(CHAT_RECEIVE_MSG, payload);
+            io.to(payload.chatId).emit(CHAT_RECEIVE_MSG, payload);
         })
 
         // Notifications
         socket.on(NOTIFICATION_ADD, async notification => {
             notification.createdAt = Date.now();
             console.log('notification to add:', notification);
-            
+
             await notificationService.add(notification)
             io.emit(NOTIFICATION_ADDED, notification);
         })
