@@ -2,6 +2,13 @@
     padding: 50px;
     line-height: 150%;
     @include wrapper();
+    .member-img {
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        background-size: contain;
+        box-shadow: 0 0 0.5px #4d4d4d;
+    }
     .top-fold {
         position: relative;
         margin-bottom: 20px;
