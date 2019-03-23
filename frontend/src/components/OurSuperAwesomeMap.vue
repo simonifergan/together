@@ -4,7 +4,6 @@
             {{toolTipTxt | countryCodeToName}}
         </div>
         <map-tools
-        @click.stop=""
         @zoomIn="mapView.zoom -= 100"
         @zoomOut="mapView.zoom += 100"
         @panUp="mapView.y -= 100"
@@ -294,6 +293,10 @@ export default {
         value: {
             type: Array,
             required: true,
+        },
+        enable: {
+            type: Boolean,
+            default: false
         }
     },
     components: {
@@ -316,12 +319,18 @@ export default {
             },
             clickPos: null,
             isDragging: false,
-            didDrag: false,
+            didDrag: false
         }
     },
     mounted() {
+        this.value.forEach(id => document.querySelector(`#${id}`).style.fill = '#e74c3c')
         this.mapView.sizeX = this.$refs.svgContainer.offsetWidth
         this.mapView.sizeY = this.$refs.svgContainer.offsetHeight
+    },
+    watch: {
+        value(newVal) {
+            newVal.forEach(id => document.querySelector(`#${id}`).style.fill = '#e74c3c')
+        }
     },
     methods: {
         handleMousemove(event) {
@@ -329,6 +338,7 @@ export default {
             this.drag(event)
         },
         selectCountry(ev) {
+            if (!this.enable) return
             if (this.didDrag) {
                 this.didDrag = false
                 return

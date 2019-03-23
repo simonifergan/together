@@ -35,7 +35,7 @@
         >{{destination.region}}, {{destination.country}}</li>
       </ul>
     </div>
-
+    <our-super-awesome-map :enable="false" :value="trip.destinations"/>
     <div class="comments">
       <h3>Comments</h3>
     </div>
@@ -45,11 +45,12 @@
 <script>
 // CMPS
 import UserPreview from "@/components/UserPreview.vue";
-
+import OurSuperAwesomeMap from '@/components/OurSuperAwesomeMap.vue'
 export default {
   name: "trip-details",
   components: {
-    UserPreview
+    UserPreview,
+    OurSuperAwesomeMap
   },
   methods: {
     joinLeaveTrip() {
