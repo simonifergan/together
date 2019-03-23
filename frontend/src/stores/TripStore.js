@@ -99,31 +99,30 @@ export default {
             const backupTripToDisplay = getters.tripToDisplay;
             const newMember = getters.loggedUser;
             commit({ type: 'addMember', newMember })
-            // notification:
-            let newNotification = {
-                userId: getters.loggedUser._id,
-                tripId: getters.tripToDisplay._id,
-                action: NotificationService.TRIP_JOINED
-            }
-            dispatch({ type: 'addNotification', newNotification })
 
             try {
-                const msg = await TripService.save(getters.tripToDisplay);
-                return msg;
+                const updatedTrip = await TripService.save(getters.tripToDisplay);
+                const updatedUser = await dispatch({ type: 'joinTripToUser', tripId: updatedTrip._id })
+                
+                // notification:
+                let newNotification = {
+                    userId: updatedUser._id,
+                    tripId: getters.tripToDisplay._id,
+                    action: NotificationService.TRIP_JOINED
+                }
+                dispatch({ type: 'addNotification', newNotification })
+
             } catch {
                 commit({ type: 'updateTripToDisplay', trip: backupTripToDisplay });
             }
-
-            const msg = await TripService.joinTrip(getters.loggedUser._id, tripId)
-            return msg
         },
         async leaveTrip({ commit, getters }) {
             const backupTripToDisplay = getters.tripToDisplay;
             const memberToRemove = getters.loggedUser;
             commit({ type: 'removeMember', memberToRemove })
             try {
-                const msg = await TripService.save(getters.tripToDisplay);
-                return msg;
+                const updatedTrip = await TripService.save(getters.tripToDisplay);
+                await dispatch({ type: 'leaveTripToUser', tripId: updatedTrip._id })
             } catch {
                 commit({ type: 'updateTripToDisplay', trip: backupTripToDisplay });
             }
