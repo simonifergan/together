@@ -4,6 +4,7 @@
         @include flex(row, space-between, center);
         position: relative;
         padding: 5px 20px 1px 20px;
+        height: 70px;
         width: 100%;
         z-index: 2;
         color: #333;

@@ -48,7 +48,7 @@ function on(eventName, cb) {
 }
 
 function emit(eventName, payload) {
-    console.log('emittin event:', eventName, 'payload:', payload);
+    // console.log('emittin event:', eventName, 'payload:', payload);
     socket.emit(eventName, payload);
 }
 

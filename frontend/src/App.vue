@@ -5,7 +5,7 @@
     <div class="chat-container">
       <chat v-for="(chat,index) in chats" :chat="chat" :key="chat._id+index"/>
     </div>
-    <notification-list :notifications="getNotifications" />
+    <!-- <notification-list :notifications="getNotifications" /> -->
   </div>
 </template>
 
@@ -23,7 +23,7 @@ export default {
   },
   computed: {
     chats() {
-      console.log(this.$store.getters.userChats)
+      // console.log(this.$store.getters.userChats)
       return this.$store.getters.userChats;
     },
     getNotifications() {

@@ -1,36 +1,40 @@
 <template>
-    <section class="search-page">
-        <trip-list :trips="trips" title="Search Results"></trip-list>
-
-    </section>
+  <section class="search-page">
+    <trip-list :trips="trips" title="Search Results"></trip-list>
+    <notification-list :notifications="getNotifications"/>
+  </section>
 </template>
 
 <script>
 // CMPS
 import TripList from "@/components/TripList";
-
+import NotificationList from "@/components/NotificationList";
 
 export default {
-    name: 'searchResults',
-    components: {
-        TripList
+  name: "searchResults",
+  components: {
+    TripList,
+    NotificationList
+  },
+  computed: {
+    trips() {
+      return this.$store.getters.trips;
     },
-    computed: {
-        trips() {
-            return this.$store.getters.trips
-        },
-        searchQuery() {
-            return this.$route.query.q
-        }
+    searchQuery() {
+      return this.$route.query.q;
     },
-    created() {
-        console.log(this.searchQuery);
-                
-        this.$store.dispatch({type: 'searchTrips', searchQuery: this.searchQuery})
+    getNotifications() {
+      return this.$store.getters.notifications;
     }
-}
+  },
+  created() {
+    this.$store.dispatch({
+      type: "searchTrips",
+      searchQuery: this.searchQuery
+    });
+  }
+};
 </script>
 
 <style>
-
 </style>
