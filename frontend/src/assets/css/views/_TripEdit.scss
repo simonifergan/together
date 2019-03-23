@@ -1,9 +1,10 @@
 .trip-edit {
+    @include flex(column, center, center);
     textarea, input {
         font-family: 'Open Sans';
     }
     .date-picker {
-        @include flex(column);
+        @include flex(row, center, center);
         label {
             display: grid;
             grid-template-columns: 50px 1fr;
@@ -14,5 +15,9 @@
             }
         }
 
+    }
+    .awesome-map-container {
+        box-shadow: 0 0 1px 1px $box-shadow-gray;
+       
     }
 }

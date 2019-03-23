@@ -1,7 +1,7 @@
 <template>
     <section class="svg-map">
-        <div :style="tooltipPos" class="tooltip" :class="tooltipVisible" >
-            {{toolTipTxt}}
+        <div v-if="toolTipTxt" :style="tooltipPos" class="tooltip" :class="tooltipVisible" >
+            {{toolTipTxt | countryCodeToName}}
         </div>
         <map-tools
         @zoomIn="mapView.zoom -= 100"
@@ -289,6 +289,12 @@
 import UtilService from '@/services/UtilService.js'
 import MapTools from '@/components/MapTools.vue'
 export default {
+    props: {
+        value: {
+            type: Array,
+            required: true,
+        }
+    },
     components: {
         MapTools
     },
@@ -317,14 +323,15 @@ export default {
         selectCountry(ev) {
             const id = ev.path[0].id;
             if (!id) return;
-            const idx = this.selectedCountries.findIndex(selectedIds => selectedIds === id)
+            const idx = this.value.findIndex(selectedIds => selectedIds === id)
             if (idx !== -1) {
                 document.querySelector(`#${id}`).style.fill = '#333';
-                this.selectedCountries.splice(idx, 1);
+                this.value.splice(idx, 1);
             } else {
-                this.selectedCountries.push(id);
-                  document.querySelector(`#${id}`).style.fill = UtilService.getRandomPastel();
+                this.value.push(id);
+                  document.querySelector(`#${id}`).style.fill = '#e74c3c';
             }
+            this.$emit('input', this.value);
         },
         handleTooltip(ev) {
             const id = ev.path[0].id;
@@ -390,6 +397,7 @@ export default {
     width: 1026px;
     height: 656px;
     user-select: none;
+    position: relative;
 
 }
 .tooltip {

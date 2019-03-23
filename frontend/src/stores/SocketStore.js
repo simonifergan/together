@@ -72,10 +72,10 @@ export default {
         socketUserConnect({ getters }) {
             SocketService.emit(SocketService.SOCKET_CONNECT, getters.loggedUser._id);
         },
-        socketSendMsg({ commit }, { msg, chatId }) {
+        socketSendMsg({ commit }, { msg, chatId, recipients }) {
             msg._id = UtilService.generateId()
             // commit({type: 'addMsg', msg, chatId})
-            SocketService.emit(SocketService.CHAT_SEND_MSG, { msg, chatId });
+            SocketService.emit(SocketService.CHAT_SEND_MSG, { msg, chatId, recipients });
         },
         socketJoinPrivateChat(context, { userId }) {
             const chat = context.getters.userChats.find(chat => {
