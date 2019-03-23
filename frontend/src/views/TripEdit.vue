@@ -53,6 +53,11 @@ export default {
       trip: this.$store.getters.emptyTrip
     };
   },
+  methods: {
+    save() {
+     return
+    }
+  },
   created() {
     const { tripId } = this.$route.params;
     if (tripId) {

@@ -1,5 +1,5 @@
 <template>
-    <section class="svg-map">
+    <section class="svg-map-container">
         <div v-if="toolTipTxt" :style="tooltipPos" class="tooltip" :class="tooltipVisible" >
             {{toolTipTxt | countryCodeToName}}
         </div>
@@ -11,7 +11,7 @@
         @panDown="mapView.y += 100"
         @panRight="mapView.x += 100"
         ></map-tools>
-        <svg @wheel.prevent="zoom" @mousedown="startDrag" @mousemove="handleMousemove" @mouseup="stopDrag" @mouseleave="stopDrag" @click="selectCountry" :viewBox="viewBoxVal"
+        <svg ref="mapSvg" @wheel.prevent="zoom" @mousedown="startDrag" @mousemove="handleMousemove" @mouseup="stopDrag" @mouseleave="stopDrag" @click="selectCountry" :viewBox="viewBoxVal"
         width="100%" height="100%" xmlns="http://www1.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
             <defs>
             
@@ -315,6 +315,10 @@ export default {
             isDragging: false
         };
     },
+    mounted() {
+        console.log(this.$parent)
+        console.log(this.$refs.mapSvg)
+    },
     methods: {
         handleMousemove(event) {
             this.handleTooltip(event)
@@ -393,9 +397,11 @@ export default {
 </script>
 
 <style>
-.svg-map {
-    /* width: 1026px;
-    height: 656px; */
+.svg-map-container {
+   position: relative;
+    width: 80vh;
+    height: 500px;
+    box-shadow: 0 0 1px 1px $box-shadow-gray;
     user-select: none;
     position: relative;
 
