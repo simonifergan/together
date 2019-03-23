@@ -55,6 +55,7 @@ function getEmpty() {
         activities: [],
         members: [],
         pending: [],
+        comments: [],
         groupSize: 2,
     }
 }

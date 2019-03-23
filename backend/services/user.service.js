@@ -68,12 +68,19 @@ async function signup(user) {
 
 function update(user) {
     const strId = user._id;
+    const trips = [...user.trips];
+    const interestedIn = [...user.interestedIn];
+    
     user._id = new ObjectId(user._id);
+    user.trips = user.trips.map(tripId => new ObjectId(tripId))
+    user.interestedIn = user.interestedIn.map(tripId => new ObjectId(tripId))
 
     return mongoService.connect()
         .then(db => db.collection(usersCollection).updateOne({ _id: user._id }, { $set: user }))
         .then(mongoRes => {
             user._id = strId;
+            user.trips = trips;
+            user.interestedIn = interestedIn;
             return user;
         });
 }

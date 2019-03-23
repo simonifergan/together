@@ -19,6 +19,16 @@ module.exports = (app) => {
         })
     });
 
+    app.put(`${BASE}/user/:userId`, (req, res) => {
+        const userToUpdate = req.body;
+        console.log('user.service: userToUpdate:', userToUpdate);
+        userService.update(userToUpdate)
+            .then(updatedUser => {
+                if (updatedUser) return res.json(updatedUser);
+                else res.status(404).end();
+            })
+    })
+
     app.post(`${BASE}/login`, (req, res) => {
         const credentials = req.body;
         // console.log(credentials);

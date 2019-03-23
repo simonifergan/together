@@ -52,7 +52,7 @@ function query({ userId = null, toyId = null } = {}) {
     const criteria = {}
     if (userId) criteria.userId = new ObjectId(userId)
     if (toyId) criteria.toyId = new ObjectId(toyId)
-    console.log(criteria);
+    // console.log(criteria);
     return mongoService.connect().then(db => {
         return db.collection(reviewsCollection)
             .aggregate([
