@@ -315,12 +315,12 @@ export default {
             },
             clickPos: null,
             isDragging: false,
-            didDrag: false
-        };
+            didDrag: false,
+        }
     },
     mounted() {
-       this.mapView.sizeX = this.$refs.svgContainer.clientWidth
-       this.mapView.sizeY = this.$refs.svgContainer.clientHeight
+        this.mapView.sizeX = this.$refs.svgContainer.offsetWidth
+        this.mapView.sizeY = this.$refs.svgContainer.offsetHeight
     },
     methods: {
         handleMousemove(event) {
@@ -358,7 +358,7 @@ export default {
             }
         },
         zoom(event) {
-            let frX = event.offsetX/this.mapView.sizeX //UPDATE WHEN RESPONSIVE
+            let frX = event.offsetX/this.mapView.sizeX
             let frY = event.offsetY/this.mapView.sizeY
             if (event.deltaY > 0) {
                 this.mapView.zoom += 100
@@ -376,7 +376,6 @@ export default {
         startDrag(event) {
             this.clickPos = {diffX: (event.offsetX*this.mapView.zoom/this.mapView.sizeX + this.mapView.x),
                              diffY: (event.offsetY*this.mapView.zoom/this.mapView.sizeY + this.mapView.y)}
-            // console.log(this.clickPos);
             this.isDragging = true
         },
         drag(event) {
@@ -384,6 +383,7 @@ export default {
             this.mapView.x = this.clickPos.diffX - event.offsetX*this.mapView.zoom/this.mapView.sizeX
             this.mapView.y = this.clickPos.diffY - event.offsetY*this.mapView.zoom/this.mapView.sizeY
             this.didDrag = true
+            console.log('clickPos:', this.clickPos, 'realDiff:', event.offsetX - this.mapView.x, event.offsetY - this.mapView.y)
         },
         stopDrag(event) {
             this.isDragging = false
