@@ -61,7 +61,7 @@ export default {
         type: "socketSendMsg",
         msg: { txt: this.newMsg, sentAt: Date.now() },
         chatId: this.chat._id,
-        recipients: this.chattingWith
+        recipients: this.chattingWith,
       });
       this.newMsg = '';
     },

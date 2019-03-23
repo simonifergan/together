@@ -26,12 +26,22 @@ export default {
             const chat = state.userChats.find(chat => chat._id === chatId);
             chat.isActive = false;
         },
-        addMsg(state, { msg, chatId }) {
+        addMsg(state, { msg, chatId, recipients, loggedUser }) {
+            console.log(recipients);
             const chat = state.userChats.find(chat => chat._id === chatId)
             if (chat) {
                 chat.isActive = true
                 chat.msgs.push(msg)
-            } else return;
+            } else {
+                // A new chat has been created, so make sure to update user's state
+                let newChat = {
+                    _id: chatId,
+                    msgs: [msg],
+                    users: [...recipients, loggedUser],
+                    isActive: true,
+                }
+                state.userChats.push(newChat);
+            }
         },
         setUserChats(state, { chats }) {
             state.userChats = chats
@@ -60,8 +70,8 @@ export default {
             SocketService.on(SocketService.CHAT_JOIN, chatId => {
                 context.commit({ type: 'activateChat', chatId })
             })
-            SocketService.on(SocketService.CHAT_RECEIVE_MSG, ({ chatId, msg }) => {
-                context.commit({ type: 'addMsg', msg, chatId });
+            SocketService.on(SocketService.CHAT_RECEIVE_MSG, ({ chatId, msg, recipients}) => {
+                context.commit({ type: 'addMsg', msg, chatId, recipients, loggedUser: context.getters.loggedUser });
             })
             SocketService.on(SocketService.NOTIFICATION_ADDED, (addedNotification) => {
                 context.commit({ type: 'addNotification', addedNotification });

@@ -26,12 +26,12 @@ const connectedSockets = [];
 module.exports = (io) => {
 
     io.on('connection', socket => {
-        // console.log('Hi there socket ID:', socket.id);
+        console.log('Hi there socket ID:', socket.id);
         socket.on(SOCKET_CONNECT, userId => {
             socket.userId = userId;
             connectedSockets.push(socket)
             // console.log('Hi connected sockets:', connectedSockets);
-            // console.log('Hello user:', userId, 'in socket:', socket.userId);
+            console.log('Hello user:', userId, 'in socket:', socket.userId);
         })
 
         socket.on(CHAT_REGISTER_ROOMS, chats => {
@@ -41,14 +41,15 @@ module.exports = (io) => {
         })
 
         socket.on('disconnect', () => {
-            const socketIdx = connectedSockets.find(inSocket => inSocket.userId === socket.userId);
+            const socketIdx = connectedSockets.findIndex(inSocket => inSocket.userId === socket.userId);
+            console.log(socketIdx);
             if (socketIdx !== -1) connectedSockets.splice(socketIdx, 1);
             // console.log('Bye connected sockets:', connectedSockets);
             // console.log('Bye user with socket:', socket.id, 'and userId', socket.userId);
         })
 
         socket.on(CHAT_JOIN, async payload => {
-            // console.log('ME HERE YOUR PAYLOAD', payload);
+            console.log('ME HERE YOUR PAYLOAD', payload);
             if (payload.chatId) socket.join(payload.chatId);
             else {
                 payload.users.push(payload.loggedUserId);
@@ -69,23 +70,26 @@ module.exports = (io) => {
         })
 
         socket.on(CHAT_SEND_MSG, async payload => {
-            // console.log('got', payload)
+            console.log('got', payload)
             payload.msg.sender = socket.userId;
             // TODO: Force socket to reconnect to his room upon message sent and referred to him
-            // payload.recipients.forEach(user => {
-            //     const recipientSocket = connectedSockets.find(inSocket => inSocket.userId === user._id);
-            //     console.log('recipientIs:', recipientSocket)
-            //     if (recipientSocket) recipientSocket.join(payload.chatId);
-            // })
+            payload.recipients.forEach(recipient => {
+                if (recipient._id !== socket.userId) {
+                    const recipientSocket = connectedSockets.find(inSocket => inSocket.userId === recipient._id);
+                    console.log('recipientIs:', recipientSocket.userId, recipient._id)
+                    if (recipientSocket) recipientSocket.join(payload.chatId);
+                }
+            })
             await chatService.addMsg(payload);
-            io.to(payload.chatId).emit(CHAT_RECEIVE_MSG, payload);
+            console.log(payload)
+            io.in(payload.chatId).emit(CHAT_RECEIVE_MSG, payload);
         })
 
 
         // INSTANT TRIP ACTIONS
         socket.on(TRIP_JOIN_REQUEST, async payload => {
             // payload: {user, tripId}
-            
+
             // TODO: SEND TO USER HIS NOTIFICATION
         })
 

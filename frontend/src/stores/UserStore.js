@@ -11,7 +11,7 @@ export default {
         joinTripToUser(state, { tripId }) {
             state.loggedUser.interestedIn.push(tripId);
         },
-        leaveTripToUser(state, {tripId}) {
+        leaveTripToUser(state, { tripId }) {
             const idx = state.loggedUser.interestedIn.findIndex(trip => trip === tripId);
             state.loggedUser.interestedIn.splice(idx, 1);
         },
@@ -31,8 +31,9 @@ export default {
         async login({ commit, dispatch }, { credentials }) {
             const user = await UserService.login(credentials)
             commit({ type: 'setLoggedUser', user })
-            dispatch({ type: 'socketUserConnect' });
-            dispatch({ type: 'getUserChats' });
+            dispatch({ type: "socketConnect" });
+            dispatch({ type: "getUserChats" });
+            dispatch({ type: "loadNotification" });
         },
 
         async signup({ commit }, { newUser }) {
@@ -52,7 +53,7 @@ export default {
             }
         },
 
-        async leaveTripToUser({commit, getters}, {tripId}) {
+        async leaveTripToUser({ commit, getters }, { tripId }) {
             const backupUserLoggedUser = JSON.parse(JSON.stringify(getters.loggedUser));
             commit({ type: 'leaveTripToUser', tripId });
             try {
