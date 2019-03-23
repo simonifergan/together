@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="app-container">
     <main-header/>
-    <user-msg />
+    <!-- <user-msg /> -->
     <router-view/>
     <div class="chat-container">
       <chat v-for="(chat,index) in chats" :chat="chat" :key="chat._id+index"/>
