@@ -1,6 +1,7 @@
 <template>
   <div id="app" class="app-container">
     <main-header/>
+    <!-- <user-msg /> -->
     <router-view/>
     <div class="chat-container">
       <chat v-for="(chat,index) in chats" :chat="chat" :key="chat._id+index"/>
@@ -19,7 +20,7 @@ export default {
   components: {
     MainHeader,
     NotificationList,
-    Chat
+    Chat,
   },
   computed: {
     chats() {

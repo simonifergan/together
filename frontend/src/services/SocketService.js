@@ -19,6 +19,8 @@ const CHAT_RECEIVE_MSG = 'chat-receive-msg';
 
 const TRIP_JOIN_REQUEST = 'trip-join-request';
 
+const NOTIFICATION_RECEIVE = 'notification-receive';
+const NOTIFICATION_SEND = 'notification-send';
 const NOTIFICATION_ADD = 'notification-add'
 const NOTIFICATION_ADDED = 'notification-added'
 
@@ -36,8 +38,10 @@ export default {
     CHAT_SEND_MSG, 
     CHAT_RECEIVE_MSG,
 
-    TRIP_JOIN_REQUEST,
+    TRIP_JOIN_REQUEST, // not used so far
 
+    NOTIFICATION_RECEIVE,
+    NOTIFICATION_SEND,
     NOTIFICATION_ADD,
     NOTIFICATION_ADDED,
 }

@@ -2,6 +2,8 @@ import SocketService from '@/services/SocketService';
 import UtilService from '@/services/UtilService';
 import ChatService from '@/services/ChatService';
 import NotificationService from '@/services/NotificationService';
+import EventBusService from '@/services/EventBusService';
+import { SHOW_NOTIFICATION } from '@/services/EventBusService';
 
 export default {
     state: {
@@ -70,11 +72,16 @@ export default {
             SocketService.on(SocketService.CHAT_JOIN, chatId => {
                 context.commit({ type: 'activateChat', chatId })
             })
-            SocketService.on(SocketService.CHAT_RECEIVE_MSG, ({ chatId, msg, recipients}) => {
-                context.commit({ type: 'addMsg', msg, chatId, recipients, loggedUser: context.getters.loggedUser });
+            SocketService.on(SocketService.CHAT_RECEIVE_MSG, ({ chatId, msg, recipients }) => {
+                context.commit({ type: 'addMsg', msg, chatId, recipients });
             })
             SocketService.on(SocketService.NOTIFICATION_ADDED, (addedNotification) => {
                 context.commit({ type: 'addNotification', addedNotification });
+            })
+            SocketService.on(SocketService.NOTIFICATION_RECEIVE, payload => {
+                console.log(payload)
+                // send payload to usrmsg cmp
+                EventBusService.$emit(SHOW_NOTIFICATION, payload);
             })
         },
         socketUserConnect({ getters }) {
@@ -84,6 +91,9 @@ export default {
             msg._id = UtilService.generateId()
             // commit({type: 'addMsg', msg, chatId})
             SocketService.emit(SocketService.CHAT_SEND_MSG, { msg, chatId, recipients });
+        },
+        socketSendNotification(context, { userId, payload }) {
+            SocketService.emit(SocketService.NOTIFICATION_SEND, { userId, payload });
         },
         socketJoinPrivateChat(context, { userId }) {
             const chat = context.getters.userChats.find(chat => chat.users.some(user => user._id === userId))

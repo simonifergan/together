@@ -18,6 +18,8 @@ const CHAT_RECEIVE_MSG = 'chat-receive-msg';
 const TRIP_JOIN_REQUEST = 'trip-join-request';
 
 // NOTIFICATIONS EVENTS
+const NOTIFICATION_RECEIVE = 'notification-receive';
+const NOTIFICATION_SEND = 'notification-send';
 const NOTIFICATION_ADD = 'notification-add';
 const NOTIFICATION_ADDED = 'notification-added';
 
@@ -86,19 +88,21 @@ module.exports = (io) => {
         })
 
 
-        // INSTANT TRIP ACTIONS
-        socket.on(TRIP_JOIN_REQUEST, async payload => {
-            // payload: {user, tripId}
-
-            // TODO: SEND TO USER HIS NOTIFICATION
-        })
-
-
         // Notifications
         socket.on(NOTIFICATION_ADD, async notification => {
             notification.createdAt = Date.now();
             let addedNotification = await notificationService.add(notification)
             io.emit(NOTIFICATION_ADDED, addedNotification);
+        });
+
+        socket.on(NOTIFICATION_SEND, async ({ userId, payload }) => {
+            console.log('got this notification for user:', userId, 'and his load:', payload);
+            // send it to him:
+            const recipientSocket = connectedSockets.find(inSocket => inSocket.userId === userId);
+            if (recipientSocket) {
+                recipientSocket.emit(NOTIFICATION_RECEIVE, payload);
+                console.log('recipientIs:', recipientSocket.userId, userId)
+            }
         })
     });
 }

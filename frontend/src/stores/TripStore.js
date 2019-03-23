@@ -1,6 +1,5 @@
 import TripService from '@/services/TripService';
 import NotificationService from '@/services/NotificationService';
-import { userInfo } from 'os';
 
 export default {
     state: {
@@ -167,7 +166,9 @@ export default {
             commit({ type: 'toggleUserFromPendingList', userId });
             try {
                 const updatedTrip = await TripService.save(trip);
-                console.log('Here I am, once again, shatterd into pieces, cant deny cant pretend, behind these hazel eyessssss');
+                // send to socket with userId and tripId
+                dispatch({type: 'socketSendNotification', userId: updatedTrip.userId, payload: 'CAN YOU SEE ME BABA??'})
+                console.log('Here I am, once again, torn into pieces, cant deny cant pretend, behind these hazel eyessssss');
             } catch {
                 console.log('YOUR CODE SUCKS!!!');
                 commit({ type: 'toggleUserFromPendingList', userId });
@@ -182,7 +183,7 @@ export default {
             try {
                 const updatedTrip = await TripService.save(trip);
                 commit({ type: 'toggleUserFromPendingList', userId });
-                console.log('Here I am, once again, shatterd into pieces, cant deny cant pretend, behind these hazel eyessssss');
+                console.log('Here I am, once again, torn into pieces, cant deny cant pretend, behind these hazel eyessssss');
             } catch {
                 console.log('YOUR CODE SUCKS!!!');
             }
