@@ -4,6 +4,7 @@
             {{toolTipTxt | countryCodeToName}}
         </div>
         <map-tools
+        @click.stop=""
         @zoomIn="mapView.zoom -= 100"
         @zoomOut="mapView.zoom += 100"
         @panUp="mapView.y -= 100"

@@ -32,16 +32,13 @@
         </label>
       </div>
       <h2>Where would you like to travel to?</h2>
-      <our-super-awesome-map :value="trip.destinations"/>
+      <our-super-awesome-map :value="trip.destinations" @click.stop=""/>
       <button type="submit">Post</button>
     </form>
   </section>
 </template>
 
 <script>
-// SERVICE
-import TripService from "@/services/TripService";
-
 // CMPS
 import OurSuperAwesomeMap from "@/components/OurSuperAwesomeMap.vue";
 
