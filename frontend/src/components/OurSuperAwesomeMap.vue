@@ -1,5 +1,5 @@
 <template>
-    <section class="svg-map-container">
+    <section class="svg-map-container" ref="svgContainer">
         <div v-if="toolTipTxt" :style="tooltipPos" class="tooltip" :class="tooltipVisible" >
             {{toolTipTxt | countryCodeToName}}
         </div>
@@ -309,7 +309,9 @@ export default {
             mapView: {
                 zoom: 1000,
                 x: 0,
-                y: 0
+                y: 0,
+                sizeX: null,
+                sizeY: null
             },
             clickPos: null,
             isDragging: false,
@@ -317,7 +319,8 @@ export default {
         };
     },
     mounted() {
-       
+       this.mapView.sizeX = this.$refs.svgContainer.clientWidth
+       this.mapView.sizeY = this.$refs.svgContainer.clientHeight
     },
     methods: {
         handleMousemove(event) {
@@ -355,8 +358,8 @@ export default {
             }
         },
         zoom(event) {
-            let frX = event.offsetX/1000 //UPDATE WHEN RESPONSIVE
-            let frY = event.offsetY/1000
+            let frX = event.offsetX/this.mapView.sizeX //UPDATE WHEN RESPONSIVE
+            let frY = event.offsetY/this.mapView.sizeY
             if (event.deltaY > 0) {
                 this.mapView.zoom += 100
                 this.mapView.x -= frX * 100
@@ -371,15 +374,15 @@ export default {
             
         },
         startDrag(event) {
-            this.clickPos = {diffX: (event.offsetX*this.mapView.zoom/1000 + this.mapView.x),
-                             diffY: (event.offsetY*this.mapView.zoom/1000 + this.mapView.y)}
+            this.clickPos = {diffX: (event.offsetX*this.mapView.zoom/this.mapView.sizeX + this.mapView.x),
+                             diffY: (event.offsetY*this.mapView.zoom/this.mapView.sizeY + this.mapView.y)}
             // console.log(this.clickPos);
             this.isDragging = true
         },
         drag(event) {
             if (!this.isDragging) return
-            this.mapView.x = this.clickPos.diffX - event.offsetX*this.mapView.zoom/1000
-            this.mapView.y = this.clickPos.diffY - event.offsetY*this.mapView.zoom/1000
+            this.mapView.x = this.clickPos.diffX - event.offsetX*this.mapView.zoom/this.mapView.sizeX
+            this.mapView.y = this.clickPos.diffY - event.offsetY*this.mapView.zoom/this.mapView.sizeY
             this.didDrag = true
         },
         stopDrag(event) {
