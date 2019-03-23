@@ -5,10 +5,13 @@
         class="user-img"
         v-for="user in chattingWith"
         :key="user._id+user.firstname"
-        :style="{ backgroundImage: `url('${user.profilePic}')` }"
+        :style="profilePic"
         :title="user.firstname"
       />
-      <span v-for="(user, index) in chattingWith" :key="user._id+index">{{`${user.firstname} ${user.lastname}`}}</span>
+      <span
+        v-for="(user, index) in chattingWith"
+        :key="user._id+index"
+      >{{`${user.firstname} ${user.lastname}`}}</span>
       <button :class="{'is-focused': isFocused}" @click.stop="closeChat">
         <i class="fas fa-times"></i>
       </button>
@@ -27,7 +30,9 @@
         placeholder="Type a message..."
         @blur="isFocused = false"
       >
-      <button title="Send message" type="submit" :class="{'is-focused': isFocused}"><i class="fas fa-paper-plane"></i></button>
+      <button title="Send message" type="submit" :class="{'is-focused': isFocused}">
+        <i class="fas fa-paper-plane"></i>
+      </button>
     </form>
   </aside>
 </template>
@@ -51,19 +56,23 @@ export default {
     loggedUser() {
       return this.$store.getters.loggedUser;
     },
+    profilePic() {
+      let picUrl = this.chattingWith[0].profilePic;
+      return { backgroundImage: `url('${picUrl}')` };
+    }
   },
   methods: {
     closeChat() {
-      this.$store.commit({type: 'closeChat', chatId: this.chat._id})
+      this.$store.commit({ type: "closeChat", chatId: this.chat._id });
     },
     send() {
       this.$store.dispatch({
         type: "socketSendMsg",
         msg: { txt: this.newMsg, sentAt: Date.now() },
         chatId: this.chat._id,
-        recipients: this.chattingWith,
+        recipients: this.chat.users
       });
-      this.newMsg = '';
+      this.newMsg = "";
     },
     focusInput() {
       this.isFocused = true;
