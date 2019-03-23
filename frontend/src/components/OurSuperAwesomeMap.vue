@@ -317,8 +317,7 @@ export default {
         };
     },
     mounted() {
-        console.log(this.$parent)
-        console.log(this.$refs.mapSvg)
+       
     },
     methods: {
         handleMousemove(event) {
@@ -403,38 +402,5 @@ export default {
 </script>
 
 <style>
-.svg-map-container {
-   position: relative;
-    width: 80vh;
-    height: 500px;
-    box-shadow: 0 0 1px 1px $box-shadow-gray;
-    user-select: none;
-    position: relative;
 
-}
-.tooltip {
-    position: fixed;
-    background-color: #333;
-    color: #fff;
-    visibility: hidden;
-    padding: 5px;
-    border-radius: 50px;
-    opacity: 0;
-    transition: opacity .6s ease;
-}
-.show {
-    opacity: 1;
-    visibility: visible;
-    transition: opacity .6s ease;
-}
-path {
-    cursor: pointer;
-}
-.land {
-    fill: #333;
-    fill-opacity: 1;
-    stroke:white;
-    stroke-opacity: 1;
-    stroke-width:0.5;
-}
 </style>
