@@ -23,6 +23,7 @@
       <ul>
         <UserPreview v-for="user in trip.members" :key="user._id" :user="user"/>
       </ul>
+      <pending-list v-if="loggedInUser && loggedInUser._id === trip.userId" :pendingUsers="trip.pending"/>
     </div>
 
     <p class="trip-desc">{{trip.desc}}</p>
@@ -46,19 +47,20 @@
 // CMPS
 import UserPreview from "@/components/UserPreview.vue";
 import OurSuperAwesomeMap from '@/components/OurSuperAwesomeMap.vue'
+import PendingList from '@/components/PendingList.vue';
+
 export default {
   name: "trip-details",
   components: {
     UserPreview,
     OurSuperAwesomeMap
+    PendingList
   },
   methods: {
     joinLeaveTrip() {
       if (this.isUserMember) this.$store.dispatch({ type: "leaveTrip" });
       else if (this.trip.pending.some(id => id === this.loggedInUser._id)) this.$store.dispatch({type: 'cancelTripJoinRequest'})
       else this.$store.dispatch({ type: "userRequestToJoinTrip" });
-      // else if pending - cancel request
-      // else dispatch({type: 'requestToJoinTrip', tripId: trip._id})
 
       // THIS FUNCTION GOES TO THE TRIP OWNER - TO APPROVE A REQUEST
       // else this.$store.dispatch({ type: "joinTrip" });
@@ -92,8 +94,9 @@ export default {
     whoIsUser() {
       if (!this.loggedInUser) return 'Ask to join';
       if (this.isUserMember) return "Leave";
-      else if (this.trip.pending.some(userId => userId === this.loggedInUser._id))
+      else if (this.trip.pending.some(userId => userId === this.loggedInUser._id)) {
         return "Cancel request";
+      }
       else return "Ask to join";
     }
   },
