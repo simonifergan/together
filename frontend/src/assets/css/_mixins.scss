@@ -21,7 +21,7 @@
     font-family: $font-ubuntu-light;
 }
 
-@mixin wrapper() {
+@mixin wrapper($max-width: 700px) {
     margin: 0 auto;
-    max-width: 700px;
+    max-width: $max-width;
 }

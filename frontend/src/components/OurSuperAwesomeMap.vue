@@ -12,7 +12,7 @@
         @panRight="mapView.x += 100"
         ></map-tools>
         <svg @wheel.prevent="zoom" @mousedown="startDrag" @mousemove="handleMousemove" @mouseup="stopDrag" @mouseleave="stopDrag" @click="selectCountry" :viewBox="viewBoxVal"
-        width="1000" height="1000" xmlns="http://www1.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+        width="100%" height="100%" xmlns="http://www1.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
             <defs>
             
 
@@ -394,8 +394,8 @@ export default {
 
 <style>
 .svg-map {
-    width: 1026px;
-    height: 656px;
+    /* width: 1026px;
+    height: 656px; */
     user-select: none;
     position: relative;
 
