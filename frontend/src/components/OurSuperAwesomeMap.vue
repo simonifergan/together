@@ -377,13 +377,14 @@ export default {
             this.clickPos = {diffX: (event.offsetX*this.mapView.zoom/this.mapView.sizeX + this.mapView.x),
                              diffY: (event.offsetY*this.mapView.zoom/this.mapView.sizeY + this.mapView.y)}
             this.isDragging = true
+            console.log('clickPos:', this.clickPos, 'realDiff:', event.offsetX - this.mapView.x, event.offsetY - this.mapView.y)
         },
         drag(event) {
             if (!this.isDragging) return
+            console.log('relativeMousePosX:', event.offsetX*this.mapView.zoom/this.mapView.sizeX)
             this.mapView.x = this.clickPos.diffX - event.offsetX*this.mapView.zoom/this.mapView.sizeX
             this.mapView.y = this.clickPos.diffY - event.offsetY*this.mapView.zoom/this.mapView.sizeY
             this.didDrag = true
-            console.log('clickPos:', this.clickPos, 'realDiff:', event.offsetX - this.mapView.x, event.offsetY - this.mapView.y)
         },
         stopDrag(event) {
             this.isDragging = false
