@@ -12,7 +12,6 @@ const usersCollection = 'users';
 
 async function query() {
     const db = await mongoService.connect()
-    // const notifications = await db.collection(notificationCollection).find({}).toArray()
     const notifications = await db.collection(notificationsCollection)
         .aggregate([
             {

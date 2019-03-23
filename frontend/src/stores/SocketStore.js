@@ -12,7 +12,7 @@ export default {
     mutations: {
         setConnection(state) {
             state.isConnected = !state.isConnected;
-            console.log('connection status:', state.isConnected);
+            // console.log('connection status:', state.isConnected);
         },
         addNewChat(state, { chat }) {
             chat.isActive = true;

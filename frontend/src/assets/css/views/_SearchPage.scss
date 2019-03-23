@@ -1,0 +1,4 @@
+.search-page {
+    display: grid;
+    grid-template: calc(100vh - 70px) / 1fr 250px;
+}

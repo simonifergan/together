@@ -5,7 +5,7 @@ module.exports = (app) => {
     // Query trips' list
     app.get(BASE_URL, (req, res) => {        
         let {searchQuery} = req.query
-        console.log('searchQuery:', searchQuery);
+        // console.log('searchQuery:', searchQuery);
         if (!searchQuery) searchQuery = '';
         tripService.query(searchQuery)
             .then(trips => res.json(trips))

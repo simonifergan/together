@@ -1,5 +1,6 @@
 .trip-list {
     margin: 20px;
+    overflow: hidden;
     @include flex(column);
     h2 {
         font-weight: 1000;
