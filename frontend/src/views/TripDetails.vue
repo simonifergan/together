@@ -53,7 +53,7 @@ export default {
   name: "trip-details",
   components: {
     UserPreview,
-    OurSuperAwesomeMap
+    OurSuperAwesomeMap,
     PendingList
   },
   methods: {
