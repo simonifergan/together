@@ -40,10 +40,6 @@ export default {
             state.notifications = notifications;
         },
         addNotification(state, { addedNotification }) {
-<<<<<<< HEAD
-=======
-            // console.log(addedNotification);
->>>>>>> 81d0610f76a43efda877876301cbcb844dee47dc
             state.notifications.unshift(addedNotification);
         }
     },
@@ -67,12 +63,7 @@ export default {
             SocketService.on(SocketService.CHAT_RECEIVE_MSG, ({ chatId, msg }) => {
                 context.commit({ type: 'addMsg', msg, chatId });
             })
-<<<<<<< HEAD
             SocketService.on(SocketService.NOTIFICATION_ADDED, (addedNotification) => {
-=======
-            SocketService.on('notification-added', (addedNotification) => {
-                // console.log('NOTIFICATION ADDED:', addedNotification);
->>>>>>> 81d0610f76a43efda877876301cbcb844dee47dc
                 context.commit({ type: 'addNotification', addedNotification });
             })
         },
@@ -120,10 +111,6 @@ export default {
             commit({ type: 'setNotification', notifications });
         },
         addNotification(context, { newNotification }) {
-<<<<<<< HEAD
-=======
-            // console.log('socket store');
->>>>>>> 81d0610f76a43efda877876301cbcb844dee47dc
             SocketService.emit(SocketService.NOTIFICATION_ADD, newNotification);
         }
     }
