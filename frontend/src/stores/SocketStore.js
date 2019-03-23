@@ -26,7 +26,7 @@ export default {
             const chat = state.userChats.find(chat => chat._id === chatId);
             chat.isActive = false;
         },
-        addMsg(state, { msg, chatId, recipients, loggedUser }) {
+        addMsg(state, { msg, chatId, recipients }) {
             console.log(recipients);
             const chat = state.userChats.find(chat => chat._id === chatId)
             if (chat) {
@@ -37,7 +37,7 @@ export default {
                 let newChat = {
                     _id: chatId,
                     msgs: [msg],
-                    users: [...recipients, loggedUser],
+                    users: [...recipients],
                     isActive: true,
                 }
                 state.userChats.push(newChat);
@@ -86,10 +86,8 @@ export default {
             SocketService.emit(SocketService.CHAT_SEND_MSG, { msg, chatId, recipients });
         },
         socketJoinPrivateChat(context, { userId }) {
-            const chat = context.getters.userChats.find(chat => {
-                if (chat.users.length > 2) return false;
-                if (chat.users.some(user => user._id === userId)) return true;
-            })
+            const chat = context.getters.userChats.find(chat => chat.users.some(user => user._id === userId))
+            console.log(chat);
             let payload;
             if (chat) {
                 payload = {

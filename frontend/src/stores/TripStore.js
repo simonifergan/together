@@ -100,10 +100,14 @@ export default {
             const msg = await TripService.remove(trip._id)
             commit({ type: 'removeTrip', tripId: trip._id })
         },
-        async joinTrip({ commit, getters, dispatch }) {
-            const backupTripToDisplay = getters.tripToDisplay;
-            const newMember = getters.loggedUser;
-            commit({ type: 'addMember', newMember })
+        async joinTrip({ commit, getters, dispatch }, userIdToJoin, tripIdToJoin) {
+            // const backupTripToDisplay = getters.tripToDisplay;
+            // const newMember = getters.loggedUser;
+            // commit({ type: 'addMember', newMember })
+
+            // check if the user already pending or member
+            let tripToJoin = getters.trips.find(trip => trip._id === tripIdToJoin);
+            if (!tripToJoin)
 
             try {
                 const updatedTrip = await TripService.save(getters.tripToDisplay);
