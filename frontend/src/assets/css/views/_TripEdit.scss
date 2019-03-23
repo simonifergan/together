@@ -1,32 +1,45 @@
 .trip-edit {
     @include wrapper;
-    padding: 20px;
-    > * {
-        margin-bottom: 20px;
+    h1 {
+        font-size: 2em;
     }
-    textarea, input {
-        font-family: 'Open Sans';
-    }
-    .edit-input {
-        width: 100%;
-        border: 1px solid $box-shadow-gray;
-        padding: 10px;
-        &.trip-title {
-            font-size: 1.5em
+    form {
+        padding: 20px;
+        
+        textarea, input {
+            font-family: 'Open Sans';
+           
         }
-    }
-    .date-picker {
-        @include flex(column, center, center);
-        label {
-            padding: 5px 5px 5px 15px;
-            display: grid;
-            grid-template-columns: 50px 1fr;
-            align-self: flex-start;
-            cursor: pointer;
-            input {
-                cursor: pointer;
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            margin-top: 20px;
+        }
+        .edit-input {
+            width: 100%;
+            border: 1px solid $box-shadow-gray;
+            padding: 10px;
+            &.trip-title {
+                font-size: 1.225em
             }
         }
-
+        .date-picker {
+            @include flex(column, center, center);
+            label {
+                padding: 5px 5px 5px 15px;
+                display: grid;
+                grid-template-columns: 50px 1fr;
+                align-self: flex-start;
+                cursor: pointer;
+                input {
+                    cursor: pointer;
+                }
+            }
+        }
+        button {
+            @include button;
+            float: right;
+            margin-top: 10px;
+        }
     }
 }

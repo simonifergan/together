@@ -67,6 +67,7 @@ export default {
             commit({ type: 'loadTrip', trip });
         },
         async saveTrip({ commit, getters, dispatch }, { trip }) {
+            trip.userId = getters.loggedUser._id;
             const newTrip = await TripService.save(trip)
             if (trip._id) {
                 commit({ type: 'updateTrip', trip: newTrip })
@@ -88,6 +89,7 @@ export default {
                 }
                 dispatch({ type: 'addNotification', newNotification })
             }
+            return newTrip._id;
         },
         async removeTrip({ commit }, { trip }) {
             const msg = await TripService.remove(trip._id)

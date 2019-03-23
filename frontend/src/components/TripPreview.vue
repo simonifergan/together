@@ -1,14 +1,13 @@
 <template>
   <router-link tag="section" :to="'/trip/' + trip._id" class="trip-preview">
-    <!-- {{trip}} -->
     <div class="profile-img-container">
       <div class="profile-img" :style="profilePic"></div>
     </div>
     <p>{{trip.user.firstname}} {{trip.user.lastname}}</p>
     <p>{{trip.title}}</p>
     <p>{{trip.startsAt.month}} {{trip.startsAt.year}}, {{trip.duration[0]}} trip</p>
-    <div class="members-container">
-      <div
+    <div class="members-container" v-if="trip.members.length > 0">
+      <div 
         class="member-img"
         v-for="member in firstThree" 
         :key="member._id"
@@ -18,6 +17,7 @@
         <div class="placeholder-div"></div>
         <div class="members-txt" v-if="spotsLeft > 0">joined, {{spotsLeft}} spots remaining!</div>
     </div>
+    <p v-else>Be the first one to join!</p>
   </router-link>
 </template>
 
@@ -50,7 +50,7 @@ export default {
     },
     spotsLeft() {
       const {groupSize, members} = this.trip;
-      return groupSize - members.length;
+      return groupSize - members.length - 1;
 
     },
     firstThree() {
