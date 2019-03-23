@@ -5,9 +5,9 @@
       <h1>{{(trip && trip._id)? 'Edit your trip details:' : 'Add a new trip:'}}</h1>
       {{trip.tripStart}}
       <h2>Give your trip a title:</h2>
-      <input v-model="trip.title" />
+      <input placeholder="Type your trip's title. e.g.: 'My trip to Lapland in 3 months!'" class="edit-input trip-title" type="text" v-model="trip.title" />
       <h2>How many persons would you like to travel with?</h2>
-      <input v-model="trip.groupSize" />
+      <input class="edit-input trip-size" type="number" v-model.number="trip.groupSize" />
       <h2>Tell everyone more about your plans:</h2>
       <el-input type="textarea" :rows="5" v-model="trip.desc" class="trip-desc"/>
       <h2>When would you like to travel?</h2>
@@ -29,9 +29,7 @@
         </label>
       </div>
       <h2>Where would you like to travel to?</h2>
-      <div class="awesome-map-container">
-        <our-super-awesome-map :value="trip.destinations" />
-      </div>
+      <our-super-awesome-map :value="trip.destinations" />
     </form>
   </section>
 </template>
