@@ -40,7 +40,6 @@ export default {
             state.notifications = notifications;
         },
         addNotification(state, { addedNotification }) {
-            console.log(addedNotification);
             state.notifications.unshift(addedNotification);
         }
     },
@@ -64,8 +63,7 @@ export default {
             SocketService.on(SocketService.CHAT_RECEIVE_MSG, ({ chatId, msg }) => {
                 context.commit({ type: 'addMsg', msg, chatId });
             })
-            SocketService.on('notification-added', (addedNotification) => {
-                console.log('NOTIFICATION ADDED:', addedNotification);
+            SocketService.on(SocketService.NOTIFICATION_ADDED, (addedNotification) => {
                 context.commit({ type: 'addNotification', addedNotification });
             })
         },
@@ -98,7 +96,6 @@ export default {
                 };
             }
             SocketService.emit(SocketService.CHAT_JOIN, payload);
-
         },
         async getUserChats({ commit, getters }) {
             let chats = await ChatService.getChats(getters.loggedUser._id)
@@ -109,12 +106,11 @@ export default {
             commit({ type: 'setUserChats', chats });
             SocketService.emit(SocketService.CHAT_REGISTER_ROOMS, chats);
         },
-        async loadNotification({ commit, getters }) {
+        async loadNotification({ commit }) {
             const notifications = await NotificationService.query();
             commit({ type: 'setNotification', notifications });
         },
         addNotification(context, { newNotification }) {
-            console.log('socket store');
             SocketService.emit(SocketService.NOTIFICATION_ADD, newNotification);
         }
     }

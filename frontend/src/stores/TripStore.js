@@ -70,16 +70,23 @@ export default {
             const newTrip = await TripService.save(trip)
             if (trip._id) {
                 commit({ type: 'updateTrip', trip: newTrip })
-                // userId, trip id, actions - created a trip,
+                // userId, trip id, actions - updated a trip,
                 let newNotification = {
                     userId: getters.loggedUser,
                     tripId: trip._id,
-                    action: 'trip_modified'
+                    action: NotificationService.TRIP_MODIFIED
                 }
                 dispatch({ type: 'addNotification', newNotification })
             }
             else {
                 commit({ type: 'addTrip', trip: newTrip })
+                // userId, trip id, actions - add new trip,
+                let newNotification = {
+                    userId: getters.loggedUser,
+                    tripId: trip._id,
+                    action: NotificationService.TRIP_CREATED
+                }
+                dispatch({ type: 'addNotification', newNotification })
             }
         },
         async removeTrip({ commit }, { trip }) {
@@ -94,7 +101,7 @@ export default {
             let newNotification = {
                 userId: getters.loggedUser._id,
                 tripId: getters.tripToDisplay._id,
-                action: 'trip_joined'
+                action: NotificationService.TRIP_JOINED
             }
             dispatch({ type: 'addNotification', newNotification })
 

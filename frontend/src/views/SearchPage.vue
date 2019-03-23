@@ -1,11 +1,15 @@
 <template>
     <section class="search-page">
         <trip-list :trips="trips" title="Search Results"></trip-list>
+
     </section>
 </template>
 
 <script>
-    import TripList from "@/components/TripList";
+// CMPS
+import TripList from "@/components/TripList";
+
+
 export default {
     name: 'searchResults',
     components: {
