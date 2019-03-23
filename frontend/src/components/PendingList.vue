@@ -5,7 +5,7 @@
             v-for="pendingUser in pendingUsers"
             :key="pendingUser._id"
             class="pending-user">
-                {{pendingUser}}
+              {{pendingUser}}
         </div>
     </section>
 </template>
