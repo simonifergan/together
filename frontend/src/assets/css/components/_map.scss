@@ -1,6 +1,6 @@
 .svg-map-container {
     position: relative;
-     width: 80vh;
+     width: 100%;
      height: 500px;
      box-shadow: 0 0 1px 1px $box-shadow-gray;
      user-select: none;
@@ -34,11 +34,12 @@
  }
 
 .map-tools {
-    width: 60px;
-    height: 400px;
+    width: 35px;
+    height: 210px;
     position: absolute;
     top: 5%;
     left: 5%;
+    background-color: #50505050;
     button {
         background-color: #454555;
         color: white;
