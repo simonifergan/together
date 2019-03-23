@@ -4,7 +4,10 @@
       <div class="profile-img" :style="profilePic"/>
       <h1>{{trip.title}}</h1>
       <h2>{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</h2>
-      <button v-if="trip.userId !== loggedInUser._id" @click="initChat(trip.userId)">
+      <button
+        v-if="!loggedInUser || trip.userId !== loggedInUser._id"
+        @click="initChat(trip.userId)"
+      >
         <i class="far fa-comment-alt"></i>
       </button>
     </div>
@@ -12,8 +15,8 @@
     <button
       class="btn-join-trip"
       @click="joinLeaveTrip"
-      v-if="trip.userId !== loggedInUser._id"
-    >{{(isUserMember)? 'Leave' : 'Ask to join'}}</button>
+      v-if="!loggedInUser || trip.userId !== loggedInUser._id"
+    >{{whoIsUser}}</button>
 
     <div class="trip-members">
       <h3>Group members:</h3>
@@ -34,7 +37,7 @@
     </div>
 
     <div class="comments">
-      <h3>comments</h3>
+      <h3>Comments</h3>
     </div>
   </section>
 </template>
@@ -46,12 +49,18 @@ import UserPreview from "@/components/UserPreview.vue";
 export default {
   name: "trip-details",
   components: {
-    UserPreview,
+    UserPreview
   },
   methods: {
     joinLeaveTrip() {
       if (this.isUserMember) this.$store.dispatch({ type: "leaveTrip" });
-      else this.$store.dispatch({ type: "joinTrip" });
+      else if (this.trip.pending.some(id => id === this.loggedInUser._id)) this.$store.dispatch({type: 'cancelTripJoinRequest'})
+      else this.$store.dispatch({ type: "userRequestToJoinTrip" });
+      // else if pending - cancel request
+      // else dispatch({type: 'requestToJoinTrip', tripId: trip._id})
+
+      // THIS FUNCTION GOES TO THE TRIP OWNER - TO APPROVE A REQUEST
+      // else this.$store.dispatch({ type: "joinTrip" });
     },
     initChat(userId) {
       this.$store.dispatch({ type: "socketJoinPrivateChat", userId });
@@ -76,18 +85,26 @@ export default {
       return { "background-image": `url('${this.trip.user.profilePic}')` };
     },
     isUserMember() {
+      if (!this.loggedInUser) return false;
       return this.trip.members.some(user => user._id === this.loggedInUser._id);
+    },
+    whoIsUser() {
+      if (!this.loggedInUser) return 'Ask to join';
+      if (this.isUserMember) return "Leave";
+      else if (this.trip.pending.some(userId => userId === this.loggedInUser._id))
+        return "Cancel request";
+      else return "Ask to join";
     }
   },
-    watch: {
+  watch: {
     $route: {
       handler(newRoute) {
-        const {tripId} = newRoute.params;
+        const { tripId } = newRoute.params;
         if (tripId !== this.trip._id) {
           this.$store.dispatch({ type: "loadTrip", tripId });
         }
       }
-    }
+    },
   }
 };
 </script>

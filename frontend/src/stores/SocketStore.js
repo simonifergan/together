@@ -18,7 +18,7 @@ export default {
             chat.isActive = true;
             state.userChats.push(chat);
         },
-        activateChat(state, {chatId}) {
+        activateChat(state, { chatId }) {
             const chat = state.userChats.find(chat => chat._id === chatId);
             if (chat) chat.isActive = true;
         },
@@ -55,10 +55,10 @@ export default {
         socketConnect(context) {
             context.dispatch({ type: 'socketUserConnect' })
             SocketService.on(SocketService.CHAT_JOIN_NEW, chat => {
-                    context.commit({ type: 'addNewChat', chat })
+                context.commit({ type: 'addNewChat', chat })
             })
             SocketService.on(SocketService.CHAT_JOIN, chatId => {
-                    context.commit({ type: 'activateChat', chatId })
+                context.commit({ type: 'activateChat', chatId })
             })
             SocketService.on(SocketService.CHAT_RECEIVE_MSG, ({ chatId, msg }) => {
                 context.commit({ type: 'addMsg', msg, chatId });
@@ -87,7 +87,7 @@ export default {
                     loggedUserId: context.getters.loggedUser._id,
                     users: [userId],
                 };
-                context.commit({type: 'activateChat', chatId: chat._id});
+                context.commit({ type: 'activateChat', chatId: chat._id });
             } else {
                 payload = {
                     chatId: null,

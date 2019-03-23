@@ -3,7 +3,7 @@
     <main-header/>
     <router-view/>
     <div class="chat-container">
-      <chat v-for="(chat,index) in chats" :chat="chat" :key="chat._id+index"/>
+      <chat  v-for="(chat,index) in chats" :chat="chat" :key="chat._id+index"/>
     </div>
     <notification-list :notifications="getNotifications" />
   </div>
@@ -28,12 +28,17 @@ export default {
     },
     getNotifications() {
       return this.$store.getters.notifications;
+    },
+    loggedUser() {
+      return this.$store.getters.loggedUser;
     }
   },
   created() {
-    this.$store.dispatch({ type: "socketConnect" });
-    this.$store.dispatch({ type: "getUserChats" });
-    this.$store.dispatch({ type: "loadNotification" });
+    if (this.loggedUser) {
+      this.$store.dispatch({ type: "socketConnect" });
+      this.$store.dispatch({ type: "getUserChats" });
+      this.$store.dispatch({ type: "loadNotification" });
+    }
   }
 };
 </script>

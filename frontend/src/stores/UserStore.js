@@ -2,21 +2,7 @@ import UserService from '@/services/UserService'
 
 export default {
     state: {
-        loggedUser: {
-            "_id" : "5c9110f3e7179a0e4088e8ad",
-            "email" : "adi.binen@gmail.com",
-            "password" : "$2a$10$Qpt4/L2jZGYLAppzzj8FR.jqg9qTyVC8hoEWu7WAlSnot9ONvK8dO",
-            "firstname" : "Adi",
-            "lastname" : "Binenbaum",
-            "trips" : [],
-            "interestedIn" : [ 
-                "5c9115f5e7179a0e4088ebd2"
-            ],
-            "birthdate" : 774892500,
-            "gender" : "female",
-            "tripPrefs" : {},
-            "profilePic" : "https://res.cloudinary.com/dcv2jyqvl/image/upload/v1553085988/user_imgs/adi.png"
-        }
+        loggedUser: null,
     },
     mutations: {
         setLoggedUser(state, { user }) {
@@ -35,10 +21,10 @@ export default {
     },
     getters: {
         loggedUser(state) {
-            return state.loggedUser
+            return state.loggedUser;
         },
         getEmptyUser() {
-            return UserService.getEmptyUser()
+            return UserService.getEmptyUser();
         }
     },
     actions: {
@@ -55,7 +41,7 @@ export default {
         },
 
         async joinTripToUser({ commit, getters }, { tripId }) {
-            const backupUserLoggedUser = getters.loggedUser;
+            const backupUserLoggedUser = JSON.parse(JSON.stringify(getters.loggedUser));
             commit({ type: 'joinTripToUser', tripId })
             try {
                 const updatedUser = await UserService.update(getters.loggedUser);
@@ -67,7 +53,7 @@ export default {
         },
 
         async leaveTripToUser({commit, getters}, {tripId}) {
-            const backupUserLoggedUser = getters.loggedUser;
+            const backupUserLoggedUser = JSON.parse(JSON.stringify(getters.loggedUser));
             commit({ type: 'leaveTripToUser', tripId });
             try {
                 const updatedUser = await UserService.update(getters.loggedUser);

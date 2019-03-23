@@ -147,14 +147,17 @@ async function getById(tripId) {
 function add(trip) {
     const userId = trip.userId;
     const members = [...trip.members];
+    const pending = [...trip.pending];
     trip.userId = new ObjectId(userId);
     trip.members = trip.members.map(userId => new ObjectId(userId));
+    trip.pending = trip.pending.map(pendingUser => new ObjectId(pendingUser._id));
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).insertOne(trip))
         .then(mongoRes => {
             trip._id = mongoRes.insertedId;
             trip.userId = userId;
             trip.members = members;
+            trip.pending = pending;
             return trip;
         });
 }
@@ -162,16 +165,19 @@ function add(trip) {
 function update(trip) {
     const tripId = trip._id;
     const members = [...trip.members];
+    const pending = [...trip.pending];
     const userId = trip.userId;
     trip._id = new ObjectId(trip._id);
     trip.userId = new ObjectId(trip.userId);
     trip.members = trip.members.map(member => new ObjectId(member._id));
+    trip.pending = trip.pending.map(pendingUser => new ObjectId(pendingUser));
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).updateOne({ _id: trip._id }, { $set: trip }))
         .then(mongoRes => {
             trip._id = tripId;
             trip.userId = userId
             trip.members = members;
+            trip.pending = pending;
             return trip;
         });
 }

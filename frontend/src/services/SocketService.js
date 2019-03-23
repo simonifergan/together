@@ -17,6 +17,8 @@ const CHAT_LEAVE = 'chat-leave';
 const CHAT_SEND_MSG = 'chat-send-msg';
 const CHAT_RECEIVE_MSG = 'chat-receive-msg';
 
+const TRIP_JOIN_REQUEST = 'trip-join-request';
+
 const NOTIFICATION_ADD = 'notification-add'
 const NOTIFICATION_ADDED = 'notification-added'
 
@@ -26,12 +28,16 @@ export default {
     // SOCKET EVENTS
     SOCKET_CONNECT, 
     SOCKET_DISCONNECT, 
+    
     CHAT_REGISTER_ROOMS,
     CHAT_JOIN,
     CHAT_JOIN_NEW,
     CHAT_LEAVE,
     CHAT_SEND_MSG, 
     CHAT_RECEIVE_MSG,
+
+    TRIP_JOIN_REQUEST,
+
     NOTIFICATION_ADD,
     NOTIFICATION_ADDED,
 }
