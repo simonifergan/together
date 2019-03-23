@@ -1,6 +1,8 @@
 <template>
   <section class="trip-edit" v-if="trip">
+    <pre>
     {{trip}}
+    </pre>
     <h1>{{(trip && trip._id)? 'Edit your trip details' : 'Post a new trip'}}</h1>
     <form @submit.prevent="save">
       <label>
@@ -32,7 +34,7 @@
         </label>
       </div>
       <h2>Where would you like to travel to?</h2>
-      <our-super-awesome-map :value="trip.destinations" @click.stop=""/>
+      <our-super-awesome-map :enable="true" v-model="trip.destinations"/>
       <button type="submit">Post</button>
     </form>
   </section>
