@@ -1,5 +1,5 @@
 <template>
-    <section class="svg-map">
+    <section class="svg-map-container">
         <div v-if="toolTipTxt" :style="tooltipPos" class="tooltip" :class="tooltipVisible" >
             {{toolTipTxt | countryCodeToName}}
         </div>
@@ -11,8 +11,8 @@
         @panDown="mapView.y += 100"
         @panRight="mapView.x += 100"
         ></map-tools>
-        <svg @wheel.prevent="zoom" @mousedown="startDrag" @mousemove="handleMousemove" @mouseup="stopDrag" @mouseleave="stopDrag" @click="selectCountry" :viewBox="viewBoxVal"
-        width="1000" height="1000" xmlns="http://www1.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+        <svg ref="mapSvg" @wheel.prevent="zoom" @mousedown="startDrag" @mousemove="handleMousemove" @mouseup="stopDrag" @mouseleave="stopDrag" @click="selectCountry" :viewBox="viewBoxVal"
+        width="100%" height="100%" xmlns="http://www1.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
             <defs>
             
 
@@ -315,6 +315,9 @@ export default {
             isDragging: false
         };
     },
+    mounted() {
+       
+    },
     methods: {
         handleMousemove(event) {
             this.handleTooltip(event)
@@ -365,7 +368,7 @@ export default {
         startDrag(event) {
             this.clickPos = {diffX: (event.offsetX*this.mapView.zoom/1000 + this.mapView.x),
                              diffY: (event.offsetY*this.mapView.zoom/1000 + this.mapView.y)}
-            console.log(this.clickPos);
+            // console.log(this.clickPos);
             this.isDragging = true
         },
         drag(event) {
@@ -393,36 +396,5 @@ export default {
 </script>
 
 <style>
-.svg-map {
-    width: 1026px;
-    height: 656px;
-    user-select: none;
-    position: relative;
 
-}
-.tooltip {
-    position: fixed;
-    background-color: #333;
-    color: #fff;
-    visibility: hidden;
-    padding: 5px;
-    border-radius: 50px;
-    opacity: 0;
-    transition: opacity .6s ease;
-}
-.show {
-    opacity: 1;
-    visibility: visible;
-    transition: opacity .6s ease;
-}
-path {
-    cursor: pointer;
-}
-.land {
-    fill: #333;
-    fill-opacity: 1;
-    stroke:white;
-    stroke-opacity: 1;
-    stroke-width:0.5;
-}
 </style>

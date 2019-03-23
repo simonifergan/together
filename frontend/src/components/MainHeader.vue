@@ -30,7 +30,9 @@ export default {
     };
   },
   methods: {
-    
+    logOut() {
+      
+    }
   },
   created() {
     if (this.$route.name !== 'home') this.isHome = false;

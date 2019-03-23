@@ -1,5 +1,9 @@
 .trip-edit {
-    @include flex(column, center, center);
+    @include wrapper;
+    padding: 20px;
+    > * {
+        margin-bottom: 20px;
+    }
     textarea, input {
         font-family: 'Open Sans';
     }
@@ -15,9 +19,5 @@
             }
         }
 
-    }
-    .awesome-map-container {
-        box-shadow: 0 0 1px 1px $box-shadow-gray;
-       
     }
 }
