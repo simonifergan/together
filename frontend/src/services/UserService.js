@@ -8,7 +8,8 @@ export default {
     update,
     login,
     signup,
-    getEmptyUser
+    getEmptyUser,
+    getUsers
 }
 
 const API_USER = (process.env.NODE_ENV !== 'development')
@@ -29,6 +30,12 @@ async function login(credentials) {
 
 async function signup(newUser) {
     const {data} = await axios.post(API_USER + '/signup', newUser)
+    return data
+}
+
+async function getUsers(userIds) {
+    const query = {userIds}
+    const {data} = await axios.post(API_USER + '/user', query)
     return data
 }
 

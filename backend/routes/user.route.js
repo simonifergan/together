@@ -10,6 +10,13 @@ module.exports = (app) => {
             .catch(err => res.end(err));
     });
 
+    app.post(`${BASE}/user`, (req, res) => {
+        const {userIds} = req.body
+        userService.query(userIds)
+            .then(users => res.json(users))
+            .catch(err => res.end(err));
+    });
+
     app.get(`${BASE}/user/:userId`, (req, res) => {
         const {userId} = req.params;
         userService.getById(userId)

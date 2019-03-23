@@ -52,7 +52,6 @@ export default {
                 // throw Error ??
             }
         },
-
         async leaveTripToUser({ commit, getters }, { tripId }) {
             const backupUserLoggedUser = JSON.parse(JSON.stringify(getters.loggedUser));
             commit({ type: 'leaveTripToUser', tripId });
@@ -62,6 +61,11 @@ export default {
             } catch {
                 commit({ type: 'updateLoggedUser', user: backupUserLoggedUser });
             }
+        },
+        async getUsers(context, {userIds}) {
+            console.log(userIds)
+            const users = await UserService.getUsers(userIds)
+            return users
         }
     }
 }

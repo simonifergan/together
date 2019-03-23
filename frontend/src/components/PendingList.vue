@@ -2,23 +2,33 @@
     <section class="pending-list" v-if="pendingUsers">
       <h1>Pending</h1>
         <div 
-            v-for="pendingUser in pendingUsers"
-            :key="pendingUser._id"
-            class="pending-user">
-                {{pendingUser}}
-        </div>
+        class="member-img"
+        v-for="pendingUser in pendingUsers"
+        :key="pendingUser._id"
+        :style="{ backgroundImage: `url('${pendingUser.profilePic}')` }"
+        :title="pendingUser.firstname"
+        />
     </section>
 </template>
 
 <script>
 export default {
   props: {
-    pendingUsers: {
+    pendingUserIds: {
       type: Array,
       required: true
     }
   },
+  data() {
+    return {
+      pendingUsers: null
+    }
+  },
   computed: {
+  },
+  async created() {
+    const users = await this.$store.dispatch({type: 'getUsers', userIds: this.pendingUserIds})
+    this.pendingUsers = users
   }
 }
 </script>

@@ -13,10 +13,15 @@ module.exports = {
 
 const usersCollection = 'users';
 
-function query() {
+function query(userIds) {
+    let mongoQuery = {}
+    if (userIds) {
+        userIds = userIds.map(userId => new ObjectId(userId))
+        mongoQuery = { _id: { $in: userIds } }
+    }
     return mongoService.connect()
         .then(db => db.collection(usersCollection)
-            .find({})
+            .find(mongoQuery)
             .sort()
             .toArray()
         );
@@ -70,7 +75,7 @@ function update(user) {
     const strId = user._id;
     const trips = [...user.trips];
     const interestedIn = [...user.interestedIn];
-    
+
     user._id = new ObjectId(user._id);
     user.trips = user.trips.map(tripId => new ObjectId(tripId))
     user.interestedIn = user.interestedIn.map(tripId => new ObjectId(tripId))

@@ -23,7 +23,7 @@
       <ul>
         <UserPreview v-for="user in trip.members" :key="user._id" :user="user"/>
       </ul>
-      <pending-list v-if="loggedInUser && loggedInUser._id === trip.userId" :pendingUsers="trip.pending"/>
+      <pending-list v-if="loggedInUser && loggedInUser._id === trip.userId" :pendingUserIds="trip.pending"/>
     </div>
 
     <p class="trip-desc">{{trip.desc}}</p>
@@ -67,12 +67,16 @@ export default {
     },
     initChat(userId) {
       this.$store.dispatch({ type: "socketJoinPrivateChat", userId });
+    },
+    initTrip() {
+      const { tripId } = this.$route.params;
+      if (!this.trip || tripId !== this.trip._id) {
+        this.$store.dispatch({ type: "loadTrip", tripId })
+      }
     }
   },
   created() {
-    var { tripId } = this.$route.params;
-    if (tripId) this.$store.dispatch({ type: "loadTrip", tripId });
-    else this.$router.go(-1);
+    this.initTrip()
   },
   beforeDestroy() {
     this.$store.commit({ type: "clearTrip" });
@@ -103,12 +107,10 @@ export default {
   watch: {
     $route: {
       handler(newRoute) {
-        const { tripId } = newRoute.params;
-        if (tripId !== this.trip._id) {
-          this.$store.dispatch({ type: "loadTrip", tripId });
-        }
-      }
-    },
+        this.initTrip()
+      },
+      deep: true
+    }
   }
 };
 </script>
