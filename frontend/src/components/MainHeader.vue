@@ -12,7 +12,7 @@
           <a href="#">Account</a>
           <a href="#">Friends</a>
           <a href="#">My trips</a>
-          <a href="#">Log out</a>
+          <a href="#" @click="logOut">Log out</a>
         </div>
       </div>
       <!-- <a href="#">Log out</a> -->
@@ -28,6 +28,11 @@ export default {
       isHome: true,
       isShowDropdown: false,
     };
+  },
+  methods: {
+    logOut() {
+      
+    }
   },
   created() {
     if (this.$route.name !== 'home') this.isHome = false;

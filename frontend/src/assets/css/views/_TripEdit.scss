@@ -1,9 +1,14 @@
 .trip-edit {
+    @include wrapper;
+    padding: 20px;
+    > * {
+        margin-bottom: 20px;
+    }
     textarea, input {
         font-family: 'Open Sans';
     }
     .date-picker {
-        @include flex(column);
+        @include flex(row, center, center);
         label {
             display: grid;
             grid-template-columns: 50px 1fr;

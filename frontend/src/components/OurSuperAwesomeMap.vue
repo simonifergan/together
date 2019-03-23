@@ -1,7 +1,7 @@
 <template>
-    <section class="svg-map">
-        <div :style="tooltipPos" class="tooltip" :class="tooltipVisible" >
-            {{toolTipTxt}}
+    <section class="svg-map-container">
+        <div v-if="toolTipTxt" :style="tooltipPos" class="tooltip" :class="tooltipVisible" >
+            {{toolTipTxt | countryCodeToName}}
         </div>
         <map-tools
         @zoomIn="mapView.zoom -= 100"
@@ -11,8 +11,8 @@
         @panDown="mapView.y += 100"
         @panRight="mapView.x += 100"
         ></map-tools>
-        <svg @wheel.prevent="zoom" @mousedown="startDrag" @mousemove="handleMousemove" @mouseup="stopDrag" @mouseleave="stopDrag" @click="selectCountry" :viewBox="viewBoxVal"
-        width="1000" height="1000" xmlns="http://www1.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+        <svg ref="mapSvg" @wheel.prevent="zoom" @mousedown="startDrag" @mousemove="handleMousemove" @mouseup="stopDrag" @mouseleave="stopDrag" @click="selectCountry" :viewBox="viewBoxVal"
+        width="100%" height="100%" xmlns="http://www1.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
             <defs>
             
 
@@ -289,6 +289,12 @@
 import UtilService from '@/services/UtilService.js'
 import MapTools from '@/components/MapTools.vue'
 export default {
+    props: {
+        value: {
+            type: Array,
+            required: true,
+        }
+    },
     components: {
         MapTools
     },
@@ -310,6 +316,10 @@ export default {
             didDrag: false
         };
     },
+    mounted() {
+        console.log(this.$parent)
+        console.log(this.$refs.mapSvg)
+    },
     methods: {
         handleMousemove(event) {
             this.handleTooltip(event)
@@ -322,14 +332,15 @@ export default {
             }
             const id = ev.path[0].id;
             if (!id) return;
-            const idx = this.selectedCountries.findIndex(selectedIds => selectedIds === id)
+            const idx = this.value.findIndex(selectedIds => selectedIds === id)
             if (idx !== -1) {
                 document.querySelector(`#${id}`).style.fill = '#333';
-                this.selectedCountries.splice(idx, 1);
+                this.value.splice(idx, 1);
             } else {
-                this.selectedCountries.push(id);
-                  document.querySelector(`#${id}`).style.fill = UtilService.getRandomPastel();
+                this.value.push(id);
+                  document.querySelector(`#${id}`).style.fill = '#e74c3c';
             }
+            this.$emit('input', this.value);
         },
         handleTooltip(ev) {
             const id = ev.path[0].id;
@@ -363,7 +374,7 @@ export default {
         startDrag(event) {
             this.clickPos = {diffX: (event.offsetX*this.mapView.zoom/1000 + this.mapView.x),
                              diffY: (event.offsetY*this.mapView.zoom/1000 + this.mapView.y)}
-            console.log(this.clickPos);
+            // console.log(this.clickPos);
             this.isDragging = true
         },
         drag(event) {
@@ -392,10 +403,13 @@ export default {
 </script>
 
 <style>
-.svg-map {
-    width: 1026px;
-    height: 656px;
+.svg-map-container {
+   position: relative;
+    width: 80vh;
+    height: 500px;
+    box-shadow: 0 0 1px 1px $box-shadow-gray;
     user-select: none;
+    position: relative;
 
 }
 .tooltip {

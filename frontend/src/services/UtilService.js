@@ -1,7 +1,17 @@
+import worldDb from '../data/world.json'
+const worldCodeMap = new Map();
+(function() {
+    worldDb.forEach(country => {
+        let key = country.alpha2Code;
+        let value = country.name;
+        worldCodeMap.set(key, value);
+    })
+})();
 
 export default {
     generateId,
-    getRandomPastel
+    getRandomPastel,
+    worldCodeMap
 }
 
 function generateId() {

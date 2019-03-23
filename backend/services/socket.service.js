@@ -13,12 +13,16 @@ const CHAT_RECEIVE_MSG = 'chat-receive-msg';
 const NOTIFICATION_ADD = 'notification-add';
 const NOTIFICATION_ADDED = 'notification-added';
 
+const connectedSockets = [];
+
 module.exports = (io) => {
 
     io.on('connection', socket => {
         console.log('Hi there socket ID:', socket.id);
         socket.on(SOCKET_CONNECT, userId => {
             socket.userId = userId;
+            connectedSockets.push(socket)
+            console.log('Hi connected sockets:', connectedSockets);
             console.log('Hello user:', userId, 'in socket:', socket.userId);
         })
 
@@ -29,6 +33,9 @@ module.exports = (io) => {
         })
 
         socket.on('disconnect', () => {
+            const socketIdx = connectedSockets.find(inSocket => inSocket.userId === socket.userId);
+            if (socketIdx !== -1) connectedSockets.splice(socketIdx, 1);
+            console.log('Bye connected sockets:', connectedSockets);
             console.log('Bye user with socket:', socket.id, 'and userId', socket.userId);
         })
 
@@ -56,6 +63,12 @@ module.exports = (io) => {
         socket.on(CHAT_SEND_MSG, async payload => {
             console.log('got', payload)
             payload.msg.sender = socket.userId;
+            // TODO: Force socket to reconnect to his room upon message sent and referred to him
+            // payload.recipients.forEach(user => {
+            //     const recipientSocket = connectedSockets.find(inSocket => inSocket.userId === user._id);
+            //     console.log('recipientIs:', recipientSocket)
+            //     if (recipientSocket) recipientSocket.join(payload.chatId);
+            // })
             await chatService.addMsg(payload);
             io.to(payload.chatId).emit(CHAT_RECEIVE_MSG, payload);
         })

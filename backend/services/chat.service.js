@@ -79,7 +79,7 @@ async function addMsg({ msg, chatId }) {
     msg.sender = new ObjectId(msg.sender);
     try {
         const db = await mongoService.connect();
-        const res = await db.collection(chatsCollection).update(
+        const res = await db.collection(chatsCollection).updateOne(
             { _id: chatId },
             {
                 $push: {

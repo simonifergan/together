@@ -46,7 +46,7 @@ import UserPreview from "@/components/UserPreview.vue";
 export default {
   name: "trip-details",
   components: {
-    UserPreview
+    UserPreview,
   },
   methods: {
     joinLeaveTrip() {

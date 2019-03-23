@@ -46,14 +46,16 @@ async function remove(id) {
 
 function getEmpty() {
     return {
-        desc: null,
-        locations: [],
-        tripStart: null,
-        tripDuration: null,
+        title: '',
+        desc: '',
+        destinations: [],
+        startsAt: '',
+        duration: '',
         openTo: {},
-        interestedUsers: [],
         activities: [],
-        travelersAmount: [],
+        members: [],
+        pending: [],
+        groupSize: 2,
     }
 }
 

@@ -40,7 +40,7 @@ export default {
             state.notifications = notifications;
         },
         addNotification(state, { addedNotification }) {
-            console.log(addedNotification);
+            // console.log(addedNotification);
             state.notifications.unshift(addedNotification);
         }
     },
@@ -65,17 +65,17 @@ export default {
                 context.commit({ type: 'addMsg', msg, chatId });
             })
             SocketService.on('notification-added', (addedNotification) => {
-                console.log('NOTIFICATION ADDED:', addedNotification);
+                // console.log('NOTIFICATION ADDED:', addedNotification);
                 context.commit({ type: 'addNotification', addedNotification });
             })
         },
         socketUserConnect({ getters }) {
             SocketService.emit(SocketService.SOCKET_CONNECT, getters.loggedUser._id);
         },
-        socketSendMsg({ commit }, { msg, chatId }) {
+        socketSendMsg({ commit }, { msg, chatId, recipients }) {
             msg._id = UtilService.generateId()
             // commit({type: 'addMsg', msg, chatId})
-            SocketService.emit(SocketService.CHAT_SEND_MSG, { msg, chatId });
+            SocketService.emit(SocketService.CHAT_SEND_MSG, { msg, chatId, recipients });
         },
         socketJoinPrivateChat(context, { userId }) {
             const chat = context.getters.userChats.find(chat => {
@@ -114,7 +114,7 @@ export default {
             commit({ type: 'setNotification', notifications });
         },
         addNotification(context, { newNotification }) {
-            console.log('socket store');
+            // console.log('socket store');
             SocketService.emit(SocketService.NOTIFICATION_ADD, newNotification);
         }
     }

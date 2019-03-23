@@ -60,7 +60,8 @@ export default {
       this.$store.dispatch({
         type: "socketSendMsg",
         msg: { txt: this.newMsg, sentAt: Date.now() },
-        chatId: this.chat._id
+        chatId: this.chat._id,
+        recipients: this.chattingWith
       });
       this.newMsg = '';
     },
