@@ -365,7 +365,7 @@ export default {
         startDrag(event) {
             this.clickPos = {diffX: (event.offsetX*this.mapView.zoom/1000 + this.mapView.x),
                              diffY: (event.offsetY*this.mapView.zoom/1000 + this.mapView.y)}
-            console.log(this.clickPos);
+            // console.log(this.clickPos);
             this.isDragging = true
         },
         drag(event) {

@@ -40,7 +40,7 @@ export default {
             state.notifications = notifications;
         },
         addNotification(state, { addedNotification }) {
-            console.log(addedNotification);
+            // console.log(addedNotification);
             state.notifications.unshift(addedNotification);
         }
     },
@@ -65,7 +65,7 @@ export default {
                 context.commit({ type: 'addMsg', msg, chatId });
             })
             SocketService.on('notification-added', (addedNotification) => {
-                console.log('NOTIFICATION ADDED:', addedNotification);
+                // console.log('NOTIFICATION ADDED:', addedNotification);
                 context.commit({ type: 'addNotification', addedNotification });
             })
         },
@@ -114,7 +114,7 @@ export default {
             commit({ type: 'setNotification', notifications });
         },
         addNotification(context, { newNotification }) {
-            console.log('socket store');
+            // console.log('socket store');
             SocketService.emit(SocketService.NOTIFICATION_ADD, newNotification);
         }
     }
