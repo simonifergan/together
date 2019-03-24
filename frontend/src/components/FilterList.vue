@@ -1,10 +1,10 @@
 <template>
-  <section class="filter-list">
+  <ul class="filter-list">
     <h2>Hot Locations</h2>
     <div class="filter-previews">
       <filter-preview v-for="filter in filtersWithImages" :key="filter.title" :filter="filter"/>
     </div>
-  </section>
+  </ul>
 </template>
 
 <script>

@@ -1,11 +1,11 @@
 <template>
-  <router-link tag="section" :to="'/trip/' + trip._id" class="trip-preview">
+  <router-link tag="li" :to="'/trip/' + trip._id" class="trip-preview">
     <div class="profile-img-container">
       <div class="profile-img" :style="profilePic"></div>
     </div>
     <p>{{trip.user.firstname}} {{trip.user.lastname}}</p>
     <p>{{trip.title}}</p>
-    <p>{{trip.startsAt.month}} {{trip.startsAt.year}}, {{trip.duration[0]}} trip</p>
+    <p>{{trip.startsAt}}, {{trip.duration}}</p>
     <div class="members-container" v-if="trip.members.length > 0">
       <div 
         class="member-img"

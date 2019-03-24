@@ -7,6 +7,7 @@
       <button
         v-if="!loggedInUser || trip.userId !== loggedInUser._id"
         @click="initChat(trip.userId)"
+        :title="'Start a chat with ' + trip.user.firstname"
       >
         <i class="far fa-comment-alt"></i>
       </button>

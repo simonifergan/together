@@ -1,5 +1,5 @@
 <template>
-  <router-link tag="section" :to="'/search?q=' + filter.title" class="filter-preview">
+  <router-link tag="li" :to="'/search?q=' + filter.title" class="filter-preview">
     <div class="filter-preview-img" :src="filter.imgSrc" :style="imgPrev" />
     <h3>{{filter.title}}</h3>
   </router-link>
