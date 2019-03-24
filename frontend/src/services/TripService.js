@@ -1,4 +1,6 @@
 import Axios from 'axios'
+import GoogleService from './GoogleService.js'
+import UtilService from './UtilService.js'
 
 const axios = Axios.create({
     withCredentials: true
@@ -10,6 +12,7 @@ export default {
     save,
     remove,
     getEmpty,
+    getImgs
     // getCategories
 }
 
@@ -61,21 +64,23 @@ function getEmpty() {
     }
 }
 
-async function getCategories() {
-    return {
-        activities: [
-
-        ],
-        tripLengths: [
-
-        ],
-        locations: await _getLocations()
+async function getImgs(query, type) {
+    
+    if (type === 'destinations') query = UtilService.worldCodeMap.get(query)
+    console.log('getting imgs', query);
+    const filter = {}
+    filter.title = query
+    if (type === 'destinations') {
+        
+        filter.imgSrc = await GoogleService.getGoogleLocation(query)
+        console.log('imgSrc', filter.imgSrc);
+        
+    } else {
+        filter.imgSrc = _getActivityImg(query)
     }
+    return filter
 }
 
-async function _getLocation() {
-    // const {data} = await axios.get(TRIP_API + '/locations');
-    // return data.map(location => {
-    //     return {location, imgUrl: await}
-    // });
+function _getActivityImg(query) {
+    return {title: query, imgSrc: '@/src/assets/img/home/activity.jpg'}
 }

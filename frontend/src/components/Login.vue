@@ -1,0 +1,47 @@
+<template>
+    <section class="login-form">
+        <button class="cancel" @click="cancel">
+            <i class="fas fa-times"></i>
+        </button>
+        <h2>Login</h2>
+        <form @submit.prevent="login">
+            <label for="">Email<br>
+                <el-input type="email" v-model="email" placeholder="Email" />
+            </label>
+                <label for="">Password<br>
+            <el-input type="password" v-model="password" placeholder="Password" />
+                </label>
+            <button type="submit">Login</button>
+        </form>
+    </section>
+</template>
+
+<script>
+export default {
+    name: 'LoginPage',
+    data() {
+        return {
+            email: '',
+            password: ''
+        }
+    },
+    methods: {
+        login() {
+            this.$store.dispatch({type: 'login', credentials: {email: this.email, password: this.password}})
+            .then(res => {
+                this.$router.push(this.$route.path);
+            });
+        },
+        cancel() {
+            this.$router.push(this.$route.path)
+        }
+    },
+    created() {
+        
+    }
+}
+</script>
+
+<style>
+
+</style>

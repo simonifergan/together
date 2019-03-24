@@ -3,6 +3,7 @@
     <main-header/>
     <!-- <user-msg /> -->
     <router-view/>
+    <login v-if="isShowLogin" />
     <div class="chat-container">
       <chat v-for="(chat,index) in chats" :chat="chat" :key="chat._id+index"/>
     </div>
@@ -11,7 +12,9 @@
 </template>
 
 <script>
+
 import MainHeader from "@/components/MainHeader";
+import Login from '@/components/Login';
 import Chat from "@/components/Chat";
 import NotificationList from "@/components/NotificationList";
 
@@ -19,12 +22,12 @@ export default {
   name: "App",
   components: {
     MainHeader,
+    Login,
     NotificationList,
     Chat,
   },
   computed: {
     chats() {
-      // console.log(this.$store.getters.userChats)
       return this.$store.getters.userChats;
     },
     getNotifications() {
@@ -32,6 +35,11 @@ export default {
     },
     loggedUser() {
       return this.$store.getters.loggedUser;
+    },
+    isShowLogin() {
+      if (this.$route.hash !== '#login') return false;
+      return true;
+      
     }
   },
   created() {
@@ -40,7 +48,7 @@ export default {
       this.$store.dispatch({ type: "getUserChats" });
       this.$store.dispatch({ type: "loadNotification" });
     }
-  }
+  },
 };
 </script>
 

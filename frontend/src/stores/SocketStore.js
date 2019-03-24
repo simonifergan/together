@@ -84,6 +84,11 @@ export default {
                 EventBusService.$emit(SHOW_NOTIFICATION, payload);
             })
         },
+
+        socketDisconnect() {
+            SocketService.off();
+        },
+
         socketUserConnect({ getters }) {
             SocketService.emit(SocketService.SOCKET_CONNECT, getters.loggedUser._id);
         },

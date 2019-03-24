@@ -20,7 +20,7 @@ export default {
             state.loggedUser = user;
         },
         // USER LIST FOR: Pending list
-        setUsersToDisplay(state, {users}) {
+        setUsersToDisplay(state, { users }) {
             state.usersToDisplay = users;
         },
         toggleUserInUsersToDisplay(state, { user }) {
@@ -49,6 +49,19 @@ export default {
             dispatch({ type: "socketConnect" });
             dispatch({ type: "getUserChats" });
             dispatch({ type: "loadNotification" });
+        },
+
+        async logout(context) {
+            try {
+                await UserService.logout();
+                context.commit({ type: 'setLoggedUser', user: null });
+                context.commit({ type: 'setUserChats', chats: [] });
+                context.commit({ type: 'setNotification', notifications: [] });
+                context.dispatch('socketDisconnect');
+                return true;
+            } catch {
+
+            }
         },
 
         async signup({ commit }, { newUser }) {
