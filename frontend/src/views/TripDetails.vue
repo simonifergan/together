@@ -54,9 +54,15 @@ export default {
   },
   methods: {
     joinLeaveTrip() {
-      if (this.isUserMember) this.$store.dispatch({ type: "leaveTrip" });
-      else if (this.trip.pending.some(id => id === this.loggedInUser._id)) this.$store.dispatch({ type: "cancelTripJoinRequest" });
-      else this.$store.dispatch({ type: "userRequestToJoinTrip" });
+      if (this.isUserMember)
+        this.$store.dispatch({
+          type: "leaveTrip",
+          userToLeave: this.loggedInUser,
+          tripIdToLeave: this.trip._id
+        });
+      else if (this.trip.pending.some(id => id === this.loggedInUser._id)) {
+        this.$store.dispatch({ type: "cancelTripJoinRequest" });
+      } else this.$store.dispatch({ type: "userRequestToJoinTrip" });
     },
     initChat(userId) {
       this.$store.dispatch({ type: "socketJoinPrivateChat", userId });

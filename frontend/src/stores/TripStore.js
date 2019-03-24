@@ -219,8 +219,8 @@ export default {
             const trip = JSON.parse(JSON.stringify(getters.tripToDisplay));
             const user = getters.loggedUser;
             if (trip.pending.some(alreadyPending => alreadyPending === user._id)) return;
-            console.log(user._id)
-            console.log(trip);
+            // console.log(user._id)
+            // console.log(trip);
             trip.pending.push(user._id);
             commit({ type: 'toggleUserFromPendingList', userId: user._id });
             try {
@@ -235,17 +235,18 @@ export default {
                 })
                 // send to socket with userId and tripId
                 dispatch({ type: 'socketSendNotification', userId: updatedTrip.userId, payload: 'CAN YOU SEE ME BABA??' });
-                console.log('Here I am, once again, torn into pieces, cant deny cant pretend, behind these hazel eyessssss');
+                // console.log('Here I am, once again, torn into pieces, cant deny cant pretend, behind these hazel eyessssss');
             } catch {
-                console.log('YOUR CODE SUCKS!!!');
+                // console.log('YOUR CODE SUCKS!!!');
                 commit({ type: 'toggleUserFromPendingList', userId: user._id });
             }
         },
+        // TODO : update on user's pendingIn
         async cancelTripJoinRequest({ commit, getters, dispatch }) {
             const trip = JSON.parse(JSON.stringify(getters.tripToDisplay));
             const userId = getters.loggedUser._id;
             const idx = trip.pending.findIndex(alreadyPending => alreadyPending === userId);
-            if (idx === -1) throw 'Fuck off';
+            if (idx === -1) return;
             trip.pending.splice(idx, 1);
             try {
                 const updatedTrip = await TripService.save(trip);
