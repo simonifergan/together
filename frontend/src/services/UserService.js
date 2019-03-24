@@ -6,6 +6,7 @@ const axios = Axios.create({
 
 export default {
     update,
+    updateTripToUser,
     login,
     signup,
     logout,
@@ -21,6 +22,12 @@ const API_USER = (process.env.NODE_ENV !== 'development')
     
 async function update(userToUpdate) {    
     const {data} = await axios.put(`${API_USER}/user/${userToUpdate._id}`, userToUpdate)
+    return data
+}
+
+async function updateTripToUser(userToTripId) {
+    console.log('got to user service- updateTripToUser : ', userToTripId);
+    const {data} = await axios.patch(`${API_USER}/user_trip/${userToTripId.user._id}`, userToTripId)
     return data
 }
 
@@ -51,7 +58,7 @@ function getEmptyUser() {
         firstname: null,
         lastname: null, 
         proposals: [],
-        interestedIn: [],
+        pendingIn: [],
         birthdate: null,
         gender: null,
         tripPrefs: {},

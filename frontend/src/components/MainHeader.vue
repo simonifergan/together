@@ -1,6 +1,6 @@
 <template>
   <header class="main-header" :class="isAbsolute">
-    <router-link title="Homepage" tag="h1" to="/">Bridge</router-link>
+    <router-link title="Homepage" tag="h1" to="/">Travel Maker</router-link>
     <nav>
       <router-link to="/">Home</router-link>
       <a href="#">About</a>

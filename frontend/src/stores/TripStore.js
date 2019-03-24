@@ -50,7 +50,7 @@ export default {
         },
         toggleUserFromPendingList(state, { userId }) {
             console.log('toggle:', userId);
-            
+
             const idx = state.tripToDisplay.pending.findIndex(existingUser => existingUser === userId);
             if (idx !== -1) state.tripToDisplay.pending.splice(idx, 1);
             else state.tripToDisplay.pending.push(userId);
@@ -126,12 +126,12 @@ export default {
             const msg = await TripService.remove(trip._id)
             commit({ type: 'removeTrip', tripId: trip._id })
         },
-        async joinTrip({ commit, getters, dispatch }, {userToJoin, tripIdToJoin}) {
+        async joinTrip({ commit, getters, dispatch }, { userToJoin, tripIdToJoin }) {
             const userIdToJoin = userToJoin._id;
             // get trip
             var tripToJoin = await TripService.getById(tripIdToJoin)
             if (!tripToJoin) return null;
-            
+
             // check if the user is already a member:
             const isUserMember = tripToJoin.members.some(user => user._id === userIdToJoin);
             if (isUserMember) return null;
@@ -140,26 +140,27 @@ export default {
             const idx = tripToJoin.pending.findIndex(userId => userId === userIdToJoin);
             if (idx === -1) return null;
             tripToJoin.pending.splice(idx, 1);
-            
+
             // add user to members list
             tripToJoin.members.unshift(userToJoin)
-            // update trip state : disabled for now
-            // commit({type: 'updateTrip', trip: tripToJoin});
 
-            
             // update trip to display
-            console.log('userIdToJoin', userIdToJoin);
-            commit({type: 'updateTripToDisplay', trip: tripToJoin});
-            commit({type: 'toggleUserInUsersToDisplay', user: userToJoin})
+            commit({ type: 'updateTripToDisplay', trip: tripToJoin });
+            commit({ type: 'toggleUserInUsersToDisplay', user: userToJoin })
 
             try {
                 // update user & trip
                 const updatedTrip = await TripService.save(tripToJoin);
-                console.log('updatedTrip:', updatedTrip);
-                
-                const updatedUser = await dispatch({ type: 'joinTripToUser', tripId: updatedTrip._id })
+                const updatedUser = await dispatch({
+                    type: 'joinTripToUser',
+                    userToTripId: {
+                        tripId: updatedTrip._id,
+                        user: userToJoin,
+                        action: 'approve'
+                    }
+                })
                 console.log('updatedUser:', updatedUser);
-                
+
                 // notification
                 let newNotification = {
                     userId: userIdToJoin,
@@ -171,8 +172,8 @@ export default {
             } catch {
                 // rollback
                 console.log('rollbackkk');
-                
-                commit({type: 'toggleUserFromPendingList', userId: userIdToJoin})
+
+                commit({ type: 'toggleUserFromPendingList', userId: userIdToJoin })
             }
         },
         // TODO: (Adi) get tripId and userId
@@ -193,19 +194,19 @@ export default {
             if (trip.pending.some(alreadyPending => alreadyPending === userId)) return;
             console.log(userId)
             console.log(trip);
-            trip.pending.push( userId );
+            trip.pending.push(userId);
             commit({ type: 'toggleUserFromPendingList', userId });
             try {
                 const updatedTrip = await TripService.save(trip);
                 // send to socket with userId and tripId
-                dispatch({type: 'socketSendNotification', userId: updatedTrip.userId, payload: 'CAN YOU SEE ME BABA??'})
+                dispatch({ type: 'socketSendNotification', userId: updatedTrip.userId, payload: 'CAN YOU SEE ME BABA??' })
                 console.log('Here I am, once again, torn into pieces, cant deny cant pretend, behind these hazel eyessssss');
             } catch {
                 console.log('YOUR CODE SUCKS!!!');
                 commit({ type: 'toggleUserFromPendingList', userId });
             }
         },
-        async cancelTripJoinRequest({commit, getters, dispatch}) {
+        async cancelTripJoinRequest({ commit, getters, dispatch }) {
             const trip = JSON.parse(JSON.stringify(getters.tripToDisplay));
             const userId = getters.loggedUser._id;
             const idx = trip.pending.findIndex(alreadyPending => alreadyPending === userId);

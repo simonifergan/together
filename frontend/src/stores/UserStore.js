@@ -10,11 +10,11 @@ export default {
             state.loggedUser = user;
         },
         joinTripToUser(state, { tripId }) {
-            state.loggedUser.interestedIn.push(tripId);
+            state.loggedUser.pendingIn.push(tripId);
         },
         leaveTripToUser(state, { tripId }) {
-            const idx = state.loggedUser.interestedIn.findIndex(trip => trip === tripId);
-            state.loggedUser.interestedIn.splice(idx, 1);
+            const idx = state.loggedUser.pendingIn.findIndex(trip => trip === tripId);
+            state.loggedUser.pendingIn.splice(idx, 1);
         },
         updateLoggedUser(state, { user }) {
             state.loggedUser = user;
@@ -69,15 +69,12 @@ export default {
             commit({ type: 'setLoggedUser', user })
         },
 
-        async joinTripToUser({ commit, getters }, { tripId }) {
-            const backupUserLoggedUser = JSON.parse(JSON.stringify(getters.loggedUser));
-            commit({ type: 'joinTripToUser', tripId })
+        async joinTripToUser({ commit, getters }, { userToTripId }) {
             try {
-                const updatedUser = await UserService.update(getters.loggedUser);
+                const updatedUser = await UserService.updateTripToUser(userToTripId);
                 return updatedUser;
             } catch {
-                commit({ type: 'updateLoggedUser', user: backupUserLoggedUser });
-                // throw Error ??
+                throw 'failed to update user';
             }
         },
         async leaveTripToUser({ commit, getters }, { tripId }) {
