@@ -41,6 +41,8 @@ module.exports = (app) => {
         console.log('got to user.route');
         
         const userToTripId = req.body;
+        console.log('userToTripId : ', userToTripId);
+        
         userService.updateTripToUser(userToTripId)
             .then(updatedUser => {
                 if (updatedUser) return res.json(updatedUser);

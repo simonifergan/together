@@ -29,6 +29,10 @@ export default {
             if (idx !== -1) state.usersToDisplay.splice(idx, 1);
             else state.usersToDisplay.push(user);
         },
+        removeUserInUsersToDisplay(state, {user}) {
+            const idx = state.usersToDisplay.find(inUser => inUser._id === user._id);
+            if (idx !== -1) state.usersToDisplay.splice(idx, 1);
+        }
     },
     getters: {
         loggedUser(state) {
@@ -69,7 +73,7 @@ export default {
             commit({ type: 'setLoggedUser', user })
         },
 
-        async joinTripToUser({ commit, getters }, { userToTripId }) {
+        async joinLeaveTripToUser({ commit, getters }, { userToTripId }) {
             try {
                 const updatedUser = await UserService.updateTripToUser(userToTripId);
                 return updatedUser;
@@ -77,16 +81,16 @@ export default {
                 throw 'failed to update user';
             }
         },
-        async leaveTripToUser({ commit, getters }, { tripId }) {
-            const backupUserLoggedUser = JSON.parse(JSON.stringify(getters.loggedUser));
-            commit({ type: 'leaveTripToUser', tripId });
-            try {
-                const updatedUser = await UserService.update(getters.loggedUser);
-                return updatedUser;
-            } catch {
-                commit({ type: 'updateLoggedUser', user: backupUserLoggedUser });
-            }
-        },
+        // async leaveTripToUser({ commit, getters }, { tripId }) {
+        //     const backupUserLoggedUser = JSON.parse(JSON.stringify(getters.loggedUser));
+        //     commit({ type: 'leaveTripToUser', tripId });
+        //     try {
+        //         const updatedUser = await UserService.update(getters.loggedUser);
+        //         return updatedUser;
+        //     } catch {
+        //         commit({ type: 'updateLoggedUser', user: backupUserLoggedUser });
+        //     }
+        // },
         async getUsers(context, { userIds }) {
             console.log(userIds)
             const users = await UserService.getUsers(userIds)

@@ -21,11 +21,12 @@
     <div class="trip-members">
       <h3>Group members:</h3>
       <ul>
-        <UserPreview v-for="user in trip.members" :key="user._id" :user="user"/>
+        <userPreview v-for="user in trip.members" :key="user._id" :user="user"/>
       </ul>
       <pending-list
         @requestPendingUsers="requestPendingUsers"
         @requestApproved="requestApproved"
+        @requestRejected="requestRejected"
         v-if="loggedInUser && loggedInUser._id === trip.userId"
       />
     </div>
@@ -54,12 +55,8 @@ export default {
   methods: {
     joinLeaveTrip() {
       if (this.isUserMember) this.$store.dispatch({ type: "leaveTrip" });
-      else if (this.trip.pending.some(id => id === this.loggedInUser._id))
-        this.$store.dispatch({ type: "cancelTripJoinRequest" });
+      else if (this.trip.pending.some(id => id === this.loggedInUser._id)) this.$store.dispatch({ type: "cancelTripJoinRequest" });
       else this.$store.dispatch({ type: "userRequestToJoinTrip" });
-
-      // THIS FUNCTION GOES TO THE TRIP OWNER - TO APPROVE A REQUEST
-      // else this.$store.dispatch({ type: "joinTrip" });
     },
     initChat(userId) {
       this.$store.dispatch({ type: "socketJoinPrivateChat", userId });
@@ -78,6 +75,13 @@ export default {
         type: "joinTrip",
         userToJoin: pendingUser,
         tripIdToJoin: this.trip._id
+      });
+    },
+    requestRejected(pendingUser) {
+      this.$store.dispatch({
+        type: "leaveTrip",
+        userToLeave: pendingUser,
+        tripIdToLeave: this.trip._id
       });
     }
   },

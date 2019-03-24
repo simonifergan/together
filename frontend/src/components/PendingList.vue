@@ -1,22 +1,28 @@
 <template>
-  <section class="pending-list" v-if="pendingUsers">
+  <section v-if="pendingUsers">
     <h1>Pending</h1>
-    <div
-      class="member-img"
-      v-for="pendingUser in pendingUsers"
-      :key="pendingUser._id"
-      :style="{ backgroundImage: `url('${pendingUser.profilePic}')` }"
-      :title="pendingUser.firstname"
-    >
-      <button @click="requestApproved(pendingUser)">Approve</button>
+    <div class="pending-list">
+      <user-preview 
+        v-for="pendingUser in pendingUsers" 
+        :key="pendingUser._id"
+        :user="pendingUser">
+          <div 
+            class="btns-pending"
+            slot="btns-pending">
+              <button @click="requestApproved(pendingUser)">Approve</button>
+              <button @click="requestRejected(pendingUser)">Cancel</button>
+          </div>
+      </user-preview>
     </div>
   </section>
 </template>
 
 <script>
+import UserPreview from '@/components/UserPreview.vue';
+
 export default {
-  data() {
-    return {};
+  components: {
+    UserPreview
   },
   computed: {
     pendingUsers() {
@@ -27,6 +33,9 @@ export default {
   methods: {
     requestApproved(pendingUser) {
       this.$emit("requestApproved", pendingUser);
+    },
+    requestRejected(pendingUser) {
+      this.$emit("requestRejected", pendingUser);
     }
   },
   created() {
