@@ -79,6 +79,7 @@ button {
                 border-radius: 50%;
                 width: 35px;
                 height: 35px;
+                margin: 0;
                 background-size: contain;
                 position: relative;
                 cursor: pointer;
@@ -159,6 +160,7 @@ button {
                         button {
                             float: right;
                             margin-top: 5px;
+                            @include button;
                         }
                     }
                 }
@@ -167,7 +169,24 @@ button {
         }
     }
 
-
+    // MSGS CONTAINER/DROPDOWN
+    .msgs-container {
+        position: relative;
+        .msgs-dropdown {
+            @include flex(column);
+            z-index: 2;
+            position: absolute;
+            background-color: #fff;
+            padding: 0 10px;
+            color: #333;
+            width: 400px;
+            height: 500px;
+            top: 51px;
+            right: -5px;
+            border-radius: 0 0 1px 1px;
+            box-shadow: 0 0 1px 1px $box-shadow-gray;
+        }
+    }
   
     // CHAT BOX
     .chat-container {

@@ -59,7 +59,8 @@ export default {
     profilePic() {
       let picUrl = this.chattingWith[0].profilePic;
       return { backgroundImage: `url('${picUrl}')` };
-    }
+    },
+   
   },
   methods: {
     closeChat() {

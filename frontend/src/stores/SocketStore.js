@@ -133,6 +133,9 @@ export default {
             const notifications = await NotificationService.query();
             commit({ type: 'setNotification', notifications });
         },
+        activateChat({commit}, {chatId}) {
+            commit({type: 'activateChat', chatId})
+        },
         addNotification(context, { newNotification }) {
             SocketService.emit(SocketService.NOTIFICATION_ADD, newNotification);
         }

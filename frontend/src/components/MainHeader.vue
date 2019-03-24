@@ -5,18 +5,18 @@
       <router-link to="/">Home</router-link>
       <a href="#">About</a>
       <router-link to="/signup" v-if="!user">Sign up</router-link>
+      <div class="msgs-container" v-else>
+        <a>Messages</a>
+        <message-list 
+          :chats="chats"
+          :user="user" 
+        />
+      </div>
       <div class="login-container">
         <router-link :to="currentRoute + '#login'" v-if="!user">Log in</router-link>
-        <transition name="fade" mode="out-in">
-          <login v-if="isShowLogin"/>
-        </transition>
+        <login v-if="isShowLogin"/>
       </div>
-      <div
-        v-if="user"
-        class="user-dashboard"
-        :style="profilePic"
-        @click.stop="showDropdown"
-      >
+      <div v-if="user" class="user-dashboard" :style="profilePic" @click.stop="showDropdown">
         <div class="dropdown" v-if="isShowDropdown" @click.stop>
           <a href="#">Profile</a>
           <a href="#">Account</a>
@@ -31,12 +31,14 @@
 </template>
 
 <script>
-import Login from '@/components/Login';
+import Login from "@/components/Login";
+import MessageList from "@/components/MessageList";
 
 export default {
   name: "MainHeader",
   components: {
-    Login
+    Login,
+    MessageList
   },
   data() {
     return {
@@ -52,14 +54,18 @@ export default {
       } catch {}
     },
     closeDropdown() {
-      console.log('alive?')
+      console.log("alive?");
       this.isShowDropdown = false;
-      document.querySelector('#app').removeEventListener('click', this.closeDropdown);
+      document
+        .querySelector("#app")
+        .removeEventListener("click", this.closeDropdown);
     },
     showDropdown() {
-      console.log('activate');
+      console.log("activate");
       this.isShowDropdown = true;
-      document.querySelector('#app').addEventListener('click', this.closeDropdown);
+      document
+        .querySelector("#app")
+        .addEventListener("click", this.closeDropdown);
     }
   },
   created() {
@@ -79,9 +85,11 @@ export default {
       return this.$route.path;
     },
     isShowLogin() {
-      if (this.$route.hash !== '#login') return false;
+      if (this.$route.hash !== "#login") return false;
       return true;
-      
+    },
+    chats() {
+      return this.$store.getters.userChats;
     }
   },
   watch: {
