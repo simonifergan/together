@@ -1,5 +1,9 @@
 .app-container {
+
     position:relative;
+
+
+
     .main-header {
         @include flex(row, space-between, center);
         position: relative;
@@ -86,6 +90,9 @@
         }
 
     }
+
+
+
     .chat-container {
         position: fixed;
         right: 5%;
@@ -173,5 +180,18 @@
                 }
             }
         }
+    }
+
+
+    .user-msg {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        box-shadow: 0 0 1px 1px $box-shadow-gray;
+        padding: 10px 20px;
+        z-index: 1020320310429214109;
     }
 }

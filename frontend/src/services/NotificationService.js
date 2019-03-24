@@ -4,6 +4,7 @@ const axios = Axios.create({
     withCredentials: true
 })
 
+// Activity log notifications:
 const TRIP_REQUEST = 'trip_request';
 const TRIP_CREATED = 'trip_created';
 const TRIP_JOINED =  'trip_joined';
@@ -13,8 +14,12 @@ const USER_ONLINE = 'user_online';
 const USER_OFFLINE = 'user_offline';
 const TRIP_COMMENT = 'trip_comment';
 
+// Private user msgs (pop-ups)
+const TRIP_PRIVATE_REQUEST = 'trip_private_request';
+
 export default {
     TRIP_REQUEST,
+    TRIP_PRIVATE_REQUEST,
     TRIP_CREATED,
     TRIP_JOINED,
     TRIP_MODIFIED,

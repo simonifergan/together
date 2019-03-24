@@ -167,7 +167,13 @@ export default {
             try {
                 const updatedTrip = await TripService.save(trip);
                 // send to socket with userId and tripId
-                dispatch({type: 'socketSendNotification', userId: updatedTrip.userId, payload: 'CAN YOU SEE ME BABA??'})
+                let payload = {
+                    user: getters.loggedUser,
+                    tripId: updatedTrip._id,
+                    action: NotificationService.TRIP_PRIVATE_REQUEST,
+                    toDo: 'approve',
+                }
+                dispatch({type: 'socketSendNotification', userId: updatedTrip.userId, payload})
                 console.log('Here I am, once again, torn into pieces, cant deny cant pretend, behind these hazel eyessssss');
             } catch {
                 console.log('YOUR CODE SUCKS!!!');

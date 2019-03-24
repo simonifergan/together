@@ -28,7 +28,7 @@ const connectedSockets = [];
 module.exports = (io) => {
 
     io.on('connection', socket => {
-        console.log('Hi there socket ID:', socket.id);
+        // console.log('Hi there socket ID:', socket.id);
         socket.on(SOCKET_CONNECT, userId => {
             socket.userId = userId;
             connectedSockets.push(socket)
