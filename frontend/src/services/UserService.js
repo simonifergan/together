@@ -8,6 +8,7 @@ export default {
     update,
     login,
     signup,
+    logout,
     getEmptyUser,
     getUsers
 }
@@ -31,6 +32,11 @@ async function login(credentials) {
 async function signup(newUser) {
     const {data} = await axios.post(API_USER + '/signup', newUser)
     return data
+}
+
+async function logout() {
+    const {data} = await axios.post(API_USER + '/logout')
+    return data;
 }
 
 async function getUsers(userIds) {

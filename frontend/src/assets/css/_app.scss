@@ -1,5 +1,8 @@
 .app-container {
     position:relative;
+
+
+    // GLOBAL HEADER
     .main-header {
         @include flex(row, space-between, center);
         position: relative;
@@ -86,6 +89,32 @@
         }
 
     }
+
+
+    // LOGIN FORM
+    .login-form {
+        background-color: white;
+        position: fixed; 
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        border-radius: 0 0 1px 1px;
+        box-shadow: 0 0 2px 1px $box-shadow-gray;
+        @include flex(column);
+        .cancel {
+            align-self: flex-end;
+            margin-bottom: 20px;            
+        }
+        h1 {
+            padding: 20px;
+        }
+        form {
+            padding: 20px;
+        }
+    }
+
+    // CHAT BOX
     .chat-container {
         position: fixed;
         right: 5%;
