@@ -1,23 +1,42 @@
 <template>
-  <section class="trip-list">
-    <h2>{{filter.value}}</h2>
-    <div class="trip-items">
-      <trip-preview v-for="filter in category" :key="filter.value" :filter="filter" />
+  <section class="filter-list">
+    {{filters}}
+    {{type}}
+    <div v-for="filter in filtersWithImages" :key="filter.name">
+      <h2>{{filter.title}}</h2>
+      <img :src="filter.imgSrc">
     </div>
   </section>
 </template>
 
 <script>
 // CMPS:
-import TripPreview from '@/components/TripPreview'
 
 export default {
-  name: 'filter-list',
+  name: "filter-list",
   props: {
-    category: {
+    filters: {
       type: Array,
       required: true
+    },
+    type: {
+      type: String,
+      required: true
     }
+  },
+  computed: {
+    filtersWithImages() {
+      return this.type === "activities"
+        ? this.$store.getters.activityFilters
+        : this.$store.getters.destinationFilters;
+    }
+  },
+  async created() {
+    this.$store.dispatch({
+      type: "getFilterImgs",
+      filters: this.filters,
+      filterType: this.type
+    });
   }
-}
+};
 </script>

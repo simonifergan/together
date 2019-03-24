@@ -1,15 +1,52 @@
+import Axios from 'axios'
 
+const axios = Axios.create({
+    withCredentials: true
+})
 
-function _connectGoogleApi() {
+const API_KEY = 'AIzaSyAXeo5fckdLgf_cfKs78MtTsARYWluZM7U';
+var connecting = false
+
+export default {
+    getGoogleLocation,
+    connectGoogleApi
+}
+
+function connectGoogleApi() {
     if (window.google) return Promise.resolve()
     const API_KEY = 'AIzaSyAXeo5fckdLgf_cfKs78MtTsARYWluZM7U';
-    var elGoogleApi = document.createElement('script');
-    elGoogleApi.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}`;
-    elGoogleApi.async = true;
-    document.body.append(elGoogleApi);
 
+    let elGooglePlacesApi = document.querySelector('.google');
+    if (!elGooglePlacesApi) {
+        // console.log('nogoogle')
+        elGooglePlacesApi = document.createElement('script');
+        elGooglePlacesApi.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places`;
+        elGooglePlacesApi.async = true;
+        elGooglePlacesApi.classList.add('google')
+        document.body.append(elGooglePlacesApi);
+    }
     return new Promise((resolve, reject) => {
-        elGoogleApi.onload = resolve;
-        elGoogleApi.onerror = () => reject('Google script failed to load')
+        elGooglePlacesApi.onload = resolve;
+        elGooglePlacesApi.onerror = () => reject('Google script failed to load')
     })
+}
+
+async function getGoogleLocation(query) {
+    console.log('got here times');
+    const elImg = document.createElement('img')
+    var request = {
+        query,
+        fields: ['photos'],
+    };
+    const service = new google.maps.places.PlacesService(elImg);
+    console.log(request);
+    return new Promise((res, rej) => {
+        service.findPlaceFromQuery(request, (results, status) => {
+            console.log('status:', status)
+            console.log('res:', results)
+            if (results) res(results[0].photos[0].getUrl())
+            else res(null)
+        })
+    })
+
 }

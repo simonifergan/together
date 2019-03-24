@@ -1,10 +1,13 @@
 import TripService from '@/services/TripService';
 import NotificationService from '@/services/NotificationService';
+import GoogleService from '@/services/GoogleService'
 
 export default {
     state: {
         trips: [],
-        tripToDisplay: null
+        tripToDisplay: null,
+        activityFilters: null,
+        destinationFilters: null
     },
     mutations: {
         // trips section:
@@ -55,6 +58,12 @@ export default {
             const trip = state.trips.find(trip => trip._id === tripId);
             const idx = trip.pending.findIndex(existingUser => existingUser === userId);
             if (idx !== -1) trip.pending.splice(idx, 1);
+        },
+        setActivityFilters(state, {filterImgs}) {
+            state.activityFilters = filterImgs
+        },
+        setDestinationFilters(state, {filterImgs}) {
+            state.destinationFilters = filterImgs
         }
     },
     getters: {
@@ -69,6 +78,12 @@ export default {
         },
         emptyTrip(state) {
             return TripService.getEmpty();
+        },
+        activityFilters(state) {
+            return state.activityFilters
+        },
+        destinationFilters(state) {
+            return state.destinationFilters
         }
     },
     actions: {
@@ -203,6 +218,15 @@ export default {
         async searchTrips({ commit }, { searchQuery }) {
             const trips = await TripService.query(searchQuery)
             commit({ type: 'loadTrips', trips })
+        },
+        async getFilterImgs({commit}, {filterType, filters}) {
+            const filterImgs = await Promise.all(filters.map(filter => TripService.getImgs(filter, filterType)))
+            // console.log(filters.map(filter => TripService.getImgs(filter, filterType)))
+            if (filterType === 'activities') commit({type: 'setActivityFilters', filterImgs})
+            else if (filterType === 'destinations') commit({type: 'setDestinationFilters', filterImgs})
+        },
+        async connectToGoogle() {
+            return GoogleService.connectGoogleApi()
         }
     }
 }

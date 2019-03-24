@@ -12,6 +12,8 @@
         </form>
       </div>
     </header>
+    <filter-list v-if="trips.length" :type="'destinations'" :filters="destinations"/>
+    <filter-list v-if="trips.length" :type="'activities'" :filters="activities"/>
     <trip-list :trips="trips" title="Trips you might like"/>
   </section>
 </template>
@@ -19,11 +21,13 @@
 <script>
 // CMPS:
 import TripList from "@/components/TripList";
+import FilterList from "@/components/FilterList";
 
 export default {
   name: "home",
   components: {
-    TripList
+    TripList,
+    FilterList
   },
   data() {
     return {
@@ -33,6 +37,22 @@ export default {
   computed: {
     trips() {
       return this.$store.getters.trips;
+    },
+    destinations() {
+      return this.trips.reduce((acc, trip) => {
+        trip.destinations.forEach(destination => {
+          if (acc.indexOf(destination) === -1) acc.push(destination)
+        })
+        return acc
+      }, [])
+    },
+    activities() {
+      return this.trips.reduce((acc, trip) => {
+        trip.activities.forEach(activity => {
+          if (acc.indexOf(activity) === -1) acc.push(activity)
+        })
+        return acc
+      }, [])
     }
   },
   methods: {
@@ -40,7 +60,8 @@ export default {
       this.$router.push('/search?q=' + this.searchQuery)
     }
   },
-  created() {
+  async created() {
+    await this.$store.dispatch({type: 'connectToGoogle'})
     this.$store.dispatch({ type: "loadTrips" });
   }
 };
