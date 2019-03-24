@@ -65,16 +65,11 @@ function getEmpty() {
 }
 
 async function getImgs(query, type) {
-    
     if (type === 'destinations') query = UtilService.worldCodeMap.get(query)
-    console.log('getting imgs', query);
     const filter = {}
     filter.title = query
     if (type === 'destinations') {
-        
         filter.imgSrc = await GoogleService.getGoogleLocation(query)
-        console.log('imgSrc', filter.imgSrc);
-        
     } else {
         filter.imgSrc = _getActivityImg(query)
     }
@@ -82,5 +77,24 @@ async function getImgs(query, type) {
 }
 
 function _getActivityImg(query) {
-    return {title: query, imgSrc: '@/src/assets/img/home/activity.jpg'}
+    switch (query) {
+        case 'art':
+        return `http://res.cloudinary.com/dcv2jyqvl/image/upload/v1553435772/user_imgs/ipfflonqbkr1vpxcc49a.jpg`
+        case 'beach':
+        return `http://res.cloudinary.com/dcv2jyqvl/image/upload/v1553435796/user_imgs/puuwebsjs2x8te2hy0fw.jpg`
+        case 'food':
+        return `http://res.cloudinary.com/dcv2jyqvl/image/upload/v1553435813/user_imgs/nr9q2xsqq2xkmm8jyssi.jpg`
+        case 'hiking':
+        return `http://res.cloudinary.com/dcv2jyqvl/image/upload/v1553435831/user_imgs/ltklohnva57abr4xyxys.jpg`
+        case 'history':
+        return `http://res.cloudinary.com/dcv2jyqvl/image/upload/v1553435847/user_imgs/zd8ubpkuzpak7fxuuxm2.jpg`
+        case 'music':
+        return `http://res.cloudinary.com/dcv2jyqvl/image/upload/v1553435863/user_imgs/d2gu6fmahxr1ojavtjxz.jpg`
+        case 'shopping':
+        return `http://res.cloudinary.com/dcv2jyqvl/image/upload/v1553435876/user_imgs/n4lbixndk2tgvanbl6b1.jpg`
+        case 'sports':
+        return `http://res.cloudinary.com/dcv2jyqvl/image/upload/v1553435889/user_imgs/gyq6cdfdqh6bgklcd9jo.jpg`
+        case 'theater':
+        return `http://res.cloudinary.com/dcv2jyqvl/image/upload/v1553435901/user_imgs/sf89vyq9zksgp5wqrt7l.jpg`
+    }
 }

@@ -32,18 +32,14 @@ function connectGoogleApi() {
 }
 
 async function getGoogleLocation(query) {
-    console.log('got here times');
     const elImg = document.createElement('img')
     var request = {
         query,
         fields: ['photos'],
     };
     const service = new google.maps.places.PlacesService(elImg);
-    console.log(request);
     return new Promise((res, rej) => {
         service.findPlaceFromQuery(request, (results, status) => {
-            console.log('status:', status)
-            console.log('res:', results)
             if (results) res(results[0].photos[0].getUrl())
             else res(null)
         })

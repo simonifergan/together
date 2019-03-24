@@ -15,6 +15,7 @@
     <filter-list v-if="trips.length" :type="'destinations'" :filters="destinations"/>
     <filter-list v-if="trips.length" :type="'activities'" :filters="activities"/>
     <trip-list :trips="trips" title="Trips you might like"/>
+    <upload-image />
   </section>
 </template>
 
@@ -22,12 +23,14 @@
 // CMPS:
 import TripList from "@/components/TripList";
 import FilterList from "@/components/FilterList";
+import UploadImage from '@/components/UploadImage';
 
 export default {
   name: "home",
   components: {
     TripList,
-    FilterList
+    FilterList,
+    UploadImage
   },
   data() {
     return {
@@ -61,7 +64,9 @@ export default {
     }
   },
   async created() {
-    await this.$store.dispatch({type: 'connectToGoogle'})
+    if (!window.google) {
+      await this.$store.dispatch({type: 'connectToGoogle'})
+    }    
     this.$store.dispatch({ type: "loadTrips" });
   }
 };

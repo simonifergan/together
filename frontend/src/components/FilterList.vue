@@ -1,10 +1,8 @@
 <template>
   <section class="filter-list">
-    {{filters}}
-    {{type}}
-    <div v-for="filter in filtersWithImages" :key="filter.name">
-      <h2>{{filter.title}}</h2>
-      <img :src="filter.imgSrc">
+    <h2>Hot Locations</h2>
+    <div class="filter-previews">
+    <filter-preview v-for="filter in filtersWithImages" :key="filter.title" :filter="filter" />
     </div>
   </section>
 </template>
@@ -12,8 +10,10 @@
 <script>
 // CMPS:
 
+import FilterPreview from "./FilterPreview.vue";
 export default {
   name: "filter-list",
+  components: { FilterPreview },
   props: {
     filters: {
       type: Array,
