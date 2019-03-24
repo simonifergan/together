@@ -4,7 +4,7 @@ import NotificationService from '@/services/NotificationService';
 export default {
     state: {
         trips: [],
-        tripToDisplay: null
+        tripToDisplay: null,
     },
     mutations: {
         // trips section:
@@ -12,6 +12,7 @@ export default {
             state.trips = trips
         },
         updateTrip(state, { trip }) {
+            // MIGHT BE USEELSSS
             let trips = state.trips
             let idx = trips.findIndex(currTrip => currTrip._id = trip._id)
             trips.splice(idx, 1, trip)
@@ -127,11 +128,14 @@ export default {
             
             // add user to members list
             tripToJoin.members.unshift(userToJoin)
-            // update trip state
-            commit({type: 'updateTrip', trip: tripToJoin})
+            // update trip state : disabled for now
+            // commit({type: 'updateTrip', trip: tripToJoin});
+
+            
             // update trip to display
             console.log('userIdToJoin', userIdToJoin);
-            commit({type: 'toggleUserFromPendingList', userId: userIdToJoin})
+            commit({type: 'updateTripToDisplay', trip: tripToJoin});
+            commit({type: 'toggleUserInUsersToDisplay', user: userToJoin})
 
             try {
                 // update user & trip
