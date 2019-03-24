@@ -9,7 +9,8 @@ export default {
     getById,
     save,
     remove,
-    getEmpty
+    getEmpty,
+    getCategories
 }
 
 const TRIP_API = (process.env.NODE_ENV !== 'development')
@@ -60,3 +61,21 @@ function getEmpty() {
     }
 }
 
+async function getCategories() {
+    return {
+        activities: [
+
+        ],
+        tripLengths: [
+
+        ],
+        locations: await _getLocations()
+    }
+}
+
+async function _getLocation() {
+    const {data} = await axios.get(TRIP_API + '/locations');
+    return data.map(location => {
+        return {location, imgUrl: await}
+    });
+}
