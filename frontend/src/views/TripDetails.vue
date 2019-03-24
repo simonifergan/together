@@ -23,7 +23,10 @@
       <ul>
         <UserPreview v-for="user in trip.members" :key="user._id" :user="user"/>
       </ul>
-      <pending-list v-if="loggedInUser && loggedInUser._id === trip.userId" :pendingUserIds="trip.pending"/>
+      <pending-list
+        @requestApproved="requestApproved"
+        v-if="loggedInUser && loggedInUser._id === trip.userId" 
+        :pendingUserIds="trip.pending"/>
     </div>
 
     <p class="trip-desc">{{trip.desc}}</p>
@@ -73,6 +76,9 @@ export default {
       if (!this.trip || tripId !== this.trip._id) {
         this.$store.dispatch({ type: "loadTrip", tripId })
       }
+    },
+    requestApproved(pendingUser) {
+      this.$store.dispatch({ type: "joinTrip", userToJoin: pendingUser, tripIdToJoin: this.trip._id});
     }
   },
   created() {
