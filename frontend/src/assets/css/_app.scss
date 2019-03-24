@@ -1,3 +1,32 @@
+html {
+    font-family: 'Open Sans';
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+iframe, audio {
+    width: 100%;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+a {
+    cursor: pointer;
+}
+
+a:visited {
+    color:inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
 .app-container {
     position:relative;
 
