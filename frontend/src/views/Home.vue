@@ -3,9 +3,9 @@
     <header>
       <h1>Reaching your destination with the right people for you</h1>
       <div class="intro-form">
-        <h2>Where do you want to go?</h2>
+        <h2>Where would you like to go?</h2>
         <form @submit.prevent="search">
-          <input type="text" placeholder="The Sky Is The Limit" v-model="searchQuery">
+          <input type="text" placeholder="Anywhere" v-model="searchQuery">
           <button type="submit">Search</button>
         </form>
       </div>

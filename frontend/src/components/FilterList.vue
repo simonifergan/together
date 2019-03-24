@@ -1,6 +1,6 @@
 <template>
   <ul class="filter-list">
-    <h2>Hot Locations</h2>
+    <h2>{{(type === 'destinations')? 'Hot locations' : 'Recommended activities'}}</h2>
     <div class="filter-previews">
       <filter-preview v-for="filter in filtersWithImages" :key="filter.title" :filter="filter"/>
     </div>
