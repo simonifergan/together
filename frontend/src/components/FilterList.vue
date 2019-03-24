@@ -2,7 +2,7 @@
   <section class="filter-list">
     <h2>Hot Locations</h2>
     <div class="filter-previews">
-    <filter-preview v-for="filter in filtersWithImages" :key="filter.title" :filter="filter" />
+      <filter-preview v-for="filter in filtersWithImages" :key="filter.title" :filter="filter"/>
     </div>
   </section>
 </template>
@@ -37,6 +37,15 @@ export default {
       filters: this.filters,
       filterType: this.type
     });
+  },
+  watch: {
+    filters(newVal) {
+      this.$store.dispatch({
+        type: "getFilterImgs",
+        filters: newVal,
+        filterType: this.type
+      });
+    }
   }
 };
 </script>
