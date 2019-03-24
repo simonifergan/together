@@ -1,5 +1,9 @@
 <template>
-    <section class="login-page">
+    <section class="login-form">
+        <button class="cancel" @click="cancel">
+            <i class="fas fa-times"></i>
+        </button>
+        <h2>Login</h2>
         <form @submit.prevent="login">
             <label for="">Email<br>
                 <el-input type="email" v-model="email" placeholder="Email" />
@@ -25,8 +29,11 @@ export default {
         login() {
             this.$store.dispatch({type: 'login', credentials: {email: this.email, password: this.password}})
             .then(res => {
-                this.$router.push('/');
+                this.$router.push(this.$route.path);
             });
+        },
+        cancel() {
+            this.$router.push(this.$route.path)
         }
     },
     created() {

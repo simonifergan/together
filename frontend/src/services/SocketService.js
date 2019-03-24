@@ -27,6 +27,7 @@ const NOTIFICATION_ADDED = 'notification-added'
 export default {
     on,
     emit,
+    off,
     // SOCKET EVENTS
     SOCKET_CONNECT, 
     SOCKET_DISCONNECT, 
@@ -62,6 +63,10 @@ function emit(eventName, payload) {
     socket.emit(eventName, payload);
 }
 
+function off() {
+    socket.off();
+    socket.emit(SOCKET_DISCONNECT);
+}
 // function send(msg) {
 //     socket.emit(CHAT_SEND_MSG, msg)
 // }
