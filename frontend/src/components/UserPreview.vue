@@ -1,8 +1,9 @@
 <template>
-  <li class="user-preview">
-    <div class="user-profile-img" :style="profilePic"></div>
+  <div class="user-preview">
+    <div class="user-profile-img" :style="profilePic"/>
     <p>{{user.firstname}} {{user.lastname}}</p>
-  </li>
+    <slot name="btns-pending"></slot>
+  </div>
 </template>
 
 <script>
@@ -21,3 +22,17 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.user-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .user-profile-img {
+    width: 60px;
+    height: 60px;
+    background-size: contain;
+    border-radius: 50%;
+  }
+}
+</style>
