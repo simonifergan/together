@@ -125,7 +125,9 @@ async function updateTripToUser({tripId, user, action}) {
         var user;
         console.log('action:', action);
         
-        if (action === 'approve') {
+        if (action === 'request') {
+            user = await db.collection(usersCollection).updateOne({_id: objUserId}, {$push: {pendingIn: objTripId}})
+        } else if (action === 'approve') {
             user = await db.collection(usersCollection).updateOne({_id: objUserId}, {$pull: {pendingIn: objTripId}})
             user = await db.collection(usersCollection).updateOne({_id: objUserId}, {$push: {memberIn: objTripId}})
         } else if (action === 'remove from pending') {

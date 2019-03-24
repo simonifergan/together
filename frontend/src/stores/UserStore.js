@@ -74,6 +74,8 @@ export default {
         },
 
         async joinLeaveTripToUser({ commit, getters }, { userToTripId }) {
+            console.log('here');
+            
             try {
                 const updatedUser = await UserService.updateTripToUser(userToTripId);
                 return updatedUser;
