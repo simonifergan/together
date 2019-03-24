@@ -1,5 +1,5 @@
 .trip-list {
-    margin: 20px;
+    padding: 20px;
     overflow: hidden;
     @include flex(column);
     h2 {
@@ -9,7 +9,7 @@
     }
     .trip-items {
         @include flex();
-        width: 250px;
+        // width: 250px;
         .trip-preview {
             @include flex(column);
             font-family: $font-open-sans;

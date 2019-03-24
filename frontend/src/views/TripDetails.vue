@@ -32,14 +32,14 @@
 
     <p class="trip-desc">{{trip.desc}}</p>
 
-    <div class="destinations">
+    <!-- <div class="destinations">
       <ul>
         <li
           v-for="destination in trip.destinations"
           :key="destination.region"
         >{{destination.region}}, {{destination.country}}</li>
       </ul>
-    </div>
+    </div> -->
     <our-super-awesome-map :enable="false" :value="trip.destinations"/>
     <div class="comments">
       <h3>Comments</h3>
