@@ -36,6 +36,19 @@ module.exports = (app) => {
             })
     })
 
+    // move trip from pendingIn to memberIn
+    app.patch(`${BASE}/user_trip/:userId`, (req, res) => {
+        console.log('got to user.route');
+        
+        const userToTripId = req.body;
+        userService.updateTripToUser(userToTripId)
+            .then(updatedUser => {
+                if (updatedUser) return res.json(updatedUser);
+                else res.status(404).end();
+            })
+
+    })
+
     app.post(`${BASE}/login`, (req, res) => {
         const credentials = req.body;
         // console.log(credentials);

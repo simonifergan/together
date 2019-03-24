@@ -30,7 +30,7 @@ async function query() {
                         password: 0,
                         email: 0,
                         tripPreferences: 0,
-                        interestedIn: 0,
+                        pendingIn: 0,
                         proposals: 0,
                         tripPrefs: 0,
                         birthdate: 0,

@@ -34,7 +34,8 @@ async function query(userId) {
                     users: {
                         password: 0,
                         email: 0,
-                        interestedIn: 0,
+                        pendingIn: 0,
+                        memberIn: 0,
                         proposals: 0,
                         tripPrefs: 0,
                         birthdate: 0,
@@ -63,7 +64,7 @@ async function createChat(chat) {
             delete user.email;
             delete user.password;
             delete user.tripPrefs;
-            delete user.interestedIn;
+            delete user.pendingIn;
             delete user.proposals;
 
             return user

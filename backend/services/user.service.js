@@ -8,10 +8,12 @@ module.exports = {
     signup,
     getById,
     update,
+    updateTripToUser,
     remove
 }
 
 const usersCollection = 'users';
+const tripsCollection = 'trips';
 
 function query(userIds) {
     let mongoQuery = {}
@@ -74,20 +76,69 @@ async function signup(user) {
 function update(user) {
     const strId = user._id;
     const trips = [...user.trips];
-    const interestedIn = [...user.interestedIn];
+    const pendingIn = [...user.pendingIn];
 
     user._id = new ObjectId(user._id);
     user.trips = user.trips.map(tripId => new ObjectId(tripId))
-    user.interestedIn = user.interestedIn.map(tripId => new ObjectId(tripId))
+    user.pendingIn = user.pendingIn.map(tripId => new ObjectId(tripId))
 
     return mongoService.connect()
         .then(db => db.collection(usersCollection).updateOne({ _id: user._id }, { $set: user }))
         .then(mongoRes => {
             user._id = strId;
             user.trips = trips;
-            user.interestedIn = interestedIn;
+            user.pendingIn = pendingIn;
             return user;
         });
+}
+
+// async function updateTripToUser({tripId, user}) {
+//     const objTripId = new ObjectId(tripId);
+//     const objUserId = new ObjectId(user._id)
+//     try {
+//         const db = await mongoService.connect()
+//         var user = await db.collection(usersCollection).findOne({_id: objUserId});
+//         const idxTripInPending = user.pendingIn.findIndex(trip => trip._id === tripId);
+//         const idxTripInMember = user.memberIn.findIndex(trip => trip._id === tripId);
+//         console.log('idxTripInPending:', idxTripInPending, ', idxTripInMember:', idxTripInMember);
+        
+//         if (idxTripInPending === -1 && idxTripInMember === -1) {
+//             console.log('not pending not member - insert to pending');
+//             user.pendingIn.push(tripId);
+//         } else if (idxTripInPending !== -1 && idxTripInMember === -1) {
+//             user.pendingIn.splice(idxTripInPending, 1);
+//             user.memberIn.push(tripId);
+//         } else if (idxTripInPending === -1 && idxTripInMember !== -1) {
+//             user.memberIn.splice(idxTripInMember, 1);
+//         }
+//         await db.collection(usersCollection).updateOne({_id: objUserId}, {$set: user});
+//         return user;
+//     } catch {
+
+//     }
+// }
+async function updateTripToUser({tripId, user, action}) {
+    const objTripId = new ObjectId(tripId);
+    const objUserId = new ObjectId(user._id)
+    try {
+        const db = await mongoService.connect()
+        var user;
+        console.log('action:', action);
+        
+        if (action === 'approve') {
+            console.log('here in approve');
+            
+            user = await db.collection(usersCollection).updateOne({_id: objUserId}, {$pull: {pendingIn: objTripId}})
+            user = await db.collection(usersCollection).updateOne({_id: objUserId}, {$push: {memberIn: objTripId}})
+        } else if (action === 'reject') {
+            user = await db.collection(usersCollection).updateOne({_id: objUserId}, {$pull: {pendingIn: objTripId}})
+        } else { // admin can remove member after approved
+            user = await db.collection(usersCollection).updateOne({_id: objUserId}, {$pull: {memberIn: objTripId}})
+        }
+        return user;
+    } catch {
+
+    }
 }
 
 function remove(id) {
