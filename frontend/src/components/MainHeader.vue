@@ -1,13 +1,23 @@
 <template>
   <header class="main-header" :class="isAbsolute">
-    <router-link title="Homepage" tag="h1" to="/">Bridge</router-link>
+    <router-link title="Homepage" tag="h1" to="/">Travel Maker</router-link>
     <nav>
       <router-link to="/">Home</router-link>
       <a href="#">About</a>
       <router-link to="/signup" v-if="!user">Sign up</router-link>
-      <router-link :to="currentRoute + '#login'" v-if="!user">Log in</router-link>
-      <div v-if="user" class="user-dashboard" :style="profilePic" @click="isShowDropdown = !isShowDropdown">
-        <div class="dropdown" v-if="isShowDropdown" @click.stop="">
+      <div class="login-container">
+        <router-link :to="currentRoute + '#login'" v-if="!user">Log in</router-link>
+        <transition name="fade" mode="out-in">
+          <login v-if="isShowLogin"/>
+        </transition>
+      </div>
+      <div
+        v-if="user"
+        class="user-dashboard"
+        :style="profilePic"
+        @click="isShowDropdown = !isShowDropdown"
+      >
+        <div class="dropdown" v-if="isShowDropdown" @click.stop>
           <a href="#">Profile</a>
           <a href="#">Account</a>
           <a href="#">Friends</a>
@@ -21,30 +31,33 @@
 </template>
 
 <script>
+import Login from '@/components/Login';
+
 export default {
-  name: 'MainHeader',
+  name: "MainHeader",
+  components: {
+    Login
+  },
   data() {
     return {
       isHome: true,
-      isShowDropdown: false,
+      isShowDropdown: false
     };
   },
   methods: {
     async logout() {
       try {
-        await this.$store.dispatch('logout');
-        this.$router.push('/');
-      } catch {
-
-      }
+        await this.$store.dispatch("logout");
+        this.$router.push("/");
+      } catch {}
     }
   },
   created() {
-    if (this.$route.name !== 'home') this.isHome = false;
+    if (this.$route.name !== "home") this.isHome = false;
   },
   computed: {
     isAbsolute() {
-      return {'on-homepage': this.isHome}
+      return { "on-homepage": this.isHome };
     },
     user() {
       return this.$store.getters.loggedUser;
@@ -54,19 +67,23 @@ export default {
     },
     currentRoute() {
       return this.$route.path;
+    },
+    isShowLogin() {
+      if (this.$route.hash !== '#login') return false;
+      return true;
+      
     }
   },
   watch: {
     $route: {
       handler(newRoute) {
-        if (newRoute.name !== 'home') this.isHome = false;
+        if (newRoute.name !== "home") this.isHome = false;
         else this.isHome = true;
       }
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
-
 </style>

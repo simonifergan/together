@@ -1,18 +1,22 @@
 import Axios from 'axios'
-
 const axios = Axios.create({
     withCredentials: true
 })
 
+import StorageService from './StorageService.js';
+
 export default {
-    update,
-    updateTripToUser,
     login,
     signup,
     logout,
     getEmptyUser,
-    getUsers
+    getLoggedUser,
+    getUsers,
+    update,
+    updateTripToUser,
 }
+
+const USER_KEY = 'loggedUser';
 
 const API_USER = (process.env.NODE_ENV !== 'development')
     ? '/api'
@@ -33,6 +37,7 @@ async function updateTripToUser(userToTripId) {
 
 async function login(credentials) {
     const {data} = await axios.post(API_USER + '/login', credentials)
+    StorageService.saveToLocal(USER_KEY, data);
     return data
 }
 
@@ -43,6 +48,7 @@ async function signup(newUser) {
 
 async function logout() {
     const {data} = await axios.post(API_USER + '/logout')
+    StorageService.removeFromLocal(USER_KEY);
     return data;
 }
 
@@ -50,6 +56,10 @@ async function getUsers(userIds) {
     const query = {userIds}
     const {data} = await axios.post(API_USER + '/user', query)
     return data
+}
+
+function getLoggedUser() {
+    return StorageService.getFromLocal(USER_KEY);
 }
 
 function getEmptyUser() {
