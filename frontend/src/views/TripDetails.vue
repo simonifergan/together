@@ -23,7 +23,11 @@
       <ul>
         <UserPreview v-for="user in trip.members" :key="user._id" :user="user"/>
       </ul>
-      <pending-list v-if="loggedInUser && loggedInUser._id === trip.userId" :pendingUserIds="trip.pending"/>
+      <pending-list
+        @requestPendingUsers="requestPendingUsers"
+        @requestApproved="requestApproved"
+        v-if="loggedInUser && loggedInUser._id === trip.userId"
+      />
     </div>
 
     <p class="trip-desc">{{trip.desc}}</p>
@@ -46,8 +50,8 @@
 <script>
 // CMPS
 import UserPreview from "@/components/UserPreview.vue";
-import OurSuperAwesomeMap from '@/components/OurSuperAwesomeMap.vue'
-import PendingList from '@/components/PendingList.vue';
+import OurSuperAwesomeMap from "@/components/OurSuperAwesomeMap.vue";
+import PendingList from "@/components/PendingList.vue";
 
 export default {
   name: "trip-details",
@@ -59,7 +63,8 @@ export default {
   methods: {
     joinLeaveTrip() {
       if (this.isUserMember) this.$store.dispatch({ type: "leaveTrip" });
-      else if (this.trip.pending.some(id => id === this.loggedInUser._id)) this.$store.dispatch({type: 'cancelTripJoinRequest'})
+      else if (this.trip.pending.some(id => id === this.loggedInUser._id))
+        this.$store.dispatch({ type: "cancelTripJoinRequest" });
       else this.$store.dispatch({ type: "userRequestToJoinTrip" });
 
       // THIS FUNCTION GOES TO THE TRIP OWNER - TO APPROVE A REQUEST
@@ -71,12 +76,22 @@ export default {
     initTrip() {
       const { tripId } = this.$route.params;
       if (!this.trip || tripId !== this.trip._id) {
-        this.$store.dispatch({ type: "loadTrip", tripId })
+        this.$store.dispatch({ type: "loadTrip", tripId });
       }
+    },
+    requestPendingUsers() {
+      this.$store.dispatch({ type: "getUsers", userIds: this.trip.pending });
+    },
+    requestApproved(pendingUser) {
+      this.$store.dispatch({
+        type: "joinTrip",
+        userToJoin: pendingUser,
+        tripIdToJoin: this.trip._id
+      });
     }
   },
   created() {
-    this.initTrip()
+    this.initTrip();
   },
   beforeDestroy() {
     this.$store.commit({ type: "clearTrip" });
@@ -96,18 +111,19 @@ export default {
       return this.trip.members.some(user => user._id === this.loggedInUser._id);
     },
     whoIsUser() {
-      if (!this.loggedInUser) return 'Ask to join';
+      if (!this.loggedInUser) return "Ask to join";
       if (this.isUserMember) return "Leave";
-      else if (this.trip.pending.some(userId => userId === this.loggedInUser._id)) {
+      else if (
+        this.trip.pending.some(userId => userId === this.loggedInUser._id)
+      ) {
         return "Cancel request";
-      }
-      else return "Ask to join";
+      } else return "Ask to join";
     }
   },
   watch: {
     $route: {
       handler(newRoute) {
-        this.initTrip()
+        this.initTrip();
       },
       deep: true
     }

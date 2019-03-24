@@ -23,7 +23,10 @@ export default {
     },
     methods: {
         login() {
-            this.$store.dispatch({type: 'login', credentials: {email: this.email, password: this.password}});
+            this.$store.dispatch({type: 'login', credentials: {email: this.email, password: this.password}})
+            .then(res => {
+                this.$router.push('/');
+            });
         }
     },
     created() {

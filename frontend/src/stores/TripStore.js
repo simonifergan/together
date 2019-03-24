@@ -4,7 +4,7 @@ import NotificationService from '@/services/NotificationService';
 export default {
     state: {
         trips: [],
-        tripToDisplay: null
+        tripToDisplay: null,
     },
     mutations: {
         // trips section:
@@ -12,6 +12,7 @@ export default {
             state.trips = trips
         },
         updateTrip(state, { trip }) {
+            // MIGHT BE USEELSSS
             let trips = state.trips
             let idx = trips.findIndex(currTrip => currTrip._id = trip._id)
             trips.splice(idx, 1, trip)
@@ -45,6 +46,8 @@ export default {
             state.tripToDisplay = trip;
         },
         toggleUserFromPendingList(state, { userId }) {
+            console.log('toggle:', userId);
+            
             const idx = state.tripToDisplay.pending.findIndex(existingUser => existingUser === userId);
             if (idx !== -1) state.tripToDisplay.pending.splice(idx, 1);
             else state.tripToDisplay.pending.push(userId);
@@ -108,31 +111,43 @@ export default {
             const msg = await TripService.remove(trip._id)
             commit({ type: 'removeTrip', tripId: trip._id })
         },
-        async joinTrip({ commit, getters, dispatch }, userIdToJoin, tripIdToJoin) {
+        async joinTrip({ commit, getters, dispatch }, {userToJoin, tripIdToJoin}) {
+            const userIdToJoin = userToJoin._id;
             // get trip
-            const tripToJoin = getters.trips.find(trip => trip._id === tripIdToJoin);
+            var tripToJoin = await TripService.getById(tripIdToJoin)
             if (!tripToJoin) return null;
-
+            
             // check if the user is already a member:
-            const isUserMember = tripToJoin.members.some(userId => userId === userIdToJoin);
+            const isUserMember = tripToJoin.members.some(user => user._id === userIdToJoin);
             if (isUserMember) return null;
 
             // remove user from pending list
             const idx = tripToJoin.pending.findIndex(userId => userId === userIdToJoin);
             if (idx === -1) return null;
-            commit({type: 'removeUserFromPendingList', userId: userIdToJoin, tripId: tripIdToJoin})
+            tripToJoin.pending.splice(idx, 1);
             
             // add user to members list
-            commit({ type: 'addUserToMembersList', userId: userIdToJoin, tripId: tripIdToJoin })
+            tripToJoin.members.unshift(userToJoin)
+            // update trip state : disabled for now
+            // commit({type: 'updateTrip', trip: tripToJoin});
+
+            
+            // update trip to display
+            console.log('userIdToJoin', userIdToJoin);
+            commit({type: 'updateTripToDisplay', trip: tripToJoin});
+            commit({type: 'toggleUserInUsersToDisplay', user: userToJoin})
 
             try {
                 // update user & trip
-                const updatedTrip = await TripService.save(getters.tripToDisplay);
+                const updatedTrip = await TripService.save(tripToJoin);
+                console.log('updatedTrip:', updatedTrip);
+                
                 const updatedUser = await dispatch({ type: 'joinTripToUser', tripId: updatedTrip._id })
-
+                console.log('updatedUser:', updatedUser);
+                
                 // notification
                 let newNotification = {
-                    userId: updatedUser._id,
+                    userId: userIdToJoin,
                     tripId: getters.tripToDisplay._id,
                     action: NotificationService.TRIP_JOINED
                 }
@@ -140,8 +155,9 @@ export default {
 
             } catch {
                 // rollback
-                commit({type: 'toggleUserFromPendingList', userId: userIdToJoin, tripId: tripIdToJoin})
-                commit({ type: 'toggleUserFromMembersList', userId: userIdToJoin, tripId: tripIdToJoin })
+                console.log('rollbackkk');
+                
+                commit({type: 'toggleUserFromPendingList', userId: userIdToJoin})
             }
         },
         // TODO: (Adi) get tripId and userId

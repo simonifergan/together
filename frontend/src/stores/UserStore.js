@@ -3,6 +3,7 @@ import UserService from '@/services/UserService'
 export default {
     state: {
         loggedUser: null,
+        usersToDisplay: [],
     },
     mutations: {
         setLoggedUser(state, { user }) {
@@ -17,7 +18,17 @@ export default {
         },
         updateLoggedUser(state, { user }) {
             state.loggedUser = user;
-        }
+        },
+        // USER LIST FOR: Pending list
+        setUsersToDisplay(state, {users}) {
+            state.usersToDisplay = users;
+        },
+        toggleUserInUsersToDisplay(state, { user }) {
+            console.log('toggleUserInUsersToDisplay', user._id)
+            const idx = state.usersToDisplay.find(inUser => inUser._id === user._id);
+            if (idx !== -1) state.usersToDisplay.splice(idx, 1);
+            else state.usersToDisplay.push(user);
+        },
     },
     getters: {
         loggedUser(state) {
@@ -25,7 +36,11 @@ export default {
         },
         getEmptyUser() {
             return UserService.getEmptyUser();
+        },
+        userListToDisplay(state) {
+            return state.usersToDisplay;
         }
+
     },
     actions: {
         async login({ commit, dispatch }, { credentials }) {
@@ -62,10 +77,10 @@ export default {
                 commit({ type: 'updateLoggedUser', user: backupUserLoggedUser });
             }
         },
-        async getUsers(context, {userIds}) {
+        async getUsers(context, { userIds }) {
             console.log(userIds)
             const users = await UserService.getUsers(userIds)
-            return users
+            context.commit({ type: 'setUsersToDisplay', users });
         }
     }
 }
