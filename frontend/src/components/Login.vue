@@ -1,9 +1,8 @@
 <template>
     <section class="login-form">
-        <button class="cancel" @click="cancel">
+        <button title="Dismiss" class="cancel" @click="cancel">
             <i class="fas fa-times"></i>
         </button>
-        <h2>Login</h2>
         <form @submit.prevent="login">
             <label for="">Email<br>
                 <el-input type="email" v-model="email" placeholder="Email" />

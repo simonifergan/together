@@ -2,7 +2,7 @@ import UserService from '@/services/UserService'
 
 export default {
     state: {
-        loggedUser: null,
+        loggedUser: UserService.getLoggedUser(),
         usersToDisplay: [],
     },
     mutations: {
