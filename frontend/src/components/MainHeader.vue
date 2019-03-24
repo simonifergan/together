@@ -15,7 +15,7 @@
         v-if="user"
         class="user-dashboard"
         :style="profilePic"
-        @click="isShowDropdown = !isShowDropdown"
+        @click.stop="showDropdown"
       >
         <div class="dropdown" v-if="isShowDropdown" @click.stop>
           <a href="#">Profile</a>
@@ -50,6 +50,16 @@ export default {
         await this.$store.dispatch("logout");
         this.$router.push("/");
       } catch {}
+    },
+    closeDropdown() {
+      console.log('alive?')
+      this.isShowDropdown = false;
+      document.querySelector('#app').removeEventListener('click', this.closeDropdown);
+    },
+    showDropdown() {
+      console.log('activate');
+      this.isShowDropdown = true;
+      document.querySelector('#app').addEventListener('click', this.closeDropdown);
     }
   },
   created() {
