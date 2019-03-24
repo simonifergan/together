@@ -11,19 +11,19 @@ module.exports = (app) => {
     });
 
     app.post(`${BASE}/user`, (req, res) => {
-        const {userIds} = req.body
+        const { userIds } = req.body
         userService.query(userIds)
             .then(users => res.json(users))
             .catch(err => res.end(err));
     });
 
     app.get(`${BASE}/user/:userId`, (req, res) => {
-        const {userId} = req.params;
+        const { userId } = req.params;
         userService.getById(userId)
-        .then(user => {
-            if (user) return res.json(user);
-            else res.status(404).end();
-        })
+            .then(user => {
+                if (user) return res.json(user);
+                else res.status(404).end();
+            })
     });
 
     app.put(`${BASE}/user/:userId`, (req, res) => {
@@ -44,7 +44,7 @@ module.exports = (app) => {
                 if (!user) return res.status(401).end();
                 req.session.user = user;
                 // console.log('user logged:', user);
-                
+
                 res.json(user)
             })
             .catch(err => res.end(err));
@@ -67,5 +67,11 @@ module.exports = (app) => {
         delete req.session.user;
         res.end();
     });
+
+
+    // PUSH NOTIFICATIONS
+    app.patch(`${BASE}/user_push_sub/:userId`, async (req, res) => {
+        
+    })
 
 }

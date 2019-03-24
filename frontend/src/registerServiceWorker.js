@@ -5,24 +5,37 @@ import { register } from 'register-service-worker'
 if (process.env.NODE_ENV === 'development') {
   register(`${process.env.BASE_URL}service-worker.js`, {
     ready (reg) {
-      console.log(
-        'App is being served from cache by a service worker.\n' +
-        'For more details, visit https://goo.gl/AFskqB', reg
-      )
-      reg.pushManager.getSubscription()
+      Notification.requestPermission(status => {
+        console.log(status);
+        if (status === 'granted') {
+          reg.showNotification('Welcome to Bridge App!');
+        }
+      });
+     
+        reg.pushManager.getSubscription()
       .then(sub => {
-        if (sub) console.log('found him', sub)
-        else {
+        if (!sub) {
+          console.log('I AM HERE', sub);
           reg.pushManager.subscribe({
             userVisibleOnly: true,
-          }).then(sub => sub.toJSON()).then(sub => {
+          }).then(sub => {
             console.log(sub);
-          }).catch(err => console.log(err));
+          })
+          .catch(err => {console.log('in error', err)})
+        } else {
+          console.log('else', sub)
         }
       })
+     
+      
+      console.log(
+        'App is being served from cache by a service worker.\n' +
+        'For more details, visit https://goo.gl/AFskqB'
+      )
     },
     registered (reg) {
-      console.log('Service worker has been registered.', reg)
+      console.log('Service worker has been registered.')
+    
     },
     cached () {
       console.log('Content has been cached for offline use.')

@@ -73,9 +73,9 @@ async function getCategories() {
     }
 }
 
-async function _getLocation() {
-    const {data} = await axios.get(TRIP_API + '/locations');
-    return data.map(location => {
-        return {location, imgUrl: await}
-    });
-}
+// async function _getLocation() {
+//     const {data} = await axios.get(TRIP_API + '/locations');
+//     return data.map(location => {
+//         return {location, imgUrl: await}
+//     });
+// }
