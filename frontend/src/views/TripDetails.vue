@@ -9,7 +9,7 @@
         @click="initChat(trip.userId)"
         :title="'Start a chat with ' + trip.user.firstname"
       >
-        <i class="far fa-comment-alt"></i>
+        <i class="far fa-comments"></i>
       </button>
     </div>
 
