@@ -1,13 +1,15 @@
 <template>
   <ul class="filter-list">
     <h2>{{(type === 'destinations')? 'Hot locations' : 'Recommended activities'}}</h2>
-    <button @click="moveSlide('-')">left</button>
     <div class="filters-container">
-      <div class="filter-previews" :style="pagination">
-        <filter-preview v-for="filter in filtersWithImages" :key="filter.title" :filter="filter"/>
+      <button @click="moveSlide('-')">left</button>
+      <div class="inner-container">
+        <ul class="filter-previews" :style="pagination">
+          <filter-preview v-for="filter in filtersWithImages" :key="filter.title" :filter="filter"/>
+        </ul>
       </div>
+      <button @click="moveSlide('+')">right</button>
     </div>
-    <button @click="moveSlide('+')">right</button>
   </ul>
 </template>
 

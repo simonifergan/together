@@ -14,7 +14,7 @@
             @requestApproved="requestApproved"
             @requestRejected="requestRejected"
             v-if="loggedInUser && loggedInUser._id === trip.userId"
-        /> -->
+        />-->
       </user-trip-preview>
     </ul>
 
@@ -25,24 +25,27 @@
 </template>
 
 <script>
-import UserTripPreview from '@/components/UserTripPreview';
+import UserTripPreview from "@/components/UserTripPreview";
 
 export default {
   components: {
     UserTripPreview
   },
   methods: {
+    async initUser() {
+      const { userId } = this.$route.params;
+      if (userId) {
+        const res = await this.$store.dispatch({ type: "getUserById", userId });
+        if (res)
+          await this.$store.dispatch({ type: "loadTripsByUserId", userId });
+      }
+    },
     requestPendingUsers(pending) {
       this.$store.dispatch({ type: "getUsers", userIds: pending });
     }
   },
   async created() {
-    const { userId } = this.$route.params;
-    if (userId) {
-      const res = await this.$store.dispatch({ type: "getUserById", userId });
-      if (res)
-        await this.$store.dispatch({ type: "loadTripsByUserId", userId });
-    }
+    this.initUser();
   },
   computed: {
     user() {
@@ -58,7 +61,14 @@ export default {
   },
   beforeDestroy() {
     this.$store.commit({ type: "setUserToDisplay", user: null });
-    
+  },
+  watch: {
+    $route: {
+      handler(newRoute) {
+        this.initUser();
+      },
+      deep: true
+    }
   }
 };
 </script>
