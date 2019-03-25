@@ -86,9 +86,10 @@ export default {
             try {
                 const user = await UserService.getById(userId);
                 commit({type: 'setUserToDisplay', user});
+                return true;
 
             } catch {
-                
+                return false;
             }
         },
 

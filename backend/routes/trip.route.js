@@ -21,6 +21,21 @@ module.exports = (app) => {
             })
     });
 
+    // Get trips by user Id 
+    app.get(`${BASE_URL}/user/:userId`, async (req,res) => {
+        const {userId} = req.params;
+        try {
+            const trips = await tripService.getByUserId(userId);
+            if (trips.length) res.json(trips);
+            else res.status(404).end('User has no trips');
+        } catch(err) {
+            console.log(err);
+            res.status(404).end('There was a problem');
+        }
+
+    });
+
+    // For further use: when user is an admin
     function checkAdmin(req, res, next) {
         if (!req.session.user || !req.session.user.isAdmin) return res.end('Not admin');
         next();

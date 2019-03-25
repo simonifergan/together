@@ -50,7 +50,7 @@ export default {
     },
     spotsLeft() {
       const {groupSize, members} = this.trip;
-      return groupSize - members.length - 1;
+      return groupSize - members.length;
 
     },
     firstThree() {
