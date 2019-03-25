@@ -66,7 +66,7 @@ export default {
     }
   },
   async created() {
-    if (this.filtersWithImages) return
+    if (this.filtersWithImages.length) return
     this.$store.dispatch({
       type: "getFilterImgs",
       filters: this.filters,
