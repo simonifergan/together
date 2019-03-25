@@ -2,7 +2,9 @@
   <div id="app" class="app-container">
     <main-header/>
     <!-- <user-msg /> -->
-    <router-view/>
+    <transition name="fade" mode="out-in">
+      <router-view/>
+    </transition>
     <div class="chat-container">
       <chat v-for="(chat,index) in chats" :chat="chat" :key="chat._id+index"/>
     </div>

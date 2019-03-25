@@ -10,6 +10,9 @@
       :user="user"
       @click.native="initChat(chat._id)"
     />
+    <footer v-if="!isExpanded">
+      <router-link to="/messages">See all messages</router-link>
+    </footer>
   </ul>
 </template>
 
@@ -37,7 +40,9 @@ export default {
     MessagePreview
   },
   computed: {
-  
+    isExpanded() {
+      return (this.$route.path === '/messages')
+    }
   },
   methods: {
     initChat(chatId) {
