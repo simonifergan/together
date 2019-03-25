@@ -6,8 +6,8 @@ export default {
     state: {
         trips: [],
         tripToDisplay: null,
-        activityFilters: null,
-        destinationFilters: null
+        activityFilters: [],
+        destinationFilters: []
     },
     mutations: {
         // trips section:
@@ -170,8 +170,6 @@ export default {
 
             } catch {
                 // rollback
-                console.log('rolback');
-                
                 commit({ type: 'toggleUserFromPendingList', userId: userIdToJoin })
             }
         },
@@ -212,15 +210,13 @@ export default {
                     }
                 })
             } catch {
-                // TODO
+                // TODO simon
             }
         },
         async userRequestToJoinTrip({ commit, getters, dispatch }) {
             const trip = JSON.parse(JSON.stringify(getters.tripToDisplay));
             const user = getters.loggedUser;
             if (trip.pending.some(alreadyPending => alreadyPending === user._id)) return;
-            // console.log(user._id)
-            // console.log(trip);
             trip.pending.push(user._id);
             commit({ type: 'toggleUserFromPendingList', userId: user._id });
             try {
@@ -235,13 +231,10 @@ export default {
                 })
                 // send to socket with userId and tripId
                 dispatch({ type: 'socketSendNotification', userId: updatedTrip.userId, payload: 'CAN YOU SEE ME BABA??' });
-                // console.log('Here I am, once again, torn into pieces, cant deny cant pretend, behind these hazel eyessssss');
             } catch {
-                // console.log('YOUR CODE SUCKS!!!');
                 commit({ type: 'toggleUserFromPendingList', userId: user._id });
             }
         },
-        // TODO : update on user's pendingIn
         async cancelTripJoinRequest({ commit, getters, dispatch }) {
             const trip = JSON.parse(JSON.stringify(getters.tripToDisplay));
             const user = getters.loggedUser;
@@ -259,9 +252,8 @@ export default {
                     }
                 })
                 commit({ type: 'toggleUserFromPendingList', userId: user._id });
-                console.log('Here I am, once again, torn into pieces, cant deny cant pretend, behind these hazel eyessssss');
             } catch {
-                console.log('YOUR CODE SUCKS!!!');
+                // TODO simon
             }
         },
         async searchTrips({ commit }, { searchQuery }) {
@@ -270,7 +262,6 @@ export default {
         },
         async getFilterImgs({commit}, {filterType, filters}) {
             const filterImgs = await Promise.all(filters.map(filter => TripService.getImgs(filter, filterType)))
-            // console.log(filters.map(filter => TripService.getImgs(filter, filterType)))
             if (filterType === 'activities') commit({type: 'setActivityFilters', filterImgs})
             else if (filterType === 'destinations') commit({type: 'setDestinationFilters', filterImgs})
         },
