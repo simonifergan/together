@@ -42,6 +42,8 @@ export default {
       this.$store.dispatch({ type: "getUserChats" });
       this.$store.dispatch({ type: "loadNotification" });
     }
+
+    this.$store.dispatch('checkFacebookUser');
   },
 };
 </script>

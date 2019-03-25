@@ -1,4 +1,5 @@
 import UserService from '@/services/UserService'
+import FacebookService from '@/services/FacebookService'
 
 export default {
     state: {
@@ -118,11 +119,35 @@ export default {
             const users = await UserService.getUsers(userIds)
             context.commit({ type: 'setUsersToDisplay', users });
         },
+
+
         async getUserForEdit(context, { userId }) {            
             const res = await UserService.getUsers([userId])
             const user = res[0]
             user.tripPrefs.activities = ['sports']
             return user
+        },
+
+        // SOCIAL MEDIA user behavior:
+        async checkFacebookUser({commit}) {
+            const userFBInfo = await FacebookService.getUserInfo();
+            if (!userFBInfo) return;
+            else {
+                // Prepare object for our database and decide whether to register or auth him
+                const {id, first_name, last_name, picture, email} = userFBInfo;
+                const user = {
+                    _id: id,
+                    firstname: first_name,
+                    lastname : last_name,
+                    profilePic: picture.data.url,
+                    email,
+                    isFBUser: true,
+                }
+                console.log(user);
+                commit({ type: 'setLoggedUser', user })
+                return true;
+            }
+
         }
     }
 }
