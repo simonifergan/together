@@ -122,6 +122,21 @@ export default {
             }
             return newTrip._id;
         },
+
+        // Get trips by User ID
+        async loadTripsByUserId({commit, getters}, {userId}) {
+            const backupTrips  = JSON.parse(JSON.stringify(getters.trips));
+            try {
+                const trips = await TripService.getByUserId(userId);
+                commit({type: 'loadTrips', trips});
+                return true;
+            } catch {
+                commit({type: 'loadTrips', trips: backupTrips});
+                return false;
+            }
+
+        },
+
         async removeTrip({ commit }, { trip }) {
             const msg = await TripService.remove(trip._id)
             commit({ type: 'removeTrip', tripId: trip._id })

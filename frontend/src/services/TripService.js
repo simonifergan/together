@@ -12,7 +12,8 @@ export default {
     save,
     remove,
     getEmpty,
-    getImgs
+    getImgs,
+    getByUserId,
     // getCategories
 }
 
@@ -23,6 +24,11 @@ const TRIP_API = (process.env.NODE_ENV !== 'development')
 async function query(searchQuery) {
     let queryStr = '?searchQuery=' + searchQuery
     const {data} = await axios.get(TRIP_API + queryStr);
+    return data;
+}
+
+async function getByUserId(id) {
+    const {data} = await axios.get(`${TRIP_API}/user/${id}`)
     return data;
 }
 
