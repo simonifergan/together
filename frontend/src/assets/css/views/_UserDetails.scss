@@ -7,4 +7,21 @@
             border: 3px solid #fff;
         }
     }
+    .user-trip-preview {
+        box-shadow: 0 0 1px 1px $box-shadow-gray;
+        h2 {
+            font-size: 1.125em;
+        }
+        .expand-container {
+            @include flex(row);
+            .pending-list, .member-list {
+                .user-item {
+                    padding: 10px 10px 10px 30px;
+                    .user-img {
+                        @include userImg(50px, 50px);
+                    }
+                }
+            }
+        }
+    }
 }
