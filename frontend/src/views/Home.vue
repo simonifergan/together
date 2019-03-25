@@ -6,7 +6,7 @@
         <div class="intro-form">
           <form @submit.prevent="search">
             <input type="text" placeholder="Anywhere" v-model="searchQuery">
-            <button type="submit">
+            <button type="submit" title="Search">
               <img src="@/assets/svg/search.svg">
             </button>
           </form>
