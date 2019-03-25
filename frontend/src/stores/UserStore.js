@@ -137,6 +137,7 @@ export default {
                 const {id, first_name, last_name, picture, email} = userFBInfo;
                 const user = {
                     _id: id,
+                    fbId: id,
                     firstname: first_name,
                     lastname : last_name,
                     profilePic: picture.data.url,

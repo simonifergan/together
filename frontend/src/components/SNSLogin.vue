@@ -1,17 +1,32 @@
 <template>
   <section>
-   <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-</fb:login-button>
+    <button @click.stop.prevent="fbLogin">FB LOGIN</button>
   </section>
 </template>
 
 <script>
-
 export default {
   methods: {
-    checkLoginState() {
-      console.log('hi');
+    success() {
+      this.$store.dispatch('checkFacebookUser')
+      .then(isAuth => {
+        this.$router.push(this.$route.path);
+      });
     },
+    fbLogin() {
+      let self = this;
+      FB.login(
+        function(response) {
+          if (response.status === "connected") {
+            self.success();
+          }
+        },
+        {
+          scope: "email",
+          return_scopes: true
+        }
+      );
+    }
   }
 };
 </script>
