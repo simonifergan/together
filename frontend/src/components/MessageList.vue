@@ -8,8 +8,12 @@
       :chat="chat"
       :key="chat._id + index + 3"
       :user="user"
+      v-show="chat.msgs.length"
       @click.native="initChat(chat._id)"
     />
+    <footer v-if="!isExpanded">
+      <router-link to="/messages">See all messages</router-link>
+    </footer>
   </ul>
 </template>
 
@@ -37,7 +41,9 @@ export default {
     MessagePreview
   },
   computed: {
-  
+    isExpanded() {
+      return (this.$route.path === '/messages')
+    }
   },
   methods: {
     initChat(chatId) {

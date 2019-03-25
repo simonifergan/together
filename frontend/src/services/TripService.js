@@ -13,7 +13,8 @@ export default {
     remove,
     getEmpty,
     getImgs,
-    getTrending
+    getTrending,
+    getByUserId,
     // getCategories
 }
 
@@ -29,6 +30,11 @@ async function getTrending() {
 async function query(searchQuery) {
     let queryStr = '?searchQuery=' + searchQuery
     const {data} = await axios.get(TRIP_API + queryStr);
+    return data;
+}
+
+async function getByUserId(id) {
+    const {data} = await axios.get(`${TRIP_API}/user/${id}`)
     return data;
 }
 

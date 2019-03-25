@@ -1,15 +1,14 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from './views/Home.vue'
-import TripDetails from '@/views/TripDetails.vue'
-import TripEdit from '@/views/TripEdit.vue'
-import LoginPage from '@/views/LoginPage.vue'
-import SignupPage from '@/views/SignupPage.vue'
-import SearchPage from '@/views/SearchPage.vue'
-import UserDetails from '@/views/UserDetails.vue'
-import EditProfile from '@/views/EditProfile.vue'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Home from './views/Home.vue';
+import TripDetails from '@/views/TripDetails.vue';
+import TripEdit from '@/views/TripEdit.vue';
+import SignupPage from '@/views/SignupPage.vue';
+import SearchPage from '@/views/SearchPage.vue';
+import UserDetails from '@/views/UserDetails.vue';
+import Messages from '@/views/Messages';
+import EditProfile from '@/views/EditProfile.vue';
 
-import AwesomeMap from '@/components/OurSuperAwesomeMap.vue';
 Vue.use(Router)
 
 export default new Router({
@@ -31,13 +30,8 @@ export default new Router({
     },
     {
       path: '/user/:userId',
-      name: 'userDetails',
+      name: 'UserDetails',
       component: UserDetails
-    },
-    {
-      path: '/login',
-      name: 'LoginPage',
-      component: LoginPage
     },
     {
       path: '/signup',
@@ -50,12 +44,15 @@ export default new Router({
       component: SearchPage
     },
     {
-      path: '/map',
-      component: AwesomeMap
+      path: '/edit-profile/:userId',
+      name: 'editProfile',
+      component: EditProfile
     },
     {
-      path: '/edit-profile/:userId',
-      component: EditProfile
-    }
+      path: '/messages',
+      name: 'Messages',
+      component: Messages
+    },
+    
   ]
 })

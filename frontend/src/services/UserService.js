@@ -9,6 +9,7 @@ export default {
     login,
     signup,
     logout,
+    getById,
     getEmptyUser,
     getLoggedUser,
     getUsers,
@@ -49,6 +50,11 @@ async function signup(newUser) {
 async function logout() {
     const {data} = await axios.post(API_USER + '/logout')
     StorageService.removeFromLocal(USER_KEY);
+    return data;
+}
+
+async function getById(id) {
+    const {data} = await axios.get(`${API_USER}/user/${id}`);
     return data;
 }
 

@@ -3,7 +3,8 @@ import UserService from '@/services/UserService'
 export default {
     state: {
         loggedUser: UserService.getLoggedUser(),
-        usersToDisplay: [],
+        usersToDisplay: [], // multiple users
+        userToDisplay: null, // single user
     },
     mutations: {
         setLoggedUser(state, { user }) {
@@ -22,6 +23,11 @@ export default {
         // USER LIST FOR: Pending list
         setUsersToDisplay(state, { users }) {
             state.usersToDisplay = users;
+        },
+
+        // ONE USER TO DISPLAY:
+        setUserToDisplay(state, {user}) {
+            state.userToDisplay = user;
         },
         toggleUserInUsersToDisplay(state, { user }) {
             console.log('toggleUserInUsersToDisplay', user._id)
@@ -43,6 +49,9 @@ export default {
         },
         userListToDisplay(state) {
             return state.usersToDisplay;
+        },
+        userToDisplay(state) {
+            return state.userToDisplay;
         }
 
     },
@@ -73,6 +82,17 @@ export default {
             commit({ type: 'setLoggedUser', user })
         },
 
+        async getUserById({commit}, {userId}) {
+            try {
+                const user = await UserService.getById(userId);
+                commit({type: 'setUserToDisplay', user});
+                return true;
+
+            } catch {
+                return false;
+            }
+        },
+
         async joinLeaveTripToUser({ commit, getters }, { userToTripId }) {
             console.log('here');
             
@@ -83,6 +103,7 @@ export default {
                 throw 'failed to update user';
             }
         },
+        
         // async leaveTripToUser({ commit, getters }, { tripId }) {
         //     const backupUserLoggedUser = JSON.parse(JSON.stringify(getters.loggedUser));
         //     commit({ type: 'leaveTripToUser', tripId });

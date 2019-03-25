@@ -5,6 +5,7 @@ const ObjectId = require('mongodb').ObjectId;
 module.exports = {
     query,
     getById,
+    getByUserId,
     add,
     update,
     remove,
@@ -210,6 +211,66 @@ async function getById(tripId) {
         return trip[0];
     } catch {
         return null;
+    }
+}
+
+async function getByUserId(id) {
+    const userId = new ObjectId(id);
+    try {
+        const db = await mongoService.connect();
+        const trips = await db.collection(tripsCollection).aggregate([
+            {
+                $match: { userId }
+            },
+            {
+                $lookup: {
+                    "from": usersCollection,
+                    "foreignField": "_id",
+                    "localField": "members",
+                    "as": "members",
+                  }
+            },
+            {
+                $project: {
+                    members: {
+                        password: 0,
+                        email: 0,
+                        tripPreferences: 0,
+                        pendingIn: 0,
+                        proposals: 0,
+                        tripPrefs: 0,
+                        birthdate: 0,
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    "from": usersCollection,
+                    "foreignField": "_id",
+                    "localField": "pending",
+                    "as": "pending",
+                  }
+            },
+            {
+                $project: {
+                    pending: {
+                        password: 0,
+                        email: 0,
+                        tripPreferences: 0,
+                        pendingIn: 0,
+                        proposals: 0,
+                        tripPrefs: 0,
+                        birthdate: 0,
+                    }
+                }
+            },
+           
+        ])
+            .sort({createdAt: -1}).toArray();
+        return trips;
+        
+    } catch {
+        throw 'Could not connect to Database';
     }
 }
 
