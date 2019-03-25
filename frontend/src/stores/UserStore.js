@@ -121,6 +121,7 @@ export default {
         async getUserForEdit(context, { userId }) {            
             const res = await UserService.getUsers([userId])
             const user = res[0]
+            user.tripPrefs.activities = ['sports']
             return user
         }
     }

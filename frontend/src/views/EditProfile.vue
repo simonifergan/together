@@ -45,17 +45,18 @@
                 </el-select>
             </label><br>
             <h2>Activity Preferences</h2>
-            <label>Art
-            <el-checkbox :checked="true"></el-checkbox>
-            </label>
-
+            <activity-prefs v-model="user.tripPrefs.activities" />
             <button type="submit">Save</button>
         </form>
     </section>
 </template>
 
 <script>
+import ActivityPrefs from '../components/ActivityPrefs'
 export default {
+    components: {
+        ActivityPrefs
+    },
     name: 'EditProfile',
     data() {
         return {
