@@ -1,0 +1,7 @@
+.user-details {
+    .top-fold {
+        .user-img {
+            @include userImg(100px, 100px);
+        }
+    }
+}

@@ -23,7 +23,7 @@
           <a href="#">Account</a>
           <a href="#">Friends</a>
           <a href="#">My trips</a>
-          <a href="#" @click="logout">Log out</a>
+          <a @click="logout">Log out</a>
         </div>
       </div>
     </nav>
