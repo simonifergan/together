@@ -14,12 +14,8 @@
       </div>
     </header>
     <article class="article-filters">
-      <keep-alive>
         <filter-list v-if="trips.length" :type="'destinations'" :filters="destinations"/>
-      </keep-alive>
-      <keep-alive>
         <filter-list v-if="trips.length" :type="'activities'" :filters="activities"/>
-      </keep-alive>
     </article>
     <article class="article-trips">
       <trip-list :trips="trips" title="Trips you might like"/>

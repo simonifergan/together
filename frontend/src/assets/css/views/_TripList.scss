@@ -1,15 +1,17 @@
 .trip-list {
     padding: 20px;
     overflow: hidden;
-    @include flex(column);
+    @include flex(column, center, center);
+    margin-top: 20px;
     h2 {
+        align-self: flex-start;
         font-weight: 1000;
-        margin: 30px 0 30px 5px;
-        font-size: 1.8em;
+        margin: 0 0 30px 5px;
+        font-size: 1.2em;
     }
     .trip-items {
         @include flex();
-        width: 250px;
+        width: 1075px;
         .trip-preview {
             @include flex(column);
             font-family: $font-open-sans;

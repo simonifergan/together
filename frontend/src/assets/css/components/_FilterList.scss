@@ -6,13 +6,13 @@
     @include flex(column, flex-start, center);
     h2 {
         font-weight: 1000;
-        margin: 0px 0 30px 5px;
+        margin: 0 0 30px 5px;
         font-size: 1.2em;
         align-self: flex-start;
     }
     .filters-container {
         position: relative;
-        width: 860px;
+        width: 1080px;
         height: 260px;
         .inner-container {
             position: relative;
@@ -21,15 +21,23 @@
             width: 100%;
         }
         button {
+            background-color: #ffffff;
+            // border: 0.5px solid #333344;
+            border: none;
+            box-shadow: 0 0 2px 0.5px black;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            font-size: 1.2em;
             z-index: 1;
             top: 50%;
             transform: translateY(-50%);
             position: absolute;
             &:first-of-type {
-                left: -5px;
+                left: -24px;
             }
             &:last-of-type {
-                right: -5px;
+                right: -24px;
             }
         }
         .filter-previews {

@@ -2,13 +2,13 @@
   <ul class="filter-list">
     <h2>{{(type === 'destinations')? 'Hot locations' : 'Recommended activities'}}</h2>
     <div class="filters-container">
-      <button @click="moveSlide('-')">left</button>
+      <button @click="moveSlide('-')"><i class="fas fa-chevron-left"></i></button>
       <div class="inner-container">
         <ul class="filter-previews" :style="pagination">
           <filter-preview v-for="filter in filtersWithImages" :key="filter.title" :filter="filter"/>
         </ul>
       </div>
-      <button @click="moveSlide('+')">right</button>
+      <button @click="moveSlide('+')"><i class="fas fa-chevron-right"></i></button>
     </div>
   </ul>
 </template>
@@ -49,14 +49,14 @@ export default {
       return { left: this.slidePos };
     },
     itemsPerPage() {
-      return 4; // TODO : fit to client width
+      return 5; // TODO : fit to client width
     }
   },
   methods: {
     moveSlide(diff) {
       if (
         diff === "+" &&
-        this.page <= this.filters.length - this.itemsPerPage - 2
+        !(this.page === this.filtersWithImages.length - this.itemsPerPage)
       ) {
         this.page = this.page + 1;
       } else if (diff === "-" && this.page > 0) {
