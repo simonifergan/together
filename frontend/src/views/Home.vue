@@ -1,7 +1,7 @@
 <template>
   <section class="home">
     <header>
-      <h1>Reaching your destination with the right people fot you</h1>
+      <h1>Reaching your destination<br> with the right people for you</h1>
       <div class="intro-form">
         <h2>Where do you want to go?</h2>
         <form @submit.prevent="search">

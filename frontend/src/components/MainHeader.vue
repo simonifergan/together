@@ -7,10 +7,10 @@
       <router-link to="/signup" v-if="!user">Sign up</router-link>
       <div class="msgs-container" v-else>
         <a>Messages</a>
-        <message-list 
+        <!-- <message-list 
           :chats="chats"
           :user="user" 
-        />
+        /> -->
       </div>
       <div class="login-container">
         <router-link :to="currentRoute + '#login'" v-if="!user">Log in</router-link>
