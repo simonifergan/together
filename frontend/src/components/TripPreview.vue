@@ -5,7 +5,7 @@
     </div>
     <p>{{trip.user.firstname}} {{trip.user.lastname}}</p>
     <p>{{trip.title}}</p>
-    <p>{{trip.startsAt}}, {{trip.duration}}</p>
+    <p>{{tripDuration}}</p>
     <div class="members-container" v-if="trip.members.length > 0">
       <div 
         class="member-img"
@@ -55,6 +55,11 @@ export default {
     },
     firstThree() {
       return this.trip.members.slice(0, 3);
+    },
+    tripDuration() {
+      const {startsAt, duration} = this.trip;
+      return '';
+
     }
   }
 };
