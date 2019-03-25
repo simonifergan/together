@@ -7,6 +7,7 @@ import LoginPage from '@/views/LoginPage.vue'
 import SignupPage from '@/views/SignupPage.vue'
 import SearchPage from '@/views/SearchPage.vue'
 import UserDetails from '@/views/UserDetails.vue'
+import EditProfile from '@/views/EditProfile.vue'
 
 import AwesomeMap from '@/components/OurSuperAwesomeMap.vue';
 Vue.use(Router)
@@ -51,7 +52,10 @@ export default new Router({
     {
       path: '/map',
       component: AwesomeMap
+    },
+    {
+      path: '/edit-profile/:userId',
+      component: EditProfile
     }
-    
   ]
 })

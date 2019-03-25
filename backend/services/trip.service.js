@@ -8,11 +8,81 @@ module.exports = {
     add,
     update,
     remove,
+    getTrending
 }
 
 const tripsCollection = 'trips';
 const usersCollection = 'users';
 
+async function getTrending() {
+    try {
+        const db = await mongoService.connect()
+        const trips = await db.collection(tripsCollection).aggregate([
+            {
+                $addFields: {
+                    trendGrade: { $add: [{ $sqrt: { $divide: [{ $size: '$members' }, '$groupSize'] } }, { $divide: [1, { $subtract: ['$groupSize', { $size: '$members' }] }] }, { $divide: [{ $size: '$pending' }, 5] }] }
+                    // trendGrade: { $divide: [{$size: '$members'}, '$groupSize'] }
+                }
+            },
+            {
+                $lookup:
+                {
+                    from: usersCollection,
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'user'
+                }
+            },
+            {
+                $project: {
+                    user: {
+                        _id: 0,
+                        password: 0,
+                        email: 0,
+                        tripPreferences: 0,
+                        pendingIn: 0,
+                        proposals: 0,
+                        tripPrefs: 0,
+                        birthdate: 0,
+                    },
+                },
+            },
+            {
+                $unwind: '$user'
+            },
+            {
+                $lookup: {
+                    "from": usersCollection,
+                    "foreignField": "_id",
+                    "localField": "members",
+                    "as": "members",
+                }
+            },
+            {
+                $project: {
+                    members: {
+                        password: 0,
+                        email: 0,
+                        tripPreferences: 0,
+                        pendingIn: 0,
+                        proposals: 0,
+                        tripPrefs: 0,
+                        birthdate: 0,
+                    }
+                }
+            },
+            {
+                $sort: { trendGrade: -1 }
+            },
+            {
+                $limit: 10
+            }
+        ]).toArray()
+        return trips
+    } catch {
+
+    }
+}
 
 async function query(searchQuery) {
     try {
@@ -52,7 +122,7 @@ async function query(searchQuery) {
                     "foreignField": "_id",
                     "localField": "members",
                     "as": "members",
-                  }
+                }
             },
             {
                 $project: {
@@ -69,12 +139,11 @@ async function query(searchQuery) {
             }
         ]).toArray()
         const regex = new RegExp(searchQuery, 'i')
-        // console.log('regex', regex)
         return trips.filter(trip => {
             return trip.destinations.some(destination => Object.values(destination).some(value => regex.test(value))) ||
-            regex.test(trip.desc) ||
-            regex.test(trip.title) ||
-            trip.activities.some(activity => regex.test(activity))
+                regex.test(trip.desc) ||
+                regex.test(trip.title) ||
+                trip.activities.some(activity => regex.test(activity))
         });
     } catch {
 
@@ -95,7 +164,7 @@ async function getById(tripId) {
                     "foreignField": "_id",
                     "localField": "members",
                     "as": "members",
-                  }
+                }
             },
             {
                 $project: {

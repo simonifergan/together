@@ -94,9 +94,13 @@ export default {
         //     }
         // },
         async getUsers(context, { userIds }) {
-            console.log(userIds)
             const users = await UserService.getUsers(userIds)
             context.commit({ type: 'setUsersToDisplay', users });
+        },
+        async getUserForEdit(context, { userId }) {            
+            const res = await UserService.getUsers([userId])
+            const user = res[0]
+            return user
         }
     }
 }

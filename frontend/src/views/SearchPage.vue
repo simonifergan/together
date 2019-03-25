@@ -29,7 +29,7 @@ export default {
   },
   created() {
     this.$store.dispatch({
-      type: "searchTrips",
+      type: 'searchTrips',
       searchQuery: this.searchQuery
     });
   }

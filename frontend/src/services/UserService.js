@@ -53,8 +53,9 @@ async function logout() {
 }
 
 async function getUsers(userIds) {
+    
     const query = {userIds}
-    const {data} = await axios.post(API_USER + '/user', query)
+    const {data} = await axios.post(API_USER + '/user', query)    
     return data
 }
 

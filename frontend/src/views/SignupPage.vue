@@ -13,7 +13,7 @@
             <label for="">Last Name
                 <el-input v-model="newUser.lastname" placeholder="Last Name" />
             </label>
-            <label for="">Birth Date<br>
+            <!-- <label for="">Birth Date<br>
                 <el-date-picker
                     v-model="newUser.birthDate"
                     type="date"
@@ -27,7 +27,7 @@
                     <el-option value="Female">Female</el-option>
                     <el-option value="null">Rather not say</el-option>
                 </el-select>
-            </label><br>
+            </label><br> -->
             <button type="submit">Sign Up</button>
         </form>
     </section>

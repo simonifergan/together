@@ -12,13 +12,19 @@ export default {
     save,
     remove,
     getEmpty,
-    getImgs
+    getImgs,
+    getTrending
     // getCategories
 }
 
 const TRIP_API = (process.env.NODE_ENV !== 'development')
     ? '/api/trip'
     : '//localhost:3003/api/trip';
+
+async function getTrending() {
+    const {data} = await axios.get(TRIP_API + '/trending');
+    return data;
+}
 
 async function query(searchQuery) {
     let queryStr = '?searchQuery=' + searchQuery

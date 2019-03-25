@@ -89,8 +89,8 @@ export default {
     },
     actions: {
         // TODO: implement optimistic updates
-        async loadTrips({ commit }) {
-            const trips = await TripService.query('')
+        async getTrendingTrips({ commit }) {
+            const trips = await TripService.getTrending()
             commit({ type: 'loadTrips', trips })
         },
         async loadTrip({ commit }, { tripId }) {

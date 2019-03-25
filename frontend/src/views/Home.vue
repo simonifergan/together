@@ -11,8 +11,12 @@
       </div>
     </header>
     <article class="article-filters">
-      <filter-list v-if="trips.length" :type="'destinations'" :filters="destinations"/>
-      <filter-list v-if="trips.length" :type="'activities'" :filters="activities"/>
+      <keep-alive>
+        <filter-list v-if="trips.length" :type="'destinations'" :filters="destinations"/>
+      </keep-alive>
+      <keep-alive>
+        <filter-list v-if="trips.length" :type="'activities'" :filters="activities"/>
+      </keep-alive>
     </article>
     <article class="article-trips">
       <trip-list :trips="trips" title="Trips you might like"/>
@@ -66,7 +70,7 @@ export default {
     if (!window.google) {
       await this.$store.dispatch({type: 'connectToGoogle'})
     }    
-    this.$store.dispatch({ type: "loadTrips" });
+    this.$store.dispatch({ type: 'getTrendingTrips' });
   }
 };
 </script>
