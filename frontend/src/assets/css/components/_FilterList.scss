@@ -3,29 +3,35 @@
     padding: 20px;
     overflow: hidden;
     align-items: center;
-    @include flex(column);
+    @include flex(column, flex-start, center);
     h2 {
         font-weight: 1000;
         margin: 0px 0 30px 5px;
         font-size: 1.2em;
-    }
-    button {
-        z-index: 1;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        &:first-of-type {
-            left: -10px;
-        }
-        &:last-of-type {
-            right: 0;
-        }
+        align-self: flex-start;
     }
     .filters-container {
         position: relative;
         width: 860px;
         height: 260px;
-        overflow: hidden;
+        .inner-container {
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+        }
+        button {
+            z-index: 1;
+            top: 50%;
+            transform: translateY(-50%);
+            position: absolute;
+            &:first-of-type {
+                left: -5px;
+            }
+            &:last-of-type {
+                right: -5px;
+            }
+        }
         .filter-previews {
             @include flex();
             position: absolute;
