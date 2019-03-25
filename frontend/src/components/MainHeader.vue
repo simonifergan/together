@@ -11,7 +11,7 @@
           v-show="isShowMsgs" 
           :chats="chats"
           :user="user" 
-        /> -->
+        />
       </div>
       <div class="login-container">
         <router-link :to="currentRoute + '#login'" v-if="!user">Log in</router-link>

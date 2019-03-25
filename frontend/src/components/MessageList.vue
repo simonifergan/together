@@ -8,6 +8,7 @@
       :chat="chat"
       :key="chat._id + index + 3"
       :user="user"
+      v-show="chat.msgs.length"
       @click.native="initChat(chat._id)"
     />
     <footer v-if="!isExpanded">
