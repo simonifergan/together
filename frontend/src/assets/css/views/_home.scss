@@ -1,12 +1,11 @@
 .home {
     header {
-        // position: relative;
-        height: 100vh;
+        height: calc(100vh - 110px);
         background-image: 
         linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('../img/home/background-header.jpeg');
         background-color: black;
         background-size: cover;
-        background-position: top;
+        background-position: center;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -23,7 +22,7 @@
                 letter-spacing: 2px;
                 font-weight: 600;
                 color: #fff;
-                margin-bottom: 20px;
+                margin-bottom: 40px;
             }
             .intro-form {
                 font-family: $font-ubuntu-light;
@@ -34,8 +33,11 @@
                     display: flex;
                     max-width: 100%;
                     input {
+                        @include input();
+                        border: none;
+                        border-radius: 2px;
+                        padding: 15px;
                         width: 100%;
-                        @include input()
                     }
                     button {
                         position: absolute;
