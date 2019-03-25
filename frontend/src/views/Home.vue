@@ -1,13 +1,16 @@
 <template>
   <section class="home">
     <header>
-      <h1>Reaching your destination with the right people for you</h1>
-      <div class="intro-form">
-        <h2>Where would you like to go?</h2>
-        <form @submit.prevent="search">
-          <input type="text" placeholder="Anywhere" v-model="searchQuery">
-          <button type="submit">Search</button>
-        </form>
+      <div class="centered-content">
+        <h1>Reaching your destination with the right people for you.</h1>
+        <div class="intro-form">
+          <form @submit.prevent="search">
+            <input type="text" placeholder="Anywhere" v-model="searchQuery">
+            <button type="submit">
+              <img src="@/assets/svg/search.svg">
+            </button>
+          </form>
+        </div>
       </div>
     </header>
     <article class="article-filters">

@@ -38,6 +38,11 @@
     src: url('../fonts/Ubuntu/Ubuntu-Bold.ttf');
 }
 
+@font-face {
+    font-family: 'Roboto Bold';
+    src: url('../fonts/Roboto/Roboto-Bold.ttf');
+}
+
 
 $font-pacifico: 'Pacifico', cursive;
 $font-open-sans: 'Open Sans', sans-serif;
@@ -48,3 +53,4 @@ $font-ubuntu: 'Ubuntu', sans-serif;
 $font-ubuntu-light: 'Ubuntu Light', sans-serif;
 $font-ubuntu-bold: 'Ubuntu Bold', sans-serif;
 $font-ubuntu-s-bold: 'Ubuntu Semi Bold', sans-serif;
+$font-roboto-bold: 'Roboto Bold';

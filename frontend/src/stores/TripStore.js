@@ -244,13 +244,21 @@ export default {
         // TODO : update on user's pendingIn
         async cancelTripJoinRequest({ commit, getters, dispatch }) {
             const trip = JSON.parse(JSON.stringify(getters.tripToDisplay));
-            const userId = getters.loggedUser._id;
-            const idx = trip.pending.findIndex(alreadyPending => alreadyPending === userId);
+            const user = getters.loggedUser;
+            const idx = trip.pending.findIndex(alreadyPending => alreadyPending === user._id);
             if (idx === -1) return;
             trip.pending.splice(idx, 1);
             try {
                 const updatedTrip = await TripService.save(trip);
-                commit({ type: 'toggleUserFromPendingList', userId });
+                const updatedUser = await dispatch({
+                    type: 'joinLeaveTripToUser',
+                    userToTripId: {
+                        tripId: updatedTrip._id,
+                        user,
+                        action: 'remove from pending'
+                    }
+                })
+                commit({ type: 'toggleUserFromPendingList', userId: user._id });
                 console.log('Here I am, once again, torn into pieces, cant deny cant pretend, behind these hazel eyessssss');
             } catch {
                 console.log('YOUR CODE SUCKS!!!');

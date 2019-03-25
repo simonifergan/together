@@ -1,52 +1,57 @@
 .home {
     header {
-        position: relative;
+        // position: relative;
         height: 100vh;
         background-image: 
         linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('../img/home/background-header.jpeg');
         background-color: black;
         background-size: cover;
         background-position: top;
-        h1 {
-            font-family: $font-ubuntu;
-            position: absolute;
-            top: 19%;
-            right: 15%;
-            font-size: 3em;
-            line-height: 1.3;
-            letter-spacing: 2px;
-            max-width: 500px;
-            font-weight: 600;
-            color: #fff;
-        }
-        .intro-form {
-            font-family: $font-ubuntu-bold;
-            h2 {
-                font-size: 1.5em;
-                margin-bottom: 30px;
-                color:#484848;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-left: 20px;
+        padding-right: 20px;
+        .centered-content {
+            max-width: 650px;
+            width: 100%;
+            h1 {
+                font-family: $font-roboto-bold;
+                font-size: 36px;
+                line-height: 48px;
+                line-height: 1.3;
+                letter-spacing: 2px;
+                font-weight: 600;
+                color: #fff;
             }
-            form {
-                input {
-                    width: 80%;
-                    @include input()
+            .intro-form {
+                font-family: $font-ubuntu-light;
+                box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+                height: 150px;
+                color: #484848;
+                form {
+                    display: flex;
+                    max-width: 100%;
+                    input {
+                        width: 100%;
+                        @include input()
+                    }
+                    button {
+                        position: absolute;
+                        right: 40px;
+                        background: none;
+                        border: none;
+                        cursor: pointer;
+                        position: relative;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    @include flex(row, space-between, center)
                 }
-                button {
-                    @include button()
-                }
-                @include flex(row, space-between, center)
+                
             }
-            font-family: $font-ubuntu-light;
-            background: #ffffff;
-            border-radius: 4px;
-            padding: 32px;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.12);
-            width: 400px;
-            height: 150px;
-            position: absolute;
-            top: 50%;
-            left: 10%;
-            color: #484848;
         }
     }
     article {
