@@ -21,7 +21,7 @@
         :class="{'not-user': (msg.sender !== loggedUser._id)}"
         v-for="(msg, index) in msgs"
         :key="index"
-      >{{msg.txt}}</li>
+      ><span>{{msg.txt}}</span></li>
     </ul>
     <form @submit.prevent="send">
       <input

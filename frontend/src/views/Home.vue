@@ -1,19 +1,22 @@
 <template>
   <section class="home">
     <header>
-      <h1>Reaching your destination<br> with the right people for you</h1>
+      <h1>Reaching your destination with the right people for you</h1>
       <div class="intro-form">
-        <h2>Where do you want to go?</h2>
+        <h2>Where would you like to go?</h2>
         <form @submit.prevent="search">
-          <input type="text" placeholder="The Sky Is The Limit" v-model="searchQuery">
+          <input type="text" placeholder="Anywhere" v-model="searchQuery">
           <button type="submit">Search</button>
         </form>
       </div>
     </header>
-    <filter-list v-if="trips.length" :type="'destinations'" :filters="destinations"/>
-    <filter-list v-if="trips.length" :type="'activities'" :filters="activities"/>
-    <trip-list :trips="trips" title="Trips you might like"/>
-    <upload-image />
+    <article class="article-filters">
+      <filter-list v-if="trips.length" :type="'destinations'" :filters="destinations"/>
+      <filter-list v-if="trips.length" :type="'activities'" :filters="activities"/>
+    </article>
+    <article class="article-trips">
+      <trip-list :trips="trips" title="Trips you might like"/>
+    </article>
   </section>
 </template>
 
@@ -21,14 +24,12 @@
 // CMPS:
 import TripList from "@/components/TripList";
 import FilterList from "@/components/FilterList";
-import UploadImage from '@/components/UploadImage';
 
 export default {
   name: "home",
   components: {
     TripList,
     FilterList,
-    UploadImage
   },
   data() {
     return {

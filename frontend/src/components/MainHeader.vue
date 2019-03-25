@@ -6,8 +6,9 @@
       <a href="#">About</a>
       <router-link to="/signup" v-if="!user">Sign up</router-link>
       <div class="msgs-container" v-else>
-        <a>Messages</a>
-        <!-- <message-list 
+        <a @click.stop="showMsgs">Messages</a>
+        <message-list
+          v-show="isShowMsgs" 
           :chats="chats"
           :user="user" 
         /> -->
@@ -25,7 +26,6 @@
           <a href="#" @click="logout">Log out</a>
         </div>
       </div>
-      <!-- <a href="#">Log out</a> -->
     </nav>
   </header>
 </template>
@@ -43,7 +43,8 @@ export default {
   data() {
     return {
       isHome: true,
-      isShowDropdown: false
+      isShowDropdown: false,
+      isShowMsgs: false,
     };
   },
   methods: {
@@ -54,18 +55,42 @@ export default {
       } catch {}
     },
     closeDropdown() {
-      console.log("alive?");
       this.isShowDropdown = false;
       document
         .querySelector("#app")
         .removeEventListener("click", this.closeDropdown);
     },
     showDropdown() {
-      console.log("activate");
+       if (this.isShowMsgs) {
+        this.closeMsgs();
+      }
+      if (this.isShowDropdown) {
+        this.closeDropdown();
+        return;
+      }
       this.isShowDropdown = true;
       document
         .querySelector("#app")
         .addEventListener("click", this.closeDropdown);
+    },
+    closeMsgs() {
+      this.isShowMsgs = false;
+      document
+        .querySelector("#app")
+        .removeEventListener("click", this.closeMsgs);
+    },
+    showMsgs() {
+      if (this.isShowDropdown) {
+        this.closeDropdown();
+      }
+      if (this.isShowMsgs) {
+        this.closeMsgs();
+        return;
+      }
+      this.isShowMsgs = true;
+      document
+        .querySelector("#app")
+        .addEventListener("click", this.closeMsgs);
     }
   },
   created() {

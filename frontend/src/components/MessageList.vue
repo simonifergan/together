@@ -1,5 +1,8 @@
 <template>
   <ul class="msgs-dropdown">
+    <header>
+      <!-- TODO: 2 buttons for group chats -->
+    </header>
     <message-preview
       v-for="(chat, index) in chats"
       :chat="chat"
