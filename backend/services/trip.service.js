@@ -19,8 +19,138 @@ module.exports = {
 const tripsCollection = 'trips';
 const usersCollection = 'users';
 
-async function getRecommended() {
+async function getRecommended(prefs) {
+    const gender = prefs.gender
+    var minAge
+    var maxAge
+    switch (prefs.age) {
+        case 1:
+            minAge = 18
+            maxAge = 24
+            break;
+        case 2:
+            minAge = 24
+            maxAge = 30
+            break;
+        case 3:
+            minAge = 30
+            maxAge = 40
+            break;
+        case 4:
+            minAge = 40
+            maxAge = 99
+            break;
+    }
 
+    const activities = prefs.activities
+    try {
+        const db = await mongoService.connect()
+
+        const trips = await db.collection(tripsCollection).aggregate([
+            {
+                $lookup:
+                {
+                    from: usersCollection,
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'user'
+                }
+            },
+            {
+                $project: {
+                    user: {
+                        _id: 0,
+                        password: 0,
+                        email: 0,
+                        tripPreferences: 0,
+                        pendingIn: 0,
+                        proposals: 0,
+                        tripPrefs: 0,
+                        birthdate: 0,
+                    },
+                },
+            },
+            {
+                $unwind: '$user'
+            },
+            {
+                $addFields: {
+
+                    matchGrade: {
+                        $add: [
+                            {
+                                $reduce: {
+                                    input: activities,
+                                    initialValue: 0,
+                                    in: {
+                                        $cond: {
+                                            if: {
+                                                $in: ['$$this', '$activities']
+                                            },
+                                            then: { $add: ['$$value', 0.1] },
+                                            else: { $add: ['$$value', 0] }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                $cond: {
+                                    if: {
+                                        $eq: [gender, '$user.gender']
+                                    },
+                                    then: 1,
+                                    else: 0
+                                }
+                            },
+                            {
+                                $cond: {
+                                    if: {
+                                        $and: [
+                                            { lte: ['$user.age', maxAge] },
+                                            { gte: ['$user.age', minAge] }
+                                        ]
+                                    },
+                                    then: 1,
+                                    else: 0
+                                }
+                            },
+                        ]
+                    }
+                }
+            },
+
+            {
+                $lookup: {
+                    "from": usersCollection,
+                    "foreignField": "_id",
+                    "localField": "members",
+                    "as": "members",
+                }
+            },
+            {
+                $project: {
+                    members: {
+                        password: 0,
+                        email: 0,
+                        tripPreferences: 0,
+                        pendingIn: 0,
+                        proposals: 0,
+                        tripPrefs: 0,
+                        birthdate: 0,
+                    }
+                }
+            },
+            {
+                $sort: { matchGrade: -1 }
+            },
+            {
+                $limit: 10
+            }
+        ]).toArray()
+        return trips
+    } catch {
+
+    }
 }
 
 async function getTrending() {
@@ -361,7 +491,7 @@ async function add(trip) {
 
     } catch {
         // TODO: Could not create chat
-    } 
+    }
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).insertOne(trip))
         .then(mongoRes => {
@@ -379,10 +509,12 @@ function update(trip) {
     const pending = [...trip.pending];
     const userId = trip.userId;
     const chatMembers = [...(trip.members.map(member => member._id)), userId];
+    const chatId = trip.chatId;
     trip._id = new ObjectId(trip._id);
     trip.userId = new ObjectId(trip.userId);
     trip.members = trip.members.map(member => new ObjectId(member._id));
     trip.pending = trip.pending.map(pendingUser => new ObjectId(pendingUser));
+    trip.chatId = new ObjectId(chatId);
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).updateOne({ _id: trip._id }, { $set: trip }))
         .then(async mongoRes => {
@@ -390,6 +522,7 @@ function update(trip) {
             trip.userId = userId
             trip.members = members;
             trip.pending = pending;
+            trip.chatId = chatId;
             const res = await chatService.updateTripChat(trip.chatId, chatMembers);
 
             return trip;

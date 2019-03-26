@@ -1,18 +1,18 @@
 <template>
-  <li class="msg-preview" >
+  <li class="msg-preview" :title="(chat.trip)? chat.trip.title: chattingWith[0]">
     <div
       class="user-img"
-      v-for="(pic, idx) in profilePics"
+      v-for="(pic) in profilePics"
       :key="pic"
       :style="{'background-image': `url(${pic})`}"
-      :title="chattingWith[idx].firstname"
     />
     <div
       class="msg-content"
       v-for="(user, index) in chattingWith"
       :key="user._id+index"
     >
-      <h4>{{`${user.firstname} ${user.lastname}`}}</h4>
+      <h4 v-if="!chat.trip">{{`${user.firstname} ${user.lastname}`}}</h4>
+      <h4 v-else>{{chat.trip.title}}</h4>
       <div v-if="lastMsg">{{lastSender}}&nbsp;{{lastMsg.txt}}</div>
     </div>
     <span v-if="lastMsg" class="sent-at">
