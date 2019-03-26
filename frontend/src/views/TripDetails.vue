@@ -1,17 +1,6 @@
 <template>
   <section v-if="trip" class="trip-details">
-    <button
-      class="btn-join-trip"
-      @click="joinLeaveTrip"
-      v-if="!loggedInUser || trip.userId !== loggedInUser._id"
-    >{{whoIsUser}}</button>
-
     <div class="user-section">
-      <!-- {{trip}} -->
-      <p class="likes-count">
-        <i class="fas fa-heart"></i>
-        <span>&nbsp;({{this.trip.user.likes.length}})</span>
-      </p>
       <div class="profile-img" :style="profilePic"/>
       <h2>{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</h2>
       <h3>{{trip.user.birthdate | calcAge}}, {{trip.user.from | countryCodeToName}}</h3>
@@ -26,15 +15,46 @@
         </button>
 
         <!-- TODO: on click - update likes (toggle likes) -->
-        <button :title="'Like ' + trip.user.firstname">
-          <i class="far fa-heart"></i>
-        </button>
+        <p class="likes-count">
+          <button :title="'Like ' + trip.user.firstname">
+            <i :class="isLike"></i>
+          </button>
+          <span>&nbsp;({{this.trip.user.likes.length}})</span>
+        </p>
       </div>
     </div>
 
-    <div class="trip-members">
+    <div class="trip-section">
+      <div class="trip-header">
+        <h1>{{trip.title}}</h1>
+        <button
+          class="btn-join-trip"
+          @click="joinLeaveTrip"
+          v-if="!loggedInUser || trip.userId !== loggedInUser._id"
+        >{{whoIsUser}}</button>
+      </div>
+      <p class="trip-desc">{{trip.desc}}</p>
+      <div class="trip-time">
+        <i class="far fa-calendar-alt"></i>
+        <p>On {{trip.startsAt | monthAndYearName}}, for {{trip.duration}}</p>
+      </div>
+      <div class="trip-dest">
+        <i class="fas fa-globe-europe"></i>
+        <!-- TODO -->
+        <p>Nis, Paris in France</p>
+      </div>
+      <div class="trip-activities">
+        <div v-for="(activity, idx) in trip.activities" :key="idx">{{activity}}</div>
+      </div>
+
+      <div class="map">
+        <our-super-awesome-map :enable="false" :value="trip.destinations"/>
+      </div>
+    </div>
+
+    <div class="trip-users">
       <h3>Group members:</h3>
-      <ul>
+      <ul class="trip-members">
         <userPreview v-for="user in trip.members" :key="user._id" :user="user"/>
       </ul>
       <pending-list
@@ -44,12 +64,6 @@
         v-if="loggedInUser && loggedInUser._id === trip.userId"
       />
     </div>
-
-    <!-- <p class="trip-desc">{{trip.desc}}</p>
-    <our-super-awesome-map :enable="false" :value="trip.destinations"/>
-    <div class="comments">
-      <h3>Comments</h3>
-    </div>-->
   </section>
 </template>
 
@@ -84,8 +98,6 @@ export default {
     initTrip() {
       const { tripId } = this.$route.params;
       if (!this.trip || tripId !== this.trip._id) {
-        console.log("dispatch");
-
         this.$store.dispatch({ type: "loadTrip", tripId });
       }
     },
@@ -135,6 +147,14 @@ export default {
       ) {
         return "Cancel request";
       } else return "Ask to join";
+    },
+    isLike() {
+      let classKey = this.trip.user.likes.some(
+        userId => userId === this.loggedInUser._id
+      )
+        ? "fas fa-heart"
+        : "far fa-heart";
+      return { [classKey]: true };
     }
   },
   watch: {
