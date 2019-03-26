@@ -53,7 +53,7 @@
     </div>
 
     <div class="trip-users">
-      <h3 v-if="trip.pending.length > 0 && trip.user._id === this.loggedInUser._id">Pending:</h3>
+      <h3 v-if="loggedInUser && trip.pending.length > 0 && trip.user._id === loggedInUser._id">Pending:</h3>
       <pending-list
         @requestPendingUsers="requestPendingUsers"
         @requestApproved="requestApproved"
@@ -64,7 +64,7 @@
       <div class="btn-group-chat">
         <button
           @click="initGroupChat(trip.chatId)"
-          v-if="isUserMember || loggedInUser._id === trip.userId"
+          v-if="isUserMember || (loggedInUser && loggedInUser._id === trip.userId)"
           :title="'Chat with group members'">
             <i class="far fa-comments"></i>
         </button>
@@ -153,7 +153,7 @@ export default {
     },
     whoIsUser() {
       if (!this.loggedInUser) return "Ask to join";
-      if (this.isUserMember) return "Leave";
+      else if (this.isUserMember) return "Leave";
       else if (
         this.loggedInUser && this.trip.pending.some(userId => userId === this.loggedInUser._id)
       ) {
