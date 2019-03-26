@@ -1,40 +1,40 @@
 <template>
-  <div>
+  <div class="activity-prefs">
     <label>
-      Art
       <el-checkbox v-model="activities.art"></el-checkbox>
+      Art
     </label>
     <label>
-      Beach
       <el-checkbox v-model="activities.beach"></el-checkbox>
+      Beach
     </label>
     <label>
-      Food
       <el-checkbox v-model="activities.food"></el-checkbox>
+      Food
     </label>
     <label>
-      Hiking
       <el-checkbox v-model="activities.hiking"></el-checkbox>
+      Hiking
     </label>
     <label>
-      History
       <el-checkbox v-model="activities.history"></el-checkbox>
+      History
     </label>
     <label>
-      Music
       <el-checkbox v-model="activities.music"></el-checkbox>
+      Music
     </label>
     <label>
-      Shopping
       <el-checkbox v-model="activities.shopping"></el-checkbox>
+      Shopping
     </label>
     <label>
-      Sports
       <el-checkbox v-model="activities.sports"></el-checkbox>
+      Sports
     </label>
     <label>
-      Theater
       <el-checkbox v-model="activities.theater"></el-checkbox>
+      Theater
     </label>
   </div>
 </template>

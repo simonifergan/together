@@ -1,6 +1,7 @@
 <template>
     <section class="signup-page">
         <form @submit.prevent="saveUser" v-if="user">
+            <h2>Account</h2>
             <label>Email
                 <el-input type="email" v-model="user.email" placeholder="Email" />
             </label>
@@ -53,10 +54,12 @@
 </template>
 
 <script>
-import ActivityPrefs from '../components/ActivityPrefs'
+import ActivityPrefs from '@/components/ActivityPrefs';
+import UploadImage from '@/components/UploadImage';
+
 export default {
     components: {
-        ActivityPrefs
+        ActivityPrefs, UploadImage
     },
     name: 'EditProfile',
     data() {
