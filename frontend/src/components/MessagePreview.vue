@@ -35,12 +35,14 @@ export default {
   },
   computed: {
     chattingWith() {
+      console.log(this.chat);
       return this.chat.users.filter(otherUser => otherUser._id !== this.user._id);
     },
     profilePics() {
       return this.chattingWith.map(user => user.profilePic);
     },
     lastMsg() {
+      if (!this.chat.msgs.length) return '';
       return this.chat.msgs[this.chat.msgs.length - 1];
     },
     lastSender() {

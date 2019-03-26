@@ -2,6 +2,8 @@ const mongoService = require('./mongo.service');
 
 const ObjectId = require('mongodb').ObjectId;
 
+const chatService = require('./chat.service');
+
 module.exports = {
     query,
     getById,
@@ -297,7 +299,7 @@ async function getByUserId(id) {
                     "foreignField": "_id",
                     "localField": "members",
                     "as": "members",
-                  }
+                }
             },
             {
                 $project: {
@@ -318,7 +320,7 @@ async function getByUserId(id) {
                     "foreignField": "_id",
                     "localField": "pending",
                     "as": "pending",
-                  }
+                }
             },
             {
                 $project: {
@@ -333,23 +335,34 @@ async function getByUserId(id) {
                     }
                 }
             },
-           
+
         ])
-            .sort({createdAt: -1}).toArray();
+            .sort({ createdAt: -1 }).toArray();
         return trips;
-        
+
     } catch {
         throw 'Could not connect to Database';
     }
 }
 
-function add(trip) {
+async function add(trip) {
     const userId = trip.userId;
     const members = [...trip.members];
     const pending = [...trip.pending];
     trip.userId = new ObjectId(userId);
     trip.members = trip.members.map(userId => new ObjectId(userId));
     trip.pending = trip.pending.map(pendingUser => new ObjectId(pendingUser._id));
+    let chat = {
+        users: [userId],
+        msgs: [],
+    };
+    try {
+        chat = await chatService.createChat(chat);
+        trip.chatId = chat._id;
+
+    } catch {
+        // TODO: Could not create chat
+    } 
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).insertOne(trip))
         .then(mongoRes => {
@@ -366,17 +379,20 @@ function update(trip) {
     const members = [...trip.members];
     const pending = [...trip.pending];
     const userId = trip.userId;
+    const chatMembers = [...(trip.members.map(member => member._id)), userId];
     trip._id = new ObjectId(trip._id);
     trip.userId = new ObjectId(trip.userId);
     trip.members = trip.members.map(member => new ObjectId(member._id));
     trip.pending = trip.pending.map(pendingUser => new ObjectId(pendingUser));
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).updateOne({ _id: trip._id }, { $set: trip }))
-        .then(mongoRes => {
+        .then(async mongoRes => {
             trip._id = tripId;
             trip.userId = userId
             trip.members = members;
             trip.pending = pending;
+            const res = await chatService.updateTripChat(trip.chatId, chatMembers);
+
             return trip;
         });
 }

@@ -1,5 +1,13 @@
 <template>
   <section v-if="trip" class="trip-details">
+    <button 
+      @click="initGroupChat(trip.chatId)" 
+      v-if="isUserMember || loggedInUser._id === trip.userId" 
+      class="group-chat" 
+      :title="'Chat with group members'"
+    >
+        <i class="far fa-comments"></i>HI
+    </button>
     <div class="top-fold">
       <div class="profile-img" :style="profilePic"/>
       <h1>{{trip.title}}</h1>
@@ -67,6 +75,9 @@ export default {
     },
     initChat(userId) {
       this.$store.dispatch({ type: "socketJoinPrivateChat", userId });
+    },
+    initGroupChat(chatId) {
+      this.$store.dispatch({type: 'socketInitGroupChat', chatId});
     },
     initTrip() {
       const { tripId } = this.$route.params;

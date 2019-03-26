@@ -3,12 +3,15 @@ const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
     query,
+    getById,
     createChat,
     addMsg,
+    updateTripChat,
 }
 
 const chatsCollection = 'chats';
 const usersCollection = 'users';
+const tripsCollection = 'trips';
 
 async function query(userId) {
     userId = new ObjectId(userId)
@@ -43,12 +46,62 @@ async function query(userId) {
 
                 },
             },
+            {
+                $lookup:
+                {
+                    from: tripsCollection,
+                    localField: '_id',
+                    foreignField: 'chatId',
+                    as: 'trip'
+                }
+            },
+            {
+                $unwind: '$trip'
+            }
         ]).toArray()
+        console.log(chats);
         return chats;
     } catch {
 
     }
 }
+
+async function getById(chatId) {
+    const _id = new ObjectId(chatId);
+    try {
+        const db = await mongoService.connect()
+        const chat = await db.collection(chatsCollection).aggregate([
+            {
+                $match: { _id }
+            },
+            {
+                $lookup: {
+                    "from": usersCollection,
+                    "foreignField": "_id",
+                    "localField": "users",
+                    "as": "users",
+                }
+            },
+            {
+                $project: {
+                    members: {
+                        password: 0,
+                        email: 0,
+                        tripPreferences: 0,
+                        pendingIn: 0,
+                        proposals: 0,
+                        tripPrefs: 0,
+                        birthdate: 0,
+                    }
+                }
+            },
+        ]).toArray()
+        return chat[0];
+    } catch {
+        return null;
+    }
+}
+
 
 async function createChat(chat) {
     chat.users = chat.users.map(user => new ObjectId(user));
@@ -73,6 +126,25 @@ async function createChat(chat) {
     } catch {
         console.log('major error');
     }
+}
+
+async function updateTripChat(chatId, users) {
+    chatId = new ObjectId(chatId);
+    users = users.map(userId => new ObjectId(userId));
+    try {
+        const db = await mongoService.connect();
+        const res = await db.collection(chatsCollection).updateOne(
+            {_id: chatId},
+            {
+                $set : {
+                    users
+                }
+            }
+        ) 
+    } catch {
+
+    }
+
 }
 
 async function addMsg({ msg, chatId }) {

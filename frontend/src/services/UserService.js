@@ -74,11 +74,14 @@ function getEmptyUser() {
         password: null,
         firstname: null,
         lastname: null, 
-        proposals: [],
+        trips: [],
         pendingIn: [],
+        memberIn: [],
         birthdate: null,
         gender: null,
         tripPrefs: {activities: [], gender: null, age: null},
-        profilePic: null
+        profilePic: null,
+        from: null,
+        likes: [],
     }
 }

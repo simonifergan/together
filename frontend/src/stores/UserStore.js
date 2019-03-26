@@ -1,4 +1,5 @@
 import UserService from '@/services/UserService'
+import FacebookService from '@/services/FacebookService'
 
 export default {
     state: {
@@ -90,7 +91,6 @@ export default {
         },
 
         async joinLeaveTripToUser({ commit, getters }, { userToTripId }) {
-            console.log('here');
             
             try {
                 const updatedUser = await UserService.updateTripToUser(userToTripId);
@@ -103,6 +103,8 @@ export default {
             const users = await UserService.getUsers(userIds)
             context.commit({ type: 'setUsersToDisplay', users });
         },
+
+
         async getUserForEdit(context, { userId }) {            
             const res = await UserService.getUsers([userId])
             const user = res[0]
@@ -112,6 +114,31 @@ export default {
             const msg = await UserService.update(user)
             commit({type: 'setLoggedUser', user})
             return user
+        },
+
+        // SOCIAL MEDIA user behavior:
+        async checkFacebookUser({commit}) {
+            const userFBInfo = await FacebookService.getUserInfo();
+            if (!userFBInfo) return false;
+            else {
+                // Prepare object for our database and decide whether to register or auth him
+                const {id, first_name, last_name, picture, email} = userFBInfo;
+                let user = UserService.getEmptyUser();
+                user.facebookId = id;
+                user.firstname = first_name;
+                user.lastname = last_name;
+                user.profilePic = picture.data.url;
+                user.email = email;
+                try {
+                    const loggedUser = await UserService.login(user); 
+                    commit({ type: 'setLoggedUser', user: loggedUser });
+
+                } catch (err) {
+                }
+                
+                return true;
+            }
+
         }
     }
 }

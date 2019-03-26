@@ -49,6 +49,9 @@ export default {
   },
   methods: {
     async logout() {
+      if (this.user.isFBUser) {
+        FB.logout();
+      }
       try {
         await this.$store.dispatch("logout");
         this.$router.push("/");

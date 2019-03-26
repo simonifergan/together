@@ -11,13 +11,19 @@
             <el-input type="password" v-model="password" placeholder="Password" />
                 </label>
             <button title="Press to login" type="submit">Login</button>
+            <SNSLogin />
         </form>
     </section>
 </template>
 
 <script>
+import SNSLogin from '@/components/SNSLogin';
+
 export default {
     name: 'LoginPage',
+    components: {
+        SNSLogin
+    },
     data() {
         return {
             email: '',

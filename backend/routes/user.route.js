@@ -51,9 +51,25 @@ module.exports = (app) => {
 
     })
 
-    app.post(`${BASE}/login`, (req, res) => {
+    app.post(`${BASE}/login`, async (req, res) => {
         const credentials = req.body;
-        // console.log(credentials);
+        // IF USER LOGGED IN WITH FACEBOOK:
+        console.log(credentials);
+        if (credentials && credentials.facebookId) {
+            // return res.end();
+            try {
+                const user = await userService.loginWithFacebook(credentials);
+                console.log(user);
+                if (user) return res.json(user);
+                else throw new Error ('Problem with authentication');
+            } catch (err) {
+                return res.status(401).end(err);
+            }
+        }
+
+        
+
+        // IF USER LOGGED IN THROUGH OUR WEBSITE
         userService.login(credentials)
             .then((user) => {
                 if (!user) return res.status(401).end();
