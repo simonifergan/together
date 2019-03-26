@@ -4,6 +4,7 @@
     border-right: 1px solid $box-shadow-gray;
     border-left: 1px solid $box-shadow-gray;
     form {
+        
         h2 {
             font-size: 1.225em;
             font-weight: 600;
@@ -12,15 +13,26 @@
                 margin-top: 15px;
             }
         }
+        label {
+            padding-left: 20px;
+            
+        }
         .activity-prefs {
             display: grid;
             grid-template-columns: repeat(3, minmax(100px, 1fr));
             & > * {
                 margin-bottom: 15px;
             }
+            label {
+                padding-left: 20px;
+                cursor: pointer;
+                @include flex(row, flex-start, center);
+                & > * {
+                    margin-right: 5px;
+                }
+            }
         }
         button {
-            float: right;
             margin-top: 20px;
             @include button;
             font-size: 18px;

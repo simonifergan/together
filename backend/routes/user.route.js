@@ -28,7 +28,6 @@ module.exports = (app) => {
 
     app.put(`${BASE}/user/:userId`, (req, res) => {
         const userToUpdate = req.body;
-        console.log('user.service: userToUpdate:', userToUpdate);
         userService.update(userToUpdate)
             .then(updatedUser => {
                 if (updatedUser) return res.json(updatedUser);
@@ -38,10 +37,8 @@ module.exports = (app) => {
 
     // move trip from pendingIn to memberIn
     app.patch(`${BASE}/user_trip/:userId`, (req, res) => {
-        console.log('got to user.route');
         
         const userToTripId = req.body;
-        console.log('userToTripId : ', userToTripId);
         
         userService.updateTripToUser(userToTripId)
             .then(updatedUser => {
@@ -54,20 +51,17 @@ module.exports = (app) => {
     app.post(`${BASE}/login`, async (req, res) => {
         const credentials = req.body;
         // IF USER LOGGED IN WITH FACEBOOK:
-        console.log(credentials);
         if (credentials && credentials.facebookId) {
             // return res.end();
             try {
                 const user = await userService.loginWithFacebook(credentials);
-                console.log(user);
+                req.session.user = user;
                 if (user) return res.json(user);
                 else throw new Error ('Problem with authentication');
             } catch (err) {
                 return res.status(401).end(err);
             }
         }
-
-        
 
         // IF USER LOGGED IN THROUGH OUR WEBSITE
         userService.login(credentials)
