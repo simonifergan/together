@@ -21,7 +21,7 @@ module.exports = (app) => {
     // Get recommended trips
     app.post(`${BASE_URL}/recommended`, (req, res) => {
         console.log(req.body);
-        res(null)
+        res.end()
         // tripService.getRecommended()
         //     .then(trips => res.json(trips))
         //     .catch(err => res.end(err));
