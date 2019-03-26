@@ -1,15 +1,7 @@
 <template>
   <section v-if="trip" class="trip-details">
+    
     <div class="user-section">
-    <!-- <button 
-      @click="initGroupChat(trip.chatId)" 
-      v-if="isUserMember || loggedInUser._id === trip.userId" 
-      class="group-chat" 
-      :title="'Chat with group members'"
-    >
-        <i class="far fa-comments"></i>HI
-    </button> -->
-    <div class="top-fold">
       <div class="profile-img" :style="profilePic"/>
       <h2>{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</h2>
       <h3>{{trip.user.birthdate | calcAge}}, {{trip.user.from | countryCodeToName}}</h3>
@@ -32,7 +24,7 @@
         </p>
       </div>
     </div>
-
+    
     <div class="trip-section">
       <div class="trip-header">
         <h1>{{trip.title}}</h1>
@@ -73,6 +65,16 @@
         v-if="loggedInUser && loggedInUser._id === trip.userId"
       />
     </div>
+    <!-- SIMON GROUP CHAT BUTTON -->
+    <button
+      @click="initGroupChat(trip.chatId)"
+      v-if="isUserMember || loggedInUser._id === trip.userId"
+      class="group-chat"
+      :title="'Chat with group members'"
+    >
+      <i class="far fa-comments"></i>HI
+    </button>
+    <!-- SIMON GROUP CHAT BUTTON -->
   </section>
 </template>
 
@@ -104,9 +106,6 @@ export default {
     initChat(userId) {
       this.$store.dispatch({ type: "socketJoinPrivateChat", userId });
     },
-    initGroupChat(chatId) {
-      this.$store.dispatch({type: 'socketInitGroupChat', chatId});
-    },
     initTrip() {
       const { tripId } = this.$route.params;
       if (!this.trip || tripId !== this.trip._id) {
@@ -129,7 +128,10 @@ export default {
         userToLeave: pendingUser,
         tripIdToLeave: this.trip._id
       });
-    }
+    },
+    initGroupChat(chatId) {
+     this.$store.dispatch({type: 'socketInitGroupChat', chatId});
+   },
   },
   created() {
     this.initTrip();
