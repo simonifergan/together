@@ -15,10 +15,10 @@
     </header>
     <article class="article-filters">
       <!-- <filter-list v-if="destinations" :type="'destinations'" :filters="destinations"/> -->
-      <filter-list v-if="activities" :type="'activities'" :filters="activities"/>
+      <filter-list v-if="filterLists.activities" :type="'activities'" :filters="filterLists.activities"/>
     </article>
     <article class="article-trips">
-      <!-- <trip-list :trips="trips" title="Trips you might like"/> -->
+      <trip-list v-for="(value, key) in tripLists" :key="key" :trips="value" :title="key"/>
     </article>
   </section>
 </template>
@@ -41,10 +41,17 @@ export default {
         trending: [],
         recommended: []
       },
-      activities: null
+      filterLists: {
+        beach: [],
+        activities: []
+      },
+      countries: null
     };
   },
   computed: {
+    loggedUser() {
+      return this.$store.getters.loggedUser
+    }
     // trips() {
     //   return this.$store.getters.trips;
     // },
@@ -65,30 +72,32 @@ export default {
     //   }, [])
     // },
   },
+  watch: {
+    async loggedUser() {
+      this.tripLists.recommended = await this.$store.dispatch({ type: "getRecommendedTrips" });
+    }
+  },
   methods: {
     search() {
       this.$router.push("/search?q=" + this.searchQuery);
     },
     async getActivityTrips(activity) {
-      this.tripLists[activity] = await this.$store.dispatch({
-        type: "getActivityTrips",
-        activity
-      });
+      const activityTrips = await this.$store.dispatch({ type: "getActivityTrips", activity })
+      this.tripLists = Object.assign({}, this.tripLists, {
+        [activity]: activityTrips,
+      })
     }
   },
   async created() {
     if (!window.google) {
       await this.$store.dispatch({ type: "connectToGoogle" });
     }
-    this.tripLists.trending = await this.$store.dispatch({
-      type: "getTrendingTrips"
-    });
-    if (this.$store.getters.loggedUser)
-      this.tripLists.recommended = await this.$store.dispatch({
-        type: "getRecommendedTrips"
-      });
-    this.activities = this.$store.getters.activities;
-    this.activities.forEach(activity => this.getActivityTrips(activity));
+    this.tripLists.trending = await this.$store.dispatch({ type: "getTrendingTrips" });
+    if (this.$store.getters.loggedUser) {      
+      this.tripLists.recommended = await this.$store.dispatch({ type: "getRecommendedTrips" })
+    }
+    this.filterLists.activities = this.$store.getters.activities;
+    this.filterLists.activities.forEach(activity => this.getActivityTrips(activity));
   }
 };
 </script>

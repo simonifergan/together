@@ -19,12 +19,11 @@ module.exports = (app) => {
     });
 
     // Get recommended trips
-    app.post(`${BASE_URL}/recommended`, (req, res) => {
-        console.log(req.body);
-        res(null)
-        // tripService.getRecommended()
-        //     .then(trips => res.json(trips))
-        //     .catch(err => res.end(err));
+    app.post(`${BASE_URL}/recommended`, (req, res) => {        
+        const prefs = req.body;        
+        tripService.getRecommended(prefs)
+            .then(trips => res.json(trips))
+            .catch(err => res.end(err));
     });
 
     // Get trips by activity

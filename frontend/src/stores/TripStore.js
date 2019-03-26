@@ -97,8 +97,10 @@ export default {
             return trendingTrips
         },
         async getRecommendedTrips({ getters }) {
-            console.log('in store user:', getters.loggedUser);
-            const recommendedTrips = await TripService.getRecommended(getters.loggedUser.tripPrefs)
+            const prefs = getters.loggedUser.tripPrefs
+            console.log('in store prefs', prefs);
+            if (!prefs.activities.length && !prefs.gender && !prefs.age) return null
+            const recommendedTrips = await TripService.getRecommended(prefs)
             return recommendedTrips
         },
         async loadTrip({ commit }, { tripId }) {
