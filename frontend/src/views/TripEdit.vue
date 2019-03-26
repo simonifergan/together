@@ -34,9 +34,16 @@
         </label>
       </div>
       <h2>Where would you like to travel to?</h2>
-      <our-super-awesome-map :enable="true" v-model="trip.destinations"/>
+      <el-input v-model="searchQuery"/>
+      <ul v-if="autocomplete">
+        <li v-for="(city, idx) in autocomplete" :key="idx" @click="chooseCity(city)">
+          <h3>{{city.description}}</h3>
+        </li>
+      </ul>
+      <our-super-awesome-map :enable="true" v-model="trip.destinations.countryCodes"/>
       <button type="submit">Post</button>
     </form>
+    <button @click="searchPlaces">search</button>
   </section>
 </template>
 
@@ -51,15 +58,28 @@ export default {
   },
   data() {
     return {
-      trip: this.$store.getters.emptyTrip
+      trip: this.$store.getters.emptyTrip,
+      searchQuery: "",
+      autocomplete: null
     };
   },
   methods: {
     save() {
-      this.$store.dispatch({type: 'saveTrip', trip: this.trip })
-      .then(tripId => {
-        this.$router.push(`/trip/${tripId}`);
-      })
+      this.$store
+        .dispatch({ type: "saveTrip", trip: this.trip })
+        .then(tripId => {
+          this.$router.push(`/trip/${tripId}`);
+        });
+    },
+    searchPlaces() {
+      this.$store
+        .dispatch({ type: "getPlacesAutocomplete", query: this.searchQuery })
+        .then(res => (this.autocomplete = res));
+    },
+    async chooseCity(city) {
+      const countryCode = await this.$store.dispatch({type: 'getCountryCode', placeId: city.place_id})
+      this.trip.destinations.cities.push(city.name)
+      this.trip.destinations.countryCodes.push(countryCode)
     }
   },
   created() {
@@ -67,7 +87,10 @@ export default {
     if (tripId) {
       this.$store
         .dispatch({ type: "loadTrip", tripId })
-        .then(() => (this.trip = this.$store.getters.tripToEdit));
+        .then(() => this.trip = this.$store.getters.tripToEdit)
+    }
+    if (!window.google) {
+      this.$store.dispatch({ type: "connectToGoogle" });
     }
   },
   destroy() {}

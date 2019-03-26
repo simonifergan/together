@@ -17,9 +17,6 @@ export default {
             const idx = state.loggedUser.pendingIn.findIndex(trip => trip === tripId);
             state.loggedUser.pendingIn.splice(idx, 1);
         },
-        updateLoggedUser(state, { user }) {
-            state.loggedUser = user;
-        },
         // USER LIST FOR: Pending list
         setUsersToDisplay(state, { users }) {
             state.usersToDisplay = users;
@@ -53,7 +50,6 @@ export default {
         userToDisplay(state) {
             return state.userToDisplay;
         }
-
     },
     actions: {
         async login({ commit, dispatch }, { credentials }) {
@@ -103,17 +99,6 @@ export default {
                 throw 'failed to update user';
             }
         },
-        
-        // async leaveTripToUser({ commit, getters }, { tripId }) {
-        //     const backupUserLoggedUser = JSON.parse(JSON.stringify(getters.loggedUser));
-        //     commit({ type: 'leaveTripToUser', tripId });
-        //     try {
-        //         const updatedUser = await UserService.update(getters.loggedUser);
-        //         return updatedUser;
-        //     } catch {
-        //         commit({ type: 'updateLoggedUser', user: backupUserLoggedUser });
-        //     }
-        // },
         async getUsers(context, { userIds }) {
             const users = await UserService.getUsers(userIds)
             context.commit({ type: 'setUsersToDisplay', users });
@@ -121,7 +106,11 @@ export default {
         async getUserForEdit(context, { userId }) {            
             const res = await UserService.getUsers([userId])
             const user = res[0]
-            user.tripPrefs.activities = ['sports']
+            return user
+        },
+        async updateUserProfile({commit}, {user}) {
+            const msg = await UserService.update(user)
+            commit({type: 'setLoggedUser', user})
             return user
         }
     }

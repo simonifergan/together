@@ -60,10 +60,10 @@ export default {
             const idx = trip.pending.findIndex(existingUser => existingUser === userId);
             if (idx !== -1) trip.pending.splice(idx, 1);
         },
-        setActivityFilters(state, {filterImgs}) {
+        setActivityFilters(state, { filterImgs }) {
             state.activityFilters = filterImgs
         },
-        setDestinationFilters(state, {filterImgs}) {
+        setDestinationFilters(state, { filterImgs }) {
             state.destinationFilters = filterImgs
         }
     },
@@ -85,13 +85,21 @@ export default {
         },
         destinationFilters(state) {
             return state.destinationFilters
+        },
+        activities(state) {
+            return TripService.getActivities()
         }
     },
     actions: {
         // TODO: implement optimistic updates
         async getTrendingTrips({ commit }) {
-            const trips = await TripService.getTrending()
-            commit({ type: 'loadTrips', trips })
+            const trendingTrips = await TripService.getTrending()
+            return trendingTrips
+        },
+        async getRecommendedTrips({ getters }) {
+            console.log('in store user:', getters.loggedUser);
+            const recommendedTrips = await TripService.getRecommended(getters.loggedUser.tripPrefs)
+            return recommendedTrips
         },
         async loadTrip({ commit }, { tripId }) {
             const trip = await TripService.getById(tripId);
@@ -124,14 +132,14 @@ export default {
         },
 
         // Get trips by User ID
-        async loadTripsByUserId({commit, getters}, {userId}) {
-            const backupTrips  = JSON.parse(JSON.stringify(getters.trips));
+        async loadTripsByUserId({ commit, getters }, { userId }) {
+            const backupTrips = JSON.parse(JSON.stringify(getters.trips));
             try {
                 const trips = await TripService.getByUserId(userId);
-                commit({type: 'loadTrips', trips});
+                commit({ type: 'loadTrips', trips });
                 return true;
             } catch {
-                commit({type: 'loadTrips', trips: backupTrips});
+                commit({ type: 'loadTrips', trips: backupTrips });
                 return false;
             }
 
@@ -188,9 +196,9 @@ export default {
                 commit({ type: 'toggleUserFromPendingList', userId: userIdToJoin })
             }
         },
-        async leaveTrip({ commit, getters, dispatch }, {userToLeave, tripIdToLeave}) {
+        async leaveTrip({ commit, getters, dispatch }, { userToLeave, tripIdToLeave }) {
             const userIdToLeave = userToLeave._id;
-            
+
             var tripToLeave = await TripService.getById(tripIdToLeave)
             if (!tripToLeave) return null;
 
@@ -275,13 +283,25 @@ export default {
             const trips = await TripService.query(searchQuery)
             commit({ type: 'loadTrips', trips })
         },
-        async getFilterImgs({commit}, {filterType, filters}) {
+        async getActivityTrips(context, { activity }) {
+            const trips = await TripService.getActivityTrips(activity)
+            return trips
+        },
+        async getFilterImgs({ commit }, { filterType, filters }) {
             const filterImgs = await Promise.all(filters.map(filter => TripService.getImgs(filter, filterType)))
-            if (filterType === 'activities') commit({type: 'setActivityFilters', filterImgs})
-            else if (filterType === 'destinations') commit({type: 'setDestinationFilters', filterImgs})
+            if (filterType === 'activities') commit({ type: 'setActivityFilters', filterImgs })
+            else if (filterType === 'destinations') commit({ type: 'setDestinationFilters', filterImgs })
         },
         async connectToGoogle() {
             return GoogleService.connectGoogleApi()
+        },
+        async getPlacesAutocomplete(context, { query }) {
+            const autocomplete = await TripService.getPlacesAutocomplete(query)
+            return autocomplete
+        },
+        async getCountryCode(context, { placeId }) {
+            const countryCode = await TripService.getCountryCode(placeId)
+            return countryCode
         }
     }
 }

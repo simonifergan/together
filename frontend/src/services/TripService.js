@@ -15,6 +15,11 @@ export default {
     getImgs,
     getTrending,
     getByUserId,
+    getPlacesAutocomplete,
+    getCountryCode,
+    getActivityTrips,
+    getActivities,
+    getRecommended
     // getCategories
 }
 
@@ -27,10 +32,22 @@ async function getTrending() {
     return data;
 }
 
+async function getRecommended(prefs) {
+    console.log('in service prefs:', prefs);
+    const {data} = await axios.post(TRIP_API + '/recommended', prefs);
+    return data;
+}
+
 async function query(searchQuery) {
     let queryStr = '?searchQuery=' + searchQuery
     const {data} = await axios.get(TRIP_API + queryStr);
     return data;
+}
+
+async function getActivityTrips(activity) {
+    let queryStr = '?activity=' + activity
+    const {data} = await axios.get(TRIP_API + '/activity' + queryStr)
+    return data
 }
 
 async function getByUserId(id) {
@@ -64,7 +81,7 @@ function getEmpty() {
     return {
         title: '',
         desc: '',
-        destinations: [],
+        destinations: {countryCodes: [], cities: []},
         startsAt: '',
         duration: '',
         openTo: {},
@@ -76,12 +93,26 @@ function getEmpty() {
     }
 }
 
+function getActivities() {
+    return ['art', 'beach', 'food', 'hiking', 'history', 'music', 'shopping', 'sports', 'theater']
+}
+
+async function getPlacesAutocomplete(query) {
+    const autocomplete = await GoogleService.getAutocomplete(query)
+    return autocomplete
+}
+
+async function getCountryCode(placeId) {
+    const countryCode = await GoogleService.getPlaceDetails(placeId, ['photos'])
+    return countryCode
+}
+
 async function getImgs(query, type) {
     if (type === 'destinations') query = UtilService.worldCodeMap.get(query)
     const filter = {}
     filter.title = query
     if (type === 'destinations') {
-        filter.imgSrc = await GoogleService.getGoogleLocation(query)
+        filter.imgSrc = await GoogleService.getGoogleLocation(query, ['photos'])
     } else {
         filter.imgSrc = _getActivityImg(query)
     }

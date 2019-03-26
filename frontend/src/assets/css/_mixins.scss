@@ -19,6 +19,7 @@
     padding: 6px;
     color: #484848;
     font-family: $font-ubuntu-light;
+    outline: none;
 }
 
 @mixin wrapper($max-width: 700px) {

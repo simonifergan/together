@@ -9,11 +9,17 @@ module.exports = {
     add,
     update,
     remove,
-    getTrending
+    getTrending,
+    getByActivity,
+    getRecommended
 }
 
 const tripsCollection = 'trips';
 const usersCollection = 'users';
+
+async function getRecommended() {
+
+}
 
 async function getTrending() {
     try {
@@ -145,6 +151,69 @@ async function query(searchQuery) {
                 regex.test(trip.desc) ||
                 regex.test(trip.title) ||
                 trip.activities.some(activity => regex.test(activity))
+        });
+    } catch {
+
+    }
+}
+
+async function getByActivity(activity) {
+    try {
+        const db = await mongoService.connect()
+        const trips = await db.collection(tripsCollection).aggregate([
+            {
+                $lookup:
+                {
+                    from: usersCollection,
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'user'
+
+                }
+            },
+            {
+                $project: {
+                    user: {
+                        _id: 0,
+                        password: 0,
+                        email: 0,
+                        tripPreferences: 0,
+                        pendingIn: 0,
+                        proposals: 0,
+                        tripPrefs: 0,
+                        birthdate: 0,
+                    },
+
+                },
+            },
+            {
+                $unwind: '$user'
+            },
+            {
+                $lookup: {
+                    "from": usersCollection,
+                    "foreignField": "_id",
+                    "localField": "members",
+                    "as": "members",
+                }
+            },
+            {
+                $project: {
+                    members: {
+                        password: 0,
+                        email: 0,
+                        tripPreferences: 0,
+                        pendingIn: 0,
+                        proposals: 0,
+                        tripPrefs: 0,
+                        birthdate: 0,
+                    }
+                }
+            }
+        ]).toArray()
+
+        return trips.filter(trip => {
+            return trip.activities.some(tripActivity => tripActivity === activity)
         });
     } catch {
 

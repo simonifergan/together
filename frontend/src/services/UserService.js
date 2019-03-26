@@ -78,7 +78,7 @@ function getEmptyUser() {
         pendingIn: [],
         birthdate: null,
         gender: null,
-        tripPrefs: {},
+        tripPrefs: {activities: [], gender: null, age: null},
         profilePic: null
     }
 }
