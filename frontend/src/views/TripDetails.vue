@@ -1,5 +1,11 @@
 <template>
   <section v-if="trip" class="trip-details">
+    <button
+      class="btn-join-trip"
+      @click="joinLeaveTrip"
+      v-if="!loggedInUser || trip.userId !== loggedInUser._id"
+    >{{whoIsUser}}</button>
+
     <div class="user-section">
       <!-- {{trip}} -->
       <p class="likes-count">
@@ -20,8 +26,7 @@
         </button>
 
         <!-- TODO: on click - update likes (toggle likes) -->
-        <button
-        :title="'Like ' + trip.user.firstname">
+        <button :title="'Like ' + trip.user.firstname">
           <i class="far fa-heart"></i>
         </button>
       </div>

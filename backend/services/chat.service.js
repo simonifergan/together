@@ -97,7 +97,7 @@ async function createChat(chat) {
     }
 }
 
-function updateTripChat(chatId, users) {
+async function updateTripChat(chatId, users) {
     chatId = new ObjectId(chatId);
     users = users.map(userId => new ObjectId(userId));
     try {
