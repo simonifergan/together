@@ -59,13 +59,21 @@ export default {
     }
   }
   .btns-pending {
-      button {
-        background: none;
-        border: none;
-        i {
-          font-size: 1.4em;
-        }
+    button {
+      background: none;
+      border: none;
+      padding: 5px;
+      transition: .3s;
+      i {
+        font-size: 1.4em;
+      }
+      &:first-of-type:hover {
+        color: #8bc34a;
+      }
+      &:last-of-type:hover {
+        color: #e74c3c;
       }
     }
+  }
 }
 </style>
