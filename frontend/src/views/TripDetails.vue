@@ -1,6 +1,15 @@
 <template>
   <section v-if="trip" class="trip-details">
     <div class="user-section">
+    <!-- <button 
+      @click="initGroupChat(trip.chatId)" 
+      v-if="isUserMember || loggedInUser._id === trip.userId" 
+      class="group-chat" 
+      :title="'Chat with group members'"
+    >
+        <i class="far fa-comments"></i>HI
+    </button> -->
+    <div class="top-fold">
       <div class="profile-img" :style="profilePic"/>
       <h2>{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</h2>
       <h3>{{trip.user.birthdate | calcAge}}, {{trip.user.from | countryCodeToName}}</h3>
@@ -94,6 +103,9 @@ export default {
     },
     initChat(userId) {
       this.$store.dispatch({ type: "socketJoinPrivateChat", userId });
+    },
+    initGroupChat(chatId) {
+      this.$store.dispatch({type: 'socketInitGroupChat', chatId});
     },
     initTrip() {
       const { tripId } = this.$route.params;

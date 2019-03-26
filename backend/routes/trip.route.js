@@ -11,11 +11,29 @@ module.exports = (app) => {
             .catch(err => res.end(err));
     });
 
+    // Get trending trips
     app.get(`${BASE_URL}/trending`, (req, res) => {        
         tripService.getTrending()
             .then(trips => res.json(trips))
             .catch(err => res.end(err));
     });
+
+    // Get recommended trips
+    app.post(`${BASE_URL}/recommended`, (req, res) => {
+        console.log(req.body);
+        res.end()
+        // tripService.getRecommended()
+        //     .then(trips => res.json(trips))
+        //     .catch(err => res.end(err));
+    });
+
+    // Get trips by activity
+    app.get(`${BASE_URL}/activity`, (req, res) => {
+        const {activity} = req.query
+        tripService.getByActivity(activity)
+            .then(trips => res.json(trips))
+            .catch(err => res.end(err));
+    })
     
     // Get single trip by id
     app.get(`${BASE_URL}/:tripId`, (req, res) => {

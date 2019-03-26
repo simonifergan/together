@@ -3,6 +3,7 @@ const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
     query,
+    getById,
     createChat,
     addMsg,
     updateTripChat,
@@ -54,14 +55,6 @@ async function query(userId) {
                     as: 'trip'
                 }
             },
-            // {
-            //     $project: {
-            //         tripTitle: {
-            //             title: 1
-            //         },
-
-            //     },
-            // },
             {
                 $unwind: '$trip'
             }
@@ -73,66 +66,42 @@ async function query(userId) {
     }
 }
 
-// async function query(userId) {
-//     userId = new ObjectId(userId)
-//     try {
-//         const db = await mongoService.connect()
-//         const chats = await db.collection(chatsCollection).aggregate([
-//             {
-//                 $match: {
-//                     users: userId
-//                 }
-//             },
-//             {
-//                 $lookup:
-//                 {
-//                     from: usersCollection,
-//                     localField: 'users',
-//                     foreignField: '_id',
-//                     as: 'users'
-//                 }
-//             },
-//             {
-//                 $project: {
-//                     users: {
-//                         password: 0,
-//                         email: 0,
-//                         pendingIn: 0,
-//                         memberIn: 0,
-//                         proposals: 0,
-//                         tripPrefs: 0,
-//                         birthdate: 0,
-//                     },
+async function getById(chatId) {
+    const _id = new ObjectId(chatId);
+    try {
+        const db = await mongoService.connect()
+        const chat = await db.collection(chatsCollection).aggregate([
+            {
+                $match: { _id }
+            },
+            {
+                $lookup: {
+                    "from": usersCollection,
+                    "foreignField": "_id",
+                    "localField": "users",
+                    "as": "users",
+                }
+            },
+            {
+                $project: {
+                    members: {
+                        password: 0,
+                        email: 0,
+                        tripPreferences: 0,
+                        pendingIn: 0,
+                        proposals: 0,
+                        tripPrefs: 0,
+                        birthdate: 0,
+                    }
+                }
+            },
+        ]).toArray()
+        return chat[0];
+    } catch {
+        return null;
+    }
+}
 
-//                 },
-//             },
-//             {
-//                 $lookup:
-//                 {
-//                     from: tripsCollection,
-//                     localField: '_id',
-//                     foreignField: 'chatId',
-//                     as: 'tripTitle'
-//                 }
-//             },
-//             {
-//                 $project: {
-//                     tripTitle: {
-//                         title: 1
-//                     },
-
-//                 },
-//             },
-//             {
-//                 $unwind: '$tripTitle'
-//             }
-//         ]).toArray()
-//         console.log(chats);
-//         return chats;
-//     } catch {
-
-//     }
-// }
 
 async function createChat(chat) {
     chat.users = chat.users.map(user => new ObjectId(user));

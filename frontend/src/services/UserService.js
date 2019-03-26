@@ -79,9 +79,9 @@ function getEmptyUser() {
         memberIn: [],
         birthdate: null,
         gender: null,
-        tripPrefs: {},
+        tripPrefs: {activities: [], gender: null, age: null},
         profilePic: null,
         from: null,
-        likes: 0,
+        likes: [],
     }
 }

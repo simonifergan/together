@@ -1,8 +1,11 @@
+// IMPORT SERVICES
 import SocketService from '@/services/SocketService';
 import UtilService from '@/services/UtilService';
 import ChatService from '@/services/ChatService';
 import NotificationService from '@/services/NotificationService';
 import EventBusService from '@/services/EventBusService';
+
+// IMPORT SPECIFIC BUS EVENTS
 import { SHOW_NOTIFICATION } from '@/services/EventBusService';
 
 export default {
@@ -17,8 +20,12 @@ export default {
             // console.log('connection status:', state.isConnected);
         },
         addNewChat(state, { chat }) {
-            chat.isActive = true;
-            state.userChats.push(chat);
+            const existingChat = state.userChats.find(loadedChat => loadedChat._id === chat._id);
+            if (!existingChat) {
+                chat.isActive = true;
+                state.userChats.push(chat);
+            } else existingChat.isActive = true;
+
         },
         activateChat(state, { chatId }) {
             const chat = state.userChats.find(chat => chat._id === chatId);
@@ -101,7 +108,9 @@ export default {
             SocketService.emit(SocketService.NOTIFICATION_SEND, { userId, payload });
         },
         socketJoinPrivateChat(context, { userId }) {
-            const chat = context.getters.userChats.find(chat => chat.users.some(user => user._id === userId))
+            const chat = context.getters.userChats.find(chat => {
+                if (chat.trip && chat.trip.title) return false;
+            })
             console.log(chat);
             let payload;
             if (chat) {
@@ -120,6 +129,19 @@ export default {
             }
             SocketService.emit(SocketService.CHAT_JOIN, payload);
         },
+
+        async socketInitGroupChat({ commit }, { chatId }) {
+            try {
+                const chat = await ChatService.getById(chatId);
+                console.log('I AM IN SOCKET INIT GROUP', chat);
+                SocketService.emit(SocketService.CHAT_REGISTER_ROOMS, [chatId])
+                if (chat) commit({ type: 'addNewChat', chat });
+            } catch {
+
+            }
+
+        },
+
         async getUserChats({ commit, getters }) {
             let chats = await ChatService.getChats(getters.loggedUser._id)
             chats = chats.map(chat => {
@@ -133,8 +155,8 @@ export default {
             const notifications = await NotificationService.query();
             commit({ type: 'setNotification', notifications });
         },
-        activateChat({commit}, {chatId}) {
-            commit({type: 'activateChat', chatId})
+        activateChat({ commit }, { chatId }) {
+            commit({ type: 'activateChat', chatId })
         },
         addNotification(context, { newNotification }) {
             SocketService.emit(SocketService.NOTIFICATION_ADD, newNotification);

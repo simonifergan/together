@@ -1,6 +1,6 @@
 <template>
     <section class="signup-page">
-        <form @submit.prevent="signup" v-if="user">
+        <form @submit.prevent="saveUser" v-if="user">
             <label>Email
                 <el-input type="email" v-model="user.email" placeholder="Email" />
             </label>
@@ -31,17 +31,18 @@
             <h2>Travel Partner Preferences</h2>
             <label>Gender<br>
                 <el-select v-model="user.tripPrefs.gender">
+                    <el-option value="null">No Preference</el-option>
                     <el-option value="Male">Male</el-option>
                     <el-option value="Female">Female</el-option>
-                    <el-option value="Rather not say">Rather not say</el-option>
                 </el-select>
             </label><br>
             <label>Age<br>
                 <el-select v-model="user.tripPrefs.age">
-                    <el-option value="18-24">18-24</el-option>
-                    <el-option value="24-30">24-30</el-option>
-                    <el-option value="30-40">30-40</el-option>
-                    <el-option value="40+">40+</el-option>
+                    <el-option value="null">No Preference</el-option>
+                    <el-option value="1">18-24</el-option>
+                    <el-option value="2">24-30</el-option>
+                    <el-option value="3">30-40</el-option>
+                    <el-option value="4">40+</el-option>
                 </el-select>
             </label><br>
             <h2>Activity Preferences</h2>
@@ -64,7 +65,7 @@ export default {
         }
     },
     methods: {
-        signup() {
+        saveUser() {
             this.$store.dispatch({type: 'saveUser', user: this.user})
         }
     },
