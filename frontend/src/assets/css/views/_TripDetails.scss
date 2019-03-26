@@ -129,17 +129,13 @@
             font-family: $font-ubuntu-s-bold;
             font-size: 1.3em;
         }
+        h3:last-of-type {
+            margin-top: 30px;
+        }
         .trip-members {
             @include flex(row, space-evenly, center);
         }
-        .pending-list, .member-list {
-            .user-item {
-                padding: 10px 10px 10px 30px;
-                .user-img {
-                    @include userImg(50px, 50px);
-                }
-            }
-        }
+        
     }
 }
 
