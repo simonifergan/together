@@ -2,7 +2,7 @@
   <section class="home">
     <header>
       <div class="centered-content">
-        <h1>Get anywhere with the right people</h1>
+        <h1>Reaching your destination with the right people for you.</h1>
         <div class="intro-form">
           <form @submit.prevent="search">
             <input type="text" placeholder="Anywhere" v-model="searchQuery">
