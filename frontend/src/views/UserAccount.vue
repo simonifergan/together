@@ -8,6 +8,8 @@
             <label>Password
                 <el-input type ="password" v-model="user.password" placeholder="Password" />
             </label>
+            <upload-image @setProfilePic="setProfilePic"/>
+            <h2>Personal Information</h2>
             <label>First Name
                 <el-input v-model="user.firstname" placeholder="First Name" />
             </label>
@@ -70,6 +72,9 @@ export default {
     methods: {
         saveUser() {
             this.$store.dispatch({type: 'saveUser', user: this.user})
+        },
+        setProfilePic(url) {
+            this.user.profilePic = url;
         }
     },
     async created() {

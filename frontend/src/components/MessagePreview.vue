@@ -1,15 +1,15 @@
 <template>
   <li class="msg-preview" :title="(chat.trip)? chat.trip.title: chattingWith[0]">
-    <div
-      class="user-img"
-      v-for="(pic) in profilePics"
-      :key="pic"
-      :style="{'background-image': `url(${pic})`}"
-    />
+    <div class="user-img-container">
+      <div
+        class="user-img"
+        v-for="(pic) in profilePics"
+        :key="pic"
+        :style="{'background-image': `url(${pic})`}"
+      />
+    </div>
     <div
       class="msg-content"
-      v-for="(user, index) in chattingWith"
-      :key="user._id+index"
     >
       <h4 v-if="!chat.trip">{{`${user.firstname} ${user.lastname}`}}</h4>
       <h4 v-else>{{chat.trip.title}}</h4>
@@ -39,7 +39,7 @@ export default {
       return this.chat.users.filter(otherUser => otherUser._id !== this.user._id);
     },
     profilePics() {
-      return this.chattingWith.map(user => user.profilePic);
+      return this.chattingWith.map(user => user.profilePic).slice(0,3);
     },
     lastMsg() {
       if (!this.chat.msgs.length) return '';
