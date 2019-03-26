@@ -82,6 +82,6 @@ function getEmptyUser() {
         tripPrefs: {},
         profilePic: null,
         from: null,
-        likes: 0,
+        likes: [],
     }
 }

@@ -5,7 +5,8 @@ const axios = Axios.create({
 })
 
 export default {
-    getChats
+    getChats,
+    getById
 }
 
 const CHAT_API = (process.env.NODE_ENV !== 'development')
@@ -15,5 +16,10 @@ const CHAT_API = (process.env.NODE_ENV !== 'development')
 async function getChats(userId) {
     let queryStr = '?userId=' + userId
     const {data} = await axios.get(CHAT_API + queryStr)
+    return data;
+}
+
+async function getById(chatId) {
+    const {data} = await axios.get(`${CHAT_API}/${chatId}`);
     return data;
 }
