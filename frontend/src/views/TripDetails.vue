@@ -1,37 +1,61 @@
 <template>
   <section v-if="trip" class="trip-details">
-    <!-- SIMON GROUP CHAT BUTTON -->
-    <button 
-      @click="initGroupChat(trip.chatId)" 
-      v-if="isUserMember || loggedInUser._id === trip.userId" 
-      class="group-chat" 
-      :title="'Chat with group members'"
-    >
-        <i class="far fa-comments"></i>HI
-    </button>
-    <!-- SIMON GROUP CHAT BUTTON -->
-    <div class="top-fold">
+    
+    <div class="user-section">
       <div class="profile-img" :style="profilePic"/>
-      <h1>{{trip.title}}</h1>
       <h2>{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</h2>
-      <button
-        v-if="!loggedInUser || trip.userId !== loggedInUser._id"
-        @click="initChat(trip.userId)"
-        :title="'Start a chat with ' + trip.user.firstname"
-      >
-        <i class="far fa-comments"></i>
-      </button>
+      <h3>{{trip.user.birthdate | calcAge}}, {{trip.user.from | countryCodeToName}}</h3>
+
+      <div class="btns-like-msg">
+        <button
+          v-if="!loggedInUser || trip.userId !== loggedInUser._id"
+          @click="initChat(trip.userId)"
+          :title="'Start a chat with ' + trip.user.firstname"
+        >
+          <i class="far fa-comments"></i>
+        </button>
+
+        <!-- TODO: on click - update likes (toggle likes) -->
+        <p class="likes-count">
+          <button :title="'Like ' + trip.user.firstname">
+            <i :class="isLike"></i>
+          </button>
+          <span>&nbsp;({{this.trip.user.likes.length}})</span>
+        </p>
+      </div>
+    </div>
+    
+    <div class="trip-section">
+      <div class="trip-header">
+        <h1>{{trip.title}}</h1>
+        <button
+          class="btn-join-trip"
+          @click="joinLeaveTrip"
+          v-if="!loggedInUser || trip.userId !== loggedInUser._id"
+        >{{whoIsUser}}</button>
+      </div>
+      <p class="trip-desc">{{trip.desc}}</p>
+      <div class="trip-time">
+        <i class="far fa-calendar-alt"></i>
+        <p>On {{trip.startsAt | monthAndYearName}}, for {{trip.duration}}</p>
+      </div>
+      <div class="trip-dest">
+        <i class="fas fa-globe-europe"></i>
+        <!-- TODO -->
+        <p>Nis, Paris in France</p>
+      </div>
+      <div class="trip-activities">
+        <div v-for="(activity, idx) in trip.activities" :key="idx">{{activity}}</div>
+      </div>
+
+      <div class="map">
+        <our-super-awesome-map :enable="false" :value="trip.destinations"/>
+      </div>
     </div>
 
-    <button
-      class="btn-join-trip"
-      @click="joinLeaveTrip"
-      v-if="!loggedInUser || trip.userId !== loggedInUser._id"
-    >{{whoIsUser}}</button>
-
-    <div class="trip-members">
+    <div class="trip-users">
       <h3>Group members:</h3>
-      <ul>
+      <ul class="trip-members">
         <userPreview v-for="user in trip.members" :key="user._id" :user="user"/>
       </ul>
       <pending-list
@@ -41,12 +65,16 @@
         v-if="loggedInUser && loggedInUser._id === trip.userId"
       />
     </div>
-
-    <p class="trip-desc">{{trip.desc}}</p>
-    <our-super-awesome-map :enable="false" :value="trip.destinations"/>
-    <div class="comments">
-      <h3>Comments</h3>
-    </div>
+    <!-- SIMON GROUP CHAT BUTTON -->
+    <button
+      @click="initGroupChat(trip.chatId)"
+      v-if="isUserMember || loggedInUser._id === trip.userId"
+      class="group-chat"
+      :title="'Chat with group members'"
+    >
+      <i class="far fa-comments"></i>HI
+    </button>
+    <!-- SIMON GROUP CHAT BUTTON -->
   </section>
 </template>
 
@@ -78,9 +106,6 @@ export default {
     initChat(userId) {
       this.$store.dispatch({ type: "socketJoinPrivateChat", userId });
     },
-    initGroupChat(chatId) {
-      this.$store.dispatch({type: 'socketInitGroupChat', chatId});
-    },
     initTrip() {
       const { tripId } = this.$route.params;
       if (!this.trip || tripId !== this.trip._id) {
@@ -103,7 +128,10 @@ export default {
         userToLeave: pendingUser,
         tripIdToLeave: this.trip._id
       });
-    }
+    },
+    initGroupChat(chatId) {
+     this.$store.dispatch({type: 'socketInitGroupChat', chatId});
+   },
   },
   created() {
     this.initTrip();
@@ -133,6 +161,14 @@ export default {
       ) {
         return "Cancel request";
       } else return "Ask to join";
+    },
+    isLike() {
+      let classKey = this.trip.user.likes.some(
+        userId => userId === this.loggedInUser._id
+      )
+        ? "fas fa-heart"
+        : "far fa-heart";
+      return { [classKey]: true };
     }
   },
   watch: {

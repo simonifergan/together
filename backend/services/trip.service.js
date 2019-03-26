@@ -258,7 +258,7 @@ async function getById(tripId) {
                     localField: 'userId',
                     foreignField: '_id',
                     as: 'user'
-
+ 
                 }
             },
             {
@@ -271,7 +271,6 @@ async function getById(tripId) {
                         pendingIn: 0,
                         proposals: 0,
                         tripPrefs: 0,
-                        birthdate: 0,
                     },
                 },
             },
@@ -283,7 +282,7 @@ async function getById(tripId) {
     } catch {
         return null;
     }
-}
+ }
 
 async function getByUserId(id) {
     const userId = new ObjectId(id);

@@ -7,6 +7,18 @@ Vue.filter('countryCodeToName', code => {
     return (name)? name : '';
 })
 
+Vue.filter('calcAge', timestamp => {
+    return Math.floor((Date.now() - timestamp) / (1000 * 60 * 60 * 24 * 365));
+})
+
+Vue.filter('monthAndYearName', (monthYearStr) => {
+    let monthNumStart = +monthYearStr.substring(5);
+    let monthNameStart = UtilService.getMonthName(monthNumStart);
+    let yearNumStart = +monthYearStr.substring(0,4);
+   
+    return `${monthNameStart} ${yearNumStart}`;
+})
+
 Vue.filter('notificationAction', (action)=>{
     switch (action) {
         case 'trip_request':
@@ -33,3 +45,4 @@ Vue.filter('notificationAction', (action)=>{
 Vue.filter('fromNow', (timestamp)=>{
     return moment(timestamp).fromNow();
 });
+
