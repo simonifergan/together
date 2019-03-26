@@ -44,7 +44,7 @@ export default new Router({
       component: SearchPage
     },
     {
-      path: '/edit-profile/:userId',
+      path: '/account/:userId',
       name: 'editProfile',
       component: EditProfile
     },
