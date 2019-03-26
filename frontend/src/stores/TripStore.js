@@ -88,6 +88,9 @@ export default {
         },
         activities(state) {
             return TripService.getActivities()
+        },
+        countries(state) {
+            return TripService.getCountries()
         }
     },
     actions: {
@@ -290,9 +293,13 @@ export default {
             return trips
         },
         async getFilterImgs({ commit }, { filterType, filters }) {
+            console.log('getting filter Imgs', filters);
+            
             const filterImgs = await Promise.all(filters.map(filter => TripService.getImgs(filter, filterType)))
-            if (filterType === 'activities') commit({ type: 'setActivityFilters', filterImgs })
-            else if (filterType === 'destinations') commit({ type: 'setDestinationFilters', filterImgs })
+            console.log('got:', filterImgs);
+            return filterImgs
+            // if (filterType === 'activities') commit({ type: 'setActivityFilters', filterImgs })
+            // else if (filterType === 'destinations') commit({ type: 'setDestinationFilters', filterImgs })
         },
         async connectToGoogle() {
             return GoogleService.connectGoogleApi()
@@ -304,6 +311,10 @@ export default {
         async getCountryCode(context, { placeId }) {
             const countryCode = await TripService.getCountryCode(placeId)
             return countryCode
+        },
+        async getCitiesByCountry(context, {country}) {
+            const cities = await TripService.getByCountry(country)
+            return cities
         }
     }
 }

@@ -13,7 +13,8 @@ module.exports = {
     remove,
     getTrending,
     getByActivity,
-    getRecommended
+    getRecommended,
+    getTripsByCountry
 }
 
 const tripsCollection = 'trips';
@@ -472,6 +473,16 @@ async function getByUserId(id) {
     } catch {
         throw 'Could not connect to Database';
     }
+}
+
+async function getTripsByCountry(country) {    
+    const db = await mongoService.connect()
+    const trips = await db.collection(tripsCollection).find({
+        'destinations.countries': {
+            $all: [country]
+        }
+    }).toArray()
+    return trips
 }
 
 async function add(trip) {

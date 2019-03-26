@@ -57,6 +57,13 @@ module.exports = (app) => {
 
     });
 
+    // Get trips by countryCode
+    app.get(`${BASE_URL}/country/:countryCode`, async (req,res) => {
+        const {countryCode} = req.params;
+            const trips = await tripService.getTripsByCountry(countryCode);
+            res.json(trips);
+    });
+
     // For further use: when user is an admin
     function checkAdmin(req, res, next) {
         if (!req.session.user || !req.session.user.isAdmin) return res.end('Not admin');

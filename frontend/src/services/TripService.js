@@ -19,7 +19,9 @@ export default {
     getCountryCode,
     getActivityTrips,
     getActivities,
-    getRecommended
+    getRecommended,
+    getCountries,
+    getByCountry
     // getCategories
 }
 
@@ -53,6 +55,21 @@ async function getActivityTrips(activity) {
 async function getByUserId(id) {
     const {data} = await axios.get(`${TRIP_API}/user/${id}`)
     return data;
+}
+
+async function getByCountry(country) {
+    const {data} = await axios.get(`${TRIP_API}/country/${country}`)
+    const cities = data.reduce((acc, trip) => {
+        console.log('int service, destinations:', trip.destinations);
+        const tripCities = trip.destinations.cities
+        console.log('int service, tripCities:', tripCities);
+        
+        tripCities.forEach(city => {
+            if (acc.indexOf(city) === -1) acc.push(city)
+        })
+        return acc
+    }, [])
+    return cities;
 }
 
 async function getById(id) {
@@ -97,6 +114,10 @@ function getActivities() {
     return ['art', 'beach', 'food', 'hiking', 'history', 'music', 'shopping', 'sports', 'theater']
 }
 
+function getCountries() {
+    return ['Italia', 'USA', 'Brazil', 'Thailand', 'India', 'PT']
+}
+
 async function getPlacesAutocomplete(query) {
     const autocomplete = await GoogleService.getAutocomplete(query)
     return autocomplete
@@ -108,7 +129,9 @@ async function getCountryCode(placeId) {
 }
 
 async function getImgs(query, type) {
-    if (type === 'destinations') query = UtilService.worldCodeMap.get(query)
+    console.log('query:', query);
+    
+    // if (type === 'destinations') query = UtilService.worldCodeMap.get(query)
     const filter = {}
     filter.title = query
     if (type === 'destinations') {
