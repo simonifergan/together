@@ -2,7 +2,20 @@
   <section class="user-details" v-if="user">
     <div class="top-fold">
       <div :style="profilePic" class="user-img"/>
-      <span>{{user.firstname}} {{user.lastname}}</span>
+      <div class="user-info">
+        <h2>{{user.firstname}}&nbsp;{{user.lastname}}</h2>
+        <h3>{{user.birthdate | calcAge}}, {{user.from | countryCodeToName}}</h3>
+      </div>
+
+      <div class="likes-container">
+         <p class="likes-count">
+          <button :title="'Like ' + user.firstname">
+            <i :class="isLike"></i>
+          </button>
+          <span>&nbsp;({{user.likes.length}})</span>
+        </p>
+      </div>
+      
     </div>
 
     <ul class="user-trips">
@@ -18,9 +31,9 @@
       </user-trip-preview>
     </ul>
 
-    <ul class="user-trips">
+    <!-- <ul class="user-trips">
       <h2>{{user.firstname}}'s testimonies</h2>
-    </ul>
+    </ul> -->
   </section>
 </template>
 
@@ -51,17 +64,27 @@ export default {
     user() {
       return this.$store.getters.userToDisplay;
     },
+    loggedInUser() {
+      return this.$store.getters.loggedUser;
+    },
     profilePic() {
       if (!this.user) return "";
       return { backgroundImage: `url('${this.user.profilePic}')` };
     },
     trips() {
       return this.$store.getters.trips;
-    }
+    },
+    isLike() {
+      let classKey = (this.loggedInUser && this.user.likes.some(userId => userId === this.loggedInUser._id))
+        ? "fas fa-heart"
+        : "far fa-heart";
+      return { [classKey]: true };
+    },
   },
   beforeDestroy() {
     this.$store.commit({ type: "setUserToDisplay", user: null });
   },
+   
   watch: {
     $route: {
       handler(newRoute) {

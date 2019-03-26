@@ -1,11 +1,33 @@
 .user-details {
+    @include wrapper(1000px);
+    border-right: 1px solid $box-shadow-gray;
+    border-left: 1px solid $box-shadow-gray;
     .top-fold {
-        @include flex();
+        // background: linear-gradient(to top, #ece9e6, #ffffff);
+        border-bottom: 1px solid $box-shadow-gray;
+        padding: 20px 30px 10px 30px;
+        @include flex(row, flex-start, center);
         .user-img {
             @include userImg(250px, 250px);
             box-shadow: 0 0 1px 1px #333;
             background-repeat: no-repeat;
             border: 3px solid #fff;
+        }
+        .user-info {
+            margin-left: 50px;
+            @include flex(column);
+            h2 {
+                font-weight: bold;
+                font-size: 1.4em;
+                margin-bottom: 5px;
+            }
+            h3 {
+                font-size: 1em;
+                margin-bottom: 5px;
+            }
+        }
+        .likes-container {
+            margin-left: 50px;
         }
     }
     .user-trip-preview {

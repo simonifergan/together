@@ -5,23 +5,23 @@
     <transition name="fade" mode="out-in">
       <router-view/>
     </transition>
-    <div class="chat-container">
+    <div class="chat-container" v-if="!isMessagesPage">
       <chat v-for="(chat,index) in chats" :chat="chat" :key="chat._id+index"/>
     </div>
-    <notification-list :notifications="getNotifications"/>
+    <!-- <notification-list :notifications="getNotifications"/> -->
   </div>
 </template>
 
 <script>
 import MainHeader from "@/components/MainHeader";
 import Chat from "@/components/Chat";
-import NotificationList from "@/components/NotificationList";
+// import NotificationList from "@/components/NotificationList";
 
 export default {
   name: "App",
   components: {
     MainHeader,
-    NotificationList,
+    // NotificationList,
     Chat
   },
   computed: {
@@ -33,6 +33,9 @@ export default {
     },
     loggedUser() {
       return this.$store.getters.loggedUser;
+    },
+    isMessagesPage() {
+      return this.$route.path === '/messages';
     }
   },
   created() {

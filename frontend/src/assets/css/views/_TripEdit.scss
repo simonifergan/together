@@ -1,45 +1,87 @@
 .trip-edit {
+    background-color: #fbfbfb;
+    border-right: 1px solid $box-shadow-gray;
+    border-left: 1px solid $box-shadow-gray;
     @include wrapper;
     h1 {
+        padding: 30px 20px 20px 20px;
+
         font-size: 2em;
+        border-bottom: 1px solid $box-shadow-gray;
     }
     form {
-        padding: 20px;
-        
-        textarea, input {
-            font-family: 'Open Sans';
-           
-        }
+        @include flex(column);
+        padding: 20px 20px 20px 30px;
         h2 {
-            font-size: 1.5em;
+            font-size: 1.2em;
             margin-bottom: 10px;
-            margin-top: 20px;
-        }
-        .edit-input {
-            width: 100%;
-            border: 1px solid $box-shadow-gray;
-            padding: 10px;
-            &.trip-title {
-                font-size: 1.225em
+            margin-top: 25px;
+            &:first-of-type {
+                margin-top: 15px;
             }
         }
+        input, textarea {
+            font-family: 'Open Sans';
+            font-size: 14px;
+            transition: .3s;
+            border-radius: 5px;
+            
+            
+        }
+        input::placeholder, textarea::placeholder {
+            color: #8a8f90;
+        }
+
+        label {
+            input, textarea {
+                font-family: 'Open Sans';
+                font-size: 14px;
+                transition: .3s;
+                border-radius: 5px;
+                margin-left: 5px;
+              
+                
+            }
+                input::placeholder, textarea::placeholder {
+                    color: #8a8f90;
+                }
+        }
+ 
         .date-picker {
-            @include flex(column, center, center);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding: 20px 0;
             label {
-                padding: 5px 5px 5px 15px;
-                display: grid;
-                grid-template-columns: 50px 1fr;
-                align-self: flex-start;
+                span {
+                    margin-bottom: 10px;
+                    padding-left: 5px;
+                }
+                @include flex(column);
+                
                 cursor: pointer;
                 input {
                     cursor: pointer;
                 }
             }
         }
-        button {
-            @include button;
-            float: right;
+        .btn-share-trip {
+            align-self: flex-end;
             margin-top: 10px;
+            font-family: $font-ubuntu-s-bold;
+            color: white;
+            background-color: $clr1;
+            width: 150px;
+            border: none;
+            font-size: 1em;
+            padding: 10px 15px;
+            border-radius: 2px;
+            transition: .3s;
+            &:hover {
+                background-color: rgba($clr1, .7);
+            }
+        }
+        .svg-map-container {
+            margin: 15px 0 20px 0;
         }
     }
 }
