@@ -160,8 +160,15 @@ button {
                             @include button;
                         }
                     }
+                    .btn-sns-container {
+                        .fb {
+                            background-color: #4267b2;
+                            color: #fff;
+                        }
+                    }
                 }
             }
+
             
         }
     }
