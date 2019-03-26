@@ -7,7 +7,7 @@
 
       <div class="btns-like-msg">
         <button
-          v-if="!loggedInUser || trip.userId !== loggedInUser._id"
+          v-if="!loggedInUser || (loggedInUser && trip.userId !== loggedInUser._id)"
           @click="initChat(trip.userId)"
           :title="'Start a chat with ' + trip.user.firstname"
         >
@@ -97,7 +97,7 @@ export default {
           userToLeave: this.loggedInUser,
           tripIdToLeave: this.trip._id
         });
-      else if (this.trip.pending.some(id => id === this.loggedInUser._id)) {
+      else if (this.loggedInUser && this.trip.pending.some(id => id === this.loggedInUser._id)) {
         this.$store.dispatch({ type: "cancelTripJoinRequest" });
       } else this.$store.dispatch({ type: "userRequestToJoinTrip" });
     },
@@ -155,15 +155,13 @@ export default {
       if (!this.loggedInUser) return "Ask to join";
       if (this.isUserMember) return "Leave";
       else if (
-        this.trip.pending.some(userId => userId === this.loggedInUser._id)
+        this.loggedInUser && this.trip.pending.some(userId => userId === this.loggedInUser._id)
       ) {
         return "Cancel request";
       } else return "Ask to join";
     },
     isLike() {
-      let classKey = this.trip.user.likes.some(
-        userId => userId === this.loggedInUser._id
-      )
+      let classKey = (this.loggedInUser && this.trip.user.likes.some(userId => userId === this.loggedInUser._id))
         ? "fas fa-heart"
         : "far fa-heart";
       return { [classKey]: true };
