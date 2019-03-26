@@ -59,7 +59,6 @@ async function query(userId) {
                 $unwind: '$trip'
             }
         ]).toArray()
-        console.log(chats);
         return chats;
     } catch {
 

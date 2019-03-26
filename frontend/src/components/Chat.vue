@@ -9,11 +9,11 @@
         :title="user.firstname"
       />
       <span
-        v-show="chattingWith.length < 2"
+        v-show="!chat.trip"
         v-for="(user, index) in chattingWith"
         :key="user._id+index"
       >{{`${user.firstname} ${user.lastname}`}}</span>
-      <span v-show="chattingWith.length > 2">{{chat.trip.title}}</span>
+      <span v-show="chat.trip">{{chat.trip.title}}</span>
       <button :class="{'is-focused': isFocused}" @click.stop="closeChat">
         <i class="fas fa-times"></i>
       </button>
@@ -85,6 +85,7 @@ export default {
       this.$nextTick( () => {
 
           let msgs = this.$refs.msgsBlock.children;
+          if (!msgs) return;
           this.$refs.msgsBlock.scrollTo({
             top: msgs[msgs.length - 1].offsetTop,
             bottom: 0,

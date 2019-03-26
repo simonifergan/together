@@ -9,7 +9,6 @@
       :chat="chat"
       :key="chat._id + index + 3"
       :user="user"
-      
       @click.native="initChat(chat._id)"
     />
     <footer v-if="!isExpanded">
