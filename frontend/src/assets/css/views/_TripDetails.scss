@@ -80,7 +80,6 @@
                 }
             }
         }
-        
         .trip-desc {
             margin-bottom: 30px;
             line-height: 22px;
@@ -114,7 +113,6 @@
                 }
             }
         }
-        
         .map {
             max-width: 700px;
         }
@@ -131,9 +129,22 @@
         h3:last-of-type {
             margin-top: 30px;
         }
-        .trip-members {
-            @include flex(row, space-evenly, center);
+        .btn-group-chat {
+            width: 100%;
+            margin-bottom: 20px;
+            @include flex(row, center, center);
+            button {
+                background: none;
+                border: none;
+                i {
+                    font-size: 1.7em;
+                }
+            }
+
         }
-        
+        .trip-members {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
     }
 }

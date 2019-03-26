@@ -46,18 +46,6 @@ export default {
 
 <style lang="scss">
 .pending-list {
-  .user-item {
-    padding: 10px 10px 10px 30px;
-    .user-img {
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      background-size: cover;
-      box-shadow: 0 0 0.5px #e5e5e5;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-  }
   .btns-pending {
     button {
       background: none;

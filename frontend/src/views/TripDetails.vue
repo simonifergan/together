@@ -53,7 +53,7 @@
     </div>
 
     <div class="trip-users">
-      <h3 v-if="trip.pending.length > 0 && trip.user._id === this.loggedInUser">Pending:</h3>
+      <h3 v-if="trip.pending.length > 0 && trip.user._id === this.loggedInUser._id">Pending:</h3>
       <pending-list
         @requestPendingUsers="requestPendingUsers"
         @requestApproved="requestApproved"
@@ -61,15 +61,14 @@
         v-if="loggedInUser && loggedInUser._id === trip.userId"
       />
       <h3>Group members:</h3>
-      <!-- SIMON GROUP CHAT BUTTON -->
-      <button
-        @click="initGroupChat(trip.chatId)"
-        v-if="isUserMember || loggedInUser._id === trip.userId"
-        class="group-chat"
-        :title="'Chat with group members'">
-          <i class="far fa-comments"></i>
-      </button>
-      <!-- SIMON GROUP CHAT BUTTON -->
+      <div class="btn-group-chat">
+        <button
+          @click="initGroupChat(trip.chatId)"
+          v-if="isUserMember || loggedInUser._id === trip.userId"
+          :title="'Chat with group members'">
+            <i class="far fa-comments"></i>
+        </button>
+      </div>
       <ul class="trip-members">
         <userPreview v-for="user in trip.members" :key="user._id" :user="user"/>
       </ul>
