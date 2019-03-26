@@ -3,12 +3,13 @@
     <header>
       <!-- TODO: 2 buttons for group chats -->
     </header>
+    <!-- v-show="chat.msgs.length" -->
     <message-preview
       v-for="(chat, index) in chats"
       :chat="chat"
       :key="chat._id + index + 3"
       :user="user"
-      v-show="chat.msgs.length"
+      
       @click.native="initChat(chat._id)"
     />
     <footer v-if="!isExpanded">
