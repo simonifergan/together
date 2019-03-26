@@ -1,70 +1,107 @@
 .trip-details {
-    padding: 50px;
-    line-height: 150%;
-    @include wrapper();
-    
-    .top-fold {
-        position: relative;
-        margin-bottom: 20px;
-        display: grid;
-        grid-template: 3fr 2fr / 100px 1fr;
-        grid-column-gap: 20px;
-        h1 {
-            font-family: $font-ubuntu-bold;
-            font-size: 1.5em;
-            align-self: center;
-        }
-        h2 {
-            font-family: $font-ubuntu;
-            font-size: 1.2em;
-            color: #606060;
+    display: grid;
+    grid-template-areas: 
+        "user-section trip-section"
+        "trip-members trip-section";
+    .user-section {
+        height: 600px;
+        text-align: center;
+        .likes-count {
+            @include flex(row, flex-start, center);
+            text-align: start;
+            font-size: .9em;
+            i {
+                font-size: 1.5em;
+            }
         }
         .profile-img {
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
-            background-size: contain;
+            @include userImg(100px, 100px);
+            margin: 0 auto;
             grid-row: span 2;
         }
-        button {
-            background-color: transparent;
-            border: none;
-            font-size: 1.5em;
-            position: absolute;
-            top: 0;
-            right: 0;
+        .btns-like-msg {
+            @include flex(row, space-between, center);
+            width: 100px;
+            margin: 0 auto;
+            button {
+                width: 50px;
+                height: 50px;
+                background: none;
+                border: none;
+                font-size: 1.5em;
+            }
         }
-    }
-    .btn-join-trip {
-        font-family: $font-ubuntu-s-bold;
-        color: #606060;
-        background-color: unset;
-        border: none;
-        font-size: 1em;
-        padding: 10px 15px;
-        box-shadow: 0 0 2px black;
-        border-radius: 2px;
-        transition: .3s;
-        &:hover {
-            color: black;
-        }
-    }
-    .trip-members {
-        margin-top: 20px;
-        margin-bottom: 40px;
-        ul {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, 120px);
-            justify-items: center;
-        }
-        .pending-list {
-            background-color: antiquewhite;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, 120px);
-            justify-items: center;
-        }
-    }
-    .trip-desc {
-        margin-bottom: 20px;
     }
 }
+
+
+// .trip-details {
+//     padding: 50px;
+//     line-height: 150%;
+//     @include wrapper();
+    
+//     .top-fold {
+//         position: relative;
+//         margin-bottom: 20px;
+//         display: grid;
+//         grid-template: 3fr 2fr / 100px 1fr;
+//         grid-column-gap: 20px;
+//         h1 {
+//             font-family: $font-ubuntu-bold;
+//             font-size: 1.5em;
+//             align-self: center;
+//         }
+//         h2 {
+//             font-family: $font-ubuntu;
+//             font-size: 1.2em;
+//             color: #606060;
+//         }
+//         .profile-img {
+//             border-radius: 50%;
+//             width: 100px;
+//             height: 100px;
+//             background-size: contain;
+//             grid-row: span 2;
+//         }
+//         button {
+//             background-color: transparent;
+//             border: none;
+//             font-size: 1.5em;
+//             position: absolute;
+//             top: 0;
+//             right: 0;
+//         }
+//     }
+//     .btn-join-trip {
+//         font-family: $font-ubuntu-s-bold;
+//         color: #606060;
+//         background-color: unset;
+//         border: none;
+//         font-size: 1em;
+//         padding: 10px 15px;
+//         box-shadow: 0 0 2px black;
+//         border-radius: 2px;
+//         transition: .3s;
+//         &:hover {
+//             color: black;
+//         }
+//     }
+//     .trip-members {
+//         margin-top: 20px;
+//         margin-bottom: 40px;
+//         ul {
+//             display: grid;
+//             grid-template-columns: repeat(auto-fill, 120px);
+//             justify-items: center;
+//         }
+//         .pending-list {
+//             background-color: antiquewhite;
+//             display: grid;
+//             grid-template-columns: repeat(auto-fill, 120px);
+//             justify-items: center;
+//         }
+//     }
+//     .trip-desc {
+//         margin-bottom: 20px;
+//     }
+// }

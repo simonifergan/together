@@ -76,11 +76,8 @@ button {
                 }
             }
             .user-dashboard {
-                border-radius: 50%;
-                width: 35px;
-                height: 35px;
+                @include userImg(35px, 35px);
                 margin: 0;
-                background-size: contain;
                 position: relative;
                 cursor: pointer;
                 .dropdown {

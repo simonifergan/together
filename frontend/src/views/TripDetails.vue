@@ -1,23 +1,31 @@
 <template>
   <section v-if="trip" class="trip-details">
-    <div class="top-fold">
+    <div class="user-section">
+      <!-- {{trip}} -->
+      <p class="likes-count">
+        <i class="fas fa-heart"></i>
+        <span>&nbsp;({{this.trip.user.likes.length}})</span>
+      </p>
       <div class="profile-img" :style="profilePic"/>
-      <h1>{{trip.title}}</h1>
       <h2>{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</h2>
-      <button
-        v-if="!loggedInUser || trip.userId !== loggedInUser._id"
-        @click="initChat(trip.userId)"
-        :title="'Start a chat with ' + trip.user.firstname"
-      >
-        <i class="far fa-comments"></i>
-      </button>
-    </div>
+      <h3>{{trip.user.birthdate | calcAge}}, {{trip.user.from | countryCodeToName}}</h3>
 
-    <button
-      class="btn-join-trip"
-      @click="joinLeaveTrip"
-      v-if="!loggedInUser || trip.userId !== loggedInUser._id"
-    >{{whoIsUser}}</button>
+      <div class="btns-like-msg">
+        <button
+          v-if="!loggedInUser || trip.userId !== loggedInUser._id"
+          @click="initChat(trip.userId)"
+          :title="'Start a chat with ' + trip.user.firstname"
+        >
+          <i class="far fa-comments"></i>
+        </button>
+
+        <!-- TODO: on click - update likes (toggle likes) -->
+        <button
+        :title="'Like ' + trip.user.firstname">
+          <i class="far fa-heart"></i>
+        </button>
+      </div>
+    </div>
 
     <div class="trip-members">
       <h3>Group members:</h3>
@@ -32,11 +40,11 @@
       />
     </div>
 
-    <p class="trip-desc">{{trip.desc}}</p>
+    <!-- <p class="trip-desc">{{trip.desc}}</p>
     <our-super-awesome-map :enable="false" :value="trip.destinations"/>
     <div class="comments">
       <h3>Comments</h3>
-    </div>
+    </div>-->
   </section>
 </template>
 
@@ -71,6 +79,8 @@ export default {
     initTrip() {
       const { tripId } = this.$route.params;
       if (!this.trip || tripId !== this.trip._id) {
+        console.log("dispatch");
+
         this.$store.dispatch({ type: "loadTrip", tripId });
       }
     },

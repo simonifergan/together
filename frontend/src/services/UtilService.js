@@ -1,4 +1,5 @@
 import worldDb from '../data/world.json'
+
 const worldCodeMap = new Map();
 (function() {
     worldDb.forEach(country => {

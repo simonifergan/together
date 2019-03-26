@@ -7,6 +7,10 @@ Vue.filter('countryCodeToName', code => {
     return (name)? name : '';
 })
 
+Vue.filter('calcAge', timestamp => {
+    return Math.floor((Date.now() - timestamp) / (1000 * 60 * 60 * 24 * 365));
+})
+
 Vue.filter('notificationAction', (action)=>{
     switch (action) {
         case 'trip_request':
