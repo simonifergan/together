@@ -3,20 +3,19 @@
     border-right: 1px solid $box-shadow-gray;
     border-left: 1px solid $box-shadow-gray;
     display: grid;
-    grid-template-rows: 300px 1fr;
+    grid-template-rows: 280px 1fr;
     grid-template-columns: 300px 1fr;
     grid-template-areas: 
         "user-section trip-section"
         "trip-members trip-section";
-    padding: 20px;
     color: #333;
     .user-section {
+        border-bottom: 1px solid $box-shadow-gray;
         grid-area: user-section;
         text-align: center;
-        
         .profile-img {
             @include userImg(150px, 150px);
-            margin: 10px auto;
+            margin: 20px auto;
             grid-row: span 2;
             border: 3px solid white;
             box-shadow: 0 0 0 1px #333;
@@ -27,9 +26,7 @@
             margin-bottom: 5px;
         }
         .btns-like-msg {
-            @include flex(row, space-between, center);
-            width: 100px;
-            margin: 0 auto;
+            @include flex(row, center, center);
             button {
                 width: 50px;
                 height: 50px;
@@ -56,6 +53,7 @@
         }
     }
     .trip-section {
+        border-left: 1px solid $box-shadow-gray;
         grid-area: trip-section;
         padding: 30px;
         .trip-header {
@@ -82,7 +80,6 @@
                 }
             }
         }
-        
         .trip-desc {
             margin-bottom: 30px;
             line-height: 22px;
@@ -116,13 +113,13 @@
                 }
             }
         }
-        
         .map {
             max-width: 700px;
         }
     }
     .trip-users {
         grid-area: trip-members;
+        margin-top: 30px;
         h3 {
             margin-bottom: 20px;
             text-align: center;
@@ -132,81 +129,22 @@
         h3:last-of-type {
             margin-top: 30px;
         }
-        .trip-members {
-            @include flex(row, space-evenly, center);
+        .btn-group-chat {
+            width: 100%;
+            margin-bottom: 20px;
+            @include flex(row, center, center);
+            button {
+                background: none;
+                border: none;
+                i {
+                    font-size: 1.7em;
+                }
+            }
+
         }
-        
+        .trip-members {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
     }
 }
-
-
-// .trip-details {
-//     padding: 50px;
-//     line-height: 150%;
-//     @include wrapper();
-    
-//     .top-fold {
-//         position: relative;
-//         margin-bottom: 20px;
-//         display: grid;
-//         grid-template: 3fr 2fr / 100px 1fr;
-//         grid-column-gap: 20px;
-//         h1 {
-//             font-family: $font-ubuntu-bold;
-//             font-size: 1.5em;
-//             align-self: center;
-//         }
-//         h2 {
-//             font-family: $font-ubuntu;
-//             font-size: 1.2em;
-//             color: #606060;
-//         }
-//         .profile-img {
-//             border-radius: 50%;
-//             width: 100px;
-//             height: 100px;
-//             background-size: contain;
-//             grid-row: span 2;
-//         }
-//         button {
-//             background-color: transparent;
-//             border: none;
-//             font-size: 1.5em;
-//             position: absolute;
-//             top: 0;
-//             right: 0;
-//         }
-//     }
-//     .btn-join-trip {
-//         font-family: $font-ubuntu-s-bold;
-//         color: #606060;
-//         background-color: unset;
-//         border: none;
-//         font-size: 1em;
-//         padding: 10px 15px;
-//         box-shadow: 0 0 2px black;
-//         border-radius: 2px;
-//         transition: .3s;
-//         &:hover {
-//             color: black;
-//         }
-//     }
-//     .trip-members {
-//         margin-top: 20px;
-//         margin-bottom: 40px;
-//         ul {
-//             display: grid;
-//             grid-template-columns: repeat(auto-fill, 120px);
-//             justify-items: center;
-//         }
-//         .pending-list {
-//             background-color: antiquewhite;
-//             display: grid;
-//             grid-template-columns: repeat(auto-fill, 120px);
-//             justify-items: center;
-//         }
-//     }
-//     .trip-desc {
-//         margin-bottom: 20px;
-//     }
-// }

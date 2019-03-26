@@ -323,13 +323,13 @@ export default {
         }
     },
     mounted() {
-        this.value.forEach(id => document.querySelector(`#${id}`).style.fill = '#e74c3c')
+        this.value.forEach(id => document.querySelector(`#${id}`).style.fill = '#4f8314')
         this.mapView.sizeX = this.$refs.svgContainer.offsetWidth
         this.mapView.sizeY = this.$refs.svgContainer.offsetHeight
     },
     watch: {
         value(newVal) {
-            newVal.forEach(id => document.querySelector(`#${id}`).style.fill = '#e74c3c')
+            newVal.forEach(id => document.querySelector(`#${id}`).style.fill = '#4f8314')
         },
     },
     methods: {

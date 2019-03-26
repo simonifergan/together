@@ -46,26 +46,22 @@ export default {
 
 <style lang="scss">
 .pending-list {
-  .user-item {
-    padding: 10px 10px 10px 30px;
-    .user-img {
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      background-size: cover;
-      box-shadow: 0 0 0.5px #e5e5e5;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-  }
   .btns-pending {
-      button {
-        background: none;
-        border: none;
-        i {
-          font-size: 1.4em;
-        }
+    button {
+      background: none;
+      border: none;
+      padding: 5px;
+      transition: .3s;
+      i {
+        font-size: 1.4em;
+      }
+      &:first-of-type:hover {
+        color: #8bc34a;
+      }
+      &:last-of-type:hover {
+        color: #e74c3c;
       }
     }
+  }
 }
 </style>

@@ -179,7 +179,6 @@ button {
         margin: 0;
         position: relative;
         .msgs-dropdown {
-            overflow-y: scroll;
             margin: 0;
             @include flex(column);
             z-index: 2;
@@ -187,11 +186,15 @@ button {
             background-color: #fff;
             color: #333;
             width: 430px;
+            min-height: 100px;
             max-height: 500px;
             top: 42px;
             right: -20px;
             border-radius: 0 0 1px 1px;
             box-shadow: 0 0 1px 1px $box-shadow-gray;
+            &.allow-scroll {
+                overflow-y: scroll;
+            }
             .msg-preview {
                 @include flex(row, flex-start, center);
                 margin: 0;
@@ -202,9 +205,13 @@ button {
                 &:hover {
                     background-color: #f6f6f6;
                 }
-                .user-img {
-                    @include userImg(50px, 50px);
-                    background-repeat: no-repeat;
+                .user-img-container {
+                    display: grid;
+                    grid-template-columns: repeat(3, 25px);
+                    .user-img {
+                        @include userImg(50px, 50px);
+                        background-repeat: no-repeat;
+                    }
                 }
                 .msg-content{
                     margin-left: 20px;

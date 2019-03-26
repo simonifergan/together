@@ -1,6 +1,5 @@
 <template>
   <section v-if="trip" class="trip-details">
-    
     <div class="user-section">
       <div class="profile-img" :style="profilePic"/>
       <h2>{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</h2>
@@ -8,11 +7,11 @@
 
       <div class="btns-like-msg">
         <button
-          v-if="!loggedInUser || trip.userId !== loggedInUser._id"
+          v-if="!loggedInUser || (loggedInUser && trip.userId !== loggedInUser._id)"
           @click="initChat(trip.userId)"
           :title="'Start a chat with ' + trip.user.firstname"
         >
-          <i class="far fa-comments"></i>
+          <i class="far fa-comment-dots"></i>
         </button>
 
         <!-- TODO: on click - update likes (toggle likes) -->
@@ -24,7 +23,7 @@
         </p>
       </div>
     </div>
-    
+
     <div class="trip-section">
       <div class="trip-header">
         <h1>{{trip.title}}</h1>
@@ -54,7 +53,7 @@
     </div>
 
     <div class="trip-users">
-      <h3 v-if="trip.pending.length > 0">Pending:</h3>
+      <h3 v-if="trip.pending.length > 0 && trip.user._id === this.loggedInUser._id">Pending:</h3>
       <pending-list
         @requestPendingUsers="requestPendingUsers"
         @requestApproved="requestApproved"
@@ -62,20 +61,18 @@
         v-if="loggedInUser && loggedInUser._id === trip.userId"
       />
       <h3>Group members:</h3>
+      <div class="btn-group-chat">
+        <button
+          @click="initGroupChat(trip.chatId)"
+          v-if="isUserMember || loggedInUser._id === trip.userId"
+          :title="'Chat with group members'">
+            <i class="far fa-comments"></i>
+        </button>
+      </div>
       <ul class="trip-members">
         <userPreview v-for="user in trip.members" :key="user._id" :user="user"/>
       </ul>
     </div>
-    <!-- SIMON GROUP CHAT BUTTON -->
-    <button
-      @click="initGroupChat(trip.chatId)"
-      v-if="isUserMember || loggedInUser._id === trip.userId"
-      class="group-chat"
-      :title="'Chat with group members'"
-    >
-      <i class="far fa-comments"></i>HI
-    </button>
-    <!-- SIMON GROUP CHAT BUTTON -->
   </section>
 </template>
 
@@ -100,7 +97,7 @@ export default {
           userToLeave: this.loggedInUser,
           tripIdToLeave: this.trip._id
         });
-      else if (this.trip.pending.some(id => id === this.loggedInUser._id)) {
+      else if (this.loggedInUser && this.trip.pending.some(id => id === this.loggedInUser._id)) {
         this.$store.dispatch({ type: "cancelTripJoinRequest" });
       } else this.$store.dispatch({ type: "userRequestToJoinTrip" });
     },
@@ -131,8 +128,8 @@ export default {
       });
     },
     initGroupChat(chatId) {
-     this.$store.dispatch({type: 'socketInitGroupChat', chatId});
-   },
+      this.$store.dispatch({ type: "socketInitGroupChat", chatId });
+    }
   },
   created() {
     this.initTrip();
@@ -158,15 +155,13 @@ export default {
       if (!this.loggedInUser) return "Ask to join";
       if (this.isUserMember) return "Leave";
       else if (
-        this.trip.pending.some(userId => userId === this.loggedInUser._id)
+        this.loggedInUser && this.trip.pending.some(userId => userId === this.loggedInUser._id)
       ) {
         return "Cancel request";
       } else return "Ask to join";
     },
     isLike() {
-      let classKey = this.trip.user.likes.some(
-        userId => userId === this.loggedInUser._id
-      )
+      let classKey = (this.loggedInUser && this.trip.user.likes.some(userId => userId === this.loggedInUser._id))
         ? "fas fa-heart"
         : "far fa-heart";
       return { [classKey]: true };

@@ -1,13 +1,13 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
-import TripDetails from '@/views/TripDetails.vue';
-import TripEdit from '@/views/TripEdit.vue';
-import SignupPage from '@/views/SignupPage.vue';
-import SearchPage from '@/views/SearchPage.vue';
-import UserDetails from '@/views/UserDetails.vue';
+import Home from './views/Home';
+import TripDetails from '@/views/TripDetails';
+import TripEdit from '@/views/TripEdit';
+import SignupPage from '@/views/SignupPage';
+import SearchPage from '@/views/SearchPage';
+import UserDetails from '@/views/UserDetails';
 import Messages from '@/views/Messages';
-import EditProfile from '@/views/EditProfile.vue';
+import UserAccount from '@/views/UserAccount';
 
 Vue.use(Router)
 
@@ -44,9 +44,9 @@ export default new Router({
       component: SearchPage
     },
     {
-      path: '/edit-profile/:userId',
-      name: 'editProfile',
-      component: EditProfile
+      path: '/account/:userId',
+      name: 'UserAccount',
+      component: UserAccount
     },
     {
       path: '/messages',
