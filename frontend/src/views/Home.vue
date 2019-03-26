@@ -15,7 +15,7 @@
     </header>
     <article class="article-filters">
       <!-- <filter-list v-if="destinations" :type="'destinations'" :filters="destinations"/> -->
-      <filter-list v-if="filterLists.activities" :type="'activities'" :filters="filterLists.activities"/>
+      <filter-list v-for="(value, key) in filterLists" :key="key" :filters="value" :title="key"/>
     </article>
     <article class="article-trips">
       <trip-list v-for="(value, key) in tripLists" :key="key" :trips="value" :title="key"/>
@@ -43,9 +43,9 @@ export default {
       },
       filterLists: {
         beach: [],
-        activities: []
+        activities: [],
       },
-      countries: null
+      countries: this.$store.getters.countries
     };
   },
   computed: {
@@ -86,6 +86,13 @@ export default {
       this.tripLists = Object.assign({}, this.tripLists, {
         [activity]: activityTrips,
       })
+    },
+    async getFiltersForCountry(country) {
+      const cities = await this.$store.dispatch({type: 'getCitiesByCountry', country})
+      const citiesWithImgs = await this.$store.dispatch( {type: 'getFilterImgs', filterType: 'destinations', filters: cities })
+      this.filterLists = Object.assign({}, this.filterLists, {
+        [country]: citiesWithImgs,
+      })
     }
   },
   async created() {
@@ -96,8 +103,10 @@ export default {
     if (this.$store.getters.loggedUser) {      
       this.tripLists.recommended = await this.$store.dispatch({ type: "getRecommendedTrips" })
     }
-    this.filterLists.activities = this.$store.getters.activities;
-    this.filterLists.activities.forEach(activity => this.getActivityTrips(activity));
+    const activities = this.$store.getters.activities;
+    this.filterLists.activities = await this.$store.dispatch( {type: 'getFilterImgs', filterType: 'activities', filters: activities })
+    this.filterLists.activities.forEach(activity => this.getActivityTrips(activity.title));
+    this.countries.forEach(country => this.getFiltersForCountry(country))
   }
 };
 </script>
