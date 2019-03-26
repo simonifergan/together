@@ -26,9 +26,7 @@
             margin-bottom: 5px;
         }
         .btns-like-msg {
-            @include flex(row, space-between, center);
-            width: 100px;
-            margin: 0 auto;
+            @include flex(row, center, center);
             button {
                 width: 50px;
                 height: 50px;

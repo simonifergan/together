@@ -11,7 +11,7 @@
           @click="initChat(trip.userId)"
           :title="'Start a chat with ' + trip.user.firstname"
         >
-          <i class="far fa-comments"></i>
+          <i class="far fa-comment-dots"></i>
         </button>
 
         <!-- TODO: on click - update likes (toggle likes) -->
@@ -53,7 +53,7 @@
     </div>
 
     <div class="trip-users">
-      <h3 v-if="trip.pending.length > 0">Pending:</h3>
+      <h3 v-if="trip.pending.length > 0 && trip.user._id === this.loggedInUser">Pending:</h3>
       <pending-list
         @requestPendingUsers="requestPendingUsers"
         @requestApproved="requestApproved"
