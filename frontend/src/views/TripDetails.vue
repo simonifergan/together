@@ -54,16 +54,17 @@
     </div>
 
     <div class="trip-users">
-      <h3>Group members:</h3>
-      <ul class="trip-members">
-        <userPreview v-for="user in trip.members" :key="user._id" :user="user"/>
-      </ul>
+      <h3 v-if="trip.pending.length > 0">Pending:</h3>
       <pending-list
         @requestPendingUsers="requestPendingUsers"
         @requestApproved="requestApproved"
         @requestRejected="requestRejected"
         v-if="loggedInUser && loggedInUser._id === trip.userId"
       />
+      <h3>Group members:</h3>
+      <ul class="trip-members">
+        <userPreview v-for="user in trip.members" :key="user._id" :user="user"/>
+      </ul>
     </div>
     <!-- SIMON GROUP CHAT BUTTON -->
     <button
