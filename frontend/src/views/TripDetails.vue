@@ -1,5 +1,6 @@
 <template>
   <section v-if="trip" class="trip-details">
+    <!-- SIMON GROUP CHAT BUTTON -->
     <button 
       @click="initGroupChat(trip.chatId)" 
       v-if="isUserMember || loggedInUser._id === trip.userId" 
@@ -8,6 +9,7 @@
     >
         <i class="far fa-comments"></i>HI
     </button>
+    <!-- SIMON GROUP CHAT BUTTON -->
     <div class="top-fold">
       <div class="profile-img" :style="profilePic"/>
       <h1>{{trip.title}}</h1>
