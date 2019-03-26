@@ -388,7 +388,7 @@ async function getById(tripId) {
                     localField: 'userId',
                     foreignField: '_id',
                     as: 'user'
-
+ 
                 }
             },
             {
@@ -401,7 +401,6 @@ async function getById(tripId) {
                         pendingIn: 0,
                         proposals: 0,
                         tripPrefs: 0,
-                        birthdate: 0,
                     },
                 },
             },
@@ -413,7 +412,7 @@ async function getById(tripId) {
     } catch {
         return null;
     }
-}
+ }
 
 async function getByUserId(id) {
     const userId = new ObjectId(id);
@@ -510,10 +509,12 @@ function update(trip) {
     const pending = [...trip.pending];
     const userId = trip.userId;
     const chatMembers = [...(trip.members.map(member => member._id)), userId];
+    const chatId = trip.chatId;
     trip._id = new ObjectId(trip._id);
     trip.userId = new ObjectId(trip.userId);
     trip.members = trip.members.map(member => new ObjectId(member._id));
     trip.pending = trip.pending.map(pendingUser => new ObjectId(pendingUser));
+    trip.chatId = new ObjectId(chatId);
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).updateOne({ _id: trip._id }, { $set: trip }))
         .then(async mongoRes => {
@@ -521,6 +522,7 @@ function update(trip) {
             trip.userId = userId
             trip.members = members;
             trip.pending = pending;
+            trip.chatId = chatId;
             const res = await chatService.updateTripChat(trip.chatId, chatMembers);
 
             return trip;

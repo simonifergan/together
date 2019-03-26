@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="app-container">
+  <div id="app" class="app-container" ref="topOfPage">
     <main-header/>
     <!-- <user-msg /> -->
     <transition name="fade" mode="out-in">
@@ -46,7 +46,7 @@ export default {
         if (res) this.$router.push(this.$route.path);
       });
     }
-  }
+  },
 };
 </script>
 

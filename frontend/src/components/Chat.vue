@@ -9,14 +9,16 @@
         :title="user.firstname"
       />
       <span
+        v-show="!chat.trip"
         v-for="(user, index) in chattingWith"
         :key="user._id+index"
       >{{`${user.firstname} ${user.lastname}`}}</span>
+      <span v-show="chat.trip">{{chat.trip.title}}</span>
       <button :class="{'is-focused': isFocused}" @click.stop="closeChat">
         <i class="fas fa-times"></i>
       </button>
     </header>
-    <ul>
+    <ul ref="msgsBlock">
       <li
         :class="{'not-user': (msg.sender !== loggedUser._id)}"
         v-for="(msg, index) in msgs"
@@ -78,8 +80,41 @@ export default {
     focusInput() {
       this.isFocused = true;
       this.$refs.msgbox.focus();
+    },
+    scrollToBottom() {
+      this.$nextTick( () => {
+
+          let msgs = this.$refs.msgsBlock.children;
+          if (!msgs) return;
+          this.$refs.msgsBlock.scrollTo({
+            top: msgs[msgs.length - 1].offsetTop,
+            bottom: 0,
+            behavior: 'smooth',
+          })
+        })
+    }
+  },
+  updated() {
+    if (this.chat.isActive) {
+      this.scrollToBottom();
+    }
+  },
+  watch: {
+    chat: {
+      deep: true,
+      handler(newVal) {
+        if (newVal.isActive) this.scrollToBottom();
+      }
     }
   }
+  // watch: {
+  //   msgs: {
+  //     handler(newVal, oldVal) {
+  //       this.scrollToBottom();
+  //     },
+  //     deep: true,
+  //   }
+  // },
 };
 </script>
 

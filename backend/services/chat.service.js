@@ -59,7 +59,6 @@ async function query(userId) {
                 $unwind: '$trip'
             }
         ]).toArray()
-        console.log(chats);
         return chats;
     } catch {
 
@@ -95,6 +94,18 @@ async function getById(chatId) {
                     }
                 }
             },
+            {
+                $lookup:
+                {
+                    from: tripsCollection,
+                    localField: '_id',
+                    foreignField: 'chatId',
+                    as: 'trip'
+                }
+            },
+            {
+                $unwind: '$trip'
+            }
         ]).toArray()
         return chat[0];
     } catch {

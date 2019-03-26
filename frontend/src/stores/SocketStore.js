@@ -109,8 +109,7 @@ export default {
         },
         socketJoinPrivateChat(context, { userId }) {
             const chat = context.getters.userChats.find(chat => {
-                if (chat.users > 2) return false;
-                else return chat.users.some(user => user._id === userId)
+                if (chat.trip && chat.trip.title) return false;
             })
             console.log(chat);
             let payload;

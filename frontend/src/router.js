@@ -54,5 +54,8 @@ export default new Router({
       component: Messages
     },
     
-  ]
+  ],
+  scrollBehavior(to, from) {
+    return {x: 0 , y:0};
+  }
 })

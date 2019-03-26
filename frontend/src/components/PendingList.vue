@@ -1,24 +1,22 @@
 <template>
   <section v-if="pendingUsers">
-    <h1>Pending</h1>
     <div class="pending-list">
-      <user-preview 
-        v-for="pendingUser in pendingUsers" 
-        :key="pendingUser._id"
-        :user="pendingUser">
-          <div 
-            class="btns-pending"
-            slot="btns-pending">
-              <button @click="requestApproved(pendingUser)">Approve</button>
-              <button @click="requestRejected(pendingUser)">Cancel</button>
-          </div>
+      <user-preview v-for="pendingUser in pendingUsers" :key="pendingUser._id" :user="pendingUser">
+        <div class="btns-pending" slot="btns-pending">
+          <button @click="requestApproved(pendingUser)">
+            <i class="fas fa-check"></i>
+          </button>
+          <button @click="requestRejected(pendingUser)">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
       </user-preview>
     </div>
   </section>
 </template>
 
 <script>
-import UserPreview from '@/components/UserPreview.vue';
+import UserPreview from "@/components/UserPreview.vue";
 
 export default {
   components: {
@@ -26,7 +24,6 @@ export default {
   },
   computed: {
     pendingUsers() {
-      console.log(this.$store.getters.userListToDisplay);
       return this.$store.getters.userListToDisplay;
     }
   },
@@ -46,3 +43,29 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.pending-list {
+  .user-item {
+    padding: 10px 10px 10px 30px;
+    .user-img {
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      background-size: cover;
+      box-shadow: 0 0 0.5px #e5e5e5;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+  .btns-pending {
+      button {
+        background: none;
+        border: none;
+        i {
+          font-size: 1.4em;
+        }
+      }
+    }
+}
+</style>

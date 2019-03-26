@@ -29,10 +29,13 @@ export default {
   flex-direction: column;
   align-items: center;
   .user-profile-img {
-    width: 60px;
-    height: 60px;
-    background-size: contain;
     border-radius: 50%;
+    width:  60px;
+    height: 60px;
+    background-size: cover;
+    box-shadow: 0 0 0.5px #e5e5e5;
+    background-repeat: no-repeat;
+    background-position: center;
   }
 }
 </style>
