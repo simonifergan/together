@@ -8,12 +8,11 @@
     <div class="chat-container">
       <chat v-for="(chat,index) in chats" :chat="chat" :key="chat._id+index"/>
     </div>
-    <notification-list :notifications="getNotifications" />
+    <notification-list :notifications="getNotifications"/>
   </div>
 </template>
 
 <script>
-
 import MainHeader from "@/components/MainHeader";
 import Chat from "@/components/Chat";
 import NotificationList from "@/components/NotificationList";
@@ -23,7 +22,7 @@ export default {
   components: {
     MainHeader,
     NotificationList,
-    Chat,
+    Chat
   },
   computed: {
     chats() {
@@ -34,7 +33,7 @@ export default {
     },
     loggedUser() {
       return this.$store.getters.loggedUser;
-    },
+    }
   },
   created() {
     if (this.loggedUser) {
@@ -42,9 +41,12 @@ export default {
       this.$store.dispatch({ type: "getUserChats" });
       this.$store.dispatch({ type: "loadNotification" });
     }
-
-    this.$store.dispatch('checkFacebookUser');
-  },
+    if (!this.loggedUser) {
+      this.$store.dispatch("checkFacebookUser").then(res => {
+        if (res) this.$router.push(this.$route.path);
+      });
+    }
+  }
 };
 </script>
 

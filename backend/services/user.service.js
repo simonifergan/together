@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 module.exports = {
     query,
     login,
+    loginWithFacebook,
     signup,
     getById,
     update,
@@ -43,6 +44,24 @@ function login(credentials) {
                 return user;
             } else return null;
         });
+}
+
+async function loginWithFacebook(user) {
+    try {
+        const db = await mongoService.connect();
+        const userInDB = await db.collection(usersCollection).findOne({ email: user.email });
+        if (!userInDB) {
+            const { insertedId } = await db.collection(usersCollection).insertOne(user);
+            user._id = insertedId;
+            return user;
+        } else {
+            if (userInDB.facebookId === user.facebookId) return userInDB;
+            else throw new Error('User already exists, please log in using your Username and Password');
+        }
+    } catch (err) {
+        throw err;
+    }
+
 }
 
 function getById(id) {
@@ -92,6 +111,41 @@ function update(user) {
         });
 }
 
+async function updateTripToUser({ tripId, user, action }) {
+    const objTripId = new ObjectId(tripId);
+    const objUserId = new ObjectId(user._id)
+    try {
+        const db = await mongoService.connect()
+        var user;
+        console.log('action:', action);
+
+        if (action === 'request') {
+            user = await db.collection(usersCollection).updateOne({ _id: objUserId }, { $push: { pendingIn: objTripId } })
+        } else if (action === 'approve') {
+            user = await db.collection(usersCollection).updateOne({ _id: objUserId }, { $pull: { pendingIn: objTripId } })
+            user = await db.collection(usersCollection).updateOne({ _id: objUserId }, { $push: { memberIn: objTripId } })
+        } else if (action === 'remove from pending') {
+            user = await db.collection(usersCollection).updateOne({ _id: objUserId }, { $pull: { pendingIn: objTripId } })
+        } else { // admin can remove member after approved
+            user = await db.collection(usersCollection).updateOne({ _id: objUserId }, { $pull: { memberIn: objTripId } })
+        }
+        return user;
+    } catch {
+
+    }
+}
+
+function remove(id) {
+    const _id = new ObjectId(id);
+    return mongoService.connect()
+        .then(db => db.collection(usersCollection).remove({ _id }));
+}
+
+
+
+
+// scrap code:
+
 // async function updateTripToUser({tripId, user}) {
 //     const objTripId = new ObjectId(tripId);
 //     const objUserId = new ObjectId(user._id)
@@ -101,7 +155,7 @@ function update(user) {
 //         const idxTripInPending = user.pendingIn.findIndex(trip => trip._id === tripId);
 //         const idxTripInMember = user.memberIn.findIndex(trip => trip._id === tripId);
 //         console.log('idxTripInPending:', idxTripInPending, ', idxTripInMember:', idxTripInMember);
-        
+
 //         if (idxTripInPending === -1 && idxTripInMember === -1) {
 //             console.log('not pending not member - insert to pending');
 //             user.pendingIn.push(tripId);
@@ -117,33 +171,3 @@ function update(user) {
 
 //     }
 // }
-async function updateTripToUser({tripId, user, action}) {
-    const objTripId = new ObjectId(tripId);
-    const objUserId = new ObjectId(user._id)
-    try {
-        const db = await mongoService.connect()
-        var user;
-        console.log('action:', action);
-        
-        if (action === 'request') {
-            user = await db.collection(usersCollection).updateOne({_id: objUserId}, {$push: {pendingIn: objTripId}})
-        } else if (action === 'approve') {
-            user = await db.collection(usersCollection).updateOne({_id: objUserId}, {$pull: {pendingIn: objTripId}})
-            user = await db.collection(usersCollection).updateOne({_id: objUserId}, {$push: {memberIn: objTripId}})
-        } else if (action === 'remove from pending') {
-            user = await db.collection(usersCollection).updateOne({_id: objUserId}, {$pull: {pendingIn: objTripId}})
-        } else { // admin can remove member after approved
-            user = await db.collection(usersCollection).updateOne({_id: objUserId}, {$pull: {memberIn: objTripId}})
-        }
-        return user;
-    } catch {
-
-    }
-}
-
-function remove(id) {
-    const _id = new ObjectId(id);
-    return mongoService.connect()
-        .then(db => db.collection(usersCollection).remove({ _id }));
-}
-

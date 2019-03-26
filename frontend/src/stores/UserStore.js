@@ -95,7 +95,6 @@ export default {
         },
 
         async joinLeaveTripToUser({ commit, getters }, { userToTripId }) {
-            console.log('here');
             
             try {
                 const updatedUser = await UserService.updateTripToUser(userToTripId);
@@ -131,21 +130,23 @@ export default {
         // SOCIAL MEDIA user behavior:
         async checkFacebookUser({commit}) {
             const userFBInfo = await FacebookService.getUserInfo();
-            if (!userFBInfo) return;
+            if (!userFBInfo) return false;
             else {
                 // Prepare object for our database and decide whether to register or auth him
                 const {id, first_name, last_name, picture, email} = userFBInfo;
-                const user = {
-                    _id: id,
-                    fbId: id,
-                    firstname: first_name,
-                    lastname : last_name,
-                    profilePic: picture.data.url,
-                    email,
-                    isFBUser: true,
+                let user = UserService.getEmptyUser();
+                user.facebookId = id;
+                user.firstname = first_name;
+                user.lastname = last_name;
+                user.profilePic = picture.data.url;
+                user.email = email;
+                try {
+                    const loggedUser = await UserService.login(user); 
+                    commit({ type: 'setLoggedUser', user: loggedUser });
+
+                } catch (err) {
                 }
-                console.log(user);
-                commit({ type: 'setLoggedUser', user })
+                
                 return true;
             }
 

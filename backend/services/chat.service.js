@@ -5,10 +5,12 @@ module.exports = {
     query,
     createChat,
     addMsg,
+    updateTripChat,
 }
 
 const chatsCollection = 'chats';
 const usersCollection = 'users';
+const tripsCollection = 'trips';
 
 async function query(userId) {
     userId = new ObjectId(userId)
@@ -43,6 +45,26 @@ async function query(userId) {
 
                 },
             },
+            {
+                $lookup:
+                {
+                    from: tripsCollection,
+                    localField: '_id',
+                    foreignField: 'chatId',
+                    as: 'tripTitle'
+                }
+            },
+            {
+                $project: {
+                    tripTitle: {
+                        title: 1
+                    },
+
+                },
+            },
+            {
+                $unwind: '$tripTitle'
+            }
         ]).toArray()
         return chats;
     } catch {
@@ -73,6 +95,25 @@ async function createChat(chat) {
     } catch {
         console.log('major error');
     }
+}
+
+function updateTripChat(chatId, users) {
+    chatId = new ObjectId(chatId);
+    users = users.map(userId => new ObjectId(userId));
+    try {
+        const db = await mongoService.connect();
+        const res = await db.collection(chatsCollection).updateOne(
+            {_id: chatId},
+            {
+                $set : {
+                    users
+                }
+            }
+        ) 
+    } catch {
+
+    }
+
 }
 
 async function addMsg({ msg, chatId }) {
