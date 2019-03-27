@@ -60,6 +60,8 @@ async function getByUserId(id) {
 }
 
 async function getByCountry(country) {
+    console.log('country:', country);
+    
     const {data} = await axios.get(`${TRIP_API}/country/${country}`)
     const cities = data.reduce((acc, trip) => {
         const tripCities = trip.destinations.cities        
@@ -68,6 +70,7 @@ async function getByCountry(country) {
         })
         return acc
     }, [])
+    console.log('cities:', cities);
     return cities;
 }
 
@@ -114,7 +117,7 @@ function getActivities() {
 }
 
 function getCountries() {
-    return ['Italia', 'USA', 'Brazil', 'Thailand', 'India', 'PT']
+    return ['IT', 'US', 'BR', 'TH', 'IN', 'PT']
 }
 
 async function getPlacesAutocomplete(query) {

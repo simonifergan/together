@@ -4,7 +4,7 @@ import UtilService from '@/services/UtilService'
 
 Vue.filter('countryCodeToName', code => {
     let name = UtilService.worldCodeMap.get(code);
-    return (name)? name : '';
+    return (name) ? name : code;
 })
 
 Vue.filter('calcAge', timestamp => {
