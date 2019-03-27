@@ -110,6 +110,7 @@ export default {
         socketJoinPrivateChat(context, { userId }) {
             const chat = context.getters.userChats.find(chat => {
                 if (chat.trip && chat.trip.title) return false;
+                return chat.users.find(user => user._id === userId);
             })
             console.log(chat);
             let payload;

@@ -1,5 +1,8 @@
 <template>
-  <ul class="msgs-dropdown">
+  <ul 
+    class="msgs-dropdown"
+    :class="isAllowScrolling"
+  >
     <header>
       <!-- TODO: 2 buttons for group chats -->
     </header>
@@ -43,6 +46,14 @@ export default {
   computed: {
     isExpanded() {
       return (this.$route.path === '/messages')
+    },
+    isAllowScrolling() {
+      if (this.isExpanded) return '';
+      const activeChats = this.chats.reduce((acc, chat) => {
+        if (chat.msgs.length) return ++acc;
+      }, 0)
+      return {'allow-scroll': activeChats > 5};
+     
     }
   },
   methods: {

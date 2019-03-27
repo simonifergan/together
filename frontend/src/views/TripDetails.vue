@@ -1,8 +1,8 @@
 <template>
   <section v-if="trip" class="trip-details">
     <div class="user-section">
-      <div class="profile-img" :style="profilePic"/>
-      <h2>{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</h2>
+      <router-link :to="'/user/' + trip.userId" tag="div" class="profile-img" :style="profilePic"/>
+      <router-link :to="'/user/' + trip.userId" tag="h2">{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</router-link>
       <h3>{{trip.user.birthdate | calcAge}}, {{trip.user.from | countryCodeToName}}</h3>
 
       <div class="btns-like-msg">

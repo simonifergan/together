@@ -14,6 +14,7 @@
         grid-area: user-section;
         text-align: center;
         .profile-img {
+            cursor: pointer;
             @include userImg(150px, 150px);
             margin: 20px auto;
             grid-row: span 2;
@@ -21,6 +22,7 @@
             box-shadow: 0 0 0 1px #333;
         }
         h2 {
+            cursor: pointer;
             font-weight: bold;
             font-size: 1.2em;
             margin-bottom: 5px;
