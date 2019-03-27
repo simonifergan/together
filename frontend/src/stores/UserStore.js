@@ -124,6 +124,9 @@ export default {
                 commit({type: 'setLoggedUser', user: backupUser})
             }
         },
+        toggleUserLike({commit}, {userId}) {
+            
+        },
         // SOCIAL MEDIA user behavior:
         async checkFacebookUser({commit}) {
             const userFBInfo = await FacebookService.getUserInfo();
