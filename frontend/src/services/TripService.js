@@ -60,8 +60,6 @@ async function getByUserId(id) {
 }
 
 async function getByCountry(country) {
-    console.log('country:', country);
-    
     const {data} = await axios.get(`${TRIP_API}/country/${country}`)
     const cities = data.reduce((acc, trip) => {
         const tripCities = trip.destinations.cities        
@@ -70,8 +68,14 @@ async function getByCountry(country) {
         })
         return acc
     }, [])
-    console.log('cities:', cities);
-    return cities;
+    let regex
+    if (country === 'US') regex = /USA/i
+    else regex = new RegExp(UtilService.worldCodeMap.get(country), 'i')
+    console.log(regex);
+    return cities.filter(city => {
+        console.log(city);
+        return regex.test(city)
+    })
 }
 
 async function getById(id) {
@@ -117,7 +121,7 @@ function getActivities() {
 }
 
 function getCountries() {
-    return ['IT', 'US', 'BR', 'TH', 'IN', 'PT']
+    return ['ES', 'US', 'FR', 'TH', 'IN', 'PT']
 }
 
 async function getPlacesAutocomplete(query) {
