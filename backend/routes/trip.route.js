@@ -92,8 +92,8 @@ module.exports = (app) => {
     app.put(`${BASE_URL}/:tripId`, (req, res) => {
         const trip = req.body;
         tripService.update(trip)
-            .then((updatedToy) => {
-                res.json(updatedToy);
+            .then(updatedTrip => {
+                res.json(updatedTrip);
             })
     });
 }
