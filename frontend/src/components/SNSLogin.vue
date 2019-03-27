@@ -1,6 +1,6 @@
 <template>
   <section class="btn-sns-container">
-    <button class="fb" @click.stop.prevent="fbLogin">Login with <i class="fab fa-facebook-square"></i></button>
+    <button type="button" class="fb" @click.stop.prevent="fbLogin">Login with <i class="fab fa-facebook-square"></i></button>
   </section>
 </template>
 

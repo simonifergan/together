@@ -11,7 +11,7 @@
             <el-input type="password" v-model="password" placeholder="Password" />
                 </label>
             <div class="btns-container">
-                <SNSLogin />
+                <SNSLogin type="button" />
                 <button title="Press to login" type="submit">Login</button>
             </div>
         </form>
