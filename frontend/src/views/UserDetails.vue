@@ -9,7 +9,7 @@
 
       <div class="likes-container">
          <p class="likes-count">
-          <button :title="'Like ' + user.firstname">
+          <button @click="toggleUserLike(user._id)" :title="'Like ' + user.firstname">
             <i :class="isLike"></i>
           </button>
           <span>&nbsp;({{user.likes.length}})</span>
@@ -55,6 +55,9 @@ export default {
     },
     requestPendingUsers(pending) {
       this.$store.dispatch({ type: "getUsers", userIds: pending });
+    },
+      toggleUserLike(userId) {
+      this.$store.dispatch({type: 'toggleUserLike', userId});
     }
   },
   async created() {

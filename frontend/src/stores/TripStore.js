@@ -53,7 +53,6 @@ export default {
             if (state.tripToDisplay) state.tripToDisplay = trip;
         },
         toggleUserLikeTrip(state, { userId }) {
-            console.log(userId);
             const idx = state.tripToDisplay.user.likes.findIndex(id => id === userId);
             if (idx !== -1) state.tripToDisplay.user.likes.splice(idx, 1);
             else state.tripToDisplay.user.likes.push(userId);
