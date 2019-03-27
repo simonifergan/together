@@ -113,7 +113,9 @@ export default {
             return recommendedTrips
         },
         async loadTrip({ commit }, { tripId }) {
+            console.log('AM I HERE FROM SOCKET?')
             const trip = await TripService.getById(tripId);
+            console.log(trip);
             commit({ type: 'loadTrip', trip });
         },
         async saveTrip({ commit, getters, dispatch }, { trip }) {
@@ -194,13 +196,22 @@ export default {
                     }
                 })
 
-                // notification
+                // general notification
                 let newNotification = {
                     userId: userIdToJoin,
                     tripId: getters.tripToDisplay._id,
                     action: NotificationService.TRIP_JOINED
                 }
                 dispatch({ type: 'addNotification', newNotification })
+
+                // User personal notification
+                 // send to socket with userId and tripId
+                 const payload = {
+                    action: NotificationService.USER_TRIP_APPROVED,
+                    user: getters.loggedUser,
+                    tripId: updatedTrip._id,
+                }
+                dispatch({ type: 'socketSendNotification', userId: userIdToJoin, payload });
 
             } catch {
                 // rollback

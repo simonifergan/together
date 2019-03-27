@@ -1,5 +1,5 @@
 <template>
-  <aside class="chat-box" @click="focusInput" v-if="chat.isActive">
+  <aside class="chat-box" @click="focusInput" v-if="chat && chat.isActive">
     <header>
       <div class="user-img-container">
         <div
@@ -11,7 +11,8 @@
         />
       </div>
       <span
-        v-show="!chat.trip"
+
+        v-show="user && !chat.trip"
         v-for="(user, index) in chattingWith"
         :key="user._id+index"
       >{{`${user.firstname} ${user.lastname}`}}</span>
@@ -88,7 +89,7 @@ export default {
     },
     scrollToBottom() {
       this.$nextTick(() => {
-        if (!this.$refs.msgsBlock.children.length) return;
+        if (!this.$refs.msgsBlock || !this.$refs.msgsBlock.children.length) return;
         let msgs = this.$refs.msgsBlock.children;
         if (!msgs) return;
         this.$refs.msgsBlock.scrollTo({

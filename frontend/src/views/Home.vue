@@ -13,7 +13,7 @@
         </div>
       </div>
     </header>
-    <article v-for="list in listsForRender" :key="list.title" :class="'article-' + list.type">
+    <article v-for="(list, idx) in listsForRender" :key="list.title + idx" :class="'article-' + list.type">
       <component :is="list.type" :title="list.title" :trips="list.trips" :filters="list.filters" />
     </article>
   </section>

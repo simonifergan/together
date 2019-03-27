@@ -134,6 +134,9 @@ export default {
   created() {
     this.initTrip();
   },
+  updated() {
+      this.requestPendingUsers();
+  },
   beforeDestroy() {
     this.$store.commit({ type: "clearTrip" });
   },
