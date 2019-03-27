@@ -43,7 +43,7 @@ export default {
   computed: {
     isExpanded() {
       return (this.$route.path === '/messages')
-    }
+    },
   },
   methods: {
     initChat(chatId) {

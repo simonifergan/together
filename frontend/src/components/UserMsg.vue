@@ -36,17 +36,8 @@ export default {
 }
 
 </script>
-<style lang="scss" scoped>
-.user-msg {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    background-color: #333;
-    width: 50vh;
-    height: 50vh;
-    z-index: 1020320310429214109;
-}
+<style>
+
 </style>
 
 

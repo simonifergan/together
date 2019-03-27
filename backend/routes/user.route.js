@@ -26,13 +26,14 @@ module.exports = (app) => {
         })
     });
 
-    app.put(`${BASE}/user/:userId`, (req, res) => {
+    app.put(`${BASE}/user/:userId`, async (req, res) => {
         const userToUpdate = req.body;
-        userService.update(userToUpdate)
-            .then(updatedUser => {
-                if (updatedUser) return res.json(updatedUser);
-                else res.status(404).end();
-            })
+        try {
+            const updatedUser = await userService.update(userToUpdate);
+            if (updatedUser) return res.json(updatedUser);
+        } catch(err) {
+            res.status(err).end();
+        }
     })
 
     // move trip from pendingIn to memberIn

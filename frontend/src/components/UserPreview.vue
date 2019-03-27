@@ -1,7 +1,7 @@
 <template>
-  <div class="user-preview">
-    <div class="user-profile-img" :style="profilePic"/>
-    <p>{{user.firstname}} {{user.lastname}}</p>
+  <div class="user-preview" >
+    <router-link tag="div" :to="'/user/' + user._id" :title="`Go to ${user.firstname}'s profile`" class="user-profile-img" :style="profilePic"/>
+    <router-link tag="p" :to="'/user/' + user._id" :title="`Go to ${user.firstname}'s profile`">{{user.firstname}} {{user.lastname}}</router-link>
     <slot name="btns-pending"></slot>
   </div>
 </template>
@@ -25,6 +25,7 @@ export default {
 
 <style lang="scss">
 .user-preview {
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
