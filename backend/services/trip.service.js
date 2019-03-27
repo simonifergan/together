@@ -224,21 +224,22 @@ async function getTrending() {
     }
 }
 
-async function query(searchQuery) {
-    searchQuery = new RegExp(searchQuery, 'i')
-    console.log(searchQuery);
-    
+async function query(searchQuery, tripDate) {
+    const dateMatch = tripDate ? {'startsAt': tripDate} : {}
+    searchQuery = new RegExp(searchQuery, 'i')    
     try {
         const db = await mongoService.connect()
         const trips = await db.collection(tripsCollection).aggregate([
             {
                 $match: { $or: [
-                    { 'destinations.cities': {$regex: searchQuery} },
-                    { 'desc': {$regex: searchQuery} },
-                    { 'title': {$elemMatch: { $regex: searchQuery } } },
+                    { 'destinations.cities': { $regex: searchQuery} },
+                    { 'desc': { $regex: searchQuery} },
+                    { 'title': { $elemMatch: { $regex: searchQuery } } },
                     { 'activities': { $elemMatch: { $regex: searchQuery } } }
                 ]}
-                
+            },
+            {
+                $match: dateMatch
             },
             {
                 $lookup:

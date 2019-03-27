@@ -105,7 +105,7 @@ export default {
     async chooseCity(city) {
       const countryCode = await this.$store.dispatch({type: 'getCountryCode', placeId: city.place_id})
       this.trip.destinations.cities.push(city.description)
-      this.trip.destinations.countries.push(countryCode)
+      if (this.trip.destinations.countries.indexOf(countryCode) === -1) this.trip.destinations.countries.push(countryCode)
     }
   },
   created() {
