@@ -38,8 +38,8 @@ async function updateTripToUser(userToTripId) {
     return data
 }
 
-async function updateLikesToUser(likes, userId) {
-    const { data } = await axios.patch(`${API_USER}/user_likes/${userId}`, likes)
+async function updateLikesToUser(like, userId) {
+    const { data } = await axios.patch(`${API_USER}/user_likes/${userId}`, like)
     return data;
 }
 
