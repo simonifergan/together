@@ -35,7 +35,6 @@ export default {
   },
   computed: {
     chattingWith() {
-      console.log(this.chat);
       return this.chat.users.filter(otherUser => otherUser._id !== this.user._id);
     },
     profilePics() {

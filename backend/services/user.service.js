@@ -96,47 +96,45 @@ async function update(user) {
     const strId = user._id;
     const trips = [...user.trips];
     const pendingIn = [...user.pendingIn];
+    const likes = [...likes];
 
     user._id = new ObjectId(user._id);
     user.trips = user.trips.map(tripId => new ObjectId(tripId))
     user.pendingIn = user.pendingIn.map(tripId => new ObjectId(tripId))
-
-    let loadedUser = await mongoService.connect()
-        .then(db => db.collection(usersCollection)
-            .findOne({ _id: user._id })
-        )
-
-    if (!user.newPassword) {
-        delete user.confirmPassword;
-        delete user.newPassword;
-        //
-
-    } else {
-        
-            async loadedUser => {
-        if (!loadedUser) return null;
-        const isAuth = await bcrypt.compare(user.confirmPassword, loadedUser.password)
-        if (isAuth) {
-            try {
-                const salt = await bcrypt.genSalt(10)
-                const hashedPassword = await bcrypt.hash(user.newPassword, salt);
-                user.password = hashedPassword;
-                delete user.confirmPassword;
-                delete user.newPassword;
-            } catch {
-                // TODO
-            }
-        } else return null;
-    });
+    user.likes = user.likes.map(userId => new ObjectId(userId))
+    try {
+        const db = await mongoService.connect()
+        let loadedUser = await db.collection(usersCollection).findOne({ _id: user._id })
+        if (!loadedUser) throw 404;
+        if (!user.newPassword) {
+            delete user.confirmPassword;
+            delete user.newPassword;
+            // get old hash
+            user.password = loadedUser.password;
+        } else {
+            const isAuth = await bcrypt.compare(user.confirmPassword, loadedUser.password);
+            if (isAuth) {
+                try {
+                    const salt = await bcrypt.genSalt(10)
+                    const hashedPassword = await bcrypt.hash(user.newPassword, salt);
+                    user.password = hashedPassword;
+                    delete user.confirmPassword;
+                    delete user.newPassword;
+                } catch {
+                    throw 404;
+                }
+            } else throw 401;
+        }
+        let updatedUser = await db.collection(usersCollection).updateOne({ _id: user._id }, { $set: user })
+        updatedUser._id = strId;
+        updatedUser.trips = trips;
+        updatedUser.pendingIn = pendingIn;
+        updatedUser.likes = likes;
+        delete updatedUser.password;
+        return updatedUser;
+    } catch (err){
+        throw err;
     }
-    return mongoService.connect()
-        .then(db => db.collection(usersCollection).updateOne({ _id: user._id }, { $set: user }))
-        .then(mongoRes => {
-            user._id = strId;
-            user.trips = trips;
-            user.pendingIn = pendingIn;
-            return user;
-        });
 }
 
 async function updateTripToUser({ tripId, user, action }) {

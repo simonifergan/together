@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="app-container" ref="topOfPage">
     <main-header/>
-    <!-- <user-msg /> -->
+    <user-msg />
     <transition name="fade" mode="out-in">
       <router-view/>
     </transition>
@@ -15,13 +15,14 @@
 <script>
 import MainHeader from "@/components/MainHeader";
 import Chat from "@/components/Chat";
+import UserMsg from '@/components/UserMsg';
 // import NotificationList from "@/components/NotificationList";
 
 export default {
   name: "App",
   components: {
     MainHeader,
-    // NotificationList,
+    UserMsg,
     Chat
   },
   computed: {

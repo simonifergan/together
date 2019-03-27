@@ -194,15 +194,13 @@ button {
             background-color: #fff;
             color: #333;
             width: 430px;
-            min-height: 100px;
+            min-height: 85px;
             max-height: 500px;
             top: 42px;
             right: -20px;
             border-radius: 0 0 1px 1px;
             box-shadow: 0 0 1px 1px $box-shadow-gray;
-            &.allow-scroll {
-                overflow-y: scroll;
-            }
+            overflow-y: scroll;
             .msg-preview {
                 @include flex(row, flex-start, center);
                 margin: 0;
@@ -370,5 +368,16 @@ button {
                 }
             }
         }
+    }
+
+    .user-msg {
+        position: fixed;
+        bottom: 5%;
+        left: 5%;
+        background-color: #fff;
+        min-width: 100px;
+        height: 5vh;
+        z-index: 1020320310429214109;
+        box-shadow: 0 0 1px 1px $box-shadow-gray;
     }
 }
