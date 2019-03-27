@@ -108,7 +108,6 @@ export default {
         },
         async getRecommendedTrips({ getters }) {
             const prefs = getters.loggedUser.tripPrefs
-            console.log('in store prefs', prefs);
             if (!prefs.activities.length && !prefs.gender && !prefs.age) return null
             const recommendedTrips = await TripService.getRecommended(prefs)
             return recommendedTrips
@@ -299,11 +298,8 @@ export default {
             const trips = await TripService.getActivityTrips(activity)
             return trips
         },
-        async getFilterImgs({ commit }, { filterType, filters }) {
-            console.log('getting filter Imgs', filters);
-            
+        async getFilterImgs({ commit }, { filterType, filters }) {            
             const filterImgs = await Promise.all(filters.map(filter => TripService.getImgs(filter, filterType)))
-            console.log('got:', filterImgs);
             return filterImgs
             // if (filterType === 'activities') commit({ type: 'setActivityFilters', filterImgs })
             // else if (filterType === 'destinations') commit({ type: 'setDestinationFilters', filterImgs })

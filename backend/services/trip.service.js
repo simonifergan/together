@@ -225,9 +225,21 @@ async function getTrending() {
 }
 
 async function query(searchQuery) {
+    searchQuery = new RegExp(searchQuery, 'i')
+    console.log(searchQuery);
+    
     try {
         const db = await mongoService.connect()
         const trips = await db.collection(tripsCollection).aggregate([
+            {
+                $match: { $or: [
+                    { 'destinations.cities': {$regex: searchQuery} },
+                    { 'desc': {$regex: searchQuery} },
+                    { 'title': {$elemMatch: { $regex: searchQuery } } },
+                    { 'activities': { $elemMatch: { $regex: searchQuery } } }
+                ]}
+                
+            },
             {
                 $lookup:
                 {
@@ -278,13 +290,7 @@ async function query(searchQuery) {
                 }
             }
         ]).toArray()
-        const regex = new RegExp(searchQuery, 'i')
-        return trips.filter(trip => {
-            return trip.destinations.some(destination => Object.values(destination).some(value => regex.test(value))) ||
-                regex.test(trip.desc) ||
-                regex.test(trip.title) ||
-                trip.activities.some(activity => regex.test(activity))
-        });
+        return trips
     } catch {
 
     }

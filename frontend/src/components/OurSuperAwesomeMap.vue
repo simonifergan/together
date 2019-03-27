@@ -372,7 +372,6 @@ export default {
             let maxAspect = Math.max(this.mapView.sizeX, this.mapView.sizeY)
             let frX = (event.offsetX/maxAspect)
             let frY = (event.offsetY/maxAspect)
-            console.log(frX, frY)
             if (event.deltaY > 0) {
                 this.mapView.zoom += 100
                 this.mapView.x -= frX*100
