@@ -1,6 +1,10 @@
 <template>
   <header class="main-header" :class="isAbsolute">
-    <router-link title="Homepage" tag="h1" to="/">Travel Maker</router-link>
+    <router-link title="Homepage" tag="div" class="logo" to="/">
+      <!-- <i class="fas fa-map-marker-alt"></i> -->
+      <img src="@/assets/svg/person_pin_circle.svg">
+      <h1>Travel Maker</h1>
+    </router-link>
     <nav>
       <router-link to="/">Home</router-link>
       <a href="#">About</a>
