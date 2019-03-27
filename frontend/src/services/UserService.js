@@ -15,6 +15,7 @@ export default {
     getUsers,
     update,
     updateTripToUser,
+    updateLikesToUser
 }
 
 const USER_KEY = 'loggedUser';
@@ -35,6 +36,11 @@ async function updateTripToUser(userToTripId) {
     console.log('got to user service- updateTripToUser : ', userToTripId);
     const { data } = await axios.patch(`${API_USER}/user_trip/${userToTripId.user._id}`, userToTripId)
     return data
+}
+
+async function updateLikesToUser(like, userId) {
+    const { data } = await axios.patch(`${API_USER}/user_likes/${userId}`, like)
+    return data;
 }
 
 async function login(credentials) {
