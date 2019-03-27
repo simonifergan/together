@@ -1,12 +1,16 @@
 <template>
     <section class="signup-page">
+        {{user}}
         <form @submit.prevent="saveUser" v-if="user">
             <h2>Account Settings</h2>
             <label>Email
-                <el-input type="email" v-model="user.email" placeholder="Email" required />
+                <el-input type ="email" v-model="user.email" placeholder="Email" required />
             </label>
-            <label>Password
-                <el-input type ="password" v-model="user.password" placeholder="Password" req/>
+            <label>Confirm password
+                <el-input type ="password" v-model="user.confirmPassword" placeholder="Password" req/>
+            </label>
+            <label>New password
+                <el-input type ="password" v-model="user.newPassword" placeholder="Password"/>
             </label>
             <label>First Name
                 <el-input v-model="user.firstname" placeholder="First Name" />
@@ -62,7 +66,8 @@ import UploadImage from '@/components/UploadImage';
 
 export default {
     components: {
-        ActivityPrefs, UploadImage
+        ActivityPrefs,
+        UploadImage
     },
     name: 'EditProfile',
     data() {
@@ -79,7 +84,7 @@ export default {
         }
     },
     async created() {
-        this.user = await this.$store.dispatch({type: 'getUserForEdit', userId: this.$route.params.userId})
+        this.user = await this.$store.dispatch({type: 'getUserToEdit', userId: this.$route.params.userId})
     }
 }
 </script>

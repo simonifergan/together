@@ -92,7 +92,7 @@ async function signup(user) {
     } else throw (409);
 }
 
-function update(user) {
+async function update(user) {
     const strId = user._id;
     const trips = [...user.trips];
     const pendingIn = [...user.pendingIn];
@@ -101,6 +101,34 @@ function update(user) {
     user.trips = user.trips.map(tripId => new ObjectId(tripId))
     user.pendingIn = user.pendingIn.map(tripId => new ObjectId(tripId))
 
+    let loadedUser = await mongoService.connect()
+        .then(db => db.collection(usersCollection)
+            .findOne({ _id: user._id })
+        )
+
+    if (!user.newPassword) {
+        delete user.confirmPassword;
+        delete user.newPassword;
+        //
+
+    } else {
+        
+            async loadedUser => {
+        if (!loadedUser) return null;
+        const isAuth = await bcrypt.compare(user.confirmPassword, loadedUser.password)
+        if (isAuth) {
+            try {
+                const salt = await bcrypt.genSalt(10)
+                const hashedPassword = await bcrypt.hash(user.newPassword, salt);
+                user.password = hashedPassword;
+                delete user.confirmPassword;
+                delete user.newPassword;
+            } catch {
+                // TODO
+            }
+        } else return null;
+    });
+    }
     return mongoService.connect()
         .then(db => db.collection(usersCollection).updateOne({ _id: user._id }, { $set: user }))
         .then(mongoRes => {

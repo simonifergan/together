@@ -105,15 +105,16 @@ export default {
         },
 
 
-        async getUserForEdit(context, { userId }) {            
-            const res = await UserService.getUsers([userId])
-            const user = res[0]
-            return user
+        async getUserToEdit(context, { userId }) {
+            let userToEdit = await UserService.getById(userId)
+            userToEdit.confirmPassword = null;
+            userToEdit.newPassword = null;
+            return userToEdit
         },
-        async updateUserProfile({commit}, {user}) {
-            const msg = await UserService.update(user)
-            commit({type: 'setLoggedUser', user})
-            return user
+        async saveUser({commit}, {user}) {
+            const updatedUser = await UserService.update(user)
+            commit({type: 'setLoggedUser', uesr: updatedUser})
+            return updatedUser
         },
 
         // SOCIAL MEDIA user behavior:
