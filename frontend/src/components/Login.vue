@@ -10,8 +10,10 @@
             <label title="Enter your password">Password<br>
             <el-input type="password" v-model="password" placeholder="Password" />
                 </label>
-            <button title="Press to login" type="submit">Login</button>
-            <SNSLogin />
+            <div class="btns-container">
+                <SNSLogin />
+                <button title="Press to login" type="submit">Login</button>
+            </div>
         </form>
     </section>
 </template>

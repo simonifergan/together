@@ -1,5 +1,6 @@
 <template>
     <section class="signup-page">
+        <h1>Sign up</h1>
         <form @submit.prevent="signup">
             <label for="">Email
                 <el-input type="email" v-model="newUser.email" placeholder="Email" />

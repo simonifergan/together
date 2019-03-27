@@ -162,11 +162,17 @@ button {
                             margin: 0;
                             margin-bottom: 5px;
                             align-items: center;
+                            &:last-of-type {
+                                margin: 10px 0;
+                            }
                         }
                         button {
                             float: right;
                             margin-top: 5px;
                             @include button;
+                        }
+                        .btns-container {
+                            @include flex(row, space-between, center)
                         }
                     }
                     .btn-sns-container {

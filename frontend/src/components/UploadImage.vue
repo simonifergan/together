@@ -1,17 +1,22 @@
 <template>
   <section class="upload-image">
     <form @submit.prevent="uploadImage">
-      <img id="imgPreview"/>
+      <img :src="currentProfile" id="imgPreview"/>
       <input type="file" @change="processImage">
-      <button type="submit">Upload</button>
+      <!-- <button type="submit">Upload</button> -->
     </form>
   </section>
 </template>
 
 <script>
-import ImageService from "@/services/ImageService.js";
 
 export default {
+  props: {
+    profilePic: {
+      type: String,
+      required: false,
+    }
+  },
   data() {
     return {
       previewImg: null,
@@ -27,11 +32,17 @@ export default {
         output.src = reader.result;
       };
       reader.readAsDataURL(this.img);
+       this.$emit("setProfilePic", this.img);
     },
     uploadImage() {
       ImageService.uploadImage(this.img).then(url => {
         this.$emit("setProfilePic", url);
       });
+    }
+  },
+  computed: {
+    currentProfile() {
+      if (!this.img) return this.profilePic;
     }
   }
 };

@@ -94,7 +94,7 @@ export default {
         this.$refs.msgsBlock.scrollTo({
           top: msgs[msgs.length - 1].offsetTop,
           bottom: 0,
-          behavior: "smooth"
+          behavior: "auto"
         });
       });
     }

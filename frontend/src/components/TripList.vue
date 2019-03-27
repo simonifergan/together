@@ -5,7 +5,7 @@
       <div class="trip-items">
         <trip-preview v-for="trip in tripsToDisplay" :key="trip._id" :trip="trip" />
       </div>
-      <router-link title="See all available trips" class="show-all" tag="div" to="">Show all</router-link>
+      <router-link title="See all available trips" class="show-all" tag="div" to="/search?q=">Show all</router-link>
     </div>
   </ul>
 </template>

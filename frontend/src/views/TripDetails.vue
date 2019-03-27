@@ -90,6 +90,10 @@ export default {
   },
   methods: {
     joinLeaveTrip() {
+       if (!this.loggedInUser) {
+        this.$router.push(this.$route.path + '#login');
+        return;
+      }
       if (this.isUserMember)
         this.$store.dispatch({
           type: "leaveTrip",
@@ -101,6 +105,10 @@ export default {
       } else this.$store.dispatch({ type: "userRequestToJoinTrip" });
     },
     initChat(userId) {
+       if (!this.loggedInUser) {
+        this.$router.push(this.$route.path + '#login');
+        return;
+      }
       this.$store.dispatch({ type: "socketJoinPrivateChat", userId });
     },
     initTrip() {
@@ -127,9 +135,17 @@ export default {
       });
     },
     initGroupChat(chatId) {
+       if (!this.loggedInUser) {
+        this.$router.push(this.$route.path + '#login');
+        return;
+      }
       this.$store.dispatch({ type: "socketInitGroupChat", chatId });
     },
     toggleUserLike() {
+       if (!this.loggedInUser) {
+        this.$router.push(this.$route.path + '#login');
+        return;
+      }
       this.$store.dispatch({type: 'toggleUserLike', userId: this.trip.userId});
     }
   },

@@ -7,14 +7,6 @@
         <el-input type="email" v-model="user.email" placeholder="Email" required/>
       </label>
       <label>
-        Confirm password
-        <el-input type="password" v-model="user.confirmPassword" placeholder="Password" req/>
-      </label>
-      <label>
-        New password
-        <el-input type="password" v-model="user.newPassword" placeholder="Password"/>
-      </label>
-      <label>
         First Name
         <el-input v-model="user.firstname" placeholder="First Name"/>
       </label>
@@ -23,11 +15,17 @@
         <el-input v-model="user.lastname" placeholder="Last Name"/>
       </label>
       <h2>Profile picture</h2>
-      <upload-image @setProfilePic="setProfilePic"/>
-      <h2>
-        Personal information
-        <span>(optional)</span>
-      </h2>
+      <upload-image :profilePic="user.profilePic" @setProfilePic="setProfilePic"/>
+        <h2>Change password</h2>
+      <label class="change-password">
+        Confirm password <span>(required)</span>
+        <el-input type="password" v-model="user.confirmPassword" placeholder="Type your current password" req/>
+      </label>
+      <label>
+        New password
+        <el-input type="password" v-model="user.newPassword" placeholder="Type a new password"/>
+      </label>
+      <h2>Personal information <span>(optional)</span></h2>
       <label>
         Birth Date
         <br>
@@ -86,6 +84,8 @@
 </template>
 
 <script>
+import ImageService from "@/services/ImageService.js";
+
 import ActivityPrefs from "@/components/ActivityPrefs";
 import UploadImage from "@/components/UploadImage";
 
@@ -97,16 +97,18 @@ export default {
   name: "UserAccount",
   data() {
     return {
-      user: null
+      user: null,
+      newImage: null
     };
   },
   methods: {
     async saveUser() {
+      this.user.profilePic = await ImageService.uploadImage(this.newImage);
       await this.$store.dispatch({ type: "saveUser", user: this.user });
       this.$router.go(-1);
     },
-    setProfilePic(url) {
-      this.user.profilePic = url;
+    setProfilePic(img) {
+      this.newImage = img
     }
   },
   async created() {

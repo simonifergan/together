@@ -1,6 +1,7 @@
 <template>
   <section class="search-page">
-    <h2>Showing results for: <span>{{searchQuery}}</span></h2>
+    <h2 v-if="searchQuery">Showing results for: <span>"{{searchQuery}}"</span></h2>
+    <h2 v-else>Browse all possibilities</h2>
     <article v-if="results" class="trips-container">
       <trip-preview v-for="(trip, idx) in results" :key="trip._id + idx" :trip="trip" />
     </article>
