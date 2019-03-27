@@ -15,7 +15,7 @@ export default {
         loadTrips(state, { trips }) {
             state.trips = trips
         },
-        setSearchResults(state, {trips}) {
+        setSearchResults(state, { trips }) {
             state.searchResults = trips
         },
         updateTrip(state, { trip }) {
@@ -52,6 +52,12 @@ export default {
         updateTripToDisplay(state, { trip }) {
             if (state.tripToDisplay) state.tripToDisplay = trip;
         },
+        toggleUserLikeTrip(state, { userId }) {
+            const likes = state.tripToDisplay.user.likes;
+            const idx = likes.findIndex(currUserId => currUserId === userId);
+            if (idx !== -1) likes.push(userId);
+            else likes.splice(idx, 1);
+        },
         toggleUserFromPendingList(state, { userId }) {
             console.log('toggle:', userId);
 
@@ -79,7 +85,8 @@ export default {
             return state.tripToDisplay;
         },
         tripToEdit(state) {
-            return JSON.parse(JSON.stringify(state.tripToDisplay));
+            if (state.tripToDisplay) return JSON.parse(JSON.stringify(state.tripToDisplay));
+            else return null;
         },
         emptyTrip(state) {
             return TripService.getEmpty();
@@ -101,7 +108,6 @@ export default {
         }
     },
     actions: {
-        // TODO: implement optimistic updates
         async getTrendingTrips({ commit }) {
             const trendingTrips = await TripService.getTrending()
             return trendingTrips
@@ -113,9 +119,7 @@ export default {
             return recommendedTrips
         },
         async loadTrip({ commit }, { tripId }) {
-            console.log('AM I HERE FROM SOCKET?')
             const trip = await TripService.getById(tripId);
-            console.log(trip);
             commit({ type: 'loadTrip', trip });
         },
         async saveTrip({ commit, getters, dispatch }, { trip }) {
@@ -205,8 +209,8 @@ export default {
                 dispatch({ type: 'addNotification', newNotification })
 
                 // User personal notification
-                 // send to socket with userId and tripId
-                 const payload = {
+                // send to socket with userId and tripId
+                const payload = {
                     action: NotificationService.USER_TRIP_APPROVED,
                     user: getters.loggedUser,
                     tripId: updatedTrip._id,
@@ -314,7 +318,7 @@ export default {
             const trips = await TripService.getActivityTrips(activity)
             return trips
         },
-        async getFilterImgs({ commit }, { filterType, filters }) {            
+        async getFilterImgs({ commit }, { filterType, filters }) {
             const filterImgs = await Promise.all(filters.map(filter => TripService.getImgs(filter, filterType)))
             return filterImgs
             // if (filterType === 'activities') commit({ type: 'setActivityFilters', filterImgs })
@@ -331,7 +335,7 @@ export default {
             const countryCode = await TripService.getCountryCode(placeId)
             return countryCode
         },
-        async getCitiesByCountry(context, {country}) {
+        async getCitiesByCountry(context, { country }) {
             const cities = await TripService.getByCountry(country)
             return cities
         }

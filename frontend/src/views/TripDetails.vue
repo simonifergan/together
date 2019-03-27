@@ -135,7 +135,7 @@ export default {
       this.$store.dispatch({ type: "socketInitGroupChat", chatId });
     },
     toggleUserLike() {
-      this.$store.dispatch({type: 'toggleUserLike', userId: this.trip.user._id});
+      this.$store.dispatch({type: 'toggleUserLike', userId: this.trip.userId});
     }
   },
   created() {

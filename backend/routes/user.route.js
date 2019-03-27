@@ -49,6 +49,19 @@ module.exports = (app) => {
 
     })
 
+    // Add or remove user from userId likes array
+    app.patch(`${BASE}/user_likes/:userId`, async (req, res) => {
+        const {userId} = req.params;
+        const like = req.body;
+        try {
+            const isSuccess = await userService.updateLikesToUser(userId, like)
+            if (isSuccess) res.json(isSuccess)
+            else throw 404;
+        } catch {
+            res.status(404).end();
+        }
+    })
+
     app.post(`${BASE}/login`, async (req, res) => {
         const credentials = req.body;
         // IF USER LOGGED IN WITH FACEBOOK:

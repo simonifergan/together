@@ -24,7 +24,7 @@ export default {
         },
 
         // ONE USER TO DISPLAY:
-        setUserToDisplay(state, {user}) {
+        setUserToDisplay(state, { user }) {
             state.userToDisplay = user;
         },
         toggleUserInUsersToDisplay(state, { user }) {
@@ -32,9 +32,17 @@ export default {
             if (idx !== -1) state.usersToDisplay.splice(idx, 1);
             else state.usersToDisplay.push(user);
         },
-        removeUserInUsersToDisplay(state, {user}) {
+        removeUserInUsersToDisplay(state, { user }) {
             const idx = state.usersToDisplay.find(inUser => inUser._id === user._id);
             if (idx !== -1) state.usersToDisplay.splice(idx, 1);
+        },
+        toggleUserLikeUser(state, { userId }) {
+            if (state.userToDisplay) {
+                const likes = state.userToDisplay.likes;
+                const idx = likes.findIndex(currUserId => currUserId === userId);
+                if (idx !== -1) likes.push(userId);
+                else likes.splice(idx, 1);
+            }
         }
     },
     getters: {
@@ -49,6 +57,10 @@ export default {
         },
         userToDisplay(state) {
             return state.userToDisplay;
+        },
+        userToEdit(state) {
+            if (state.userToDisplay) return JSON.parse(JSON.stringify(state.userToDisplay))
+            else return null;
         }
     },
     actions: {
@@ -78,10 +90,10 @@ export default {
             commit({ type: 'setLoggedUser', user })
         },
 
-        async getUserById({commit}, {userId}) {
+        async getUserById({ commit }, { userId }) {
             try {
                 const user = await UserService.getById(userId);
-                commit({type: 'setUserToDisplay', user});
+                commit({ type: 'setUserToDisplay', user });
                 return true;
 
             } catch {
@@ -90,7 +102,7 @@ export default {
         },
 
         async joinLeaveTripToUser({ commit, getters }, { userToTripId }) {
-            
+
             try {
                 const updatedUser = await UserService.updateTripToUser(userToTripId);
                 return updatedUser;
@@ -108,32 +120,61 @@ export default {
             userToEdit.newPassword = null;
             return userToEdit
         },
-        async saveUser({commit, getters}, {user}) {
+        async saveUser({ commit, getters }, { user }) {
             let backupUser = getters.loggedUser;
             let userCopy = JSON.parse(JSON.stringify(user));
             delete userCopy.confirmPassword;
             delete userCopy.newPassword;
-            
-            
-            commit({type: 'setLoggedUser', user: userCopy})
+
+
+            commit({ type: 'setLoggedUser', user: userCopy })
             try {
                 let updatedUser = await UserService.update(user)
                 return updatedUser
             } catch {
                 console.log('rollback');
-                commit({type: 'setLoggedUser', user: backupUser})
+                commit({ type: 'setLoggedUser', user: backupUser })
             }
         },
-        toggleUserLike({commit}, {userId}) {
-            
+        async toggleUserLike({ commit, getters }, { userId }) {
+            let action = 'like';
+            // update on trip store
+            let trip = JSON.parse(JSON.stringify(getters.tripToEdit));
+            if (trip) {
+                const idx = trip.user.likes.findIndex(currUserId => currUserId === userId);
+                if (idx !== -1) action = 'unlike';
+                commit({ type: 'toggleUserLikeTrip', userId });
+            }
+
+            // update on user store
+            let user = JSON.parse(JSON.stringify(getters.userToEdit));
+            if (user) {
+                const idx = user.likes.findIndex(currUserId => currUserId === userId);
+                if (idx !== -1) action = 'unlike';
+                commit({ type: 'toggleUserLikeUser', userId });
+            }
+
+            try {
+                let like = {
+                    action,
+                    likingUserId: getters.loggedUser._id
+                }
+                const updatedUser = await UserService.updateLikesToUser(like, userId);
+                return updatedUser;
+            } catch {
+                console.log('rollback');
+                if (trip) commit({ type: 'toggleUserLikeTrip', userId });
+                if (user) commit({ type: 'toggleUserLikeUser', userId });
+            }
+
         },
         // SOCIAL MEDIA user behavior:
-        async checkFacebookUser({commit}) {
+        async checkFacebookUser({ commit }) {
             const userFBInfo = await FacebookService.getUserInfo();
             if (!userFBInfo) return false;
             else {
                 // Prepare object for our database and decide whether to register or auth him
-                const {id, first_name, last_name, picture, email} = userFBInfo;
+                const { id, first_name, last_name, picture, email } = userFBInfo;
                 let user = UserService.getEmptyUser();
                 user.facebookId = id;
                 user.firstname = first_name;
@@ -141,12 +182,12 @@ export default {
                 user.profilePic = picture.data.url;
                 user.email = email;
                 try {
-                    const loggedUser = await UserService.login(user); 
+                    const loggedUser = await UserService.login(user);
                     commit({ type: 'setLoggedUser', user: loggedUser });
 
                 } catch (err) {
                 }
-                
+
                 return true;
             }
 

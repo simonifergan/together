@@ -1,5 +1,5 @@
 <template>
-  <li class="msg-preview" :title="(chat.trip)? chat.trip.title: chattingWith[0]">
+  <li class="msg-preview" :title="(chat.trip)? chat.trip.title: chattingWith[0].firstname">
     <div class="user-img-container">
       <div
         class="user-img"
@@ -11,7 +11,7 @@
     <div
       class="msg-content"
     >
-      <h4 v-if="!chat.trip">{{`${user.firstname} ${user.lastname}`}}</h4>
+      <h4 v-if="!chat.trip">{{`${chattingWith[0].firstname} ${chattingWith[0].lastname}`}}</h4>
       <h4 v-else>{{chat.trip.title}}</h4>
       <div v-if="lastMsg">{{lastSender}}&nbsp;{{lastMsg.txt}}</div>
     </div>

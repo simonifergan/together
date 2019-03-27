@@ -11,8 +11,7 @@
         />
       </div>
       <span
-
-        v-show="user && !chat.trip"
+        v-show="!chat.trip"
         v-for="(user, index) in chattingWith"
         :key="user._id+index"
       >{{`${user.firstname} ${user.lastname}`}}</span>
@@ -110,6 +109,13 @@ export default {
       deep: true,
       handler(newVal) {
         if (newVal.isActive) this.scrollToBottom();
+      }
+    },
+    $route: {
+      deep: true,
+      handler() {
+        console.log('chat changed');
+        if (this.chat && this.chat.isActive) this.scrollToBottom();
       }
     }
   }

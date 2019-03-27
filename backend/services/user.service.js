@@ -10,6 +10,7 @@ module.exports = {
     getById,
     update,
     updateTripToUser,
+    updateLikesToUser,
     remove
 }
 
@@ -130,18 +131,37 @@ async function update(user) {
             } else throw new Error(401);
         }
         await db.collection(usersCollection).updateOne({ _id: user._id }, { $set: user })
-        
+
         user._id = strId;
         user.trips = trips;
         user.pendingIn = pendingIn;
         user.likes = likes;
         delete user.password;
         console.log('user to return: ', user);
-        
+
         return user;
-    } catch (err){
+    } catch (err) {
         throw err;
     }
+}
+
+async function updateLikesToUser(userId, like) {
+    let { likingUserId, action } = like;
+    userId = new ObjectId(userId);
+    likingUserId = new ObjectId(likingUserId);
+    try {
+        if (action === 'like') {
+            await db.collection(usersCollection).updateOne({ _id: userId }, { $push: { likes: likingUserId } })
+
+        } else {
+            await db.collection(usersCollection).updateOne({ _id: userId }, { $pull: { likes: likingUserId } })
+        }
+        return true;
+    } catch (err) {
+        throw 404;
+    }
+
+
 }
 
 async function updateTripToUser({ tripId, user, action }) {
