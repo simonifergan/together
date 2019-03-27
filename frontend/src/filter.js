@@ -19,6 +19,10 @@ Vue.filter('monthAndYearName', (monthYearStr) => {
     return `${monthNameStart} ${yearNumStart}`;
 })
 
+Vue.filter('msgSender', (senderId, chatters) => {
+    return chatters.find(user => user._id === senderId).firstname;
+})
+
 Vue.filter('notificationAction', (action)=>{
     switch (action) {
         case 'trip_request':

@@ -106,7 +106,7 @@ function getEmpty() {
         members: [],
         pending: [],
         comments: [],
-        groupSize: 2,
+        groupSize: 1,
     }
 }
 

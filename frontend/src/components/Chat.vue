@@ -1,13 +1,15 @@
 <template>
   <aside class="chat-box" @click="focusInput" v-if="chat.isActive">
     <header>
-      <div
-        class="user-img"
-        v-for="user in chattingWith"
-        :key="user._id+user.firstname"
-        :style="profilePic"
-        :title="user.firstname"
-      />
+      <div class="user-img-container">
+        <div
+          class="user-img"
+          v-for="user in chattingWith"
+          :key="user._id+user.firstname"
+          :style="{ backgroundImage: `url('${user.profilePic}')` }"
+          :title="user.firstname"
+        />
+      </div>
       <span
         v-show="!chat.trip"
         v-for="(user, index) in chattingWith"
@@ -20,10 +22,14 @@
     </header>
     <ul ref="msgsBlock">
       <li
-        :class="{'not-user': (msg.sender !== loggedUser._id)}"
         v-for="(msg, index) in msgs"
         :key="index"
-      ><span>{{msg.txt}}</span></li>
+      >
+        <div class="sender" v-show="msg.sender !== loggedUser._id && chattingWith.length > 1">{{msg.sender | msgSender(chat.users)}}</div>
+        <div :class="{'not-user': (msg.sender !== loggedUser._id)}" class="txt-container">
+          <span>{{msg.txt}}</span>
+        </div>
+      </li>
     </ul>
     <form @submit.prevent="send">
       <input
@@ -61,8 +67,7 @@ export default {
     profilePic() {
       let picUrl = this.chattingWith[0].profilePic;
       return { backgroundImage: `url('${picUrl}')` };
-    },
-   
+    }
   },
   methods: {
     closeChat() {
@@ -82,16 +87,15 @@ export default {
       this.$refs.msgbox.focus();
     },
     scrollToBottom() {
-      this.$nextTick( () => {
-
-          let msgs = this.$refs.msgsBlock.children;
-          if (!msgs) return;
-          this.$refs.msgsBlock.scrollTo({
-            top: msgs[msgs.length - 1].offsetTop,
-            bottom: 0,
-            behavior: 'smooth',
-          })
-        })
+      this.$nextTick(() => {
+        let msgs = this.$refs.msgsBlock.children;
+        if (!msgs) return;
+        this.$refs.msgsBlock.scrollTo({
+          top: msgs[msgs.length - 1].offsetTop,
+          bottom: 0,
+          behavior: "smooth"
+        });
+      });
     }
   },
   updated() {

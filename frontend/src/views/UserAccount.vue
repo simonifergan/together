@@ -1,24 +1,25 @@
 <template>
     <section class="signup-page">
         <form @submit.prevent="saveUser" v-if="user">
-            <h2>Account</h2>
+            <h2>Account Settings</h2>
             <label>Email
-                <el-input type="email" v-model="user.email" placeholder="Email" />
+                <el-input type="email" v-model="user.email" placeholder="Email" required />
             </label>
             <label>Password
-                <el-input type ="password" v-model="user.password" placeholder="Password" />
+                <el-input type ="password" v-model="user.password" placeholder="Password" req/>
             </label>
-            <upload-image @setProfilePic="setProfilePic"/>
-            <h2>Personal Information</h2>
             <label>First Name
                 <el-input v-model="user.firstname" placeholder="First Name" />
             </label>
             <label>Last Name
                 <el-input v-model="user.lastname" placeholder="Last Name" />
             </label>
+            <h2>Profile picture</h2>
+            <upload-image @setProfilePic="setProfilePic"/>
+            <h2>Personal information <span>(optional)</span></h2>
             <label>Birth Date<br>
                 <el-date-picker
-                    v-model="user.birthDate"
+                    v-model="user.birthdate"
                     type="date"
                     value-format="timestamp"
                     placeholder="Pick a day">
@@ -26,12 +27,12 @@
             </label><br>
             <label>Gender<br>
                 <el-select v-model="user.gender">
-                    <el-option value="Male">Male</el-option>
-                    <el-option value="Female">Female</el-option>
-                    <el-option value="null">Rather not say</el-option>
+                    <el-option value="male" label="Male"></el-option>
+                    <el-option value="female" label="Female"></el-option>
+                    <el-option value="null" label="Rather not say"></el-option>
                 </el-select>
             </label><br>
-            <h2>Travel Partner Preferences</h2>
+            <h2>Travel-partner preferences <span>(recommended)</span></h2>
             <label>Gender<br>
                 <el-select v-model="user.tripPrefs.gender">
                     <el-option value="null">No Preference</el-option>
@@ -48,7 +49,7 @@
                     <el-option value="4">40+</el-option>
                 </el-select>
             </label><br>
-            <h2>Activity Preferences</h2>
+            <h2>Activity preferences <span>(recommended)</span></h2>
             <activity-prefs v-model="user.tripPrefs.activities" />
             <button type="submit">Save</button>
         </form>
