@@ -1,6 +1,6 @@
 <template>
   <section class="search-page">
-    <trip-list :trips="trips" title="Search Results"></trip-list>
+    <trip-list v-if="results" :trips="results" title="Search Results"></trip-list>
     <notification-list :notifications="getNotifications"/>
   </section>
 </template>
@@ -17,8 +17,8 @@ export default {
     NotificationList
   },
   computed: {
-    trips() {
-      return this.$store.getters.trips;
+    results() {
+      return this.$store.getters.searchResults;
     },
     searchQuery() {
       return this.$route.query.q;

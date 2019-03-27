@@ -13,12 +13,8 @@
         </div>
       </div>
     </header>
-    <article class="article-filters">
-      <!-- <filter-list v-if="destinations" :type="'destinations'" :filters="destinations"/> -->
-      <filter-list v-for="(value, key) in filterLists" :key="key" :filters="value" :title="key"/>
-    </article>
-    <article class="article-trips">
-      <trip-list v-for="(value, key) in tripLists" :key="key" :trips="value" :title="key"/>
+    <article v-for="list in listsForRender" :key="list.title" :class="'article-' + list.type">
+      <component :is="list.type" :title="list.title" :trips="list.trips" :filters="list.filters" />
     </article>
   </section>
 </template>
@@ -51,26 +47,22 @@ export default {
   computed: {
     loggedUser() {
       return this.$store.getters.loggedUser
+    },
+    listsForRender() {
+      const lists = []
+      for (let tripList in this.tripLists) {
+        lists.push({title: tripList, trips: this.tripLists[tripList], type: 'tripList'})
+      }
+      for (let filterList in this.filterLists) {
+        lists.push({title: filterList, filters: this.filterLists[filterList], type: 'filterList'})
+      }
+      lists.sort((list1, list2) => {
+        let list1length = list1.filters ? list1.filters.length : list1.trips.length
+        let list2length = list2.filters ? list2.filters.length : list2.trips.length
+        return list2length - list1length
+      })
+      return lists
     }
-    // trips() {
-    //   return this.$store.getters.trips;
-    // },
-    // destinations() {
-    //   return this.trips.reduce((acc, trip) => {
-    //     trip.destinations.cities.forEach(city => {
-    //       if (acc.indexOf(city) === -1) acc.push(city)
-    //     })
-    //     return acc
-    //   }, [])
-    // },
-    // activities() {
-    //   return this.trips.reduce((acc, trip) => {
-    //     trip.activities.forEach(activity => {
-    //       if (acc.indexOf(activity) === -1) acc.push(activity)
-    //     })
-    //     return acc
-    //   }, [])
-    // },
   },
   watch: {
     async loggedUser() {

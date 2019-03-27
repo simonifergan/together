@@ -51,7 +51,7 @@ export default {
     moveSlide(diff) {
       if (
         diff === "+" &&
-        !(this.page === this.filtersWithImages.length - this.itemsPerPage)
+        !(this.page === this.filters.length - this.itemsPerPage)
       ) {
         this.page = this.page + 1;
       } else if (diff === "-" && this.page > 0) {

@@ -6,6 +6,7 @@ export default {
     state: {
         trips: [],
         tripToDisplay: null,
+        searchResults: null,
         activityFilters: [],
         destinationFilters: []
     },
@@ -13,6 +14,9 @@ export default {
         // trips section:
         loadTrips(state, { trips }) {
             state.trips = trips
+        },
+        setSearchResults(state, {trips}) {
+            state.searchResults = trips
         },
         updateTrip(state, { trip }) {
             // MIGHT BE USEELSSS
@@ -91,6 +95,9 @@ export default {
         },
         countries(state) {
             return TripService.getCountries()
+        },
+        searchResults(state) {
+            return state.searchResults
         }
     },
     actions: {
@@ -101,7 +108,6 @@ export default {
         },
         async getRecommendedTrips({ getters }) {
             const prefs = getters.loggedUser.tripPrefs
-            console.log('in store prefs', prefs);
             if (!prefs.activities.length && !prefs.gender && !prefs.age) return null
             const recommendedTrips = await TripService.getRecommended(prefs)
             return recommendedTrips
@@ -286,17 +292,14 @@ export default {
         },
         async searchTrips({ commit }, { searchQuery }) {
             const trips = await TripService.query(searchQuery)
-            commit({ type: 'loadTrips', trips })
+            commit({ type: 'setSearchResults', trips })
         },
         async getActivityTrips(context, { activity }) {
             const trips = await TripService.getActivityTrips(activity)
             return trips
         },
-        async getFilterImgs({ commit }, { filterType, filters }) {
-            console.log('getting filter Imgs', filters);
-            
+        async getFilterImgs({ commit }, { filterType, filters }) {            
             const filterImgs = await Promise.all(filters.map(filter => TripService.getImgs(filter, filterType)))
-            console.log('got:', filterImgs);
             return filterImgs
             // if (filterType === 'activities') commit({ type: 'setActivityFilters', filterImgs })
             // else if (filterType === 'destinations') commit({ type: 'setDestinationFilters', filterImgs })

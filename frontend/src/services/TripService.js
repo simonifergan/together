@@ -35,7 +35,6 @@ async function getTrending() {
 }
 
 async function getRecommended(prefs) {
-    console.log('in service prefs:', prefs);
     const {data} = await axios.post(TRIP_API + '/recommended', prefs);
     return data;
 }
@@ -60,10 +59,7 @@ async function getByUserId(id) {
 async function getByCountry(country) {
     const {data} = await axios.get(`${TRIP_API}/country/${country}`)
     const cities = data.reduce((acc, trip) => {
-        console.log('int service, destinations:', trip.destinations);
-        const tripCities = trip.destinations.cities
-        console.log('int service, tripCities:', tripCities);
-        
+        const tripCities = trip.destinations.cities        
         tripCities.forEach(city => {
             if (acc.indexOf(city) === -1) acc.push(city)
         })
@@ -128,9 +124,7 @@ async function getCountryCode(placeId) {
     return countryCode
 }
 
-async function getImgs(query, type) {
-    console.log('query:', query);
-    
+async function getImgs(query, type) {    
     // if (type === 'destinations') query = UtilService.worldCodeMap.get(query)
     const filter = {}
     filter.title = query
