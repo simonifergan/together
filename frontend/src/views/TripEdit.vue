@@ -31,7 +31,7 @@
         </label>
       </div>
       <h2>Where would you like to travel to?</h2>
-      <el-input type="text" v-model="searchQuery" placeholder="Type a city or a country. How about a new place?"/>
+      <el-input type="text" v-model="searchQuery" @input="onInput" placeholder="Type a city or a country. How about a new place?"/>
       <ul v-if="autocomplete">
         <li v-for="(city, idx) in autocomplete" :key="idx" @click="chooseCity(city)">
           <h3>{{city.description}}</h3>
@@ -54,13 +54,13 @@
      
       <button class="btn-share-trip" type="submit">Share</button>
     </form>
-    <button @click="searchPlaces">search</button>
   </section>
 </template>
 
 <script>
 // CMPS
 import OurSuperAwesomeMap from "@/components/OurSuperAwesomeMap.vue";
+import _ from 'lodash';
 
 export default {
   name: "trip-edit",
@@ -71,9 +71,17 @@ export default {
     return {
       trip: this.$store.getters.emptyTrip,
       searchQuery: "",
-      autocomplete: null
+      autocomplete: null,
+      throttled: _.throttle(this.searchPlaces, 1000, {leading: false})
     };
   },
+  // watch: {
+    // searchQuery(newVal, oldVal) {
+    //   // console.log('debounce invoked', newVal, oldVal);
+      
+    //   _.debounce(this.searchPlaces, 3000, {trailing: true})()
+    // }
+  // },
   methods: {
     save() {
       this.$store
@@ -82,7 +90,14 @@ export default {
           this.$router.push(`/trip/${tripId}`);
         });
     },
+    onInput() {
+      console.log('throttled');
+      
+      this.throttled()
+    },
     searchPlaces() {
+      console.log('searching places');
+      
       this.$store
         .dispatch({ type: "getPlacesAutocomplete", query: this.searchQuery })
         .then(res => (this.autocomplete = res));

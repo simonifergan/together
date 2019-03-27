@@ -38,7 +38,7 @@ export default {
         recommended: []
       },
       filterLists: {
-        beach: [],
+        beachCities: [],
         activities: [],
       },
       countries: this.$store.getters.countries

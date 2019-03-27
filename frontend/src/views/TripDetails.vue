@@ -40,7 +40,6 @@
       </div>
       <div class="trip-dest">
         <i class="fas fa-globe-europe"></i>
-        <!-- TODO -->
         <p>Nis, Paris in France</p>
       </div>
       <div class="trip-activities">
