@@ -47,7 +47,9 @@ export default {
   },
   methods: {
     initChat(chatId) {
-      this.$store.dispatch({ type: "activateChat", chatId });
+      if (this.isExpanded) {
+
+      } else this.$store.dispatch({ type: "activateChat", chatId });
     }
   }
 };

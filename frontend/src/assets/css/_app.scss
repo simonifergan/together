@@ -198,8 +198,6 @@ button {
             .msg-preview {
                 @include flex(row, flex-start, center);
                 margin: 0;
-                padding: 5px 2px 5px 10px;
-                box-shadow: 0 0 2px 0px $box-shadow-gray;
                 font-size: 12px;
                 cursor: pointer;
                 &:hover {
@@ -238,6 +236,13 @@ button {
                     margin-left: auto;
                 }
             }
+            footer {
+                margin-top: 10px;
+                padding: 5px;
+                a {
+                    padding: 0;
+                }
+            }
         }
     }
   
@@ -247,6 +252,7 @@ button {
         right: 5%;
         bottom: 0;
         @include flex;
+        z-index: 10;
         justify-content: flex-end;
         .chat-box {
             display: grid;
@@ -265,9 +271,13 @@ button {
                 padding: 10px 5px 8px 10px;
                 box-shadow: 0 2px 1px rgba(0, 0, 0, .1);
                 @include flex(row, flex-start, center);
-                .user-img {
-                    @include userImg(30px, 30px);
-                    box-shadow: 0 0 0.5px #4d4d4d;
+                .user-img-container {
+                    display: grid;
+                    grid-template-columns: repeat(3, 15px);
+                    .user-img {
+                        @include userImg(30px, 30px);
+                        box-shadow: 0 0 0.5px #4d4d4d;
+                    }
                 }
                 span {
                     margin-left: 10px;
@@ -302,23 +312,35 @@ button {
                     margin-bottom: 5px;
                 }
                 li {
-                    overflow-wrap: break-word;
-                    white-space: pre-wrap;
-                    font-size: 12px;
-                    margin-bottom: 5px;
-                    border-radius: 14px;
-                    padding: 5px 10px;
-                    font-size: 13px;
-                    line-height: 16px;
-                    align-self: flex-end;
-                    background: #333;
-                    color: #fff;
-                    max-width: 145px;
-                    &.not-user{
-                        align-self: flex-start;
-                        background: #f2f1f1;
-                        color: #333;
+                    @include flex(column);
+                    .sender {
+                        padding: 5px;
+                        margin-top: 5px;
+                        margin-left: 5px;
+                        font-size: 11px;
                     }
+                    .txt-container {
+                        overflow-wrap: break-word;
+                        white-space: pre-wrap;
+                        font-size: 12px;
+                        margin-bottom: 5px;
+                        border-radius: 14px;
+                        padding: 5px 10px;
+                        font-size: 13px;
+                        line-height: 16px;
+                        background: #333;
+                        max-width: 145px;
+                        align-self: flex-end;
+                        color: #fff;
+                        &.not-user{
+                            align-self: flex-start;
+                            background: #f2f1f1;
+                            color: #333;
+                            
+                        }
+
+                    }
+                    
                 }
                 
             }
