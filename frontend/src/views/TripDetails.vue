@@ -16,7 +16,7 @@
 
         <!-- TODO: on click - update likes (toggle likes) -->
         <p class="likes-count">
-          <button :title="'Like ' + trip.user.firstname">
+          <button :title="'Like ' + trip.user.firstname" @click="toggleUserLike">
             <i :class="isLike"></i>
           </button>
           <span>&nbsp;({{this.trip.user.likes.length}})</span>
@@ -129,6 +129,9 @@ export default {
     },
     initGroupChat(chatId) {
       this.$store.dispatch({ type: "socketInitGroupChat", chatId });
+    },
+    toggleUserLike() {
+      this.$store.dispatch({type: 'toggleUserLike', userId: this.trip.user._id});
     }
   },
   created() {

@@ -27,6 +27,7 @@ const API_USER = (process.env.NODE_ENV !== 'development')
 
 async function update(userToUpdate) {
     const { data } = await axios.put(`${API_USER}/user/${userToUpdate._id}`, userToUpdate)
+    StorageService.saveToLocal(USER_KEY, data)
     return data
 }
 
