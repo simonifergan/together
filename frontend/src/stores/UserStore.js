@@ -103,8 +103,6 @@ export default {
             const users = await UserService.getUsers(userIds)
             context.commit({ type: 'setUsersToDisplay', users });
         },
-
-
         async getUserToEdit(context, { userId }) {
             let userToEdit = await UserService.getById(userId)
             userToEdit.confirmPassword = null;
@@ -116,7 +114,6 @@ export default {
             commit({type: 'setLoggedUser', uesr: updatedUser})
             return updatedUser
         },
-
         // SOCIAL MEDIA user behavior:
         async checkFacebookUser({commit}) {
             const userFBInfo = await FacebookService.getUserInfo();

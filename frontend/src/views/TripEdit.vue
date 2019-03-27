@@ -37,7 +37,7 @@
           <h3>{{city.description}}</h3>
         </li>
       </ul>
-      <our-super-awesome-map :enable="true" v-model="trip.destinations.countries"/>
+      <our-super-awesome-map v-if="trip.destinations.countries" :enable="true" v-model="trip.destinations.countries"/>
         <h2>Give your trip a title:</h2>
         <el-input
           placeholder="Type your trip's title. e.g.: 'My trip to Lapland in 3 months!'"
@@ -89,8 +89,8 @@ export default {
     },
     async chooseCity(city) {
       const countryCode = await this.$store.dispatch({type: 'getCountryCode', placeId: city.place_id})
-      this.trip.destinations.cities.push(city.name)
-      this.trip.destinations.countryCodes.push(countryCode)
+      this.trip.destinations.cities.push(city.description)
+      this.trip.destinations.countries.push(countryCode)
     }
   },
   created() {

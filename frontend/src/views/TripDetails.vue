@@ -48,7 +48,7 @@
       </div>
 
       <div class="map">
-        <our-super-awesome-map :enable="false" :value="trip.destinations"/>
+        <our-super-awesome-map :enable="false" :value="trip.destinations.countries"/>
       </div>
     </div>
 
