@@ -114,7 +114,6 @@ export default {
     $route: {
       deep: true,
       handler() {
-        console.log('chat changed');
         if (this.chat && this.chat.isActive) this.scrollToBottom();
       }
     }
