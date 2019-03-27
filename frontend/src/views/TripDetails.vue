@@ -178,7 +178,8 @@ export default {
     },
     first5cities() {
       const cities = this.trip.destinations.cities.slice(0, 5)      
-      return cities.map(city => city.match(/^.*?(?=[,\-]|$)/)[0])
+      // return cities.map(city => city.match(/^.*?(?=[,\-]|$)/)[0])
+      return cities
     },
     first5countries() {
       return this.trip.destinations.countries.slice(0, 5)
