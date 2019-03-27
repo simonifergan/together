@@ -147,21 +147,14 @@ async function update(user) {
 
 async function updateLikesToUser(userId, like) {
     let { likingUserId, action } = like;
-    console.log('INSIDE SERVICE:', likingUserId, action)
     userId = new ObjectId(userId);
     likingUserId = new ObjectId(likingUserId);
-    console.log('INSIDE SERVICEת AFTER OBJ TRANSFORM:', likingUserId, userId)
     try {
         const db = await mongoService.connect()
         if (action === 'like') {
-            console.log('giving a like')
             const res = await db.collection(usersCollection).updateOne({ _id: userId }, { $push: { likes: likingUserId } })
-            console.log('here giving a like')
-            
         } else {
-            console.log('removing a like')
             const res = await db.collection(usersCollection).updateOne({ _id: userId }, { $pull: { likes: likingUserId } })
-            console.log('here taking a like')
         }
     } catch (err) {
         throw 404;
