@@ -39,8 +39,11 @@ async function getRecommended(prefs) {
     return data;
 }
 
-async function query(searchQuery) {
-    let queryStr = '?searchQuery=' + searchQuery
+async function query(searchQuery, tripDate) {
+    console.log('tripDate:', tripDate);
+    
+    let tripQuery = tripDate ? `&tripDate=${tripDate}` : ''
+    let queryStr = '?searchQuery=' + searchQuery + tripQuery
     const {data} = await axios.get(TRIP_API + queryStr);
     return data;
 }

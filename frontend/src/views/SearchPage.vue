@@ -23,6 +23,9 @@ export default {
     searchQuery() {
       return this.$route.query.q;
     },
+    tripDate() {
+      return this.$route.query.tripDate;
+    },
     getNotifications() {
       return this.$store.getters.notifications;
     }
@@ -30,7 +33,8 @@ export default {
   created() {
     this.$store.dispatch({
       type: 'searchTrips',
-      searchQuery: this.searchQuery
+      searchQuery: this.searchQuery,
+      tripDate: this.tripDate
     });
   }
 };

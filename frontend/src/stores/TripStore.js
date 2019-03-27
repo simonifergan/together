@@ -306,8 +306,8 @@ export default {
                 // TODO simon
             }
         },
-        async searchTrips({ commit }, { searchQuery }) {
-            const trips = await TripService.query(searchQuery)
+        async searchTrips({ commit }, { searchQuery, tripDate }) {
+            const trips = await TripService.query(searchQuery, tripDate)
             commit({ type: 'setSearchResults', trips })
         },
         async getActivityTrips(context, { activity }) {

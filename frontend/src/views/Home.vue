@@ -5,7 +5,13 @@
         <h1>Reaching your destination with the right people for you.</h1>
         <div class="intro-form">
           <form @submit.prevent="search">
-            <input type="text" placeholder="Anywhere" v-model="searchQuery">
+            <input type="text" placeholder="Anything, Anywhere" @input="onInput" v-model="searchQuery">
+            <el-date-picker placeholder="Anytime" v-model="tripDate" type="month" value-format="yyyy-M"></el-date-picker>
+            <ul v-if="autocomplete">
+              <li v-for="(city, idx) in autocomplete" :key="idx" @click="cityClicked(city)">
+                <h3>{{city.description}}</h3>
+              </li>
+            </ul>
             <button type="submit" title="Search">
               <img src="@/assets/svg/search.svg">
             </button>
@@ -23,6 +29,7 @@
 // CMPS:
 import TripList from "@/components/TripList";
 import FilterList from "@/components/FilterList";
+import _ from 'lodash'
 
 export default {
   name: "home",
@@ -32,7 +39,10 @@ export default {
   },
   data() {
     return {
-      searchQuery: "",
+      searchQuery: '',
+      tripDate: '',
+      throttled: _.throttle(this.searchPlaces, 1000, {leading: false}),
+      autocomplete: null,
       tripLists: {
         trending: [],
         recommended: []
@@ -62,6 +72,9 @@ export default {
         return list2length - list1length
       })
       return lists
+    },
+    searchQueryWithDate() {
+      return "/search?q=" + this.searchQuery + "&tripDate=" + this.tripDate
     }
   },
   watch: {
@@ -71,7 +84,7 @@ export default {
   },
   methods: {
     search() {
-      this.$router.push("/search?q=" + this.searchQuery);
+      this.$router.push(this.searchQueryWithDate);
     },
     async getActivityTrips(activity) {
       const activityTrips = await this.$store.dispatch({ type: "getActivityTrips", activity })
@@ -85,6 +98,21 @@ export default {
       this.filterLists = Object.assign({}, this.filterLists, {
         [country]: citiesWithImgs,
       })
+    },
+    onInput() {
+      console.log('throttled');
+      
+      this.throttled()
+    },
+    searchPlaces() {
+      console.log('searching places');
+      this.$store
+        .dispatch({ type: "getPlacesAutocomplete", query: this.searchQuery })
+        .then(res => (this.autocomplete = res));
+    },
+    cityClicked(city) {
+      this.searchQuery = city.description
+      this.autocomplete = null
     }
   },
   async created() {

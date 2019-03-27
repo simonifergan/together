@@ -3,10 +3,11 @@ const BASE_URL = '/api/trip'
 
 module.exports = (app) => {
     // Query trips' list
-    app.get(BASE_URL, (req, res) => {        
+    app.get(BASE_URL, (req, res) => {
+        let {tripDate} = req.query
         let {searchQuery} = req.query
         if (!searchQuery) searchQuery = '';
-        tripService.query(searchQuery)
+        tripService.query(searchQuery, tripDate)
             .then(trips => res.json(trips))
             .catch(err => res.end(err));
     });

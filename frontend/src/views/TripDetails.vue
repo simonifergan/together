@@ -40,7 +40,12 @@
       </div>
       <div class="trip-dest">
         <i class="fas fa-globe-europe"></i>
-        <p>Nis, Paris in France</p>
+        <ul>
+          <li v-for="city in first5cities" :key="city">{{city}}</li>
+        </ul>
+        <ul>
+          <li v-for="country in first5countries" :key="country">{{country | countryCodeToName}}</li>
+        </ul>
       </div>
       <div class="trip-activities">
         <div v-for="(activity, idx) in trip.activities" :key="idx">{{activity}}</div>
@@ -170,6 +175,13 @@ export default {
         ? "fas fa-heart"
         : "far fa-heart";
       return { [classKey]: true };
+    },
+    first5cities() {
+      const cities = this.trip.destinations.cities.slice(0, 5)      
+      return cities.map(city => city.match(/^.*?(?=[,\-]|$)/)[0])
+    },
+    first5countries() {
+      return this.trip.destinations.countries.slice(0, 5)
     }
   },
   watch: {
