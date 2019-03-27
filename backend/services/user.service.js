@@ -152,9 +152,11 @@ async function updateLikesToUser(userId, like) {
     try {
         if (action === 'like') {
             await db.collection(usersCollection).updateOne({ _id: userId }, { $push: { likes: likingUserId } })
-
+            console.log('here giving a like')
+            
         } else {
             await db.collection(usersCollection).updateOne({ _id: userId }, { $pull: { likes: likingUserId } })
+            console.log('here taking a like')
         }
         return true;
     } catch (err) {

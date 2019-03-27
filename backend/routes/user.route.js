@@ -55,6 +55,7 @@ module.exports = (app) => {
         const like = req.body;
         try {
             const isSuccess = await userService.updateLikesToUser(userId, like)
+            console.log('DID I WORK IN USER_LIKES?:', isSuccess);
             if (isSuccess) res.json(isSuccess)
             else throw 404;
         } catch {
