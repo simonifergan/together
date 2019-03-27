@@ -379,5 +379,16 @@ button {
         height: 5vh;
         z-index: 1020320310429214109;
         box-shadow: 0 0 1px 1px $box-shadow-gray;
+        z-index: 11;
+        transition: .3s;
+        &:hover {
+            opacity: 0.5;
+        }
+        .notification-container {
+            @include flex(row, flex-start, center);
+            .user-img {
+                @include userImg(50px,50px);
+            }
+        }
     }
 }

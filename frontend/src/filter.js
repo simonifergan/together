@@ -41,6 +41,8 @@ Vue.filter('notificationAction', (action)=>{
             return '';
         case 'user_comment':
             return 'has left a comment on a trip.';
+        case 'user_trip_request':
+            return 'has request to join your trip!';
         default:
             return '';
     }

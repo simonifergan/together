@@ -258,7 +258,12 @@ export default {
                     }
                 })
                 // send to socket with userId and tripId
-                dispatch({ type: 'socketSendNotification', userId: updatedTrip.userId, payload: 'CAN YOU SEE ME BABA??' });
+                const payload = {
+                    action: NotificationService.USER_TRIP_REQUEST,
+                    user: getters.loggedUser,
+                    tripId: updatedTrip._id,
+                }
+                dispatch({ type: 'socketSendNotification', userId: updatedTrip.userId, payload });
             } catch {
                 commit({ type: 'toggleUserFromPendingList', userId: user._id });
             }

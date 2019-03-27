@@ -37,7 +37,7 @@
           <h3>{{city.description}}</h3>
         </li>
       </ul>
-      <our-super-awesome-map :enable="true" v-model="trip.destinations"/>
+      <our-super-awesome-map :enable="true" v-model="trip.destinations.countries"/>
         <h2>Give your trip a title:</h2>
         <el-input
           placeholder="Type your trip's title. e.g.: 'My trip to Lapland in 3 months!'"

@@ -1,8 +1,9 @@
 <template>
-    <aside class="user-msg">
-        <h1>MY TITLE!</h1>
-        {{isActive}}
-        {{payload}}
+    <aside class="user-msg" v-if="payload">
+        <div class="notification-container">
+            <div class="user-img" :style="{backgroundImage: `url('${payload.user.profilePic}')`}"/>
+            <span>{{payload.user.firstname}} {{payload.action | notificationAction}}</span>
+        </div>
     </aside>
 </template>
 
@@ -27,6 +28,9 @@ export default {
         EventBusService.$on(SHOW_NOTIFICATION, payload => {
             this.payload = payload;
             this.isActive = true;
+            setTimeout( () => {
+                this.closeMsg();
+            }, 10000)
 
         })
     },

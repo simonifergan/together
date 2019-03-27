@@ -98,7 +98,7 @@ function getEmpty() {
     return {
         title: '',
         desc: '',
-        destinations: {countryCodes: [], cities: []},
+        destinations: {countries: [], cities: []},
         startsAt: '',
         duration: '',
         openTo: {},
