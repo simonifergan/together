@@ -44,8 +44,6 @@
           <li v-for="(value,key) in citiesForRender" :key="value + key + '_-'" >
             {{citiesForRender[key] | cityList}} in {{key}}
           </li>
-          {{citiesForRender}}
-          <!-- <div v-for="(city) in citiesForRender[key]" :key="city+key+value">{{city | cities}}</div> -->
         </ul>
       </div>
       <div class="trip-activities">
@@ -194,6 +192,10 @@ export default {
       return { [classKey]: true };
     },
     citiesForRender() {
+      if (!this.trip || !this.trip.destinations || !this.trip.destinations.cities) return [];
+      // TODO Yanai: Found a bug where city was like: "Singapore" without a country next to it
+      // (Changed it to: "Singapore, Singapore" and it worked)
+      // Run some checks...
       const cities = this.trip.destinations.cities.reduce((acc, city) => {
         const splitComma = city.split(',')
         const splitDash = city.split('-')

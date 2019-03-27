@@ -43,8 +43,9 @@ export default {
         }
     },
     methods: {
-        signup() {
-            this.$store.dispatch({type: 'signup', newUser: this.newUser})
+        async signup() {
+            const res = await this.$store.dispatch({type: 'signup', newUser: this.newUser});
+            if (res) this.$router.push('/');
         }
     },
     created() {

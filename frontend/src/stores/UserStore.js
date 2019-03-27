@@ -85,6 +85,7 @@ export default {
         async signup({ commit }, { newUser }) {
             const user = await UserService.signup(newUser)
             commit({ type: 'setLoggedUser', user })
+            return true;
         },
 
         async getUserById({ commit }, { userId }) {
