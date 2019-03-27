@@ -336,6 +336,8 @@ button {
                         line-height: 16px;
                         background: #333;
                         max-width: 145px;
+                        min-width: 30px;
+
                         align-self: flex-end;
                         color: #fff;
                         &.not-user{

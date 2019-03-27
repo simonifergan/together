@@ -46,6 +46,7 @@ async function query(userId) {
 
                 },
             },
+           
             {
                 $lookup:
                 {
@@ -55,11 +56,14 @@ async function query(userId) {
                     as: 'trip'
                 }
             },
-            {
-                $unwind: '$trip'
-            }
-        ]).toArray()
-        return chats;
+        ]).toArray();
+        const modifiedChats = chats.map(chat => {
+            if (!chat.trip.length) {
+                delete chat.trip;
+            } else chat.trip = chat.trip[0];
+            return chat;
+        })
+        return modifiedChats;
     } catch {
 
     }

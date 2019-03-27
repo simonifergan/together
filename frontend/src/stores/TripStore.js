@@ -113,9 +113,7 @@ export default {
             return recommendedTrips
         },
         async loadTrip({ commit }, { tripId }) {
-            console.log('AM I HERE FROM SOCKET?')
             const trip = await TripService.getById(tripId);
-            console.log(trip);
             commit({ type: 'loadTrip', trip });
         },
         async saveTrip({ commit, getters, dispatch }, { trip }) {

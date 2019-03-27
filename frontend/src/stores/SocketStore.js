@@ -31,6 +31,10 @@ export default {
             const chat = state.userChats.find(chat => chat._id === chatId);
             if (chat) chat.isActive = true;
         },
+        deactivateChat(state, {chatId}) {
+            const chat = state.userChats.find(chat => chat._id === chatId);
+            if (chat) chat.isActive = false;
+        },
         closeChat(state, { chatId }) {
             const chat = state.userChats.find(chat => chat._id === chatId);
             chat.isActive = false;
@@ -86,10 +90,8 @@ export default {
                 context.commit({ type: 'addNotification', addedNotification });
             })
             SocketService.on(SocketService.NOTIFICATION_RECEIVE, payload => {
-                console.log(payload)
                 if (payload.tripId) {
                     if (context.getters.tripToDisplay && context.getters.tripToDisplay._id === payload.tripId) {
-                        console.log('got here')
                         context.dispatch({type: 'loadTrip', tripId: payload.tripId})
                     }
                 }
@@ -154,6 +156,7 @@ export default {
                 chat.isActive = false;
                 return chat;
             })
+            console.log(chats);
             commit({ type: 'setUserChats', chats });
             SocketService.emit(SocketService.CHAT_REGISTER_ROOMS, chats);
         },
