@@ -40,12 +40,7 @@
       </div>
       <div class="trip-dest">
         <i class="fas fa-globe-europe"></i>
-        <ul>
-          <li v-for="city in first5cities" :key="city">{{city}}</li>
-        </ul>
-        <ul>
-          <li v-for="country in first5countries" :key="country">{{country | countryCodeToName}}</li>
-        </ul>
+        <pre>{{citiesForRender}}</pre>
       </div>
       <div class="trip-activities">
         <div v-for="(activity, idx) in trip.activities" :key="idx">{{activity}}</div>
@@ -176,14 +171,27 @@ export default {
         : "far fa-heart";
       return { [classKey]: true };
     },
-    first5cities() {
-      const cities = this.trip.destinations.cities.slice(0, 5)      
-      // return cities.map(city => city.match(/^.*?(?=[,\-]|$)/)[0])
+    citiesForRender() {
+      const cities = this.trip.destinations.cities.reduce((acc, city) => {
+        const splitComma = city.split(',')
+        const splitDash = city.split('-')
+        let country
+        if (splitComma.length > 1) country = splitComma.splice(-1) 
+        else if (splitDash.length > 1) country = splitDash.splice(-1)
+        if (country) {
+          if (acc[country]) acc[country].push(city.match(/^.*?(?=[,\-]|$)/)[0])
+          else acc[country] = city.match(/^.*?(?=[,\-]|$)/)
+        }
+        else acc[city] = null
+        // console.log(city, acc, country, splitComma, splitDash);
+        
+        return acc
+      }, {})
       return cities
     },
-    first5countries() {
-      return this.trip.destinations.countries.slice(0, 5)
-    }
+    // first5countries() {
+    //   return this.trip.destinations.countries.slice(0, 5)
+    // }
   },
   watch: {
     $route: {
