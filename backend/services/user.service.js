@@ -96,16 +96,20 @@ async function update(user) {
     const strId = user._id;
     const trips = [...user.trips];
     const pendingIn = [...user.pendingIn];
-    const likes = [...likes];
-
+    const likes = [...user.likes];
     user._id = new ObjectId(user._id);
     user.trips = user.trips.map(tripId => new ObjectId(tripId))
     user.pendingIn = user.pendingIn.map(tripId => new ObjectId(tripId))
-    user.likes = user.likes.map(userId => new ObjectId(userId))
+    user.likes = user.likes.map(userId => {
+        if (userId) return new ObjectId(userId)
+        else return userId
+    })
     try {
         const db = await mongoService.connect()
         let loadedUser = await db.collection(usersCollection).findOne({ _id: user._id })
-        if (!loadedUser) throw 404;
+        if (!loadedUser) {
+            throw new Error(404);
+        }
         if (!user.newPassword) {
             delete user.confirmPassword;
             delete user.newPassword;
@@ -121,17 +125,20 @@ async function update(user) {
                     delete user.confirmPassword;
                     delete user.newPassword;
                 } catch {
-                    throw 404;
+                    throw new Error(404);
                 }
-            } else throw 401;
+            } else throw new Error(401);
         }
-        let updatedUser = await db.collection(usersCollection).updateOne({ _id: user._id }, { $set: user })
-        updatedUser._id = strId;
-        updatedUser.trips = trips;
-        updatedUser.pendingIn = pendingIn;
-        updatedUser.likes = likes;
-        delete updatedUser.password;
-        return updatedUser;
+        await db.collection(usersCollection).updateOne({ _id: user._id }, { $set: user })
+        
+        user._id = strId;
+        user.trips = trips;
+        user.pendingIn = pendingIn;
+        user.likes = likes;
+        delete user.password;
+        console.log('user to return: ', user);
+        
+        return user;
     } catch (err){
         throw err;
     }

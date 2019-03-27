@@ -376,8 +376,37 @@ button {
         left: 5%;
         background-color: #fff;
         min-width: 100px;
-        height: 5vh;
+        min-height: 5vh;
         z-index: 1020320310429214109;
         box-shadow: 0 0 1px 1px $box-shadow-gray;
+        z-index: 11;
+        transition: .3s;
+        
+        button {
+            background: none;
+            border: none;
+            padding: 5px;
+            float: right;
+            transition: .3s;
+            i {
+              font-size: 1.4em;
+            }
+            &:hover {
+              color: #e74c3c;
+            }
+          }
+        .notification-container {
+            &:hover {
+                opacity: 0.8;
+            }
+            @include flex(row, flex-start, center);
+            padding: 20px;
+            cursor: pointer;
+            .user-img {
+                margin-right: 5px;
+                @include userImg(64px,64px);
+                border-radius: 2px;
+            }
+        }
     }
 }

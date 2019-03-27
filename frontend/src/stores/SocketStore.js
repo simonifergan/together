@@ -87,7 +87,12 @@ export default {
             })
             SocketService.on(SocketService.NOTIFICATION_RECEIVE, payload => {
                 console.log(payload)
-                // send payload to usrmsg cmp
+                if (payload.tripId) {
+                    if (context.getters.tripToDisplay && context.getters.tripToDisplay._id === payload.tripId) {
+                        console.log('got here')
+                        context.dispatch({type: 'loadTrip', tripId: payload.tripId})
+                    }
+                }
                 EventBusService.$emit(SHOW_NOTIFICATION, payload);
             })
         },
