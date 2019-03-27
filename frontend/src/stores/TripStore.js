@@ -6,6 +6,7 @@ export default {
     state: {
         trips: [],
         tripToDisplay: null,
+        searchResults: null,
         activityFilters: [],
         destinationFilters: []
     },
@@ -13,6 +14,9 @@ export default {
         // trips section:
         loadTrips(state, { trips }) {
             state.trips = trips
+        },
+        setSearchResults(state, {trips}) {
+            state.searchResults = trips
         },
         updateTrip(state, { trip }) {
             // MIGHT BE USEELSSS
@@ -91,6 +95,9 @@ export default {
         },
         countries(state) {
             return TripService.getCountries()
+        },
+        searchResults(state) {
+            return state.searchResults
         }
     },
     actions: {
@@ -286,7 +293,7 @@ export default {
         },
         async searchTrips({ commit }, { searchQuery }) {
             const trips = await TripService.query(searchQuery)
-            commit({ type: 'loadTrips', trips })
+            commit({ type: 'setSearchResults', trips })
         },
         async getActivityTrips(context, { activity }) {
             const trips = await TripService.getActivityTrips(activity)

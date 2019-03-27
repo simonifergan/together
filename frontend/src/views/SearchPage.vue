@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     trips() {
-      return this.$store.getters.trips;
+      return this.$store.getters.searchResults;
     },
     searchQuery() {
       return this.$route.query.q;
