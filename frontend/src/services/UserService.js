@@ -51,7 +51,8 @@ async function login(credentials) {
 
 async function signup(newUser) {
     const { data } = await axios.post(API_USER + '/signup', newUser)
-    return data
+    StorageService.saveToLocal(USER_KEY, data);
+    return data;
 }
 
 async function logout() {
@@ -87,7 +88,7 @@ function getEmptyUser() {
         birthdate: null,
         gender: null,
         tripPrefs: { activities: [], gender: null, age: null },
-        profilePic: null,
+        profilePic: "https://res.cloudinary.com/dcv2jyqvl/image/upload/v1553712810/user_imgs/default-user.png",
         from: null,
         likes: [],
     }

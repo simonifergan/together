@@ -6,16 +6,18 @@
     h2 {
         align-self: flex-start;
         font-weight: 1000;
-        margin: 0 0 30px 5px;
         font-size: 1.2em;
+        margin: 0 0 30px 5px;
+        text-transform: capitalize;
     }
     .trip-items {
         @include flex();
         width: 1075px;
         .trip-preview {
+            width: 250px;
             @include flex(column);
             font-family: $font-open-sans;
-            margin-right: 25px;
+            margin-right: 27px;
             line-height: 20px;
             cursor: pointer;
             *:not(:last-child) {
@@ -36,8 +38,17 @@
             p:nth-of-type(1) {
                 font-family: $font-open-sans-bold;
                 font-size: .9em;
-                color: #888;
+                color: $clr3;
                 text-transform: uppercase;
+                @include flex(row, space-between, center);
+                span {
+                    @include flex(row, flex-start, center);
+                    color: #333;
+                    i { 
+                        font-size: 1.3em;
+                        color: $clr4;
+                    }
+                }
             }
             p:nth-of-type(2) {
                 font-family: $font-open-sans-bold;
@@ -58,6 +69,17 @@
                     font-size: .8em;
                 }
             }
+        }
+    }
+    .show-all {
+        color: $clr3;
+        font-size: 1.125em;
+        float: right;
+        margin-top: 20px;
+        cursor: pointer;
+        font-family: $font-ubuntu-s-bold;
+        &:hover {
+            color: rgba($clr1, 0.7);
         }
     }
 }

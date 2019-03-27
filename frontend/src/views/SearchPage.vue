@@ -1,20 +1,21 @@
 <template>
   <section class="search-page">
-    <trip-list v-if="results" :trips="results" title="Search Results"></trip-list>
-    <notification-list :notifications="getNotifications"/>
+    <h2 v-if="searchQuery">Showing results for: <span>"{{searchQuery}}"</span></h2>
+    <h2 v-else>Browse all possibilities</h2>
+    <article v-if="results" class="trips-container">
+      <trip-preview v-for="(trip, idx) in results" :key="trip._id + idx" :trip="trip" />
+    </article>
   </section>
 </template>
 
 <script>
 // CMPS
-import TripList from "@/components/TripList";
-import NotificationList from "@/components/NotificationList";
+import TripPreview from "@/components/TripPreview";
 
 export default {
   name: "searchResults",
   components: {
-    TripList,
-    NotificationList
+    TripPreview,
   },
   computed: {
     results() {

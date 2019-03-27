@@ -1,6 +1,23 @@
-.signup-page, .login-page {
+.signup-page {
+    min-height: calc(100vh - 70px);
     @include wrapper();
-    input, select, label {
-        margin: 10px 0;
+    h1 {
+        margin: 40px 0;
+        font-weight: 1000;
+        font-size: 2em;
+        color: #333;
+        span::first-letter {
+            text-transform: capitalize;
+        }
+    }
+    form {
+        padding: 20px;
+        input, select, label {
+            margin: 10px 0;
+        }
+        button {
+            margin-top: 20px;
+            float: right;
+        }
     }
 }

@@ -5,13 +5,11 @@
         <h1>Reaching your destination with the right people for you.</h1>
         <div class="intro-form">
           <form @submit.prevent="search">
-            <input type="text" placeholder="Anywhere" @input="onInput" v-model="searchQuery">
+            <el-input list="autocompleteList" class="input-text" type="text" placeholder="Anywhere" @input="onInput" v-model="searchQuery" />
+            <datalist id="autocompleteList" v-if="autocomplete">
+              <option v-for="(city, idx) in autocomplete" :value="city.description" :key="idx" @click="cityClicked(city)" />
+            </datalist>
             <el-date-picker placeholder="Anytime" v-model="tripDate" type="month" value-format="yyyy-M"></el-date-picker>
-            <!-- <ul v-if="autocomplete">
-              <li v-for="(city, idx) in autocomplete" :key="idx" @click="cityClicked(city)">
-                <h3>{{city.description}}</h3>
-              </li>
-            </ul> -->
             <button type="submit" title="Search">
               <img src="@/assets/svg/search.svg">
             </button>

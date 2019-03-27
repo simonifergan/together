@@ -30,19 +30,32 @@
                 height: 150px;
                 color: #484848;
                 form {
+                    background-color: #fff;
+                    border-radius: 2px;
                     display: flex;
                     max-width: 100%;
+                    
                     input {
+                        border: none;
+                        font-family: $font-ubuntu;
+                        font-size: 18px;
+                    }
+                    .input-text {
                         @include input();
                         border: none;
                         border-radius: 2px;
-                        padding: 15px;
                         width: 100%;
+                    }
+                    datalist {
+                        width: 100%;
+                        margin: 0;
+                        padding: 0;
+                        cursor: pointer;
                     }
                     button {
                         position: absolute;
-                        right: 40px;
-                        padding: 5px;
+                        right: 5px;
+                        padding: 10px;
                         background: none;
                         border: none;
                         cursor: pointer;

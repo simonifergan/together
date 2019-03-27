@@ -37,12 +37,9 @@ export default {
             if (idx !== -1) state.usersToDisplay.splice(idx, 1);
         },
         toggleUserLikeUser(state, { userId }) {
-            if (state.userToDisplay) {
-                const likes = state.userToDisplay.likes;
-                const idx = likes.findIndex(currUserId => currUserId === userId);
-                if (idx !== -1) likes.push(userId);
-                else likes.splice(idx, 1);
-            }
+            const idx = state.userToDisplay.likes.findIndex(id => id === userId);
+            if (idx !== -1) state.userToDisplay.likes.splice(idx, 1);
+            else state.userToDisplay.likes.push(userId);
         }
     },
     getters: {

@@ -8,6 +8,7 @@ Vue.filter('countryCodeToName', code => {
 })
 
 Vue.filter('calcAge', timestamp => {
+    if (!timestamp) return ''
     return Math.floor((Date.now() - timestamp) / (1000 * 60 * 60 * 24 * 365));
 })
 

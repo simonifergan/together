@@ -55,13 +55,13 @@ button {
         }
         .logo {
             @include flex(row, flex-start, center);
+            cursor: pointer;
             img {
                 width: 40px;
             }
             h1 {
                 // font-family: $font-pacifico;
                 font-family: $font-ubuntu;
-                cursor: pointer;
                 font-size: 1.7em;
                 padding-left: 5px;
                 // padding: 10px 0 15px 10px;
@@ -162,11 +162,17 @@ button {
                             margin: 0;
                             margin-bottom: 5px;
                             align-items: center;
+                            &:last-of-type {
+                                margin: 10px 0;
+                            }
                         }
                         button {
                             float: right;
                             margin-top: 5px;
                             @include button;
+                        }
+                        .btns-container {
+                            @include flex(row, space-between, center)
                         }
                     }
                     .btn-sns-container {

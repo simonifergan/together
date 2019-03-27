@@ -18,6 +18,11 @@
         }
         label {
             padding-left: 20px;
+            &.change-password {
+                span {
+                    color: #d4d4d4;
+                }
+            }
             
         }
         img {

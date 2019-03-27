@@ -1,5 +1,7 @@
 <template>
   <ul class="filter-list">
+    <div class="top-container">
+
     <h2>{{title}}</h2>
     <div class="filters-container">
       <button @click="moveSlide('-')"><i class="fas fa-chevron-left"></i></button>
@@ -9,6 +11,7 @@
         </ul>
       </div>
       <button @click="moveSlide('+')"><i class="fas fa-chevron-right"></i></button>
+    </div>
     </div>
   </ul>
 </template>
