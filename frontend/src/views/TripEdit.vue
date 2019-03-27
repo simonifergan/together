@@ -75,13 +75,6 @@ export default {
       throttled: _.throttle(this.searchPlaces, 1000, {leading: false})
     };
   },
-  // watch: {
-    // searchQuery(newVal, oldVal) {
-    //   // console.log('debounce invoked', newVal, oldVal);
-      
-    //   _.debounce(this.searchPlaces, 3000, {trailing: true})()
-    // }
-  // },
   methods: {
     save() {
       this.$store

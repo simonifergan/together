@@ -20,7 +20,7 @@
       </div>
     </header>
     <article v-for="(list, idx) in listsForRender" :key="list.title + idx" :class="'article-' + list.type">
-      <component :is="list.type" :title="list.title" :trips="list.trips" :filters="list.filters" />
+      <component :is="list.type" :title="list.title | countryCodeToName" :trips="list.trips" :filters="list.filters" />
     </article>
   </section>
 </template>

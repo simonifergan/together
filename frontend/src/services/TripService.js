@@ -68,7 +68,14 @@ async function getByCountry(country) {
         })
         return acc
     }, [])
-    return cities;
+    let regex
+    if (country === 'US') regex = /USA/i
+    else regex = new RegExp(UtilService.worldCodeMap.get(country), 'i')
+    console.log(regex);
+    return cities.filter(city => {
+        console.log(city);
+        return regex.test(city)
+    })
 }
 
 async function getById(id) {
@@ -114,7 +121,7 @@ function getActivities() {
 }
 
 function getCountries() {
-    return ['Italia', 'USA', 'Brazil', 'Thailand', 'India', 'PT']
+    return ['ES', 'US', 'FR', 'TH', 'IN', 'PT']
 }
 
 async function getPlacesAutocomplete(query) {
