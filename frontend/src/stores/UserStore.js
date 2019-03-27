@@ -28,7 +28,6 @@ export default {
             state.userToDisplay = user;
         },
         toggleUserInUsersToDisplay(state, { user }) {
-            console.log('toggleUserInUsersToDisplay', user._id)
             const idx = state.usersToDisplay.find(inUser => inUser._id === user._id);
             if (idx !== -1) state.usersToDisplay.splice(idx, 1);
             else state.usersToDisplay.push(user);
@@ -111,10 +110,21 @@ export default {
             userToEdit.newPassword = null;
             return userToEdit
         },
-        async saveUser({commit}, {user}) {
-            const updatedUser = await UserService.update(user)
-            commit({type: 'setLoggedUser', uesr: updatedUser})
-            return updatedUser
+        async saveUser({commit, getters}, {user}) {
+            let backupUser = getters.loggedUser;
+            let userCopy = JSON.parse(JSON.stringify(user));
+            delete userCopy.confirmPassword;
+            delete userCopy.newPassword;
+            
+            
+            commit({type: 'setLoggedUser', user: userCopy})
+            try {
+                let updatedUser = await UserService.update(user)
+                return updatedUser
+            } catch {
+                console.log('rollback');
+                commit({type: 'setLoggedUser', user: backupUser})
+            }
         },
 
         // SOCIAL MEDIA user behavior:
