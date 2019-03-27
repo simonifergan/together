@@ -53,10 +53,9 @@ export default {
             if (state.tripToDisplay) state.tripToDisplay = trip;
         },
         toggleUserLikeTrip(state, { userId }) {
-            const likes = state.tripToDisplay.user.likes;
-            const idx = likes.findIndex(currUserId => currUserId === userId);
-            if (idx !== -1) likes.push(userId);
-            else likes.splice(idx, 1);
+            const idx = state.tripToDisplay.user.likes.findIndex(id => id === userId);
+            if (idx !== -1) state.tripToDisplay.user.likes.splice(idx, 1);
+            else state.tripToDisplay.user.likes.push(userId);
         },
         toggleUserFromPendingList(state, { userId }) {
             console.log('toggle:', userId);

@@ -37,12 +37,9 @@ export default {
             if (idx !== -1) state.usersToDisplay.splice(idx, 1);
         },
         toggleUserLikeUser(state, { userId }) {
-            if (state.userToDisplay) {
-                const likes = state.userToDisplay.likes;
-                const idx = likes.findIndex(currUserId => currUserId === userId);
-                if (idx !== -1) likes.push(userId);
-                else likes.splice(idx, 1);
-            }
+            const idx = state.userToDisplay.likes.findIndex(id => id === userId);
+            if (idx !== -1) state.userToDisplay.likes.splice(idx, 1);
+            else state.userToDisplay.likes.push(userId);
         }
     },
     getters: {
@@ -137,34 +134,42 @@ export default {
             }
         },
         async toggleUserLike({ commit, getters }, { userId }) {
+            // HAPPY HANUKKAH
+            const loggedUserId = getters.loggedUser._id;
             let action = 'like';
             // update on trip store
-            let trip = JSON.parse(JSON.stringify(getters.tripToEdit));
+            let trip = JSON.parse(JSON.stringify(getters.tripToDisplay));
+            console.log(trip);
             if (trip) {
-                const idx = trip.user.likes.findIndex(currUserId => currUserId === userId);
+                const idx = trip.user.likes.findIndex(currUserId => currUserId === loggedUserId);
+                console.log(idx);
                 if (idx !== -1) action = 'unlike';
-                commit({ type: 'toggleUserLikeTrip', userId });
+                commit({ type: 'toggleUserLikeTrip', userId: loggedUserId });
             }
 
             // update on user store
-            let user = JSON.parse(JSON.stringify(getters.userToEdit));
+            let user = JSON.parse(JSON.stringify(getters.userToDisplay));
+            console.log(user);
             if (user) {
-                const idx = user.likes.findIndex(currUserId => currUserId === userId);
+                const idx = user.likes.findIndex(currUserId => currUserId === loggedUserId);
+                console.log(idx);
                 if (idx !== -1) action = 'unlike';
-                commit({ type: 'toggleUserLikeUser', userId });
+                commit({ type: 'toggleUserLikeUser', userId: loggedUserId });
             }
 
+            // Salat matbucha
             try {
                 let like = {
                     action,
-                    likingUserId: getters.loggedUser._id
+                    likingUserId: loggedUserId
                 }
                 const updatedUser = await UserService.updateLikesToUser(like, userId);
+                console.log(updatedUser);
                 return updatedUser;
             } catch {
                 console.log('rollback');
-                if (trip) commit({ type: 'toggleUserLikeTrip', userId });
-                if (user) commit({ type: 'toggleUserLikeUser', userId });
+                if (trip) commit({ type: 'toggleUserLikeTrip', userId: loggedUserId });
+                else if (user) commit({ type: 'toggleUserLikeUser', userId: loggedUserId });
             }
 
         },

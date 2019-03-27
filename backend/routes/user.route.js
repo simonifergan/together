@@ -50,13 +50,14 @@ module.exports = (app) => {
     })
 
     // Add or remove user from userId likes array
-    app.patch(`${BASE}/user_likes/:userId`, async (req, res) => {
+    app.patch(`${BASE}/user_like/:userId`, async (req, res) => {
+        console.log('HI')
         const {userId} = req.params;
         const like = req.body;
+        console.log(userId, like)
         try {
             const isSuccess = await userService.updateLikesToUser(userId, like)
-            if (isSuccess) res.json(isSuccess)
-            else throw 404;
+            console.log('DID I WORK IN USER_LIKES?:', isSuccess);
         } catch {
             res.status(404).end();
         }
