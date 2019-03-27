@@ -57,7 +57,7 @@ module.exports = (app) => {
         console.log(userId, like)
         try {
             const isSuccess = await userService.updateLikesToUser(userId, like)
-            console.log('DID I WORK IN USER_LIKES?:', isSuccess);
+            res.json('Success');
         } catch {
             res.status(404).end();
         }

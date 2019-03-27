@@ -40,7 +40,13 @@
       </div>
       <div class="trip-dest">
         <i class="fas fa-globe-europe"></i>
-        <pre>{{citiesForRender}}</pre>
+        <ul>
+          <li v-for="(value,key) in citiesForRender" :key="value + key + '_-'" >
+            {{citiesForRender[key] | cityList}} in {{key}}
+          </li>
+          {{citiesForRender}}
+          <!-- <div v-for="(city) in citiesForRender[key]" :key="city+key+value">{{city | cities}}</div> -->
+        </ul>
       </div>
       <div class="trip-activities">
         <div v-for="(activity, idx) in trip.activities" :key="idx">{{activity}}</div>

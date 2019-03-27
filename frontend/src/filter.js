@@ -12,6 +12,15 @@ Vue.filter('calcAge', timestamp => {
     return Math.floor((Date.now() - timestamp) / (1000 * 60 * 60 * 24 * 365));
 })
 
+Vue.filter('cityList', cities => {
+    if (!cities && !cities.length) return ''
+    return cities.reduce((acc, city, idx) => {
+        if (idx < cities.length - 2) return acc + city + ', ';
+        else if (idx === cities.length - 2) return acc + city + ' & ';
+        else return acc + city ;
+    }, '');
+})
+
 Vue.filter('monthAndYearName', (monthYearStr) => {
     let monthNumStart = +monthYearStr.substring(5);
     let monthNameStart = UtilService.getMonthName(monthNumStart);

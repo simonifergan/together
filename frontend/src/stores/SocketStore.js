@@ -156,7 +156,6 @@ export default {
                 chat.isActive = false;
                 return chat;
             })
-            console.log(chats);
             commit({ type: 'setUserChats', chats });
             SocketService.emit(SocketService.CHAT_REGISTER_ROOMS, chats);
         },
