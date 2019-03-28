@@ -536,9 +536,12 @@ function update(trip) {
     const chatId = trip.chatId;
     trip._id = new ObjectId(trip._id);
     trip.userId = new ObjectId(trip.userId);
-    trip.members = trip.members.map(member => new ObjectId(member._id));
+    trip.members = trip.members.map(member => {
+        return new ObjectId(member._id);
+    });
     trip.pending = trip.pending.map(pendingUser => new ObjectId(pendingUser));
     trip.chatId = new ObjectId(chatId);
+    delete trip.user;
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).updateOne({ _id: trip._id }, { $set: trip }))
         .then(async mongoRes => {
@@ -547,7 +550,7 @@ function update(trip) {
             trip.members = members;
             trip.pending = pending;
             trip.chatId = chatId;
-            const res = await chatService.updateTripChat(trip.chatId, chatMembers);
+            const res = await chatService.updateTripChat(chatId, chatMembers);
             return trip;
         });
 }
