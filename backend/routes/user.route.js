@@ -36,7 +36,7 @@ module.exports = (app) => {
         }
     })
 
-    // move trip from pendingIn to memberIn
+    // remove trip from pendingIn to memberIn
     app.patch(`${BASE}/user_trip/:userId`, (req, res) => {
         
         const userToTripId = req.body;

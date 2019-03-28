@@ -93,6 +93,16 @@ module.exports = (app) => {
             })
     });
 
+    // remove user from pending and members
+    app.patch(`${BASE_URL}/trip_user/:tripId`, (req, res) => {
+        const userIdToTrip = req.body;
+        tripService.updateUserOnTrip(userIdToTrip)
+            .then(updatedTrip => {
+                if (updatedTrip) return res.json(updatedTrip);
+                else res.status(404).end();
+            })
+
+    })
     // MIDDLEWARE:
 
     // For further use: when user is an admin

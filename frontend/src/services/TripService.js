@@ -10,6 +10,7 @@ export default {
     query,
     getById,
     save,
+    updateUserOnTrip,
     remove,
     getEmpty,
     getImgs,
@@ -93,6 +94,12 @@ async function save(trip) {
         const {data} = await axios.post(TRIP_API, trip);
         return data;
     }
+}
+
+async function updateUserOnTrip(userIdToTrip) {
+    console.log('got to trip service- updateUserOnTrip : ', userIdToTrip);
+    const { data } = await axios.patch(`${TRIP_API}/trip_user/${userIdToTrip.trip._id}`, userIdToTrip)
+    return data
 }
 
 async function remove(id) {

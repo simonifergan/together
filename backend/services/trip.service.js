@@ -10,6 +10,7 @@ module.exports = {
     getByUserId,
     add,
     update,
+    updateUserOnTrip,
     remove,
     getTrending,
     getByActivity,
@@ -547,9 +548,33 @@ function update(trip) {
             trip.pending = pending;
             trip.chatId = chatId;
             const res = await chatService.updateTripChat(trip.chatId, chatMembers);
-
             return trip;
         });
+}
+
+async function updateUserOnTrip({ trip, user, action }) {
+    const objTripId = new ObjectId(trip._id);
+    console.log('trip serviceb backend got userId: ', user._id);
+    
+    const objUserId = new ObjectId(user._id);
+    try {
+        const db = await mongoService.connect()
+        console.log('action on trip service:', action);
+        
+        var res;
+        if (action === 'remove from members') {
+            res = await db.collection(tripsCollection).updateOne({ _id: objTripId }, { $pull: { members: objUserId } })
+        } else if (action === 'remove from pending') {
+            res = await db.collection(tripsCollection).updateOne({ _id: objTripId }, { $pull: { pending: objUserId } })
+        } else if (action === 'request') {
+            res = await db.collection(tripsCollection).updateOne({ _id: objTripId }, { $push: { pending: objUserId } })
+        }
+        console.log('trip on trip service: ', trip);
+        
+        return trip;
+    } catch {
+        // TODO simon
+    }
 }
 
 function remove(id) {
