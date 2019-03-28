@@ -112,6 +112,8 @@ export default {
             return trendingTrips
         },
         async getRecommendedTrips({ getters }) {
+            // TODO Yanai: fix case of none logged user to return some type of recommended trips...
+            if (!getters.loggedUser) return []; // I added this for now (Simon).
             const prefs = getters.loggedUser.tripPrefs
             if (!prefs.activities.length && !prefs.gender && !prefs.age) return null
             const recommendedTrips = await TripService.getRecommended(prefs)

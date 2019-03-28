@@ -19,8 +19,8 @@
     </div>
 
     <ul class="user-trips">
-      <h2>{{user.firstname}}'s trips</h2>
-      <user-trip-preview v-for="trip in trips" :key="trip._id" :trip="trip">
+      <h3>{{user.firstname}}'s trips</h3>
+      <user-trip-preview v-for="trip in trips" :key="trip._id" :trip="trip" :user="user" :loggedInUser="loggedInUser">
         <!-- <pending-list
             slot="pending-list"
             @requestPendingUsers="requestPendingUsers"

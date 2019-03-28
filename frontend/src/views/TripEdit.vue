@@ -51,6 +51,9 @@
         <el-input type="textarea" :rows="5" v-model="trip.desc" class="trip-desc" 
           placeholder="The more you share about yourself and your vision for the trip, the more likely that others would want to join."
         />
+        <h2>What activities are planned for your trip? <span>(highly recommended)</span></h2>
+        <activity-prefs v-model="trip.activities"/>
+
      
       <button class="btn-share-trip" type="submit">Share</button>
     </form>
@@ -60,12 +63,13 @@
 <script>
 // CMPS
 import OurSuperAwesomeMap from "@/components/OurSuperAwesomeMap.vue";
+import ActivityPrefs from "@/components/ActivityPrefs";
 import _ from 'lodash';
 
 export default {
   name: "trip-edit",
   components: {
-    OurSuperAwesomeMap
+    OurSuperAwesomeMap, ActivityPrefs
   },
   data() {
     return {

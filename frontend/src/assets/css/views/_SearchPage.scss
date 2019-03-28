@@ -19,6 +19,7 @@
         grid-template-columns: repeat(auto-fill, 250px);
         grid-column-gap: 20px;
         grid-row-gap: 100px;
+        justify-content: center;
         .trip-preview {
             width: 250px;
             @include flex(column);

@@ -3,6 +3,7 @@ import moment from 'moment'
 import UtilService from '@/services/UtilService'
 
 Vue.filter('countryCodeToName', code => {
+    if (!code) return '';
     let name = UtilService.worldCodeMap.get(code);
     return (name) ? name : code;
 })

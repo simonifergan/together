@@ -2,13 +2,16 @@
     @include wrapper(1000px);
     border-right: 1px solid $box-shadow-gray;
     border-left: 1px solid $box-shadow-gray;
+    min-height: calc(100vh - 70px);
+    background-color: #fbfbfb;
+
     .top-fold {
         // background: linear-gradient(to top, #ece9e6, #ffffff);
         border-bottom: 1px solid $box-shadow-gray;
         padding: 20px 30px 10px 30px;
         @include flex(row, flex-start, center);
         .user-img {
-            @include userImg(250px, 250px);
+            @include userImg(230px, 230px);
             box-shadow: 0 0 1px 1px #333;
             background-repeat: no-repeat;
             border: 3px solid #fff;
@@ -18,12 +21,14 @@
             @include flex(column);
             h2 {
                 font-weight: bold;
+                font-family: $font-open-sans;
                 font-size: 1.4em;
                 margin-bottom: 5px;
             }
             h3 {
                 font-size: 1em;
                 margin-bottom: 5px;
+                font-family: $font-open-sans;
             }
         }
         .likes-container {
@@ -49,18 +54,56 @@
             }
         }
     }
-    .user-trip-preview {
-        box-shadow: 0 0 1px 1px $box-shadow-gray;
-        h2 {
-            font-size: 1.125em;
+    .user-trips {
+
+        h3 {
+            font-size: 1.225em;
+            font-weight: bold;
+            font-family: $font-open-sans;
+            margin: 50px 10px;
         }
-        .expand-container {
-            @include flex(row);
-            .pending-list, .member-list {
-                .user-item {
-                    padding: 10px 10px 10px 30px;
-                    .user-img {
-                        @include userImg(50px, 50px);
+        .user-trip-preview {
+            background-color: #fff;
+            box-shadow: 0 0 1px 1px $box-shadow-gray;
+            padding: 20px;
+            cursor: pointer;
+            .preview-container {
+                @include flex(row, space-between, center);
+                h4 {
+                    font-family: $font-open-sans;
+                    font-weight: 600;
+                    font-size: 1.125em;
+                    margin-bottom: 5px;
+                }
+                button {
+                    width: 50px;
+                    height: 50px;
+                    background: none;
+                    border: none;
+                    font-size: 1.5em;
+                    span {
+                        i {
+                            color: $clr1;
+                            transition: .3s ease;
+                        }
+                    }
+                }
+            }
+            .expand-container {
+                @include flex(row);
+                .pending-list, .member-list {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    grid-template-rows: 1fr repeat(min-content);
+                    h3 {
+                        grid-row: 1;
+                    }
+                    .user-item {
+                        grid-row-start: 2;
+                        padding: 10px 10px 10px 30px;
+                        .user-img {
+                            @include userImg(50px, 50px);
+                        }
                     }
                 }
             }
