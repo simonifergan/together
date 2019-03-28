@@ -96,7 +96,6 @@ module.exports = (app) => {
 
     // Toggle user between pending and members' lists
     app.patch(`${BASE_URL}/trip_user/:tripId`, (req, res) => {
-        const userIdToTrip = req.body;
         tripService.updateUserOnTrip(userIdToTrip)
             .then(updatedTrip => {
                 if (updatedTrip) return res.json(updatedTrip);

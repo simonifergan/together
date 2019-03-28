@@ -557,13 +557,10 @@ function update(trip) {
 
 async function updateUserOnTrip({ trip, user, action }) {
     const objTripId = new ObjectId(trip._id);
-    console.log('trip serviceb backend got userId: ', user._id);
     
     const objUserId = new ObjectId(user._id);
     try {
         const db = await mongoService.connect()
-        console.log('action on trip service:', action);
-        
         var res;
         if (action === 'remove from members') {
             res = await db.collection(tripsCollection).updateOne({ _id: objTripId }, { $pull: { members: objUserId } })
