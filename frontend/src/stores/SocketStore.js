@@ -76,7 +76,6 @@ export default {
     },
     actions: {
         socketConnect(context) {
-            context.dispatch({ type: 'socketUserConnect' })
             SocketService.on(SocketService.CHAT_JOIN_NEW, chat => {
                 context.commit({ type: 'addNewChat', chat })
             })
@@ -97,6 +96,7 @@ export default {
                 }
                 EventBusService.$emit(SHOW_NOTIFICATION, payload);
             })
+            context.dispatch({ type: 'socketUserConnect' })
         },
 
         socketDisconnect() {

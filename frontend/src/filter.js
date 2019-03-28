@@ -56,6 +56,8 @@ Vue.filter('notificationAction', (action)=>{
             return 'has requested to join your trip!';
         case 'user_trip_approved':
             return 'has approved your request to the trip!';
+        case 'user_like_user':
+            return 'liked your profile!';
         default:
             return '';
     }

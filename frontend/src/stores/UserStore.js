@@ -164,6 +164,14 @@ export default {
                 }
                 const updatedUser = await UserService.updateLikesToUser(like, userId);
                 console.log(updatedUser);
+                if (action === 'like') {
+                    const payload = {
+                        action: NotificationService.USER_LIKE_USER,
+                        user: getters.loggedUser,
+                        // tripId: updatedTrip._id,
+                    }
+                    dispatch({ type: 'socketSendNotification', userId: userIdToJoin, payload });
+                }
                 return updatedUser;
             } catch {
                 console.log('rollback');

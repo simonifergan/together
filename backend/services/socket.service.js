@@ -46,6 +46,7 @@ module.exports = (io) => {
         })
 
         socket.on('disconnect', () => {
+            console.log('bye user', socket.userId);
             const socketIdx = connectedSockets.findIndex(inSocket => inSocket.userId === socket.userId);
             if (socketIdx !== -1) connectedSockets.splice(socketIdx, 1);
         })
