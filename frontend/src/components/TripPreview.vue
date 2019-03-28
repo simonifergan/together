@@ -5,7 +5,7 @@
     </div>
     <p>{{trip.user.firstname}} {{trip.user.lastname}}<span>({{totalLikes}})&nbsp;<i class="far fa-heart"></i></span></p>
     <p>{{trip.title}}</p>
-    <p>On {{trip.startsAt | monthAndYearName}}, for {{trip.duration}}</p>
+    <p>On {{trip.startsAt | monthAndYearName}}, for a {{trip.duration}}</p>
     <div class="members-container" v-if="trip.members.length > 0">
       <div 
         class="member-img"

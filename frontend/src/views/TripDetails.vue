@@ -35,7 +35,7 @@
       <p class="trip-desc">{{trip.desc}}</p>
       <div class="trip-time">
         <i class="far fa-calendar-alt"></i>
-        <p>On {{trip.startsAt | monthAndYearName}}, for {{trip.duration}}</p>
+        <p>On {{trip.startsAt | monthAndYearName}}, for a {{trip.duration}}</p>
       </div>
       <div class="trip-dest">
         <i class="fas fa-globe-europe"></i>
