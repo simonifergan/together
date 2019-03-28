@@ -98,11 +98,8 @@ export default {
         .then(res => (this.autocomplete = res));
     },
     async chooseCity(city) {
-      console.log('chooseCity: ', city);
-      
       if (this.trip.destinations.cities.indexOf(city.description) !== -1) return
       const countryCode = await this.$store.dispatch({type: 'getCountryCode', placeId: city.place_id})
-      console.log('countryCode: ', countryCode);
       this.trip.destinations.cities.push(city.description)
       if (this.trip.destinations.countries.indexOf(countryCode) === -1) this.trip.destinations.countries.push(countryCode)
     }
