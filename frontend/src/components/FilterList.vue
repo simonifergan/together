@@ -52,9 +52,10 @@ export default {
   },
   methods: {
     moveSlide(diff) {
+      // console.log(this.page, this.filters.length - this.itemsPerPage)
       if (
         diff === "+" &&
-        !(this.page === this.filters.length - this.itemsPerPage)
+        (this.page < this.filters.length - this.itemsPerPage)
       ) {
         this.page = this.page + 1;
       } else if (diff === "-" && this.page > 0) {
