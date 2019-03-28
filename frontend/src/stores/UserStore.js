@@ -82,7 +82,7 @@ export default {
             }
         },
 
-        async signup({ commit }, { newUser }) {
+        async signup({ commit, dispatch }, { newUser }) {
             const user = await UserService.signup(newUser);
             commit({ type: 'setLoggedUser', user });
             dispatch({ type: "socketConnect" });

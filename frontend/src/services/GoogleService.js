@@ -4,7 +4,8 @@ const axios = Axios.create({
     withCredentials: true
 })
 
-const API_KEY = 'AIzaSyAXeo5fckdLgf_cfKs78MtTsARYWluZM7U';
+// const API_KEY = 'AIzaSyAXeo5fckdLgf_cfKs78MtTsARYWluZM7U';  // YANAI KEY
+const API_KEY = 'AIzaSyCHshynsRoN_NeY7RLOs8wZv9AOgUGHi2A';  // simon key
 
 export default {
     getGoogleLocation,
@@ -67,6 +68,7 @@ async function getGoogleLocation(query, fields) {
     const service = new google.maps.places.PlacesService(elImg);
     return new Promise((res, rej) => {
         service.findPlaceFromQuery(request, (results, status) => {
+            console.log(query, results, status);
             if (results && results[0].photos) res(results[0].photos[0].getUrl())
             else res(null)
         })
