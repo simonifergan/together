@@ -29,9 +29,9 @@ function connectGoogleApi() {
     })
 }
 
-async function getAutocomplete(query) {
+async function getAutocomplete(query, types) {
     const service = new google.maps.places.AutocompleteService()
-    const requestCity = { input: query, types: ['(cities)'] }
+    const requestCity = { input: query, types }
     return new Promise((res, rej) => {
         service.getPlacePredictions(requestCity, results => {
             if (results) res(results)

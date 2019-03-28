@@ -131,8 +131,8 @@ function getCountries() {
     return ['ES', 'US', 'FR', 'TH', 'IN', 'PT']
 }
 
-async function getPlacesAutocomplete(query) {
-    const autocomplete = await GoogleService.getAutocomplete(query)
+async function getPlacesAutocomplete(query, types) {
+    const autocomplete = await GoogleService.getAutocomplete(query, types)
     return autocomplete
 }
 
