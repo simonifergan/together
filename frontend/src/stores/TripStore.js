@@ -130,7 +130,7 @@ export default {
             trip.userId = getters.loggedUser._id;
             const newTrip = await TripService.save(trip)
             if (trip._id) {
-                // commit({ type: 'updateTrip', trip: newTrip }) // USELESS
+                commit({ type: 'updateTrip', trip: newTrip })
                 // userId, trip id, actions - updated a trip,
                 let newNotification = {
                     userId: getters.loggedUser,
@@ -140,7 +140,7 @@ export default {
                 // dispatch({ type: 'addNotification', newNotification }) // caused error
             }
             else {
-                commit({ type: 'addTrip', trip: newTrip })
+                // commit({ type: 'addTrip', trip: newTrip })
                 // userId, trip id, actions - add new trip,
                 let newNotification = {
                     userId: getters.loggedUser,
@@ -149,7 +149,7 @@ export default {
                 }
                 // dispatch({ type: 'addNotification', newNotification }) // caused error
             }
-            return newTrip._id;
+            return (newTrip._id)? newTrip._id : trip._id;
         },
 
         // Get trips by User ID
