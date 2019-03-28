@@ -4,8 +4,8 @@ const BASE_URL = '/api/trip'
 module.exports = (app) => {
     // Query trips' list
     app.get(BASE_URL, (req, res) => {
-        let {tripDate} = req.query
-        let {searchQuery} = req.query
+        let { tripDate } = req.query
+        let { searchQuery } = req.query
         if (!searchQuery) searchQuery = '';
         tripService.query(searchQuery, tripDate)
             .then(trips => res.json(trips))
@@ -13,15 +13,15 @@ module.exports = (app) => {
     });
 
     // Get trending trips
-    app.get(`${BASE_URL}/trending`, (req, res) => {        
+    app.get(`${BASE_URL}/trending`, (req, res) => {
         tripService.getTrending()
             .then(trips => res.json(trips))
             .catch(err => res.end(err));
     });
 
     // Get recommended trips
-    app.post(`${BASE_URL}/recommended`, (req, res) => {        
-        const prefs = req.body;        
+    app.post(`${BASE_URL}/recommended`, (req, res) => {
+        const prefs = req.body;
         tripService.getRecommended(prefs)
             .then(trips => res.json(trips))
             .catch(err => res.end(err));
@@ -29,12 +29,12 @@ module.exports = (app) => {
 
     // Get trips by activity
     app.get(`${BASE_URL}/activity`, (req, res) => {
-        const {activity} = req.query
+        const { activity } = req.query
         tripService.getByActivity(activity)
             .then(trips => res.json(trips))
             .catch(err => res.end(err));
     })
-    
+
     // Get single trip by id
     app.get(`${BASE_URL}/:tripId`, (req, res) => {
         const { tripId } = req.params;
@@ -45,13 +45,13 @@ module.exports = (app) => {
     });
 
     // Get trips by user Id 
-    app.get(`${BASE_URL}/user/:userId`, async (req,res) => {
-        const {userId} = req.params;
+    app.get(`${BASE_URL}/user/:userId`, async (req, res) => {
+        const { userId } = req.params;
         try {
             const trips = await tripService.getByUserId(userId);
             if (trips.length) res.json(trips);
             else res.status(404).end('User has no trips');
-        } catch(err) {
+        } catch (err) {
             console.log(err);
             res.status(404).end('There was a problem');
         }
@@ -59,10 +59,10 @@ module.exports = (app) => {
     });
 
     // Get trips by countryCode
-    app.get(`${BASE_URL}/country/:countryCode`, async (req,res) => {
-        const {countryCode} = req.params;
-            const trips = await tripService.getTripsByCountry(countryCode);
-            res.json(trips);
+    app.get(`${BASE_URL}/country/:countryCode`, async (req, res) => {
+        const { countryCode } = req.params;
+        const trips = await tripService.getTripsByCountry(countryCode);
+        res.json(trips);
     });
 
     // For further use: when user is an admin
@@ -97,4 +97,15 @@ module.exports = (app) => {
                 res.json(updatedTrip);
             })
     });
+
+    // remove user from pending and members
+    app.patch(`${BASE_URL}/trip_user/:tripId`, (req, res) => {
+        const userIdToTrip = req.body;
+        tripService.updateUserOnTrip(userIdToTrip)
+            .then(updatedTrip => {
+                if (updatedTrip) return res.json(updatedTrip);
+                else res.status(404).end();
+            })
+
+    })
 }

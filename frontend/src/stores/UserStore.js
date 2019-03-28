@@ -135,7 +135,6 @@ export default {
             }
         },
         async toggleUserLike({ commit, getters }, { userId }) {
-            // HAPPY HANUKKAH
             const loggedUserId = getters.loggedUser._id;
             let action = 'like';
             // update on trip store
@@ -158,7 +157,6 @@ export default {
                 commit({ type: 'toggleUserLikeUser', userId: loggedUserId });
             }
 
-            // Salat matbucha
             try {
                 let like = {
                     action,

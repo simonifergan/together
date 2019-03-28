@@ -181,7 +181,7 @@ async function updateTripToUser({ tripId, user, action }) {
         }
         return user;
     } catch {
-
+        // TODO simon
     }
 }
 

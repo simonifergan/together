@@ -138,14 +138,14 @@ export default {
     },
     requestApproved(pendingUser) {
       this.$store.dispatch({
-        type: "joinTrip",
+        type: "ApproveUserToTrip",
         userToJoin: pendingUser,
         tripIdToJoin: this.trip._id
       });
     },
     requestRejected(pendingUser) {
       this.$store.dispatch({
-        type: "leaveTrip",
+        type: "removeUserFromTrip",
         userToLeave: pendingUser,
         tripIdToLeave: this.trip._id
       });
