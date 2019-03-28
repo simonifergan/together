@@ -11,7 +11,7 @@
         @panDown="mapView.y += 100"
         @panRight="mapView.x += 100"
         ></map-tools>
-        <svg ref="mapSvg" @wheel.prevent="zoom" @mousedown="startDrag" @mousemove="handleMousemove" @mouseup="stopDrag" @mouseleave="stopDrag" @click="selectCountry" :viewBox="viewBoxVal"
+        <svg ref="mapSvg" @wheel.prevent="zoom" @mousedown="startDrag" @mousemove="handleMousemove" @mouseup="stopDrag" @mouseleave="handleMouseLeave" @click="selectCountry" :viewBox="viewBoxVal"
         width="100%" height="100%" preserveAspectRatio="xMidYMin slice" xmlns="http://www1.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
             <defs>
             
@@ -323,16 +323,33 @@ export default {
         }
     },
     mounted() {
-        this.value.forEach(id => document.querySelector(`#${id}`).style.fill = '#4f8314')
+        this.value.forEach(id => {
+            const elSelected = document.querySelector(`#${id}`)
+            elSelected.style.fill = '#4f8314'
+            elSelected.classList.add('selected')
+            })
         this.mapView.sizeX = this.$refs.svgContainer.offsetWidth
         this.mapView.sizeY = this.$refs.svgContainer.offsetHeight
     },
     watch: {
         value(newVal) {
-            newVal.forEach(id => document.querySelector(`#${id}`).style.fill = '#4f8314')
+            Array.from(document.querySelectorAll('.selected')).forEach(elSelected => {
+                elSelected.classList.remove('selected')
+                elSelected.style.fill = '#333'
+            })
+            newVal.forEach(id => {
+                document.querySelector(`#${id}`).classList.add('selected')
+                document.querySelector(`#${id}`).style.fill = '#4f8314'
+            })
         },
     },
     methods: {
+        handleMouseLeave() {
+            this.stopDrag()
+            this.toolTipTxt = '';
+            this.mousePos.x = null;
+            this.mousePos.y = null;
+        },
         handleMousemove(event) {
             this.handleTooltip(event)
             this.drag(event)
@@ -347,11 +364,15 @@ export default {
             if (!id) return;
             const idx = this.value.findIndex(selectedIds => selectedIds === id)
             if (idx !== -1) {
-                document.querySelector(`#${id}`).style.fill = '#333';
+                const elClicked = document.querySelector(`#${id}`)
+                elClicked.style.fill = '#333';
+                elClicked.classList.remove('selected')
                 this.value.splice(idx, 1);
             } else {
+                const elClicked = document.querySelector(`#${id}`)
+                elClicked.style.fill = '#e74c3c';
+                elClicked.classList.add('selected')
                 this.value.push(id);
-                  document.querySelector(`#${id}`).style.fill = '#e74c3c';
             }
             this.$emit('input', this.value);
         },
@@ -396,7 +417,7 @@ export default {
             this.mapView.y = this.clickPos.diffY - event.offsetY/this.sizeRatio
             this.didDrag = true
         },
-        stopDrag(event) {
+        stopDrag() {
             this.isDragging = false
             this.clickPos = null
         }

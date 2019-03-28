@@ -6,12 +6,12 @@
         <div class="intro-form">
           <form @submit.prevent="search">
             <el-input list="autocompleteList" class="input-text" type="text" placeholder="Anywhere" @input="onInput" v-model="searchQuery" />
-            <!-- <datalist id="autocompleteList" v-if="autocomplete">
+            <datalist id="autocompleteList" v-if="autocomplete">
               <option v-for="(city, idx) in autocomplete" :value="city.description" :key="idx" @click.prevent="cityClicked(city)" />
-            </datalist> -->
-            <div id="autocompleteList" v-if="autocomplete">
+            </datalist>
+            <!-- <div id="autocompleteList" v-if="autocomplete">
               <p v-for="(city, idx) in autocomplete" :key="idx" @click.prevent="cityClicked(city)">{{city.description}}</p>
-            </div>
+            </div> -->
             <el-date-picker placeholder="Anytime" v-model="tripDate" type="month" value-format="yyyy-M"></el-date-picker>
             <button type="submit" title="Search">
               <img src="@/assets/svg/search.svg">
@@ -49,7 +49,7 @@ export default {
         recommended: []
       },
       filterLists: {
-        beachCities: [],
+        // beachCities: [],
         activities: [],
       },
       countries: this.$store.getters.countries
@@ -67,12 +67,15 @@ export default {
       for (let filterList in this.filterLists) {
         lists.push({title: filterList, filters: this.filterLists[filterList], type: 'filterList'})
       }
-      lists.sort((list1, list2) => {
-        let list1length = list1.filters ? list1.filters.length : list1.trips.length
-        let list2length = list2.filters ? list2.filters.length : list2.trips.length
-        return list2length - list1length
+      let n = 1
+      lists.forEach((list, idx) => {
+        if (list.type === 'filterList') {
+          lists.splice(2*n - 1, 0, lists.splice(idx, 1)[0])
+          n++
+          }
       })
-      return lists.filter(list => (list.filters && list.filters.length) || (list.trips && list.trips.length))
+      return lists
+      // return lists.filter(list => (list.filters && list.filters.length) || (list.trips && list.trips.length))
     },
     searchQueryWithDate() {
       return "/search?q=" + this.searchQuery + "&tripDate=" + this.tripDate
@@ -109,11 +112,8 @@ export default {
         .then(res => (this.autocomplete = res));
     },
     cityClicked(city) {
-      console.log('city clicked');
-      
-      this.$router.push('/search?q=' + city.description)
-      // this.searchQuery = city.description
-      // this.autocomplete = null
+      this.searchQuery = city.description
+      this.autocomplete = null
     }
   },
   async created() {

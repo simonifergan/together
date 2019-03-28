@@ -74,10 +74,10 @@
         <br>
         <el-select v-model="user.tripPrefs.age">
           <el-option value="null" label="No Preference"></el-option>
-          <el-option value="1" label="18-24"></el-option>
-          <el-option value="2" label="24-30"></el-option>
-          <el-option value="3" label="30-40"></el-option>
-          <el-option value="4" label="40+"></el-option>
+          <el-option :value="1" label="18-24"></el-option>
+          <el-option :value="2" label="24-30"></el-option>
+          <el-option :value="3" label="30-40"></el-option>
+          <el-option :value="4" label="40+"></el-option>
         </el-select>
       </label>
       <br>

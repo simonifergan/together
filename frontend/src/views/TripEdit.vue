@@ -37,6 +37,12 @@
           <h3>{{city.description}}</h3>
         </li>
       </ul>
+      <ul>
+        <li v-for="city in trip.destinations.cities" :key="city">{{city}}<button type="button" @click="deleteCity(city)">X</button></li>
+      </ul>
+      <ul>
+        <li v-for="country in trip.destinations.countries" :key="country">{{country | countryCodeToName}}<button type="button" @click="deleteCountry(country)">X</button></li>
+      </ul>
       <our-super-awesome-map v-if="trip.destinations.countries" :enable="true" v-model="trip.destinations.countries"/>
         <h2>Give your trip a title:</h2>
         <el-input
@@ -74,7 +80,7 @@ export default {
   data() {
     return {
       trip: this.$store.getters.emptyTrip,
-      searchQuery: "",
+      searchQuery: '',
       autocomplete: null,
       throttled: _.throttle(this.searchPlaces, 1000, {leading: false})
     };
@@ -91,7 +97,11 @@ export default {
     },
     onInput() {
       console.log('throttled');
-      
+      if (!this.searchQuery) {
+        this.autocomplete = null
+        this.throttled.cancel()
+        return
+      }
       this.throttled()
     },
     searchPlaces() {
@@ -102,10 +112,19 @@ export default {
         .then(res => (this.autocomplete = res));
     },
     async chooseCity(city) {
-      if (this.trip.destinations.cities.indexOf(city.description) !== -1) return
+      this.autocomplete = null
       const countryCode = await this.$store.dispatch({type: 'getCountryCode', placeId: city.place_id})
-      this.trip.destinations.cities.push(city.description)
       if (this.trip.destinations.countries.indexOf(countryCode) === -1) this.trip.destinations.countries.push(countryCode)
+      if (this.trip.destinations.cities.indexOf(city.description) !== -1) return
+      this.trip.destinations.cities.push(city.description)
+    },
+    deleteCity(city) {
+      const cityIdx = this.trip.destinations.cities.findIndex(currCity => currCity === city)
+      this.trip.destinations.cities.splice(cityIdx, 1)
+    },
+    deleteCountry(country) {
+      const countryIdx = this.trip.destinations.countries.findIndex(currCountry => currCountry === country)
+      this.trip.destinations.countries.splice(countryIdx, 1)
     }
   },
   computed: {
