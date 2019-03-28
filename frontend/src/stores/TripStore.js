@@ -388,6 +388,7 @@ export default {
             return autocomplete
         },
         async getCountryCode(context, { placeId }) {
+            console.log('placeId trip store: ',placeId);
             const countryCode = await TripService.getCountryCode(placeId)
             return countryCode
         },
