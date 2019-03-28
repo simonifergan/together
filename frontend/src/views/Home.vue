@@ -6,9 +6,12 @@
         <div class="intro-form">
           <form @submit.prevent="search">
             <el-input list="autocompleteList" class="input-text" type="text" placeholder="Anywhere" @input="onInput" v-model="searchQuery" />
-            <datalist id="autocompleteList" v-if="autocomplete">
-              <option v-for="(city, idx) in autocomplete" :value="city.description" :key="idx" @click="cityClicked(city)" />
-            </datalist>
+            <!-- <datalist id="autocompleteList" v-if="autocomplete">
+              <option v-for="(city, idx) in autocomplete" :value="city.description" :key="idx" @click.prevent="cityClicked(city)" />
+            </datalist> -->
+            <div id="autocompleteList" v-if="autocomplete">
+              <p v-for="(city, idx) in autocomplete" :key="idx" @click.prevent="cityClicked(city)">{{city.description}}</p>
+            </div>
             <el-date-picker placeholder="Anytime" v-model="tripDate" type="month" value-format="yyyy-M"></el-date-picker>
             <button type="submit" title="Search">
               <img src="@/assets/svg/search.svg">
@@ -97,20 +100,20 @@ export default {
         [country]: citiesWithImgs,
       })
     },
-    onInput() {
-      console.log('throttled');
-      
+    onInput() {      
       this.throttled()
     },
     searchPlaces() {
-      console.log('searching places');
       this.$store
-        .dispatch({ type: "getPlacesAutocomplete", query: this.searchQuery })
+        .dispatch({ type: "getPlacesAutocomplete", query: this.searchQuery, types: ['geocode'] })
         .then(res => (this.autocomplete = res));
     },
     cityClicked(city) {
-      this.searchQuery = city.description
-      this.autocomplete = null
+      console.log('city clicked');
+      
+      this.$router.push('/search?q=' + city.description)
+      // this.searchQuery = city.description
+      // this.autocomplete = null
     }
   },
   async created() {
