@@ -27,6 +27,7 @@
       </div>
       <div v-if="user" class="user-dashboard" :style="profilePic" @click.stop="showDropdown">
         <div class="dropdown" v-if="isShowDropdown">
+          <router-link to="/edit">Add a new trip</router-link>
           <router-link :to="'/user/' + user._id">Profile</router-link>
           <router-link :to="'/account/' + user._id">Account</router-link>
           <a @click="logout">Log out</a>

@@ -79,17 +79,17 @@ function getLoggedUser() {
 
 function getEmptyUser() {
     return {
-        password: null,
-        firstname: null,
-        lastname: null,
+        password: '',
+        firstname: '',
+        lastname: '',
         trips: [],
         pendingIn: [],
         memberIn: [],
-        birthdate: null,
-        gender: null,
-        tripPrefs: { activities: [], gender: null, age: null },
+        birthdate: '',
+        gender: '',
+        tripPrefs: { activities: [], gender: '', age: null },
         profilePic: "https://res.cloudinary.com/dcv2jyqvl/image/upload/v1553712810/user_imgs/default-user.png",
-        from: null,
+        from: '',
         likes: [],
     }
 }

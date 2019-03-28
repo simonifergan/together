@@ -7,11 +7,11 @@
         <el-input type="email" v-model="user.email" placeholder="Email" required/>
       </label>
       <label>
-        First Name
+        First name
         <el-input v-model="user.firstname" placeholder="First Name"/>
       </label>
       <label>
-        Last Name
+        Last name
         <el-input v-model="user.lastname" placeholder="Last Name"/>
       </label>
       <h2>Profile picture</h2>
@@ -27,7 +27,7 @@
       </label>
       <h2>Personal information <span>(optional)</span></h2>
       <label>
-        Birth Date
+        Birthdate
         <br>
         <el-date-picker
           v-model="user.birthdate"
@@ -47,6 +47,14 @@
         </el-select>
       </label>
       <br>
+      <label>
+        Country of residence
+        <br>
+        <el-select placeholder="Select a country" v-model="user.from">
+          <el-option v-for="(country, idx) in worldCountries" :key="idx + country+ idx" :value="country" >{{country}}</el-option>
+        </el-select>
+      </label>
+      <br>
       <h2>
         Travel-partner preferences
         <span>(recommended)</span>
@@ -55,9 +63,9 @@
         Gender
         <br>
         <el-select v-model="user.tripPrefs.gender">
-          <el-option value="null">No Preference</el-option>
-          <el-option value="Male">Male</el-option>
-          <el-option value="Female">Female</el-option>
+          <el-option value="null" label="No Preference"></el-option>
+          <el-option value="Male" label="Male"></el-option>
+          <el-option value="Female" label="Female"></el-option>
         </el-select>
       </label>
       <br>
@@ -65,11 +73,11 @@
         Age
         <br>
         <el-select v-model="user.tripPrefs.age">
-          <el-option value="null">No Preference</el-option>
-          <el-option value="1">18-24</el-option>
-          <el-option value="2">24-30</el-option>
-          <el-option value="3">30-40</el-option>
-          <el-option value="4">40+</el-option>
+          <el-option value="null" label="No Preference"></el-option>
+          <el-option value="1" label="18-24"></el-option>
+          <el-option value="2" label="24-30"></el-option>
+          <el-option value="3" label="30-40"></el-option>
+          <el-option value="4" label="40+"></el-option>
         </el-select>
       </label>
       <br>
@@ -85,6 +93,7 @@
 
 <script>
 import ImageService from "@/services/ImageService.js";
+import UtilService from '@/services/UtilService.js'
 
 import ActivityPrefs from "@/components/ActivityPrefs";
 import UploadImage from "@/components/UploadImage";
@@ -103,7 +112,7 @@ export default {
   },
   methods: {
     async saveUser() {
-      this.user.profilePic = await ImageService.uploadImage(this.newImage);
+      if (this.newImage) this.user.profilePic = await ImageService.uploadImage(this.newImage);
       await this.$store.dispatch({ type: "saveUser", user: this.user });
       this.$router.go(-1);
     },
@@ -116,7 +125,12 @@ export default {
       type: "getUserToEdit",
       userId: this.$route.params.userId
     });
-  }
+  },
+  computed: {
+    worldCountries() {
+      return Array.from(UtilService.worldCodeMap.values());
+    }
+  },
 };
 </script>
 
