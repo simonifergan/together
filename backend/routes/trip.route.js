@@ -67,7 +67,7 @@ module.exports = (app) => {
     });
 
     // Delete by Id
-    app.delete(`${BASE_URL}/:tripId`, checkUser, (req, res) => {
+    app.delete(`${BASE_URL}/:tripId`, isUser, checkUser, (req, res) => {
         const { tripId } = req.params;
         tripService.remove(tripId)
             .then(() => {
@@ -85,7 +85,8 @@ module.exports = (app) => {
     });
 
     // Update existing trip
-    app.put(`${BASE_URL}/:tripId`, (req, res) => {
+    app.put(`${BASE_URL}/:tripId`, isUser, checkUser, (req, res) => {
+        console.log('passed middleware');
         const trip = req.body;
         tripService.update(trip)
             .then(updatedTrip => {
@@ -93,7 +94,7 @@ module.exports = (app) => {
             })
     });
 
-    // remove user from pending and members
+    // Toggle user between pending and members' lists
     app.patch(`${BASE_URL}/trip_user/:tripId`, (req, res) => {
         const userIdToTrip = req.body;
         tripService.updateUserOnTrip(userIdToTrip)
@@ -103,6 +104,7 @@ module.exports = (app) => {
             })
 
     })
+
     // MIDDLEWARE:
 
     // For further use: when user is an admin
@@ -118,12 +120,13 @@ module.exports = (app) => {
     }
 
     // Check if trip belongs to user
+    // Gets latest update in db and verifies
     async function checkUser(req, res, next) {
         const {tripId} = req.params;
-        if (!req.session.user) return res.status(401).end();
         if (!tripId) return res.status(404).end();
         const trip = await tripService.getById(tripId);
-        if (trip.userId !== req.session.user._id) return res.status(403).end();
+        trip.userId = trip.userId.toString();
+        if (req.session.user._id !== trip.userId) return res.status(403).end();
         next();
     }
 

@@ -137,7 +137,7 @@ export default {
                     tripId: trip._id,
                     action: NotificationService.TRIP_MODIFIED
                 }
-                dispatch({ type: 'addNotification', newNotification })
+                // dispatch({ type: 'addNotification', newNotification }) // caused error
             }
             else {
                 // commit({ type: 'addTrip', trip: newTrip })
@@ -147,9 +147,9 @@ export default {
                     tripId: trip._id,
                     action: NotificationService.TRIP_CREATED
                 }
-                dispatch({ type: 'addNotification', newNotification })
+                // dispatch({ type: 'addNotification', newNotification }) // caused error
             }
-            return newTrip._id;
+            return (newTrip._id)? newTrip._id : trip._id;
         },
 
         // Get trips by User ID

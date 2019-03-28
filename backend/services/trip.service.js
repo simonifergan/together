@@ -22,28 +22,32 @@ const tripsCollection = 'trips';
 const usersCollection = 'users';
 
 async function getRecommended(prefs) {
+    console.log(prefs);
+    
     const gender = prefs.gender
-    var minAge
-    var maxAge
+    var minBirthDate
+    var maxBirthDate
+    const yearInMs = 365*24*3600*1000
     switch (prefs.age) {
         case 1:
-            minAge = 18
-            maxAge = 24
+            minBirthDate = Date.now() - 24*yearInMs
+            maxBirthDate = Date.now() - 18*yearInMs
             break;
         case 2:
-            minAge = 24
-            maxAge = 30
+            minBirthDate = Date.now() - 30*yearInMs
+            maxBirthDate = Date.now() - 24*yearInMs
             break;
         case 3:
-            minAge = 30
-            maxAge = 40
+            minBirthDate = Date.now() - 40*yearInMs
+            maxBirthDate = Date.now() - 30*yearInMs
             break;
         case 4:
-            minAge = 40
-            maxAge = 99
+            minBirthDate = Date.now() - 99*yearInMs
+            maxBirthDate = Date.now() - 40*yearInMs
             break;
     }
-
+    console.log('minmax birthdates:', minBirthDate, maxBirthDate);
+    
     const activities = prefs.activities
     try {
         const db = await mongoService.connect()
@@ -68,7 +72,7 @@ async function getRecommended(prefs) {
                         pendingIn: 0,
                         proposals: 0,
                         tripPrefs: 0,
-                        birthdate: 0,
+                        // birthdate: 0,
                     },
                 },
             },
@@ -77,7 +81,6 @@ async function getRecommended(prefs) {
             },
             {
                 $addFields: {
-
                     matchGrade: {
                         $add: [
                             {
@@ -108,8 +111,8 @@ async function getRecommended(prefs) {
                                 $cond: {
                                     if: {
                                         $and: [
-                                            { lte: ['$user.age', maxAge] },
-                                            { gte: ['$user.age', minAge] }
+                                            { $lte: ['$user.birthdate', maxBirthDate] },
+                                            { $gte: ['$user.birthdate', minBirthDate] }
                                         ]
                                     },
                                     then: 1,
@@ -534,11 +537,15 @@ function update(trip) {
     const userId = trip.userId;
     const chatMembers = [...(trip.members.map(member => member._id)), userId];
     const chatId = trip.chatId;
+    const user = trip.user;
     trip._id = new ObjectId(trip._id);
     trip.userId = new ObjectId(trip.userId);
-    trip.members = trip.members.map(member => new ObjectId(member._id));
+    trip.members = trip.members.map(member => {
+        return new ObjectId(member._id);
+    });
     trip.pending = trip.pending.map(pendingUser => new ObjectId(pendingUser));
     trip.chatId = new ObjectId(chatId);
+    delete trip.user;
     return mongoService.connect()
         .then(db => db.collection(tripsCollection).updateOne({ _id: trip._id }, { $set: trip }))
         .then(async mongoRes => {
@@ -547,20 +554,18 @@ function update(trip) {
             trip.members = members;
             trip.pending = pending;
             trip.chatId = chatId;
-            const res = await chatService.updateTripChat(trip.chatId, chatMembers);
+            trip.user = user;
+            const res = await chatService.updateTripChat(chatId, chatMembers);
             return trip;
         });
 }
 
 async function updateUserOnTrip({ trip, user, action }) {
     const objTripId = new ObjectId(trip._id);
-    console.log('trip serviceb backend got userId: ', user._id);
     
     const objUserId = new ObjectId(user._id);
     try {
         const db = await mongoService.connect()
-        console.log('action on trip service:', action);
-        
         var res;
         if (action === 'remove from members') {
             res = await db.collection(tripsCollection).updateOne({ _id: objTripId }, { $pull: { members: objUserId } })

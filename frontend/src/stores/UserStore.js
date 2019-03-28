@@ -82,9 +82,10 @@ export default {
             }
         },
 
-        async signup({ commit }, { newUser }) {
-            const user = await UserService.signup(newUser)
-            commit({ type: 'setLoggedUser', user })
+        async signup({ commit, dispatch }, { newUser }) {
+            const user = await UserService.signup(newUser);
+            commit({ type: 'setLoggedUser', user });
+            dispatch({ type: "socketConnect" });
             return true;
         },
 
@@ -130,7 +131,6 @@ export default {
                 let updatedUser = await UserService.update(user)
                 return updatedUser
             } catch {
-                console.log('rollback');
                 commit({ type: 'setLoggedUser', user: backupUser })
             }
         },
