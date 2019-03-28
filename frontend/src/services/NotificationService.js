@@ -12,7 +12,13 @@ const TRIP_MODIFIED = 'trip_modified';
 const USER_SIGNUP = 'user_signup';
 const USER_ONLINE = 'user_online';
 const USER_OFFLINE = 'user_offline';
+const USER_LIKE_USER = 'user_like_user';
+const USER_TRIP_REQUEST = 'user_trip_request';
+const USER_TRIP_APPROVED = 'user_trip_approved';
 const TRIP_COMMENT = 'trip_comment';
+// TODO: SIMON
+const TRIP_MEMBERS_USER_LEFT = 'trip_members_user_left';
+const TRIP_MEMBERS_USER_JOINED = 'trip_members_user_left';
 
 // Private user msgs (pop-ups)
 const TRIP_PRIVATE_REQUEST = 'trip_private_request';
@@ -27,6 +33,9 @@ export default {
     USER_SIGNUP,
     USER_ONLINE,
     USER_OFFLINE,
+    USER_LIKE_USER,
+    USER_TRIP_REQUEST,
+    USER_TRIP_APPROVED,
     query
 }
 

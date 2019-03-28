@@ -1,30 +1,48 @@
 <template>
   <section class="upload-image">
     <form @submit.prevent="uploadImage">
-      <input type="file" @change="processImage" />
-      <button type="submit">Upload</button>
+      <img :src="currentProfile" id="imgPreview"/>
+      <input type="file" @change="processImage">
+      <!-- <button type="submit">Upload</button> -->
     </form>
   </section>
 </template>
 
 <script>
-import ImageService from "@/services/ImageService.js";
 
 export default {
+  props: {
+    profilePic: {
+      type: String,
+      required: false,
+    }
+  },
   data() {
     return {
-        img: null,
+      previewImg: null,
+      img: null
     };
   },
   methods: {
-      processImage(event) {
-        this.img = event.target.files[0];
-      },
+    processImage(event) {
+      this.img = event.target.files[0];
+      var reader = new FileReader();
+      reader.onload = function() {
+        var output = document.querySelector('#imgPreview');
+        output.src = reader.result;
+      };
+      reader.readAsDataURL(this.img);
+       this.$emit("setProfilePic", this.img);
+    },
     uploadImage() {
-      ImageService.uploadImage(this.img)
-        .then(url => {
-            console.log(url);
-        });
+      ImageService.uploadImage(this.img).then(url => {
+        this.$emit("setProfilePic", url);
+      });
+    }
+  },
+  computed: {
+    currentProfile() {
+      if (!this.img) return this.profilePic;
     }
   }
 };

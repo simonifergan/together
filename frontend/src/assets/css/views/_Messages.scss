@@ -1,0 +1,169 @@
+.messages-page {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: minmax(calc(100vh - 70px), 1fr);
+    .msgs-dropdown {
+        margin: 0;
+        @include flex(column);
+        background-color: #fff;
+        color: #333;
+        border-radius: 0 0 1px 1px;
+        box-shadow: 0 0 1px 1px $box-shadow-gray;
+        border-right: 1px solid $box-shadow-gray;
+        &.allow-scroll {
+            overflow-y: scroll;
+        }
+        .msg-preview {
+            @include flex(row, flex-start, center);
+            margin: 0;
+            padding: 5px 2px 5px 10px;
+            box-shadow: 0 0 2px 0px $box-shadow-gray;
+            font-size: 12px;
+            cursor: pointer;
+            &:hover {
+                background-color: #f6f6f6;
+            }
+            .user-img-container {
+                display: grid;
+                grid-template-columns: repeat(3, 25px);
+                .user-img {
+                    @include userImg(50px, 50px);
+                    background-repeat: no-repeat;
+                }
+            }
+            .msg-content{
+                margin-left: 20px;
+                
+                h4 {
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                    white-space: nowrap; 
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-width: 170px;
+                }
+                div {
+                    line-height: 1;
+                    white-space: nowrap; 
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    height: 18px;
+                    width: 200px;
+                }
+            }
+            .sent-at {
+                padding-right: 5px;
+                margin-left: auto;
+                min-width: 100px;
+            }
+        }
+    }
+
+    .chat-box {
+        max-height: calc(100vh - 70px);
+        display: grid;
+        grid-template-rows: 54px 1fr 40px;
+        border-radius: 8px 8px 0 0;
+        background: #fff;
+        header {
+            margin-bottom: 10px;
+            position: relative;
+            width: 100%;
+            padding: 10px 5px 8px 10px;
+            box-shadow: 0 2px 1px rgba(0, 0, 0, .1);
+            @include flex(row, flex-start, center);
+            .user-img-container {
+                display: grid;
+                grid-template-columns: repeat(3, 15px);
+                .user-img {
+                    @include userImg(30px, 30px);
+                    box-shadow: 0 0 0.5px #4d4d4d;
+                }
+            }
+            span {
+                margin-left: 10px;
+                color: #1c1e21;
+                font-weight: 600;
+                text-overflow: ellipsis;
+                white-space: nowrap; 
+                overflow: hidden;
+            }
+            button {
+                display: none;
+                background: none;
+                border: none;
+                color: #7f8186;
+                font-size: 1.2em;
+                position: absolute;
+                right: 20px;
+                &.is-focused {
+                    color: #1d2129;
+                    
+                }
+            }
+        }
+        ul {
+            overflow-y: scroll;
+            font-family: Helvetica, sans-serif;
+            font-size: 14px;
+            @include flex(column);
+            padding: 10px 11px 8px 4px;
+            box-shadow: 0 2px 1px rgba(0, 0, 0, .1);
+            overflow-y: scroll;
+            &:last-child {
+                margin-bottom: 5px;
+            }
+            li {
+                @include flex(column);
+                .sender {
+                    padding: 5px;
+                    margin-top: 5px;
+                    margin-left: 5px;
+                    font-size: 11px;
+                }
+                .txt-container {
+                    overflow-wrap: break-word;
+                    white-space: pre-wrap;
+                    font-size: 12px;
+                    margin-bottom: 5px;
+                    border-radius: 14px;
+                    padding: 5px 10px;
+                    font-size: 13px;
+                    line-height: 16px;
+                    background: #333;
+                    max-width: 300px;
+                    min-width: 50px;
+                    align-self: flex-end;
+                    color: #fff;
+                    &.not-user{
+                        align-self: flex-start;
+                        background: #f2f1f1;
+                        color: #333;
+                        
+                    }
+
+                }
+                
+            }
+            
+        }
+        form {
+            padding: 5px 8px 5px 8px;
+
+            input {
+                border: none;
+                padding: 8px;
+                min-width: 80%;
+                max-width: 98%;
+            }
+            button {
+                background: none;
+                border: none;
+                color: #7f8186;
+                &.is-focused{
+                    color: #333;
+                }
+            }
+        }
+    }
+}

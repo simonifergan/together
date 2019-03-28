@@ -1,32 +1,32 @@
 <template>
-  <div id="app" class="app-container">
+  <div id="app" class="app-container" ref="topOfPage">
     <main-header/>
     <user-msg />
-    <router-view/>
-    <div class="chat-container">
+    <transition name="fade" mode="out-in">
+      <router-view/>
+    </transition>
+    <div class="chat-container" v-if="!isMessagesPage">
       <chat v-for="(chat,index) in chats" :chat="chat" :key="chat._id+index"/>
     </div>
-    <notification-list :notifications="getNotifications" />
+    <!-- <notification-list :notifications="getNotifications"/> -->
   </div>
 </template>
 
 <script>
 import MainHeader from "@/components/MainHeader";
 import Chat from "@/components/Chat";
-import UserMsg from "@/components/UserMsg";
-import NotificationList from "@/components/NotificationList";
+import UserMsg from '@/components/UserMsg';
+// import NotificationList from "@/components/NotificationList";
 
 export default {
   name: "App",
   components: {
     MainHeader,
-    NotificationList,
-    Chat,
-    UserMsg
+    UserMsg,
+    Chat
   },
   computed: {
     chats() {
-      // console.log(this.$store.getters.userChats)
       return this.$store.getters.userChats;
     },
     getNotifications() {
@@ -34,6 +34,9 @@ export default {
     },
     loggedUser() {
       return this.$store.getters.loggedUser;
+    },
+    isMessagesPage() {
+      return this.$route.path === '/messages';
     }
   },
   created() {
@@ -42,7 +45,12 @@ export default {
       this.$store.dispatch({ type: "getUserChats" });
       this.$store.dispatch({ type: "loadNotification" });
     }
-  }
+    if (!this.loggedUser) {
+      this.$store.dispatch("checkFacebookUser").then(res => {
+        if (res) this.$router.push(this.$route.path);
+      });
+    }
+  },
 };
 </script>
 

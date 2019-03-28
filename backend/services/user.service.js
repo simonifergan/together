@@ -5,13 +5,17 @@ const bcrypt = require('bcryptjs');
 module.exports = {
     query,
     login,
+    loginWithFacebook,
     signup,
     getById,
     update,
+    updateTripToUser,
+    updateLikesToUser,
     remove
 }
 
 const usersCollection = 'users';
+const tripsCollection = 'trips';
 
 function query(userIds) {
     let mongoQuery = {}
@@ -43,6 +47,24 @@ function login(credentials) {
         });
 }
 
+async function loginWithFacebook(user) {
+    try {
+        const db = await mongoService.connect();
+        const userInDB = await db.collection(usersCollection).findOne({ email: user.email });
+        if (!userInDB) {
+            const { insertedId } = await db.collection(usersCollection).insertOne(user);
+            user._id = insertedId;
+            return user;
+        } else {
+            if (userInDB.facebookId === user.facebookId) return userInDB;
+            else throw new Error('User already exists, please log in using your Username and Password');
+        }
+    } catch (err) {
+        throw err;
+    }
+
+}
+
 function getById(id) {
     const _id = new ObjectId(id);
     return mongoService.connect()
@@ -71,23 +93,96 @@ async function signup(user) {
     } else throw (409);
 }
 
-function update(user) {
+async function update(user) {
     const strId = user._id;
     const trips = [...user.trips];
-    const interestedIn = [...user.interestedIn];
-
+    const pendingIn = [...user.pendingIn];
+    const likes = [...user.likes];
     user._id = new ObjectId(user._id);
     user.trips = user.trips.map(tripId => new ObjectId(tripId))
-    user.interestedIn = user.interestedIn.map(tripId => new ObjectId(tripId))
+    user.pendingIn = user.pendingIn.map(tripId => new ObjectId(tripId))
+    user.likes = user.likes.map(userId => {
+        if (userId) return new ObjectId(userId)
+        else return userId
+    })
+    try {
+        const db = await mongoService.connect()
+        let loadedUser = await db.collection(usersCollection).findOne({ _id: user._id })
+        if (!loadedUser) {
+            throw new Error(404);
+        }
+        if (!user.newPassword) {
+            delete user.confirmPassword;
+            delete user.newPassword;
+            // get old hash
+            user.password = loadedUser.password;
+        } else {
+            const isAuth = await bcrypt.compare(user.confirmPassword, loadedUser.password);
+            if (isAuth) {
+                try {
+                    const salt = await bcrypt.genSalt(10)
+                    const hashedPassword = await bcrypt.hash(user.newPassword, salt);
+                    user.password = hashedPassword;
+                    delete user.confirmPassword;
+                    delete user.newPassword;
+                } catch {
+                    throw new Error(404);
+                }
+            } else throw new Error(401);
+        }
+        await db.collection(usersCollection).updateOne({ _id: user._id }, { $set: user })
 
-    return mongoService.connect()
-        .then(db => db.collection(usersCollection).updateOne({ _id: user._id }, { $set: user }))
-        .then(mongoRes => {
-            user._id = strId;
-            user.trips = trips;
-            user.interestedIn = interestedIn;
-            return user;
-        });
+        user._id = strId;
+        user.trips = trips;
+        user.pendingIn = pendingIn;
+        user.likes = likes;
+        delete user.password;
+        console.log('user to return: ', user);
+
+        return user;
+    } catch (err) {
+        throw err;
+    }
+}
+
+async function updateLikesToUser(userId, like) {
+    let { likingUserId, action } = like;
+    userId = new ObjectId(userId);
+    likingUserId = new ObjectId(likingUserId);
+    try {
+        const db = await mongoService.connect()
+        if (action === 'like') {
+            const res = await db.collection(usersCollection).updateOne({ _id: userId }, { $push: { likes: likingUserId } })
+        } else {
+            const res = await db.collection(usersCollection).updateOne({ _id: userId }, { $pull: { likes: likingUserId } })
+        }
+    } catch (err) {
+        throw 404;
+    }
+}
+
+async function updateTripToUser({ tripId, user, action }) {
+    const objTripId = new ObjectId(tripId);
+    const objUserId = new ObjectId(user._id)
+    try {
+        const db = await mongoService.connect()
+        var user;
+        console.log('action:', action);
+
+        if (action === 'request') {
+            user = await db.collection(usersCollection).updateOne({ _id: objUserId }, { $push: { pendingIn: objTripId } })
+        } else if (action === 'approve') {
+            user = await db.collection(usersCollection).updateOne({ _id: objUserId }, { $pull: { pendingIn: objTripId } })
+            user = await db.collection(usersCollection).updateOne({ _id: objUserId }, { $push: { memberIn: objTripId } })
+        } else if (action === 'remove from pending') {
+            user = await db.collection(usersCollection).updateOne({ _id: objUserId }, { $pull: { pendingIn: objTripId } })
+        } else { // admin can remove member after approved
+            user = await db.collection(usersCollection).updateOne({ _id: objUserId }, { $pull: { memberIn: objTripId } })
+        }
+        return user;
+    } catch {
+        // TODO simon
+    }
 }
 
 function remove(id) {
@@ -96,3 +191,33 @@ function remove(id) {
         .then(db => db.collection(usersCollection).remove({ _id }));
 }
 
+
+
+
+// scrap code:
+
+// async function updateTripToUser({tripId, user}) {
+//     const objTripId = new ObjectId(tripId);
+//     const objUserId = new ObjectId(user._id)
+//     try {
+//         const db = await mongoService.connect()
+//         var user = await db.collection(usersCollection).findOne({_id: objUserId});
+//         const idxTripInPending = user.pendingIn.findIndex(trip => trip._id === tripId);
+//         const idxTripInMember = user.memberIn.findIndex(trip => trip._id === tripId);
+//         console.log('idxTripInPending:', idxTripInPending, ', idxTripInMember:', idxTripInMember);
+
+//         if (idxTripInPending === -1 && idxTripInMember === -1) {
+//             console.log('not pending not member - insert to pending');
+//             user.pendingIn.push(tripId);
+//         } else if (idxTripInPending !== -1 && idxTripInMember === -1) {
+//             user.pendingIn.splice(idxTripInPending, 1);
+//             user.memberIn.push(tripId);
+//         } else if (idxTripInPending === -1 && idxTripInMember !== -1) {
+//             user.memberIn.splice(idxTripInMember, 1);
+//         }
+//         await db.collection(usersCollection).updateOne({_id: objUserId}, {$set: user});
+//         return user;
+//     } catch {
+
+//     }
+// }

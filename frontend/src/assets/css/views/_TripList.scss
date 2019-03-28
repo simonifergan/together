@@ -1,19 +1,23 @@
 .trip-list {
-    margin: 20px;
+    padding: 20px;
     overflow: hidden;
-    @include flex(column);
+    @include flex(column, center, center);
+    margin-top: 20px;
     h2 {
+        align-self: flex-start;
         font-weight: 1000;
-        margin: 30px 0 30px 5px;
-        font-size: 1.8em;
+        font-size: 1.2em;
+        margin: 0 0 30px 5px;
+        text-transform: capitalize;
     }
     .trip-items {
         @include flex();
-        width: 250px;
+        width: 1075px;
         .trip-preview {
-            @include flex(column);
+            width: 250px;
+            @include flex(column, space-between);
             font-family: $font-open-sans;
-            margin-right: 25px;
+            margin-right: 27px;
             line-height: 20px;
             cursor: pointer;
             *:not(:last-child) {
@@ -34,8 +38,17 @@
             p:nth-of-type(1) {
                 font-family: $font-open-sans-bold;
                 font-size: .9em;
-                color: #888;
+                color: $clr3;
                 text-transform: uppercase;
+                @include flex(row, space-between, center);
+                span {
+                    @include flex(row, flex-start, center);
+                    color: #333;
+                    i { 
+                        font-size: 1.3em;
+                        color: $clr4;
+                    }
+                }
             }
             p:nth-of-type(2) {
                 font-family: $font-open-sans-bold;
@@ -47,19 +60,28 @@
             }
             .members-container {
                 display: grid;
+                align-items: center;
                 grid-template-columns: repeat(auto-fill, 13px);
                 .member-img {
-                    border-radius: 50%;
-                    width: 20px;
-                    height: 20px;
-                    background-size: contain;
-                    box-shadow: 0 0 0.5px #4d4d4d;
+                    @include userImg(20px, 20px);
+                    margin: 0;
                 }
                 .members-txt {
                     grid-column: span 15;
                     font-size: .8em;
                 }
             }
+        }
+    }
+    .show-all {
+        color: $clr3;
+        font-size: 1.125em;
+        float: right;
+        margin-top: 20px;
+        cursor: pointer;
+        font-family: $font-ubuntu-s-bold;
+        &:hover {
+            color: rgba($clr1, 0.7);
         }
     }
 }

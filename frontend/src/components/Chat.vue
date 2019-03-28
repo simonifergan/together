@@ -1,27 +1,35 @@
 <template>
-  <aside class="chat-box" @click="focusInput" v-if="chat.isActive">
+  <aside class="chat-box" @click="focusInput" v-if="chat && chat.isActive">
     <header>
-      <div
-        class="user-img"
-        v-for="user in chattingWith"
-        :key="user._id+user.firstname"
-        :style="profilePic"
-        :title="user.firstname"
-      />
+      <div class="user-img-container">
+        <div
+          class="user-img"
+          v-for="user in chattingWith"
+          :key="user._id+user.firstname"
+          :style="{ backgroundImage: `url('${user.profilePic}')` }"
+          :title="user.firstname"
+        />
+      </div>
       <span
+        v-show="!chat.trip"
         v-for="(user, index) in chattingWith"
         :key="user._id+index"
       >{{`${user.firstname} ${user.lastname}`}}</span>
+      <span v-if="chat.trip">{{chat.trip.title}}</span>
       <button :class="{'is-focused': isFocused}" @click.stop="closeChat">
         <i class="fas fa-times"></i>
       </button>
     </header>
-    <ul>
+    <ul ref="msgsBlock">
       <li
-        :class="{'not-user': (msg.sender !== loggedUser._id)}"
         v-for="(msg, index) in msgs"
         :key="index"
-      >{{msg.txt}}</li>
+      >
+        <div class="sender" v-show="msg.sender !== loggedUser._id && chattingWith.length > 1">{{msg.sender | msgSender(chat.users)}}</div>
+        <div :class="{'not-user': (msg.sender !== loggedUser._id)}" class="txt-container">
+          <span>{{msg.txt}}</span>
+        </div>
+      </li>
     </ul>
     <form @submit.prevent="send">
       <input
@@ -68,7 +76,7 @@ export default {
     send() {
       this.$store.dispatch({
         type: "socketSendMsg",
-        msg: { txt: this.newMsg, sentAt: Date.now() },
+        msg: { txt: this.newMsg, sentAt: Date.now(), isRead: false },
         chatId: this.chat._id,
         recipients: this.chat.users
       });
@@ -77,8 +85,47 @@ export default {
     focusInput() {
       this.isFocused = true;
       this.$refs.msgbox.focus();
+    },
+    scrollToBottom() {
+      this.$nextTick(() => {
+        if (!this.$refs.msgsBlock || !this.$refs.msgsBlock.children.length) return;
+        let msgs = this.$refs.msgsBlock.children;
+        if (!msgs) return;
+        this.$refs.msgsBlock.scrollTo({
+          top: msgs[msgs.length - 1].offsetTop,
+          bottom: 0,
+          behavior: "auto"
+        });
+      });
+    }
+  },
+  updated() {
+    if (this.chat.isActive) {
+      this.scrollToBottom();
+    }
+  },
+  watch: {
+    chat: {
+      deep: true,
+      handler(newVal) {
+        if (newVal.isActive) this.scrollToBottom();
+      }
+    },
+    $route: {
+      deep: true,
+      handler() {
+        if (this.chat && this.chat.isActive) this.scrollToBottom();
+      }
     }
   }
+  // watch: {
+  //   msgs: {
+  //     handler(newVal, oldVal) {
+  //       this.scrollToBottom();
+  //     },
+  //     deep: true,
+  //   }
+  // },
 };
 </script>
 

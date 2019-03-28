@@ -1,15 +1,22 @@
 import TripService from '@/services/TripService';
 import NotificationService from '@/services/NotificationService';
+import GoogleService from '@/services/GoogleService';
 
 export default {
     state: {
         trips: [],
         tripToDisplay: null,
+        searchResults: null,
+        activityFilters: [],
+        destinationFilters: []
     },
     mutations: {
         // trips section:
         loadTrips(state, { trips }) {
             state.trips = trips
+        },
+        setSearchResults(state, { trips }) {
+            state.searchResults = trips
         },
         updateTrip(state, { trip }) {
             // MIGHT BE USEELSSS
@@ -43,11 +50,16 @@ export default {
             state.tripToDisplay.members.splice(idx, 1);
         },
         updateTripToDisplay(state, { trip }) {
-            state.tripToDisplay = trip;
+            if (state.tripToDisplay) state.tripToDisplay = trip;
+        },
+        toggleUserLikeTrip(state, { userId }) {
+            const idx = state.tripToDisplay.user.likes.findIndex(id => id === userId);
+            if (idx !== -1) state.tripToDisplay.user.likes.splice(idx, 1);
+            else state.tripToDisplay.user.likes.push(userId);
         },
         toggleUserFromPendingList(state, { userId }) {
             console.log('toggle:', userId);
-            
+
             const idx = state.tripToDisplay.pending.findIndex(existingUser => existingUser === userId);
             if (idx !== -1) state.tripToDisplay.pending.splice(idx, 1);
             else state.tripToDisplay.pending.push(userId);
@@ -56,6 +68,12 @@ export default {
             const trip = state.trips.find(trip => trip._id === tripId);
             const idx = trip.pending.findIndex(existingUser => existingUser === userId);
             if (idx !== -1) trip.pending.splice(idx, 1);
+        },
+        setActivityFilters(state, { filterImgs }) {
+            state.activityFilters = filterImgs
+        },
+        setDestinationFilters(state, { filterImgs }) {
+            state.destinationFilters = filterImgs
         }
     },
     getters: {
@@ -66,23 +84,49 @@ export default {
             return state.tripToDisplay;
         },
         tripToEdit(state) {
-            return JSON.parse(JSON.stringify(state.tripToDisplay));
+            if (state.tripToDisplay) return JSON.parse(JSON.stringify(state.tripToDisplay));
+            else return null;
         },
         emptyTrip(state) {
             return TripService.getEmpty();
+        },
+        activityFilters(state) {
+            return state.activityFilters
+        },
+        destinationFilters(state) {
+            return state.destinationFilters
+        },
+        activities(state) {
+            return TripService.getActivities()
+        },
+        countries(state) {
+            return TripService.getCountries()
+        },
+        searchResults(state) {
+            return state.searchResults
         }
     },
     actions: {
-        // TODO: implement optimistic updates
-        async loadTrips({ commit }) {
-            const trips = await TripService.query('')
-            commit({ type: 'loadTrips', trips })
+        async getTrendingTrips({ commit }) {
+            const trendingTrips = await TripService.getTrending()
+            // Todo Yanai: When trending trips return empty
+            if (!trendingTrips) return [];
+            return trendingTrips
+        },
+        async getRecommendedTrips({ getters }) {
+            // TODO Yanai: fix case of none logged user to return some type of recommended trips...
+            if (!getters.loggedUser) return []; // I added this for now (Simon).
+            const prefs = getters.loggedUser.tripPrefs
+            if (!prefs.activities.length && !prefs.gender && !prefs.age) return []
+            const recommendedTrips = await TripService.getRecommended(prefs)
+            return recommendedTrips
         },
         async loadTrip({ commit }, { tripId }) {
             const trip = await TripService.getById(tripId);
             commit({ type: 'loadTrip', trip });
         },
         async saveTrip({ commit, getters, dispatch }, { trip }) {
+            if (!getters.loggedUser) return false;
             trip.userId = getters.loggedUser._id;
             const newTrip = await TripService.save(trip)
             if (trip._id) {
@@ -93,30 +137,45 @@ export default {
                     tripId: trip._id,
                     action: NotificationService.TRIP_MODIFIED
                 }
-                dispatch({ type: 'addNotification', newNotification })
+                // dispatch({ type: 'addNotification', newNotification }) // caused error
             }
             else {
-                commit({ type: 'addTrip', trip: newTrip })
+                // commit({ type: 'addTrip', trip: newTrip })
                 // userId, trip id, actions - add new trip,
                 let newNotification = {
                     userId: getters.loggedUser,
                     tripId: trip._id,
                     action: NotificationService.TRIP_CREATED
                 }
-                dispatch({ type: 'addNotification', newNotification })
+                // dispatch({ type: 'addNotification', newNotification }) // caused error
             }
-            return newTrip._id;
+            return (newTrip._id)? newTrip._id : trip._id;
         },
+
+        // Get trips by User ID
+        async loadTripsByUserId({ commit, getters }, { userId }) {
+            commit({ type: 'loadTrips', trips: [] });
+            try {
+                const trips = await TripService.getByUserId(userId);
+                commit({ type: 'loadTrips', trips });
+                return true;
+            } catch {
+                return false;
+            }
+
+        },
+
         async removeTrip({ commit }, { trip }) {
             const msg = await TripService.remove(trip._id)
             commit({ type: 'removeTrip', tripId: trip._id })
         },
-        async joinTrip({ commit, getters, dispatch }, {userToJoin, tripIdToJoin}) {
+        // Admin approve user request
+        async ApproveUserToTrip({ commit, getters, dispatch }, { userToJoin, tripIdToJoin }) {
             const userIdToJoin = userToJoin._id;
             // get trip
             var tripToJoin = await TripService.getById(tripIdToJoin)
-            if (!tripToJoin) return null;
-            
+            if (!tripToJoin || tripToJoin.groupSize <= tripToJoin.members.length) return null;
+
             // check if the user is already a member:
             const isUserMember = tripToJoin.members.some(user => user._id === userIdToJoin);
             if (isUserMember) return null;
@@ -125,94 +184,222 @@ export default {
             const idx = tripToJoin.pending.findIndex(userId => userId === userIdToJoin);
             if (idx === -1) return null;
             tripToJoin.pending.splice(idx, 1);
-            
+
             // add user to members list
             tripToJoin.members.unshift(userToJoin)
-            // update trip state : disabled for now
-            // commit({type: 'updateTrip', trip: tripToJoin});
 
-            
             // update trip to display
-            console.log('userIdToJoin', userIdToJoin);
-            commit({type: 'updateTripToDisplay', trip: tripToJoin});
-            commit({type: 'toggleUserInUsersToDisplay', user: userToJoin})
+            commit({ type: 'updateTripToDisplay', trip: tripToJoin });
+            commit({ type: 'toggleUserInUsersToDisplay', user: userToJoin })
 
             try {
                 // update user & trip
                 const updatedTrip = await TripService.save(tripToJoin);
-                console.log('updatedTrip:', updatedTrip);
-                
-                const updatedUser = await dispatch({ type: 'joinTripToUser', tripId: updatedTrip._id })
-                console.log('updatedUser:', updatedUser);
-                
-                // notification
-                let newNotification = {
-                    userId: userIdToJoin,
-                    tripId: getters.tripToDisplay._id,
-                    action: NotificationService.TRIP_JOINED
-                }
-                dispatch({ type: 'addNotification', newNotification })
+                console.log('trip returned fine????', updatedTrip);
+                const updatedUser = await dispatch({
+                    type: 'joinLeaveTripToUser',
+                    userToTripId: {
+                        tripId: updatedTrip._id,
+                        user: userToJoin,
+                        action: 'approve'
+                    }
+                })
+                console.log('user returned find?', updatedUser)
+                // Need to update group chat
+                await dispatch({type: 'loadChatById', chatId: updatedTrip.chatId });
 
-            } catch {
-                // rollback
-                console.log('rollbackkk');
-                
-                commit({type: 'toggleUserFromPendingList', userId: userIdToJoin})
-            }
-        },
-        // TODO: (Adi) get tripId and userId
-        async leaveTrip({ commit, getters, dispatch }) {
-            const backupTripToDisplay = getters.tripToDisplay;
-            const memberToRemove = getters.loggedUser;
-            commit({ type: 'removeMember', memberToRemove })
-            try {
-                const updatedTrip = await TripService.save(getters.tripToDisplay);
-                await dispatch({ type: 'leaveTripToUser', tripId: updatedTrip._id })
-            } catch {
-                commit({ type: 'updateTripToDisplay', trip: backupTripToDisplay });
-            }
-        },
-        async userRequestToJoinTrip({ commit, getters, dispatch }) {
-            const trip = JSON.parse(JSON.stringify(getters.tripToDisplay));
-            const userId = getters.loggedUser._id;
-            if (trip.pending.some(alreadyPending => alreadyPending === userId)) return;
-            console.log(userId)
-            console.log(trip);
-            trip.pending.push( userId );
-            commit({ type: 'toggleUserFromPendingList', userId });
-            try {
-                const updatedTrip = await TripService.save(trip);
+                // general notification (activity log) REMOVED FOR NOW
+                // let newNotification = {
+                //     userId: userIdToJoin,
+                //     tripId: getters.tripToDisplay._id,
+                //     action: NotificationService.TRIP_JOINED
+                // }
+                // dispatch({ type: 'addNotification', newNotification })
+
+                // User personal notification
                 // send to socket with userId and tripId
-                let payload = {
+                const payload = {
+                    action: NotificationService.USER_TRIP_APPROVED,
                     user: getters.loggedUser,
                     tripId: updatedTrip._id,
-                    action: NotificationService.TRIP_PRIVATE_REQUEST,
-                    toDo: 'approve',
                 }
-                dispatch({type: 'socketSendNotification', userId: updatedTrip.userId, payload})
-                console.log('Here I am, once again, torn into pieces, cant deny cant pretend, behind these hazel eyessssss');
-            } catch {
-                console.log('YOUR CODE SUCKS!!!');
-                commit({ type: 'toggleUserFromPendingList', userId });
+                dispatch({ type: 'socketSendNotification', userId: userIdToJoin, payload });
+
+            } catch(err) {
+                // rollback
+                console.log('I ROLLED BACK IN APPROVE:', err)
+                commit({ type: 'toggleUserFromPendingList', userId: userIdToJoin })
             }
         },
-        async cancelTripJoinRequest({commit, getters, dispatch}) {
+        //  Admin removes user from members or pending list
+        async removeUserFromTrip({ commit, dispatch }, { userToLeave, tripIdToLeave }) {
+            const userIdToLeave = userToLeave._id;
+
+            var tripToLeave = await TripService.getById(tripIdToLeave)
+            if (!tripToLeave) return null;
+
+            var action = '';
+            // remove user from members
+            const idxMember = tripToLeave.members.findIndex(user => user._id === userIdToLeave);
+            if (idxMember !== -1) {
+                action = 'remove from members';
+                tripToLeave.members.splice(idxMember, 1);
+            }
+
+            // remove user from pending
+            const idxPending = tripToLeave.pending.findIndex(userId => userId === userIdToLeave);
+            if (idxPending !== -1) {
+                action = 'remove from pending';
+                tripToLeave.pending.splice(idxPending, 1);
+            }
+
+            // update trip to display
+            commit({ type: 'updateTripToDisplay', trip: tripToLeave });
+            commit({ type: 'removeUserInUsersToDisplay', user: userToLeave })
+
+            try {
+                // update user & trip
+                const updatedTrip = await TripService.save(tripToLeave);
+                const updatedUser = await dispatch({
+                    type: 'joinLeaveTripToUser',
+                    userToTripId: {
+                        tripId: updatedTrip._id,
+                        user: userToLeave,
+                        action
+                    }
+                })
+            } catch {
+                // TODO simon
+            }
+        },
+        // member leaves trip
+        async leaveTrip({ commit, dispatch }, { userToLeave, tripIdToLeave }) {            
+            const userIdToLeave = userToLeave._id;
+            var tripToLeave = await TripService.getById(tripIdToLeave)
+            if (!tripToLeave) return null;
+
+            var action = '';
+            // remove user from members
+            const idxMember = tripToLeave.members.findIndex(user => user._id === userIdToLeave);
+            if (idxMember !== -1) {
+                action = 'remove from members';
+                tripToLeave.members.splice(idxMember, 1);
+            }
+
+            // update trip to display
+            commit({ type: 'updateTripToDisplay', trip: tripToLeave });
+
+            try {
+                // update user & trip
+                let userIdToTrip = {
+                    trip: tripToLeave,
+                    user: userToLeave,
+                    action
+                };
+                const updatedTrip = await TripService.updateUserOnTrip(userIdToTrip);
+                console.log('trip store- got updatedTrip: ', updatedTrip);
+                const updatedUser = await dispatch({
+                    type: 'joinLeaveTripToUser',
+                    userToTripId: {
+                        tripId: updatedTrip._id,
+                        user: userToLeave,
+                        action
+                    }
+                })
+            } catch {
+                // TODO simon
+            }
+        },
+        // user request to join trip
+        async userRequestToJoinTrip({ commit, getters, dispatch }) {
+            var action = 'request';
             const trip = JSON.parse(JSON.stringify(getters.tripToDisplay));
-            const userId = getters.loggedUser._id;
-            const idx = trip.pending.findIndex(alreadyPending => alreadyPending === userId);
-            if (idx === -1) throw 'Fuck off';
+            const user = getters.loggedUser;
+            if (trip.pending.some(alreadyPending => alreadyPending === user._id)) return;
+            trip.pending.push(user._id);
+            commit({ type: 'toggleUserFromPendingList', userId: user._id });
+            try {
+                let userIdToTrip = {
+                    trip,
+                    user,
+                    action
+                };
+                const updatedTrip = await TripService.updateUserOnTrip(userIdToTrip);
+                const updatedUser = await dispatch({
+                    type: 'joinLeaveTripToUser',
+                    userToTripId: {
+                        tripId: updatedTrip._id,
+                        user,
+                        action
+                    }
+                })
+                // send to socket with userId and tripId
+                const payload = {
+                    action: NotificationService.USER_TRIP_REQUEST,
+                    user: getters.loggedUser,
+                    tripId: updatedTrip._id,
+                }
+                dispatch({ type: 'socketSendNotification', userId: updatedTrip.userId, payload });
+            } catch {
+                commit({ type: 'toggleUserFromPendingList', userId: user._id });
+            }
+        },
+        // cancel join request (remove from pending)
+        async cancelTripJoinRequest({ commit, getters, dispatch }) {
+            const trip = JSON.parse(JSON.stringify(getters.tripToDisplay));
+            const user = getters.loggedUser;
+            const idx = trip.pending.findIndex(alreadyPending => alreadyPending === user._id);
+            if (idx === -1) return;
             trip.pending.splice(idx, 1);
             try {
-                const updatedTrip = await TripService.save(trip);
-                commit({ type: 'toggleUserFromPendingList', userId });
-                console.log('Here I am, once again, torn into pieces, cant deny cant pretend, behind these hazel eyessssss');
+                let userIdToTrip = {
+                    trip,
+                    user,
+                    action: 'remove from pending'
+                };
+                const updatedTrip = await TripService.updateUserOnTrip(userIdToTrip)
+                const updatedUser = await dispatch({
+                    type: 'joinLeaveTripToUser',
+                    userToTripId: {
+                        tripId: updatedTrip._id,
+                        user,
+                        action: 'remove from pending'
+                    }
+                })
+                commit({ type: 'toggleUserFromPendingList', userId: user._id });
             } catch {
-                console.log('YOUR CODE SUCKS!!!');
+                // TODO simon
             }
         },
-        async searchTrips({ commit }, { searchQuery }) {
-            const trips = await TripService.query(searchQuery)
-            commit({ type: 'loadTrips', trips })
+        async searchTrips({ commit }, { searchQuery, tripDate }) {
+            const trips = await TripService.query(searchQuery, tripDate)
+            commit({ type: 'setSearchResults', trips })
+        },
+        async getActivityTrips(context, { activity }) {
+            const trips = await TripService.getActivityTrips(activity)
+            return trips
+        },
+        async getFilterImgs({ commit }, { filterType, filters }) {
+            const filterImgs = await Promise.all(filters.map(filter => TripService.getImgs(filter, filterType)))
+            return filterImgs
+            // if (filterType === 'activities') commit({ type: 'setActivityFilters', filterImgs })
+            // else if (filterType === 'destinations') commit({ type: 'setDestinationFilters', filterImgs })
+        },
+        async connectToGoogle() {
+            return GoogleService.connectGoogleApi()
+        },
+        async getPlacesAutocomplete(context, { query, types }) {
+            const autocomplete = await TripService.getPlacesAutocomplete(query, types)
+            return autocomplete
+        },
+        async getCountryCode(context, { placeId }) {
+            console.log('placeId trip store: ',placeId);
+            const countryCode = await TripService.getCountryCode(placeId)
+            return countryCode
+        },
+        async getCitiesByCountry(context, { country }) {
+            const cities = await TripService.getByCountry(country)
+            return cities
         }
     }
 }

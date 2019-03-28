@@ -2,6 +2,7 @@
 @import 'fonts';
 @import 'mixins';
 @import 'vars';
+@import '_vueTransitions.scss';
 @import url('https://use.fontawesome.com/releases/v5.7.2/css/all.css');
 
 // import main app layout 
@@ -14,36 +15,12 @@
 @import './views/_TripList.scss';
 @import './views/SignupPage';
 @import './views/TripEdit';
+@import './views/UserDetails';
+@import './views/UserAccount';
+@import './views/Messages';
 
 // import cmps
 @import './components/_map.scss';
+@import './components/FilterList.scss';
 @import './components/Notifications.scss';
 
-html {
-    font-family: 'Open Sans';
-}
-
-img {
-    width: 100%;
-    height: auto;
-}
-
-iframe, audio {
-    width: 100%;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-a {
-    cursor: pointer;
-}
-
-a:visited {
-    color:inherit;
-}
-
-button {
-    cursor: pointer;
-}

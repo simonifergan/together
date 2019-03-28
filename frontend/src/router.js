@@ -1,14 +1,14 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from './views/Home.vue'
-import TripDetails from '@/views/TripDetails.vue'
-import TripEdit from '@/views/TripEdit.vue'
-import LoginPage from '@/views/LoginPage.vue'
-import SignupPage from '@/views/SignupPage.vue'
-import SearchPage from '@/views/SearchPage.vue'
-import UserDetails from '@/views/UserDetails.vue'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Home from './views/Home';
+import TripDetails from '@/views/TripDetails';
+import TripEdit from '@/views/TripEdit';
+import SignupPage from '@/views/SignupPage';
+import SearchPage from '@/views/SearchPage';
+import UserDetails from '@/views/UserDetails';
+import Messages from '@/views/Messages';
+import UserAccount from '@/views/UserAccount';
 
-import AwesomeMap from '@/components/OurSuperAwesomeMap.vue';
 Vue.use(Router)
 
 export default new Router({
@@ -30,13 +30,8 @@ export default new Router({
     },
     {
       path: '/user/:userId',
-      name: 'userDetails',
+      name: 'UserDetails',
       component: UserDetails
-    },
-    {
-      path: '/login',
-      name: 'LoginPage',
-      component: LoginPage
     },
     {
       path: '/signup',
@@ -49,9 +44,18 @@ export default new Router({
       component: SearchPage
     },
     {
-      path: '/map',
-      component: AwesomeMap
-    }
+      path: '/account/:userId',
+      name: 'UserAccount',
+      component: UserAccount
+    },
+    {
+      path: '/messages',
+      name: 'Messages',
+      component: Messages
+    },
     
-  ]
+  ],
+  scrollBehavior(to, from) {
+    return {x: 0 , y:0};
+  }
 })

@@ -1,88 +1,170 @@
 .trip-details {
-    padding: 50px;
-    line-height: 150%;
-    @include wrapper();
-    .member-img {
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        background-size: contain;
-        box-shadow: 0 0 0.5px #4d4d4d;
-    }
-    .top-fold {
-        position: relative;
-        margin-bottom: 20px;
-        display: grid;
-        grid-template: 3fr 2fr / 100px 1fr;
-        grid-column-gap: 20px;
-        h1 {
-            font-family: $font-ubuntu-bold;
-            font-size: 1.5em;
-            align-self: center;
+    @include wrapper(1000px);
+    border-right: 1px solid $box-shadow-gray;
+    border-left: 1px solid $box-shadow-gray;
+    display: grid;
+    grid-template-rows: 320px 1fr;
+    grid-template-columns: 300px 1fr;
+    grid-template-areas: 
+        "user-section trip-section"
+        "trip-members trip-section";
+    color: #333;
+    .user-section {
+        padding: 20px;
+        border-bottom: 1px solid $box-shadow-gray;
+        grid-area: user-section;
+        text-align: center;
+        padding: 5px;
+        .profile-img {
+            cursor: pointer;
+            @include userImg(150px, 150px);
+            margin: 20px auto;
+            grid-row: span 2;
+            border: 3px solid white;
+            box-shadow: 0 0 0 1px #333;
         }
         h2 {
-            font-family: $font-ubuntu;
+            cursor: pointer;
+            font-weight: bold;
             font-size: 1.2em;
-            color: #606060;
+            margin-bottom: 5px;
         }
-        .profile-img {
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
-            background-size: contain;
-            grid-row: span 2;
-        }
-        button {
-            background-color: transparent;
-            border: none;
-            font-size: 1.5em;
-            position: absolute;
-            top: 0;
-            right: 0;
-        }
-    }
-    .btn-join-trip {
-        font-family: $font-ubuntu-s-bold;
-        color: #606060;
-        background-color: unset;
-        border: none;
-        font-size: 1em;
-        padding: 10px 15px;
-        box-shadow: 0 0 2px black;
-        border-radius: 2px;
-        transition: .3s;
-        &:hover {
-            color: black;
+        .btns-like-msg {
+            @include flex(row, center, center);
+            button {
+                width: 50px;
+                height: 50px;
+                background: none;
+                border: none;
+                font-size: 1.5em;
+            }
+            i {
+                font-size: 1em;
+                color: #373866;
+            }
+            .likes-count {
+                @include flex(row, flex-start, center);
+                font-size: .9em; 
+                i {
+                    color: #d04343;
+                }
+                span {
+                    position: relative;
+                    left: -13px;
+                    top: -1px;
+                }
+            }
         }
     }
-    .trip-members {
-        margin-top: 20px;
-        margin-bottom: 40px;
-        ul {
+    .trip-section {
+        border-left: 1px solid $box-shadow-gray;
+        grid-area: trip-section;
+        padding: 30px;
+        .trip-header {
+            @include flex(row, space-between, flex-start);
+            margin-bottom: 40px;
+            h1 {
+                font-family: $font-ubuntu-s-bold;
+                font-size: 1.8em;
+                line-height: 39px;
+                text-shadow: 0 0 1px #666;
+                flex: 1;
+            }
+            .btn-join-trip {
+                font-family: $font-ubuntu-s-bold;
+                color: white;
+                background-color: $clr1;
+                width: 150px;
+                border: none;
+                font-size: 1em;
+                padding: 10px 15px;
+                border-radius: 2px;
+                transition: .3s;
+                &:hover {
+                    background-color: rgba($clr1, .7);
+                }
+            }
+        }
+        .trip-desc {
+            margin-bottom: 30px;
+            line-height: 2;
+            font-size: 1.1em;
+        }
+        .trip-time, .trip-dest {
+            @include flex(row, flex-start, center);
+            margin-bottom: 10px;
+            font-size: .8em;
+            font-weight: bold;
+            color: #555;
+            line-height: 1.3;
+            i {
+                color: #333;
+                margin-right: 10px;
+                font-size: 1.3em;
+            }
+        }
+        .trip-activities {
+            @include flex(row, flex-start, center);
+            margin-top: 30px;
+            margin-bottom: 20px;
+            div {
+                text-transform: capitalize;
+                cursor: default;
+                margin-right: 10px;
+                padding: 5px 10px;
+                font-size: .8em;
+                border-radius: 20px;
+                color: white;
+                background-color: $clr1;
+                &:hover {
+                    background-color: rgba($clr1, .5)
+                }
+            }
+        }
+        .map {
+            max-width: 700px;
+        }
+    }
+    .trip-users {
+        grid-area: trip-members;
+        padding: 30px 20px 0 20px;
+        h3 {
+            margin-bottom: 20px;
+            text-align: center;
+            font-family: $font-ubuntu-s-bold;
+            font-size: 1.3em;
+        }
+        h3:last-of-type {
+            margin-top: 30px;
+        }
+        .registered {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .btns-group {
+            width: 100%;
+            margin-bottom: 20px;
+            @include flex(row, center, center);
+            button {
+                background: none;
+                border: none;
+                transition: .3s;
+                i {
+                    font-size: 1.7em;
+                }
+                &:hover {
+                    color: $clr2;
+                }
+            }
+            .btn-join-trip {
+                font-size: 1em;
+                font-family: $font-ubuntu-s-bold;
+            }
+        }
+        .trip-members {
             display: grid;
-            grid-template-columns: repeat(auto-fill, 120px);
-            justify-items: center;
-            li {
-                @include flex(column, flex-start, center);
-            }
+            grid-row-gap: 30px;
+            grid-template-columns: repeat(3, 1fr);
         }
-        .user-preview {
-            .user-profile-img {
-                width: 60px;
-                height: 60px;
-                background-size: contain;
-                border-radius: 50%;
-            }
-        }
-    }
-    .trip-desc {
-        margin-bottom: 20px;
-    }
-    .destinations {
-        background-image: url('../img/TripDetails/hill-view.jpg');
-        height: 300px;
-        background-size: cover;
-        background-position: center;
-        margin-bottom: 30px;
     }
 }

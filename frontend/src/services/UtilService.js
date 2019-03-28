@@ -1,4 +1,5 @@
 import worldDb from '../data/world.json'
+
 const worldCodeMap = new Map();
 (function() {
     worldDb.forEach(country => {
@@ -9,27 +10,30 @@ const worldCodeMap = new Map();
 })();
 
 export default {
+    worldCodeMap,
     generateId,
     getRandomPastel,
-    worldCodeMap
+    getMonthName
 }
 
 function generateId() {
     return '_' + Math.random().toString(36).substr(2, 9);
- }
-
-
- function getPastelPalette() {
-    return ['#f78882','#fff06f', '#d2fc8d', '#caf2f9', '#a9cffb','#d5b3fc', '#fed1e9', '#eac8a8'];
-    // return ['#fff','#f98a8d','#fdcc87', '#fffd7f', '#c9ff9b', '#a5ffef', '#89dcfc', '#88b9fd', '#debbfe', '#dddddd'];
 }
 
 function getRandomPastel() {
-    return getPastelPalette()[getRandomIntInclusive(0,7)];
+    return _getPastelPalette()[_getRandomIntInclusive(0,7)];
 }
 
+function getMonthName(monthNum) {
+    let monthsName = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    return monthsName[monthNum - 1];
+}
 
-function getRandomIntInclusive(min, max) {
+function _getPastelPalette() {
+    return ['#f78882','#fff06f', '#d2fc8d', '#caf2f9', '#a9cffb','#d5b3fc', '#fed1e9', '#eac8a8'];
+}
+
+function _getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;

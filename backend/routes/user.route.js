@@ -26,19 +26,59 @@ module.exports = (app) => {
             })
     });
 
-    app.put(`${BASE}/user/:userId`, (req, res) => {
+    app.put(`${BASE}/user/:userId`, async (req, res) => {
         const userToUpdate = req.body;
-        console.log('user.service: userToUpdate:', userToUpdate);
-        userService.update(userToUpdate)
+        try {
+            const updatedUser = await userService.update(userToUpdate);
+            if (updatedUser) return res.json(updatedUser);
+        } catch(err) {
+            res.status(err).end();
+        }
+    })
+
+    // remove trip from pendingIn to memberIn
+    app.patch(`${BASE}/user_trip/:userId`, (req, res) => {
+        
+        const userToTripId = req.body;
+        
+        userService.updateTripToUser(userToTripId)
             .then(updatedUser => {
                 if (updatedUser) return res.json(updatedUser);
                 else res.status(404).end();
             })
+
     })
 
-    app.post(`${BASE}/login`, (req, res) => {
+    // Add or remove user from userId likes array
+    app.patch(`${BASE}/user_like/:userId`, async (req, res) => {
+        console.log('HI')
+        const {userId} = req.params;
+        const like = req.body;
+        console.log(userId, like)
+        try {
+            const isSuccess = await userService.updateLikesToUser(userId, like)
+            res.json('Success');
+        } catch {
+            res.status(404).end();
+        }
+    })
+
+    app.post(`${BASE}/login`, async (req, res) => {
         const credentials = req.body;
-        // console.log(credentials);
+        // IF USER LOGGED IN WITH FACEBOOK:
+        if (credentials && credentials.facebookId) {
+            // return res.end();
+            try {
+                const user = await userService.loginWithFacebook(credentials);
+                req.session.user = user;
+                if (user) return res.json(user);
+                else throw new Error ('Problem with authentication');
+            } catch (err) {
+                return res.status(401).end(err);
+            }
+        }
+
+        // IF USER LOGGED IN THROUGH OUR WEBSITE
         userService.login(credentials)
             .then((user) => {
                 if (!user) return res.status(401).end();

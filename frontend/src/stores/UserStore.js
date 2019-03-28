@@ -1,34 +1,47 @@
 import UserService from '@/services/UserService'
+import FacebookService from '@/services/FacebookService'
+import NotificationService from '@/services/NotificationService';
 
 export default {
     state: {
-        loggedUser: null,
-        usersToDisplay: [],
+        loggedUser: UserService.getLoggedUser(),
+        usersToDisplay: [], // multiple users
+        userToDisplay: null, // single user
     },
     mutations: {
         setLoggedUser(state, { user }) {
             state.loggedUser = user;
         },
         joinTripToUser(state, { tripId }) {
-            state.loggedUser.interestedIn.push(tripId);
+            state.loggedUser.pendingIn.push(tripId);
         },
         leaveTripToUser(state, { tripId }) {
-            const idx = state.loggedUser.interestedIn.findIndex(trip => trip === tripId);
-            state.loggedUser.interestedIn.splice(idx, 1);
-        },
-        updateLoggedUser(state, { user }) {
-            state.loggedUser = user;
+            const idx = state.loggedUser.pendingIn.findIndex(trip => trip === tripId);
+            state.loggedUser.pendingIn.splice(idx, 1);
         },
         // USER LIST FOR: Pending list
-        setUsersToDisplay(state, {users}) {
+        setUsersToDisplay(state, { users }) {
             state.usersToDisplay = users;
         },
+
+        // ONE USER TO DISPLAY:
+        setUserToDisplay(state, { user }) {
+            state.userToDisplay = user;
+        },
         toggleUserInUsersToDisplay(state, { user }) {
-            console.log('toggleUserInUsersToDisplay', user._id)
             const idx = state.usersToDisplay.find(inUser => inUser._id === user._id);
             if (idx !== -1) state.usersToDisplay.splice(idx, 1);
             else state.usersToDisplay.push(user);
         },
+        removeUserInUsersToDisplay(state, { user }) {
+            const idx = state.usersToDisplay.find(inUser => inUser._id === user._id);
+            if (idx !== -1) state.usersToDisplay.splice(idx, 1);
+        },
+        toggleUserLikeUser(state, { userId }) {
+            const idx = state.userToDisplay.likes.findIndex(id => id === userId);
+            if (idx !== -1) state.userToDisplay.likes.splice(idx, 1);
+            else state.userToDisplay.likes.push(userId);
+        }
     },
     getters: {
         loggedUser(state) {
@@ -39,8 +52,14 @@ export default {
         },
         userListToDisplay(state) {
             return state.usersToDisplay;
+        },
+        userToDisplay(state) {
+            return state.userToDisplay;
+        },
+        userToEdit(state) {
+            if (state.userToDisplay) return JSON.parse(JSON.stringify(state.userToDisplay))
+            else return null;
         }
-
     },
     actions: {
         async login({ commit, dispatch }, { credentials }) {
@@ -51,36 +70,141 @@ export default {
             dispatch({ type: "loadNotification" });
         },
 
-        async signup({ commit }, { newUser }) {
-            const user = await UserService.signup(newUser)
-            commit({ type: 'setLoggedUser', user })
-        },
-
-        async joinTripToUser({ commit, getters }, { tripId }) {
-            const backupUserLoggedUser = JSON.parse(JSON.stringify(getters.loggedUser));
-            commit({ type: 'joinTripToUser', tripId })
+        async logout(context) {
             try {
-                const updatedUser = await UserService.update(getters.loggedUser);
-                return updatedUser;
+                await UserService.logout();
+                context.commit({ type: 'setLoggedUser', user: null });
+                context.commit({ type: 'setUserChats', chats: [] });
+                context.commit({ type: 'setNotification', notifications: [] });
+                context.dispatch('socketDisconnect');
+                return true;
             } catch {
-                commit({ type: 'updateLoggedUser', user: backupUserLoggedUser });
-                // throw Error ??
+
             }
         },
-        async leaveTripToUser({ commit, getters }, { tripId }) {
-            const backupUserLoggedUser = JSON.parse(JSON.stringify(getters.loggedUser));
-            commit({ type: 'leaveTripToUser', tripId });
+
+        async signup({ commit, dispatch }, { newUser }) {
+            const user = await UserService.signup(newUser);
+            commit({ type: 'setLoggedUser', user });
+            dispatch({ type: "socketConnect" });
+            return true;
+        },
+
+        async getUserById({ commit }, { userId }) {
             try {
-                const updatedUser = await UserService.update(getters.loggedUser);
+                const user = await UserService.getById(userId);
+                commit({ type: 'setUserToDisplay', user });
+                return true;
+
+            } catch {
+                return false;
+            }
+        },
+
+        async joinLeaveTripToUser({ commit, getters }, { userToTripId }) {
+
+            try {
+                const updatedUser = await UserService.updateTripToUser(userToTripId);
                 return updatedUser;
             } catch {
-                commit({ type: 'updateLoggedUser', user: backupUserLoggedUser });
+                throw 'failed to update user';
             }
         },
         async getUsers(context, { userIds }) {
-            console.log(userIds)
             const users = await UserService.getUsers(userIds)
             context.commit({ type: 'setUsersToDisplay', users });
+        },
+        async getUserToEdit(context, { userId }) {
+            let userToEdit = await UserService.getById(userId)
+            userToEdit.confirmPassword = null;
+            userToEdit.newPassword = null;
+            return userToEdit
+        },
+        async saveUser({ commit, getters }, { user }) {
+            let backupUser = getters.loggedUser;
+            let userCopy = JSON.parse(JSON.stringify(user));
+            delete userCopy.confirmPassword;
+            delete userCopy.newPassword;
+
+
+            commit({ type: 'setLoggedUser', user: userCopy })
+            try {
+                let updatedUser = await UserService.update(user)
+                return updatedUser
+            } catch {
+                commit({ type: 'setLoggedUser', user: backupUser })
+            }
+        },
+        async toggleUserLike({ commit, getters, dispatch }, { userId }) {
+            const loggedUserId = getters.loggedUser._id;
+            let action = 'like';
+            // update on trip store
+            let trip = JSON.parse(JSON.stringify(getters.tripToDisplay));
+            console.log(trip);
+            if (trip) {
+                const idx = trip.user.likes.findIndex(currUserId => currUserId === loggedUserId);
+                console.log(idx);
+                if (idx !== -1) action = 'unlike';
+                commit({ type: 'toggleUserLikeTrip', userId: loggedUserId });
+            }
+
+            // update on user store
+            let user = JSON.parse(JSON.stringify(getters.userToDisplay));
+            console.log(user);
+            if (user) {
+                const idx = user.likes.findIndex(currUserId => currUserId === loggedUserId);
+                console.log(idx);
+                if (idx !== -1) action = 'unlike';
+                commit({ type: 'toggleUserLikeUser', userId: loggedUserId });
+            }
+
+            try {
+                let like = {
+                    action,
+                    likingUserId: loggedUserId
+                }
+                const updatedUser = await UserService.updateLikesToUser(like, userId);
+                console.log(updatedUser);
+                if (action === 'like') {
+                    const payload = {
+                        action: NotificationService.USER_LIKE_USER,
+                        user: getters.loggedUser,
+                        // tripId: updatedTrip._id,
+                    }
+                    console.log('sending payload to socket-notifi:', payload)
+                    dispatch({ type: 'socketSendNotification', userId, payload });
+                }
+                return updatedUser;
+            } catch {
+                console.log('rollback');
+                if (trip) commit({ type: 'toggleUserLikeTrip', userId: loggedUserId });
+                else if (user) commit({ type: 'toggleUserLikeUser', userId: loggedUserId });
+            }
+
+        },
+        // SOCIAL MEDIA user behavior:
+        async checkFacebookUser({ commit }) {
+            const userFBInfo = await FacebookService.getUserInfo();
+            if (!userFBInfo) return false;
+            else {
+                // Prepare object for our database and decide whether to register or auth him
+                const { id, first_name, last_name, picture, email } = userFBInfo;
+                let user = UserService.getEmptyUser();
+                user.facebookId = id;
+                user.firstname = first_name;
+                user.lastname = last_name;
+                user.profilePic = picture.data.url;
+                user.email = email;
+                try {
+                    const loggedUser = await UserService.login(user);
+                    commit({ type: 'setLoggedUser', user: loggedUser });
+
+                } catch (err) {
+                }
+
+                return true;
+            }
+
         }
     }
 }

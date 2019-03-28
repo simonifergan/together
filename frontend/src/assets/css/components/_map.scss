@@ -34,15 +34,22 @@
  }
 
 .map-tools {
-    width: 35px;
-    height: 210px;
     position: absolute;
-    top: 5%;
-    left: 5%;
-    background-color: #50505050;
+    bottom: 5px;
+    left: 0;
+    @include flex(row, space-between, center);
+    width: 100%;
+    .zoom-container {
+        margin-left: 10px;
+    }
+    .pan-container {
+        margin-right: 10px;
+      
+    }
     button {
-        background-color: #454555;
-        color: white;
+        font-size: 1em;
+        box-shadow: 0 0 1px 1px $box-shadow-gray;
+        color: #333;
         border: none;
         width: 35px;
         height: 35px;

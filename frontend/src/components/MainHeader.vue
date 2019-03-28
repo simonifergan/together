@@ -1,45 +1,117 @@
 <template>
   <header class="main-header" :class="isAbsolute">
-    <router-link title="Homepage" tag="h1" to="/">Bridge</router-link>
+    <router-link title="Homepage" tag="div" class="logo" to="/">
+      <!-- <i class="fas fa-map-marker-alt"></i> -->
+      <!-- <img src="@/assets/svg/person_pin_circle.svg"> -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
+        <path fill="none" d="M0 0h24v24H0V0z" />
+        <path :fill="svgColor" d="M12 1C7.59 1 4 4.59 4 9c0 5.57 6.96 13.34 7.26 13.67l.74.82.74-.82C13.04 22.34 20 14.57 20 9c0-4.41-3.59-8-8-8zm0 19.47C9.82 17.86 6 12.54 6 9c0-3.31 2.69-6 6-6s6 2.69 6 6c0 3.83-4.25 9.36-6 11.47zM12 9c.83 0 1.5-.67 1.5-1.5S12.83 6 12 6s-1.5.68-1.5 1.5c0 .83.67 1.5 1.5 1.5zm0 1c-1 0-3 .5-3 1.5v.12c.73.84 1.8 1.38 3 1.38s2.27-.54 3-1.38v-.12c0-1-2-1.5-3-1.5z" />
+      </svg>
+      <h1>Travel Maker</h1>
+    </router-link>
     <nav>
       <router-link to="/">Home</router-link>
       <a href="#">About</a>
       <router-link to="/signup" v-if="!user">Sign up</router-link>
-      <router-link to="/login" v-if="!user">Log in</router-link>
-      <div v-if="user" class="user-dashboard" :style="profilePic" @click="isShowDropdown = !isShowDropdown">
-        <div class="dropdown" v-if="isShowDropdown" @click.stop="">
-          <a href="#">Profile</a>
-          <a href="#">Account</a>
-          <a href="#">Friends</a>
-          <a href="#">My trips</a>
-          <a href="#" @click="logOut">Log out</a>
+      <div class="msgs-container" v-else>
+        <a @click.stop="showMsgs">Messages</a>
+        <message-list
+          v-show="isShowMsgs" 
+          :chats="chats"
+          :user="user" 
+        />
+      </div>
+      <div class="login-container">
+        <router-link :to="currentRoute + '#login'" v-if="!user">Log in</router-link>
+        <login v-if="isShowLogin"/>
+      </div>
+      <div v-if="user" class="user-dashboard" :style="profilePic" @click.stop="showDropdown">
+        <div class="dropdown" v-if="isShowDropdown">
+          <router-link to="/edit">Add a new trip</router-link>
+          <router-link :to="'/user/' + user._id">Profile</router-link>
+          <router-link :to="'/account/' + user._id">Account</router-link>
+          <a @click="logout">Log out</a>
         </div>
       </div>
-      <!-- <a href="#">Log out</a> -->
     </nav>
   </header>
 </template>
 
 <script>
+import Login from "@/components/Login";
+import MessageList from "@/components/MessageList";
+
 export default {
-  name: 'MainHeader',
+  name: "MainHeader",
+  components: {
+    Login,
+    MessageList
+  },
   data() {
     return {
       isHome: true,
       isShowDropdown: false,
+      isShowMsgs: false,
     };
   },
   methods: {
-    logOut() {
-      
+    async logout() {
+      if (this.user.isFBUser) {
+        FB.logout();
+      }
+      try {
+        await this.$store.dispatch("logout");
+        this.$router.push("/");
+      } catch {}
+    },
+    closeDropdown() {
+      this.isShowDropdown = false;
+      document
+        .querySelector("#app")
+        .removeEventListener("click", this.closeDropdown);
+    },
+    showDropdown() {
+       if (this.isShowMsgs) {
+        this.closeMsgs();
+      }
+      if (this.isShowDropdown) {
+        this.closeDropdown();
+        return;
+      }
+      this.isShowDropdown = true;
+      document
+        .querySelector("#app")
+        .addEventListener("click", this.closeDropdown);
+    },
+    closeMsgs() {
+      this.isShowMsgs = false;
+      document
+        .querySelector("#app")
+        .removeEventListener("click", this.closeMsgs);
+    },
+    showMsgs() {
+      if (this.isShowDropdown) {
+        this.closeDropdown();
+      }
+      if (this.isShowMsgs) {
+        this.closeMsgs();
+        return;
+      }
+      this.isShowMsgs = true;
+      document
+        .querySelector("#app")
+        .addEventListener("click", this.closeMsgs);
     }
   },
   created() {
-    if (this.$route.name !== 'home') this.isHome = false;
+    if (this.$route.name !== "home") this.isHome = false;
   },
   computed: {
     isAbsolute() {
-      return {'on-homepage': this.isHome}
+      return { "on-homepage": this.isHome };
+    },
+    svgColor() {
+      return this.isHome ? 'white' : 'black'
     },
     user() {
       return this.$store.getters.loggedUser;
@@ -47,18 +119,27 @@ export default {
     profilePic() {
       return { "background-image": `url('${this.user.profilePic}')` };
     },
+    currentRoute() {
+      return this.$route.path;
+    },
+    isShowLogin() {
+      if (this.$route.hash !== "#login") return false;
+      return true;
+    },
+    chats() {
+      return this.$store.getters.userChats;
+    }
   },
   watch: {
     $route: {
       handler(newRoute) {
-        if (newRoute.name !== 'home') this.isHome = false;
+        if (newRoute.name !== "home") this.isHome = false;
         else this.isHome = true;
       }
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
-
 </style>

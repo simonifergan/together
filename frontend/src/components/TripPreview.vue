@@ -1,11 +1,11 @@
 <template>
-  <router-link tag="section" :to="'/trip/' + trip._id" class="trip-preview">
+  <router-link tag="li" :to="'/trip/' + trip._id" class="trip-preview">
     <div class="profile-img-container">
       <div class="profile-img" :style="profilePic"></div>
     </div>
-    <p>{{trip.user.firstname}} {{trip.user.lastname}}</p>
+    <p>{{trip.user.firstname}} {{trip.user.lastname}}<span>({{totalLikes}})&nbsp;<i class="far fa-heart"></i></span></p>
     <p>{{trip.title}}</p>
-    <p>{{trip.startsAt.month}} {{trip.startsAt.year}}, {{trip.duration[0]}} trip</p>
+    <p>On {{trip.startsAt | monthAndYearName}}, for a {{trip.duration}}</p>
     <div class="members-container" v-if="trip.members.length > 0">
       <div 
         class="member-img"
@@ -16,8 +16,10 @@
         />
         <div class="placeholder-div"></div>
         <div class="members-txt" v-if="spotsLeft > 0">joined, {{spotsLeft}} spots remaining!</div>
+        <div class="members-txt" v-else>No spots remaining.</div>
     </div>
     <p v-else>Be the first one to join!</p>
+    
   </router-link>
 </template>
 
@@ -33,6 +35,9 @@ export default {
   computed: {
     destinations() {
       return this.trip.destinations[0].continent;
+    },
+    totalLikes() {
+      return this.trip.user.likes.length;
     },
     profilePic() {
       // THIS COSTS MONEY!!! Yanai: build a feature to "crop" images!!
@@ -50,7 +55,7 @@ export default {
     },
     spotsLeft() {
       const {groupSize, members} = this.trip;
-      return groupSize - members.length - 1;
+      return groupSize - members.length;
 
     },
     firstThree() {

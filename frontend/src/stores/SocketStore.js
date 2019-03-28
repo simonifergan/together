@@ -1,8 +1,11 @@
+// IMPORT SERVICES
 import SocketService from '@/services/SocketService';
 import UtilService from '@/services/UtilService';
 import ChatService from '@/services/ChatService';
 import NotificationService from '@/services/NotificationService';
 import EventBusService from '@/services/EventBusService';
+
+// IMPORT SPECIFIC BUS EVENTS
 import { SHOW_NOTIFICATION } from '@/services/EventBusService';
 
 export default {
@@ -18,32 +21,28 @@ export default {
         },
         addNewChat(state, { chat }) {
             chat.isActive = true;
-            state.userChats.push(chat);
+            const idx = state.userChats.findIndex(loadedChat => loadedChat._id === chat._id);
+            if (idx === -1) state.userChats.push(chat);
+            else state.userChats.splice(idx, 1, chat);
         },
         activateChat(state, { chatId }) {
             const chat = state.userChats.find(chat => chat._id === chatId);
             if (chat) chat.isActive = true;
         },
+        deactivateChat(state, {chatId}) {
+            const chat = state.userChats.find(chat => chat._id === chatId);
+            if (chat) chat.isActive = false;
+        },
         closeChat(state, { chatId }) {
             const chat = state.userChats.find(chat => chat._id === chatId);
             chat.isActive = false;
         },
-        addMsg(state, { msg, chatId, recipients }) {
-            console.log(recipients);
+        addMsg(state, { msg, chatId }) {
             const chat = state.userChats.find(chat => chat._id === chatId)
             if (chat) {
                 chat.isActive = true
                 chat.msgs.push(msg)
-            } else {
-                // A new chat has been created, so make sure to update user's state
-                let newChat = {
-                    _id: chatId,
-                    msgs: [msg],
-                    users: [...recipients],
-                    isActive: true,
-                }
-                state.userChats.push(newChat);
-            }
+            };
         },
         setUserChats(state, { chats }) {
             state.userChats = chats
@@ -65,25 +64,35 @@ export default {
     },
     actions: {
         socketConnect(context) {
-            context.dispatch({ type: 'socketUserConnect' })
             SocketService.on(SocketService.CHAT_JOIN_NEW, chat => {
                 context.commit({ type: 'addNewChat', chat })
             })
             SocketService.on(SocketService.CHAT_JOIN, chatId => {
                 context.commit({ type: 'activateChat', chatId })
             })
-            SocketService.on(SocketService.CHAT_RECEIVE_MSG, ({ chatId, msg, recipients }) => {
-                context.commit({ type: 'addMsg', msg, chatId, recipients });
+            SocketService.on(SocketService.CHAT_RECEIVE_MSG, async ({ chatId, msg }) => {
+                if (!context.getters.userChats.some(chat => chat._id === chatId)) await context.dispatch({type: 'loadChatById', chatId })
+                context.commit({ type: 'addMsg', msg, chatId });
             })
             SocketService.on(SocketService.NOTIFICATION_ADDED, (addedNotification) => {
                 context.commit({ type: 'addNotification', addedNotification });
             })
             SocketService.on(SocketService.NOTIFICATION_RECEIVE, payload => {
-                console.log(payload)
-                // send payload to usrmsg cmp
+                if (payload.tripId) {
+                    if (context.getters.tripToDisplay && context.getters.tripToDisplay._id === payload.tripId) {
+                        context.dispatch({type: 'loadTrip', tripId: payload.tripId})
+                    }
+                }
+                console.log(payload);
                 EventBusService.$emit(SHOW_NOTIFICATION, payload);
             })
+            context.dispatch({ type: 'socketUserConnect' })
         },
+
+        socketDisconnect() {
+            SocketService.off();
+        },
+
         socketUserConnect({ getters }) {
             SocketService.emit(SocketService.SOCKET_CONNECT, getters.loggedUser._id);
         },
@@ -96,7 +105,10 @@ export default {
             SocketService.emit(SocketService.NOTIFICATION_SEND, { userId, payload });
         },
         socketJoinPrivateChat(context, { userId }) {
-            const chat = context.getters.userChats.find(chat => chat.users.some(user => user._id === userId))
+            const chat = context.getters.userChats.find(chat => {
+                if (chat.trip && chat.trip.title) return false;
+                return chat.users.find(user => user._id === userId);
+            })
             console.log(chat);
             let payload;
             if (chat) {
@@ -115,6 +127,19 @@ export default {
             }
             SocketService.emit(SocketService.CHAT_JOIN, payload);
         },
+
+        async socketInitGroupChat({ commit }, { chatId }) {
+            try {
+                const chat = await ChatService.getById(chatId);
+                console.log('I AM IN SOCKET INIT GROUP', chat);
+                SocketService.emit(SocketService.CHAT_REGISTER_ROOMS, [chatId])
+                if (chat) commit({ type: 'addNewChat', chat });
+            } catch {
+
+            }
+
+        },
+
         async getUserChats({ commit, getters }) {
             let chats = await ChatService.getChats(getters.loggedUser._id)
             chats = chats.map(chat => {
@@ -127,6 +152,15 @@ export default {
         async loadNotification({ commit }) {
             const notifications = await NotificationService.query();
             commit({ type: 'setNotification', notifications });
+        },
+        async loadChatById({commit}, {chatId}) {
+            const chat = await ChatService.getById(chatId);
+            if (chat) commit({type: 'addNewChat', chat});
+
+
+        },
+        activateChat({ commit }, { chatId }) {
+            commit({ type: 'activateChat', chatId })
         },
         addNotification(context, { newNotification }) {
             SocketService.emit(SocketService.NOTIFICATION_ADD, newNotification);
