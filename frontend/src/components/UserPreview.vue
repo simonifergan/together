@@ -29,6 +29,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   .user-profile-img {
     border-radius: 50%;
     width: 60px;

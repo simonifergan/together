@@ -2,7 +2,7 @@
   <section v-if="pendingUsers">
     <div class="pending-list">
       <user-preview v-for="pendingUser in pendingUsers" :key="pendingUser._id" :user="pendingUser">
-        <div class="btns-pending" slot="btns-pending">
+        <div v-if="isSpotsLeft" class="btns-pending" slot="btns-pending">
           <button @click="requestApproved(pendingUser)">
             <i class="fas fa-check"></i>
           </button>
@@ -21,6 +21,11 @@ import UserPreview from "@/components/UserPreview.vue";
 export default {
   components: {
     UserPreview
+  },
+  props: {
+    isSpotsLeft: {
+      type: Boolean
+    }
   },
   computed: {
     pendingUsers() {

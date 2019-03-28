@@ -14,7 +14,6 @@
           <i class="far fa-comment-dots"></i>
         </button>
 
-        <!-- TODO: on click - update likes (toggle likes) -->
         <p class="likes-count">
           <button :title="'Like ' + trip.user.firstname" @click="toggleUserLike">
             <i :class="isLike"></i>
@@ -58,13 +57,26 @@
     <div class="trip-users">
       <h3 v-if="loggedInUser && trip.pending.length > 0 && trip.user._id === loggedInUser._id">Pending:</h3>
       <pending-list
+        :isSpotsLeft="isSpotsLeft"
         @requestPendingUsers="requestPendingUsers"
         @requestApproved="requestApproved"
         @requestRejected="requestRejected"
         v-if="loggedInUser && loggedInUser._id === trip.userId"
       />
       <h3>Group members:</h3>
-      <div class="btn-group-chat">
+      <div class="registered">
+        <p>
+          <i class="fas fa-users"></i>&nbsp;
+          {{registered}}
+        </p>
+      </div>
+      <div class="btns-group">
+        <button
+          class="btn-join-trip"
+          @click="joinLeaveTrip"
+          v-if="(!loggedInUser || (!isUserMember && trip.userId !== loggedInUser._id))">
+            {{whoIsUser}}
+          </button>
         <button
           @click="initGroupChat(trip.chatId)"
           v-if="isUserMember || (loggedInUser && loggedInUser._id === trip.userId)"
@@ -208,14 +220,20 @@ export default {
         }
         else acc[city] = null
         // console.log(city, acc, country, splitComma, splitDash);
-        
         return acc
       }, {})
       return cities
     },
-    // first5countries() {
-    //   return this.trip.destinations.countries.slice(0, 5)
-    // }
+    isSpotsLeft() {
+      return (this.trip.groupSize - this.trip.members.length > 0)
+    },
+    registered() {
+      let maxGroupSize = this.trip.groupSize;
+      let membersSize = this.trip.members.length;
+      if (maxGroupSize - membersSize <= 0) return 'No spots remaining.'
+      else if (membersSize === 0) return 'Be The First one to join!'
+      else return `Only ${maxGroupSize - membersSize} out of ${maxGroupSize} spots left!`
+    }
   },
   watch: {
     $route: {

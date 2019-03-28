@@ -14,6 +14,7 @@
         border-bottom: 1px solid $box-shadow-gray;
         grid-area: user-section;
         text-align: center;
+        padding: 5px;
         .profile-img {
             cursor: pointer;
             @include userImg(150px, 150px);
@@ -136,21 +137,33 @@
         h3:last-of-type {
             margin-top: 30px;
         }
-        .btn-group-chat {
+        .registered {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .btns-group {
             width: 100%;
             margin-bottom: 20px;
             @include flex(row, center, center);
             button {
                 background: none;
                 border: none;
+                transition: .3s;
                 i {
                     font-size: 1.7em;
                 }
+                &:hover {
+                    color: $clr2;
+                }
             }
-
+            .btn-join-trip {
+                font-size: 1em;
+                font-family: $font-ubuntu-s-bold;
+            }
         }
         .trip-members {
             display: grid;
+            grid-row-gap: 30px;
             grid-template-columns: repeat(3, 1fr);
         }
     }
