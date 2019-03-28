@@ -98,10 +98,11 @@ export default {
       console.log('searching places');
       
       this.$store
-        .dispatch({ type: "getPlacesAutocomplete", query: this.searchQuery })
+        .dispatch({ type: "getPlacesAutocomplete", query: this.searchQuery, types: ['(cities)'] })
         .then(res => (this.autocomplete = res));
     },
     async chooseCity(city) {
+      if (this.trip.destinations.cities.indexOf(city.description)) return
       const countryCode = await this.$store.dispatch({type: 'getCountryCode', placeId: city.place_id})
       this.trip.destinations.cities.push(city.description)
       if (this.trip.destinations.countries.indexOf(countryCode) === -1) this.trip.destinations.countries.push(countryCode)

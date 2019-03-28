@@ -383,8 +383,8 @@ export default {
         async connectToGoogle() {
             return GoogleService.connectGoogleApi()
         },
-        async getPlacesAutocomplete(context, { query }) {
-            const autocomplete = await TripService.getPlacesAutocomplete(query)
+        async getPlacesAutocomplete(context, { query, types }) {
+            const autocomplete = await TripService.getPlacesAutocomplete(query, types)
             return autocomplete
         },
         async getCountryCode(context, { placeId }) {
