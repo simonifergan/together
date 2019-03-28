@@ -3,7 +3,7 @@
     <div class="profile-img-container">
       <div class="profile-img" :style="profilePic"></div>
     </div>
-    <p>{{trip.user.firstname}} {{trip.user.lastname}}<span>({{totalLikes}})&nbsp;<i class="fas fa-heart"></i></span></p>
+    <p>{{trip.user.firstname}} {{trip.user.lastname}}<span>({{totalLikes}})&nbsp;<i class="far fa-heart"></i></span></p>
     <p>{{trip.title}}</p>
     <p>On {{trip.startsAt | monthAndYearName}}, for {{trip.duration}}</p>
     <div class="members-container" v-if="trip.members.length > 0">

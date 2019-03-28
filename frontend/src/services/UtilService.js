@@ -26,7 +26,7 @@ function getRandomPastel() {
 
 function getMonthName(monthNum) {
     let monthsName = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    return monthsName[monthNum];
+    return monthsName[monthNum - 1];
 }
 
 function _getPastelPalette() {
