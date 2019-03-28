@@ -15,7 +15,7 @@
         width: 1075px;
         .trip-preview {
             width: 250px;
-            @include flex(column);
+            @include flex(column, space-between);
             font-family: $font-open-sans;
             margin-right: 27px;
             line-height: 20px;
@@ -60,9 +60,11 @@
             }
             .members-container {
                 display: grid;
+                align-items: center;
                 grid-template-columns: repeat(auto-fill, 13px);
                 .member-img {
                     @include userImg(20px, 20px);
+                    margin: 0;
                 }
                 .members-txt {
                     grid-column: span 15;

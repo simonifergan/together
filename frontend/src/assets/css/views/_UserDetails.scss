@@ -3,10 +3,8 @@
     border-right: 1px solid $box-shadow-gray;
     border-left: 1px solid $box-shadow-gray;
     min-height: calc(100vh - 70px);
-    background-color: #fbfbfb;
 
     .top-fold {
-        // background: linear-gradient(to top, #ece9e6, #ffffff);
         border-bottom: 1px solid $box-shadow-gray;
         padding: 20px 30px 10px 30px;
         @include flex(row, flex-start, center);
@@ -63,9 +61,10 @@
             margin: 50px 10px;
         }
         .user-trip-preview {
-            background-color: #fff;
+            background-color: #fbfbfb;
             box-shadow: 0 0 1px 1px $box-shadow-gray;
             padding: 20px;
+            margin-bottom: 10px;
             cursor: pointer;
             .preview-container {
                 @include flex(row, space-between, center);
@@ -81,11 +80,9 @@
                     background: none;
                     border: none;
                     font-size: 1.5em;
-                    span {
-                        i {
-                            color: $clr1;
-                            transition: .3s ease;
-                        }
+                    i {
+                        color: $clr1;
+                        transition: .3s ease;
                     }
                 }
             }

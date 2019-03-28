@@ -2,6 +2,7 @@ const tripService = require('../services/trip.service');
 const BASE_URL = '/api/trip'
 
 module.exports = (app) => {
+
     // Query trips' list
     app.get(BASE_URL, (req, res) => {
         let { tripDate } = req.query
@@ -65,14 +66,8 @@ module.exports = (app) => {
         res.json(trips);
     });
 
-    // For further use: when user is an admin
-    function checkAdmin(req, res, next) {
-        if (!req.session.user || !req.session.user.isAdmin) return res.end('Not admin');
-        next();
-    }
-
     // Delete by Id
-    app.delete(`${BASE_URL}/:tripId`, (req, res) => {
+    app.delete(`${BASE_URL}/:tripId`, checkUser, (req, res) => {
         const { tripId } = req.params;
         tripService.remove(tripId)
             .then(() => {
@@ -81,7 +76,7 @@ module.exports = (app) => {
     });
 
     // Add a new trip
-    app.post(BASE_URL, (req, res) => {
+    app.post(BASE_URL, isUser, (req, res) => {
         const trip = req.body;
         tripService.add(trip)
             .then(trip => {
@@ -108,4 +103,28 @@ module.exports = (app) => {
             })
 
     })
+    // MIDDLEWARE:
+
+    // For further use: when user is an admin
+    function checkAdmin(req, res, next) {
+    if (!req.session.user || !req.session.user.isAdmin) return res.end('Not admin');
+    next();
+
+    }
+
+    function isUser(req, res, next) {
+        if (!req.session.user) return res.status(401).end();
+        next();
+    }
+
+    // Check if trip belongs to user
+    async function checkUser(req, res, next) {
+        const {tripId} = req.params;
+        if (!req.session.user) return res.status(401).end();
+        if (!tripId) return res.status(404).end();
+        const trip = await tripService.getById(tripId);
+        if (trip.userId !== req.session.user._id) return res.status(403).end();
+        next();
+    }
+
 }
