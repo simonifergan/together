@@ -20,12 +20,10 @@ export default {
             // console.log('connection status:', state.isConnected);
         },
         addNewChat(state, { chat }) {
-            const existingChat = state.userChats.find(loadedChat => loadedChat._id === chat._id);
-            if (!existingChat) {
-                chat.isActive = true;
-                state.userChats.push(chat);
-            } else existingChat.isActive = true;
-
+            chat.isActive = true;
+            const idx = state.userChats.findIndex(loadedChat => loadedChat._id === chat._id);
+            if (idx === -1) state.userChats.push(chat);
+            else state.userChats.splice(idx, 1, chat);
         },
         activateChat(state, { chatId }) {
             const chat = state.userChats.find(chat => chat._id === chatId);
@@ -39,22 +37,12 @@ export default {
             const chat = state.userChats.find(chat => chat._id === chatId);
             chat.isActive = false;
         },
-        addMsg(state, { msg, chatId, recipients }) {
-            console.log(recipients);
+        addMsg(state, { msg, chatId }) {
             const chat = state.userChats.find(chat => chat._id === chatId)
             if (chat) {
                 chat.isActive = true
                 chat.msgs.push(msg)
-            } else {
-                // A new chat has been created, so make sure to update user's state
-                let newChat = {
-                    _id: chatId,
-                    msgs: [msg],
-                    users: [...recipients],
-                    isActive: true,
-                }
-                state.userChats.push(newChat);
-            }
+            };
         },
         setUserChats(state, { chats }) {
             state.userChats = chats
@@ -82,8 +70,9 @@ export default {
             SocketService.on(SocketService.CHAT_JOIN, chatId => {
                 context.commit({ type: 'activateChat', chatId })
             })
-            SocketService.on(SocketService.CHAT_RECEIVE_MSG, ({ chatId, msg, recipients }) => {
-                context.commit({ type: 'addMsg', msg, chatId, recipients });
+            SocketService.on(SocketService.CHAT_RECEIVE_MSG, async ({ chatId, msg }) => {
+                if (!context.getters.userChats.some(chat => chat._id === chatId)) await context.dispatch({type: 'loadChatById', chatId })
+                context.commit({ type: 'addMsg', msg, chatId });
             })
             SocketService.on(SocketService.NOTIFICATION_ADDED, (addedNotification) => {
                 context.commit({ type: 'addNotification', addedNotification });
@@ -94,6 +83,7 @@ export default {
                         context.dispatch({type: 'loadTrip', tripId: payload.tripId})
                     }
                 }
+                console.log(payload);
                 EventBusService.$emit(SHOW_NOTIFICATION, payload);
             })
             context.dispatch({ type: 'socketUserConnect' })
@@ -162,6 +152,12 @@ export default {
         async loadNotification({ commit }) {
             const notifications = await NotificationService.query();
             commit({ type: 'setNotification', notifications });
+        },
+        async loadChatById({commit}, {chatId}) {
+            const chat = await ChatService.getById(chatId);
+            if (chat) commit({type: 'addNewChat', chat});
+
+
         },
         activateChat({ commit }, { chatId }) {
             commit({ type: 'activateChat', chatId })

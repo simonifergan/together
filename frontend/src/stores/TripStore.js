@@ -195,6 +195,7 @@ export default {
             try {
                 // update user & trip
                 const updatedTrip = await TripService.save(tripToJoin);
+                console.log('trip returned fine????', updatedTrip);
                 const updatedUser = await dispatch({
                     type: 'joinLeaveTripToUser',
                     userToTripId: {
@@ -203,14 +204,17 @@ export default {
                         action: 'approve'
                     }
                 })
+                console.log('user returned find?', updatedUser)
+                // Need to update group chat
+                await dispatch({type: 'loadChatById', chatId: updatedTrip.chatId });
 
-                // general notification
-                let newNotification = {
-                    userId: userIdToJoin,
-                    tripId: getters.tripToDisplay._id,
-                    action: NotificationService.TRIP_JOINED
-                }
-                dispatch({ type: 'addNotification', newNotification })
+                // general notification (activity log) REMOVED FOR NOW
+                // let newNotification = {
+                //     userId: userIdToJoin,
+                //     tripId: getters.tripToDisplay._id,
+                //     action: NotificationService.TRIP_JOINED
+                // }
+                // dispatch({ type: 'addNotification', newNotification })
 
                 // User personal notification
                 // send to socket with userId and tripId
@@ -221,8 +225,9 @@ export default {
                 }
                 dispatch({ type: 'socketSendNotification', userId: userIdToJoin, payload });
 
-            } catch {
+            } catch(err) {
                 // rollback
+                console.log('I ROLLED BACK IN APPROVE:', err)
                 commit({ type: 'toggleUserFromPendingList', userId: userIdToJoin })
             }
         },
