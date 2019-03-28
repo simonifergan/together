@@ -2,10 +2,11 @@ const tripService = require('../services/trip.service');
 const BASE_URL = '/api/trip'
 
 module.exports = (app) => {
+
     // Query trips' list
     app.get(BASE_URL, (req, res) => {
-        let {tripDate} = req.query
-        let {searchQuery} = req.query
+        let { tripDate } = req.query
+        let { searchQuery } = req.query
         if (!searchQuery) searchQuery = '';
         tripService.query(searchQuery, tripDate)
             .then(trips => res.json(trips))
@@ -13,15 +14,15 @@ module.exports = (app) => {
     });
 
     // Get trending trips
-    app.get(`${BASE_URL}/trending`, (req, res) => {        
+    app.get(`${BASE_URL}/trending`, (req, res) => {
         tripService.getTrending()
             .then(trips => res.json(trips))
             .catch(err => res.end(err));
     });
 
     // Get recommended trips
-    app.post(`${BASE_URL}/recommended`, (req, res) => {        
-        const prefs = req.body;        
+    app.post(`${BASE_URL}/recommended`, (req, res) => {
+        const prefs = req.body;
         tripService.getRecommended(prefs)
             .then(trips => res.json(trips))
             .catch(err => res.end(err));
@@ -29,12 +30,12 @@ module.exports = (app) => {
 
     // Get trips by activity
     app.get(`${BASE_URL}/activity`, (req, res) => {
-        const {activity} = req.query
+        const { activity } = req.query
         tripService.getByActivity(activity)
             .then(trips => res.json(trips))
             .catch(err => res.end(err));
     })
-    
+
     // Get single trip by id
     app.get(`${BASE_URL}/:tripId`, (req, res) => {
         const { tripId } = req.params;
@@ -45,13 +46,13 @@ module.exports = (app) => {
     });
 
     // Get trips by user Id 
-    app.get(`${BASE_URL}/user/:userId`, async (req,res) => {
-        const {userId} = req.params;
+    app.get(`${BASE_URL}/user/:userId`, async (req, res) => {
+        const { userId } = req.params;
         try {
             const trips = await tripService.getByUserId(userId);
             if (trips.length) res.json(trips);
             else res.status(404).end('User has no trips');
-        } catch(err) {
+        } catch (err) {
             console.log(err);
             res.status(404).end('There was a problem');
         }
@@ -59,20 +60,14 @@ module.exports = (app) => {
     });
 
     // Get trips by countryCode
-    app.get(`${BASE_URL}/country/:countryCode`, async (req,res) => {
-        const {countryCode} = req.params;
-            const trips = await tripService.getTripsByCountry(countryCode);
-            res.json(trips);
+    app.get(`${BASE_URL}/country/:countryCode`, async (req, res) => {
+        const { countryCode } = req.params;
+        const trips = await tripService.getTripsByCountry(countryCode);
+        res.json(trips);
     });
 
-    // For further use: when user is an admin
-    function checkAdmin(req, res, next) {
-        if (!req.session.user || !req.session.user.isAdmin) return res.end('Not admin');
-        next();
-    }
-
     // Delete by Id
-    app.delete(`${BASE_URL}/:tripId`, (req, res) => {
+    app.delete(`${BASE_URL}/:tripId`, checkUser, (req, res) => {
         const { tripId } = req.params;
         tripService.remove(tripId)
             .then(() => {
@@ -81,7 +76,7 @@ module.exports = (app) => {
     });
 
     // Add a new trip
-    app.post(BASE_URL, (req, res) => {
+    app.post(BASE_URL, isUser, (req, res) => {
         const trip = req.body;
         tripService.add(trip)
             .then(trip => {
@@ -97,4 +92,29 @@ module.exports = (app) => {
                 res.json(updatedTrip);
             })
     });
+
+    // MIDDLEWARE:
+
+    // For further use: when user is an admin
+    function checkAdmin(req, res, next) {
+    if (!req.session.user || !req.session.user.isAdmin) return res.end('Not admin');
+    next();
+
+    }
+
+    function isUser(req, res, next) {
+        if (!req.session.user) return res.status(401).end();
+        next();
+    }
+
+    // Check if trip belongs to user
+    async function checkUser(req, res, next) {
+        const {tripId} = req.params;
+        if (!req.session.user) return res.status(401).end();
+        if (!tripId) return res.status(404).end();
+        const trip = await tripService.getById(tripId);
+        if (trip.userId !== req.session.user._id) return res.status(403).end();
+        next();
+    }
+
 }

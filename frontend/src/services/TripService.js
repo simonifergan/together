@@ -55,8 +55,12 @@ async function getActivityTrips(activity) {
 }
 
 async function getByUserId(id) {
-    const {data} = await axios.get(`${TRIP_API}/user/${id}`)
-    return data;
+    try {
+        const {data} = await axios.get(`${TRIP_API}/user/${id}`)
+        return data;
+    } catch(err) {
+       
+    }
 }
 
 async function getByCountry(country) {

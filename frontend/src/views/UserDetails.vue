@@ -19,7 +19,7 @@
     </div>
 
     <ul class="user-trips">
-      <h3>{{user.firstname}}'s trips</h3>
+      <h3>{{user.firstname}}'s shared trips</h3>
       <user-trip-preview v-for="trip in trips" :key="trip._id" :trip="trip" :user="user" :loggedInUser="loggedInUser">
         <!-- <pending-list
             slot="pending-list"
@@ -63,6 +63,9 @@ export default {
   async created() {
     this.initUser();
   },
+  beforeDestroy() {
+    this.$store.commit({type: 'loadTrips', trips: []});
+  },
   computed: {
     user() {
       return this.$store.getters.userToDisplay;
@@ -91,6 +94,7 @@ export default {
   watch: {
     $route: {
       handler(newRoute) {
+        this.$store.commit({type: 'loadTrips', trips: []});
         this.initUser();
       },
       deep: true

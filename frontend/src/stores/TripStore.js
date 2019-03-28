@@ -124,6 +124,7 @@ export default {
             commit({ type: 'loadTrip', trip });
         },
         async saveTrip({ commit, getters, dispatch }, { trip }) {
+            if (!getters.loggedUser) return false;
             trip.userId = getters.loggedUser._id;
             const newTrip = await TripService.save(trip)
             if (trip._id) {
@@ -151,13 +152,12 @@ export default {
 
         // Get trips by User ID
         async loadTripsByUserId({ commit, getters }, { userId }) {
-            const backupTrips = JSON.parse(JSON.stringify(getters.trips));
+            commit({ type: 'loadTrips', trips: [] });
             try {
                 const trips = await TripService.getByUserId(userId);
                 commit({ type: 'loadTrips', trips });
                 return true;
             } catch {
-                commit({ type: 'loadTrips', trips: backupTrips });
                 return false;
             }
 

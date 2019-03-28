@@ -80,12 +80,10 @@ export default {
     };
   },
   methods: {
-    save() {
-      this.$store
-        .dispatch({ type: "saveTrip", trip: this.trip })
-        .then(tripId => {
-          this.$router.push(`/trip/${tripId}`);
-        });
+    async save() {
+      const tripId = await this.$store.dispatch({ type: "saveTrip", trip: this.trip })
+      if (tripId) this.$router.push(`/trip/${tripId}`);
+      else this.$router.push(this.$route.path + '#login');
     },
     onInput() {
       console.log('throttled');
@@ -105,12 +103,17 @@ export default {
       if (this.trip.destinations.countries.indexOf(countryCode) === -1) this.trip.destinations.countries.push(countryCode)
     }
   },
-  created() {
+  computed: {
+    user() {
+      return this.$store.getters.loggedUser;
+    }
+  },
+  async created() {
     const { tripId } = this.$route.params;
     if (tripId) {
-      this.$store
-        .dispatch({ type: "loadTrip", tripId })
-        .then(() => this.trip = this.$store.getters.tripToEdit)
+      await this.$store.dispatch({ type: "loadTrip", tripId })
+      if (this.$store.getters.tripToEdit.userId !== this.user._id) this.$router.push('/');
+      else this.trip = this.$store.getters.tripToEdit;
     }
     if (!window.google) {
       this.$store.dispatch({ type: "connectToGoogle" });

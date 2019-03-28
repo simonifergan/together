@@ -3,13 +3,14 @@
     border-right: 1px solid $box-shadow-gray;
     border-left: 1px solid $box-shadow-gray;
     display: grid;
-    grid-template-rows: 280px 1fr;
+    grid-template-rows: 320px 1fr;
     grid-template-columns: 300px 1fr;
     grid-template-areas: 
         "user-section trip-section"
         "trip-members trip-section";
     color: #333;
     .user-section {
+        padding: 20px;
         border-bottom: 1px solid $box-shadow-gray;
         grid-area: user-section;
         text-align: center;
