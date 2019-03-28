@@ -141,6 +141,8 @@ async function getPlacesAutocomplete(query, types) {
 }
 
 async function getCountryCode(placeId) {
+    console.log('placeId trip service: ',placeId);
+    
     const countryCode = await GoogleService.getPlaceDetails(placeId, ['photos'])
     return countryCode
 }
