@@ -75,11 +75,7 @@ async function getByCountry(country) {
     let regex
     if (country === 'US') regex = /USA/i
     else regex = new RegExp(UtilService.worldCodeMap.get(country), 'i')
-    console.log(regex);
-    return cities.filter(city => {
-        console.log(city);
-        return regex.test(city)
-    })
+    return cities.filter(city => regex.test(city))
 }
 
 async function getById(id) {

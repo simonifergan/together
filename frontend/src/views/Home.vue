@@ -69,7 +69,7 @@ export default {
         let list2length = list2.filters ? list2.filters.length : list2.trips.length
         return list2length - list1length
       })
-      return lists
+      return lists.filter(list => (list.filters && list.filters.length) || (list.trips && list.trips.length))
     },
     searchQueryWithDate() {
       return "/search?q=" + this.searchQuery + "&tripDate=" + this.tripDate

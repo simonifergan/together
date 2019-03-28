@@ -155,13 +155,18 @@ async function getRecommended(prefs) {
 }
 
 async function getTrending() {
+    console.log('getting trending');
+    
     try {
         const db = await mongoService.connect()
         const trips = await db.collection(tripsCollection).aggregate([
             {
+                $match: { $expr: { $gt: [{ $subtract: ['$groupSize', { $size: '$members' }]} ,0] } }
+            },
+            {
                 $addFields: {
+                    // trendGrade: { $subtract: ['$groupSize', { $size: '$members' }]}
                     trendGrade: { $add: [{ $sqrt: { $divide: [{ $size: '$members' }, '$groupSize'] } }, { $divide: [1, { $subtract: ['$groupSize', { $size: '$members' }] }] }, { $divide: [{ $size: '$pending' }, 5] }] }
-                    // trendGrade: { $divide: [{$size: '$members'}, '$groupSize'] }
                 }
             },
             {
