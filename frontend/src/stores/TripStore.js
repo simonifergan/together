@@ -140,7 +140,7 @@ export default {
                 dispatch({ type: 'addNotification', newNotification })
             }
             else {
-                commit({ type: 'addTrip', trip: newTrip })
+                // commit({ type: 'addTrip', trip: newTrip })
                 // userId, trip id, actions - add new trip,
                 let newNotification = {
                     userId: getters.loggedUser,
