@@ -109,6 +109,8 @@ export default {
     actions: {
         async getTrendingTrips({ commit }) {
             const trendingTrips = await TripService.getTrending()
+            // Todo Yanai: When trending trips return empty
+            if (!trendingTrips) return [];
             return trendingTrips
         },
         async getRecommendedTrips({ getters }) {
