@@ -8,6 +8,8 @@ import store from './store'
 import './filter'
 import './registerServiceWorker'
 import '@/assets/css/main.scss';
+import '@/services/PushNotificationService';
+
 
 Vue.config.productionTip = false
 
