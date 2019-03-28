@@ -98,8 +98,12 @@ async function save(trip) {
 
 async function updateUserOnTrip(userIdToTrip) {
     console.log('got to trip service- updateUserOnTrip : ', userIdToTrip);
-    const { data } = await axios.patch(`${TRIP_API}/trip_user/${userIdToTrip.trip._id}`, userIdToTrip)
-    return data
+    try {
+        const { data } = await axios.patch(`${TRIP_API}/trip_user/${userIdToTrip.trip._id}`, userIdToTrip);
+        return data
+    } catch (err) {
+        console.log('updateUserOnTrip - error:', err);
+    }
 }
 
 async function remove(id) {
@@ -137,6 +141,8 @@ async function getPlacesAutocomplete(query, types) {
 }
 
 async function getCountryCode(placeId) {
+    console.log('placeId trip service: ',placeId);
+    
     const countryCode = await GoogleService.getPlaceDetails(placeId, ['photos'])
     return countryCode
 }

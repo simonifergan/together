@@ -87,9 +87,13 @@ export default {
   },
   methods: {
     async save() {
-      const tripId = await this.$store.dispatch({ type: "saveTrip", trip: this.trip })
-      if (tripId) this.$router.push(`/trip/${tripId}`);
-      else this.$router.push(this.$route.path + '#login');
+      try {
+        const tripId = await this.$store.dispatch({ type: "saveTrip", trip: this.trip })
+        if (tripId) this.$router.push(`/trip/${tripId}`);
+        else this.$router.push(this.$route.path + '#login');
+      } catch(err) {
+        console.log('Trip edit err', err);
+      }
     },
     onInput() {
       console.log('throttled');

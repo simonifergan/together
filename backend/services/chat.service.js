@@ -144,19 +144,22 @@ async function createChat(chat) {
 }
 
 async function updateTripChat(chatId, users) {
-    chatId = new ObjectId(chatId);
+    console.log('typeof: chatid:', typeof chatId, chatId);
+    const _id = new ObjectId(chatId);
     users = users.map(userId => new ObjectId(userId));
+    console.log(users)
     try {
         const db = await mongoService.connect();
         const res = await db.collection(chatsCollection).updateOne(
-            {_id: chatId},
+            {_id},
             {
                 $set : {
-                    users
+                    'users': users
                 }
             }
         ) 
-    } catch {
+    } catch(err) {
+        console.log('updateTripChat error:', err);
 
     }
 
