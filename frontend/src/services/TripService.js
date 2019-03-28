@@ -132,7 +132,7 @@ function getActivities() {
 }
 
 function getCountries() {
-    return ['ES', 'US', 'FR', 'TH', 'IN', 'PT']
+    return ['ES', 'US', 'FR', 'TH', 'PT']
 }
 
 async function getPlacesAutocomplete(query, types) {
