@@ -31,7 +31,6 @@ module.exports = (io) => {
         socket.on(SOCKET_CONNECT, userId => {
             socket.userId = userId;
             connectedSockets.push(socket)
-            // console.log('Hi connected sockets:', connectedSockets);
             console.log('Hello user:', userId, 'in socket:', socket.userId);
         })
 
@@ -46,7 +45,8 @@ module.exports = (io) => {
         })
 
         socket.on('disconnect', () => {
-            const socketIdx = connectedSockets.findIndex(inSocket => inSocket.userId === socket.userId);
+            console.log('bye user', socket.userId);
+            const socketIdx = connectedSockets.findIndex(inSocket => inSocket.id === socket.id);
             if (socketIdx !== -1) connectedSockets.splice(socketIdx, 1);
         })
 

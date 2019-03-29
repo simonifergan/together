@@ -96,6 +96,7 @@ module.exports = (app) => {
 
     // Toggle user between pending and members' lists
     app.patch(`${BASE_URL}/trip_user/:tripId`, (req, res) => {
+        const userIdToTrip = req.body;
         tripService.updateUserOnTrip(userIdToTrip)
             .then(updatedTrip => {
                 if (updatedTrip) return res.json(updatedTrip);
@@ -114,7 +115,6 @@ module.exports = (app) => {
     }
 
     function isUser(req, res, next) {
-        console.log('checking if client is logged in', req.session.user._id);
         if (!req.session.user) return res.status(401).end();
         next();
     }
@@ -123,7 +123,6 @@ module.exports = (app) => {
     // Gets latest update in db and verifies
     async function checkUser(req, res, next) {
         const {tripId} = req.params;
-        console.log('checking if client is trip admin', req.session.user._id, tripId);
         if (!tripId) return res.status(404).end();
         const trip = await tripService.getById(tripId);
         trip.userId = trip.userId.toString();

@@ -537,6 +537,7 @@ function update(trip) {
     const userId = trip.userId;
     const chatMembers = [...(trip.members.map(member => member._id)), userId];
     const chatId = trip.chatId;
+    const user = trip.user;
     trip._id = new ObjectId(trip._id);
     trip.userId = new ObjectId(trip.userId);
     trip.members = trip.members.map(member => {
@@ -553,6 +554,7 @@ function update(trip) {
             trip.members = members;
             trip.pending = pending;
             trip.chatId = chatId;
+            trip.user = user;
             const res = await chatService.updateTripChat(chatId, chatMembers);
             return trip;
         });

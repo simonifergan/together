@@ -40,6 +40,7 @@ export default {
             if (!this.payload) return '';
             const {action} = this.payload;
             if (action === NotificationService.USER_TRIP_REQUEST || action === NotificationService.USER_TRIP_APPROVED) return '/trip/' + this.payload.tripId;
+            else if (action === NotificationService.USER_LIKE_USER) return '/user/' + this.payload.user._id;
 
         }
     },

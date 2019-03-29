@@ -76,7 +76,7 @@ export default {
     send() {
       this.$store.dispatch({
         type: "socketSendMsg",
-        msg: { txt: this.newMsg, sentAt: Date.now() },
+        msg: { txt: this.newMsg, sentAt: Date.now(), isRead: false },
         chatId: this.chat._id,
         recipients: this.chat.users
       });

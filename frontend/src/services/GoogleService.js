@@ -4,7 +4,8 @@ const axios = Axios.create({
     withCredentials: true
 })
 
-const API_KEY = 'AIzaSyAXeo5fckdLgf_cfKs78MtTsARYWluZM7U';
+// const API_KEY = 'AIzaSyAXeo5fckdLgf_cfKs78MtTsARYWluZM7U';  // YANAI KEY
+const API_KEY = 'AIzaSyCHshynsRoN_NeY7RLOs8wZv9AOgUGHi2A';  // simon key
 
 export default {
     getGoogleLocation,
