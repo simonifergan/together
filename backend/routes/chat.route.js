@@ -1,7 +1,6 @@
 const chatService = require('../services/chat.service');
 module.exports = (app) => {
 
-    // EXPERIMENT WITH CHATS DB
     app.get('/api/chat', async (req, res) => {
         const { userId } = req.query
         // console.log('userId:', userId);
@@ -38,10 +37,10 @@ module.exports = (app) => {
     })
 
     app.put('/api/chat/:chatId', async (req, res) => {
-        const msg = req.body;
+        const users = req.body;
         const { chatId } = req.params;
         try {
-            const isSuccess = await chatService.addMsg(msg, chatId)
+            const isSuccess = await chatService.updateTripChat(chatId, users)
             res.json(isSuccess);
         } catch {
             res.status(500).end('We have a problem');

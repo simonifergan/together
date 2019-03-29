@@ -568,7 +568,9 @@ async function updateUserOnTrip({ trip, user, action }) {
         const db = await mongoService.connect()
         var res;
         if (action === 'remove from members') {
-            res = await db.collection(tripsCollection).updateOne({ _id: objTripId }, { $pull: { members: objUserId } })
+            trip.users = trip.users.filter(currUser => currUser._id !== user._id);
+            res = await db.collection(tripsCollection).updateOne({ _id: objTripId }, { $pull: { members: objUserId } });
+            await chatService.updateTripChat(trip.chatId, trip.users);
         } else if (action === 'remove from pending') {
             res = await db.collection(tripsCollection).updateOne({ _id: objTripId }, { $pull: { pending: objUserId } })
         } else if (action === 'request') {

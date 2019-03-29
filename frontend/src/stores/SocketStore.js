@@ -52,7 +52,7 @@ export default {
         },
         addNotification(state, { addedNotification }) {
             state.notifications.unshift(addedNotification);
-        }
+        },
     },
     getters: {
         userChats(state) {

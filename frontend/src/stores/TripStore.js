@@ -287,11 +287,12 @@ export default {
             }
 
             // update trip to display
-            commit({ type: 'updateTripToDisplay', trip: tripToLeave });
+            let tripToLeaveCopy = JSON.parse(JSON.stringify(tripToLeave))
+            commit({ type: 'updateTripToDisplay', trip: tripToLeaveCopy });
 
             try {
                 // update user & trip
-                let userIdToTrip = {
+                const userIdToTrip = {
                     trip: tripToLeave,
                     user: userToLeave,
                     action
@@ -307,7 +308,9 @@ export default {
                     }
                 })
             } catch {
-                // TODO simon
+                console.log('rollback');
+                tripToLeave.members.push(userToLeave)
+                commit({ type: 'updateTripToDisplay', trip: tripToLeave });
             }
         },
         // user request to join trip
