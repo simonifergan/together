@@ -20,14 +20,16 @@
         </div>
       </div>
     </header>
-    <article v-for="(list, idx) in listsForRender" :key="list.title + idx" :class="'article-' + list.type">
+    <article v-for="(list, idx) in listsForDisplay" :key="list.title + idx" :class="'article-' + list.type">
       <component :is="list.type" :title="list.title | countryCodeToName" :trips="list.trips" :filters="list.filters" />
     </article>
+    <infinite-loading @infinite="infiniteHandler"></infinite-loading>
   </section>
 </template>
 
 <script>
 // CMPS:
+import infiniteLoading from 'vue-infinite-loading';
 import TripList from "@/components/TripList";
 import FilterList from "@/components/FilterList";
 import _ from 'lodash'
@@ -36,54 +38,61 @@ export default {
   name: "home",
   components: {
     TripList,
-    FilterList
+    FilterList,
+    infiniteLoading
   },
   data() {
     return {
+      // showPage: false,
+      page: 0,
+      listsForDisplay: [],
       searchQuery: '',
       tripDate: '',
       throttled: _.throttle(this.searchPlaces, 1000, {leading: false}),
       autocomplete: null,
-      tripLists: {
-        trending: [],
-        recommended: []
-      },
-      filterLists: {
+      tripLists: [
+        'trending',
+        'recommended',
+        ...this.$store.getters.activities
+      ],
+      filterLists: [
         // beachCities: [],
-        activities: [],
-      },
-      countries: this.$store.getters.countries
+        'activities',
+        ...this.$store.getters.countries
+      ],
+      // countries: this.$store.getters.countries
     };
   },
   computed: {
     loggedUser() {
       return this.$store.getters.loggedUser
     },
-    listsForRender() {
-      const lists = []
-      for (let tripList in this.tripLists) {
-        lists.push({title: tripList, trips: this.tripLists[tripList], type: 'tripList'})
-      }
-      for (let filterList in this.filterLists) {
-        lists.push({title: filterList, filters: this.filterLists[filterList], type: 'filterList'})
-      }
-      let n = 1
-      lists.forEach((list, idx) => {
-        if (list.type === 'filterList') {
-          lists.splice(2*n - 1, 0, lists.splice(idx, 1)[0])
-          n++
-          }
-      })
-      // return lists
-      return lists.filter(list => (list.filters && list.filters.length) || (list.trips && list.trips.length))
-    },
+    // listsForRender() {
+    //   const lists = []
+    //   for (let tripList in this.tripLists) {
+    //     lists.push({title: tripList, trips: this.tripLists[tripList], type: 'tripList'})
+    //   }
+    //   for (let filterList in this.filterLists) {
+    //     lists.push({title: filterList, filters: this.filterLists[filterList], type: 'filterList'})
+    //   }
+    //   let n = 1
+    //   lists.forEach((list, idx) => {
+    //     if (list.type === 'filterList') {
+    //       lists.splice(2*n - 1, 0, lists.splice(idx, 1)[0])
+    //       n++
+    //       }
+    //   })
+    //   // return lists
+    //   return lists.filter(list => (list.filters && list.filters.length) || (list.trips && list.trips.length))
+    // },
     searchQueryWithDate() {
       return "/search?q=" + this.searchQuery + "&tripDate=" + this.tripDate
     }
   },
   watch: {
     async loggedUser() {
-      this.tripLists.recommended = await this.$store.dispatch({ type: "getRecommendedTrips" });
+      if (this.listsForDisplay.recommended)
+      this.listsForDisplay.recommended = await this.$store.dispatch({ type: "getRecommendedTrips" });
     }
   },
   methods: {
@@ -92,16 +101,18 @@ export default {
     },
     async getActivityTrips(activity) {
       const activityTrips = await this.$store.dispatch({ type: "getActivityTrips", activity })
-      this.tripLists = Object.assign({}, this.tripLists, {
-        [activity]: activityTrips,
-      })
+      return activityTrips
+      // this.tripLists = Object.assign({}, this.tripLists, {
+      //   [activity]: activityTrips,
+      // })
     },
     async getFiltersForCountry(country) {
       const cities = await this.$store.dispatch({type: 'getCitiesByCountry', country})
       const citiesWithImgs = await this.$store.dispatch( {type: 'getFilterImgs', filterType: 'destinations', filters: cities })
-      this.filterLists = Object.assign({}, this.filterLists, {
-        [country]: citiesWithImgs,
-      })
+      return citiesWithImgs
+      // this.filterLists = Object.assign({}, this.filterLists, {
+      //   [country]: citiesWithImgs,
+      // })
     },
     onInput() {      
       this.throttled()
@@ -114,20 +125,77 @@ export default {
     cityClicked(city) {
       this.searchQuery = city.description
       this.autocomplete = null
-    }
+    },
+    async infiniteHandler($state) {
+      console.log('handling')
+      let page = this.page
+      let filterList
+      let tripList
+      if (this.page % 2 === 0) { // get filterList
+        filterList = this.filterLists[page/2]
+        if (filterList === 'activities') {
+          filterList = {
+            title: filterList,
+            filters: await this.$store.dispatch({type: 'getFilterImgs', filterType: 'activities', filters: this.$store.getters.activities}),
+            type: 'filterList'
+          }
+        } else if (filterList) {
+          // console.log(filterList)
+          filterList = {
+            title: filterList,
+            filters: await this.getFiltersForCountry(filterList),
+            type: 'filterList'
+            }
+        } else {
+          this.page++
+          $state.loaded()
+          return
+        }
+      } else { //get tripList
+        tripList = this.tripLists[(page - 1)/2]
+        if (tripList === 'recommended') {
+          tripList = {
+            title: tripList,
+            trips: await this.$store.dispatch({ type: "getRecommendedTrips" }),
+            type: 'tripList'
+            }
+        } else if (tripList === 'trending') {
+          tripList = {
+            title: tripList,
+            trips: await this.$store.dispatch({ type: "getTrendingTrips" }),
+            type: 'tripList'
+          }
+        } else if (tripList) { //activities
+          tripList = {
+            title: tripList,
+            trips: await this.getActivityTrips(tripList),
+            type: 'tripList'
+          }
+        }
+      }
+      const currList = filterList || tripList
+      if (currList) {
+        this.page++;
+        this.listsForDisplay.push(currList);
+        $state.loaded();
+      } else {
+        $state.complete();
+      }
+    },
   },
   async created() {
     if (!window.google) {
       await this.$store.dispatch({ type: "connectToGoogle" });
     }
-    this.tripLists.trending = await this.$store.dispatch({ type: "getTrendingTrips" });
-    if (this.$store.getters.loggedUser) {      
-      this.tripLists.recommended = await this.$store.dispatch({ type: "getRecommendedTrips" })
-    }
-    const activities = this.$store.getters.activities;
-    this.filterLists.activities = await this.$store.dispatch( {type: 'getFilterImgs', filterType: 'activities', filters: activities })
-    this.filterLists.activities.forEach(activity => this.getActivityTrips(activity.title));
-    this.countries.forEach(country => this.getFiltersForCountry(country))
+    // this.tripLists.trending = await this.$store.dispatch({ type: "getTrendingTrips" });
+    // if (this.$store.getters.loggedUser) {      
+    //   this.tripLists.recommended = await this.$store.dispatch({ type: "getRecommendedTrips" })
+    // }
+    // to infinite scroll:
+    // this.filterLists.activities = await this.$store.dispatch( {type: 'getFilterImgs', filterType: 'activities', filters: activities })
+    // this.filterLists.activities.forEach(activity => this.getActivityTrips(activity.title));
+    // to infinite scroll
+    // this.countries.forEach(country => this.getFiltersForCountry(country))
   }
 };
 </script>

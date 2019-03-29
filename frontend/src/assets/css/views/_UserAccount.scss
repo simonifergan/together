@@ -1,46 +1,53 @@
-.signup-page {
+.account-page {
     background-color: #fbfbfb;
     @include wrapper(860px);
     padding: 20px;
     border-right: 1px solid $box-shadow-gray;
     border-left: 1px solid $box-shadow-gray;
+    h1 {
+        margin-bottom: 30px;
+        font-weight: 1000;
+        font-size: 1.5em;
+        color: #333;
+    }
     form {
+        .el-input {
+            margin: 10px 0;
+        }
         h2 {
-            font-size: 1.225em;
-            font-weight: 600;
-            margin-bottom: 15px;
-            &:not(:first-of-type) {
-                margin-top: 15px;
-            }
+            margin: 20px 0;
+            font-weight: 1000;
+            font-size: 1.125em;
             span {
                 color: #d4d4d4;
             }
         }
         label {
-            padding-left: 2px;
+            margin: 15px 0;
             &.change-password {
                 span {
                     color: #d4d4d4;
                 }
             }
-            
         }
         img {
             width: 350px;
             height: 350px;
             object-fit: cover;
+            margin-bottom: 0;
+            margin-right: 20px;
         }
         .activity-prefs {
             display: grid;
             grid-template-columns: repeat(3, minmax(100px, 1fr));
-            & > * {
-                margin-bottom: 15px;
+            grid-gap: 30px;
+            * {
+                margin: 0;
             }
             label {
-                padding-left: 20px;
                 cursor: pointer;
                 @include flex(row, flex-start, center);
-                & > * {
+                * {
                     margin-right: 5px;
                 }
             }
@@ -50,6 +57,7 @@
             @include button;
             font-size: 18px;
             color: #fff;
+            // float: right;
             background-color: $clr1;
         }
     }

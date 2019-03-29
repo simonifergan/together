@@ -1,8 +1,9 @@
 .filter-list {
     position: relative;
-    margin: 20px auto;
+    margin: 50px auto;
     align-items: center;
     width: 420px;
+    margin-bottom: 70px;
     @include flex(column, flex-start, center);
     .top-container {
         width: 100%;

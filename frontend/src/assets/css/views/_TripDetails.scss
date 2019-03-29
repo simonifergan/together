@@ -4,7 +4,7 @@
         "user-section"
         "trip-section"
         "trip-members";
-    height: calc(100vh - 70px);
+    min-height: calc(100vh - 70px);
     color: #333;
     .user-section {
         grid-area: user-section;
