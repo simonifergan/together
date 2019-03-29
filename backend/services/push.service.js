@@ -10,16 +10,28 @@ webpush.setVapidDetails(
 
 const userService = require('./user.service');
 
-// TO BE PASTED IN service-worker.js after  { npm run build }
-// EVENT LISTENER:
+// PASTE THIS IN SERVICE WORKER:
+// // EVENT LISTENER:
 // self.addEventListener('push', function(e) {
-//   console.log('Hi pushhhhh');
-//   const data = e.data.json();
-//   self.registration.showNotification(data.title, data.payload);
-// });
+//     console.log('Hi pushhhhh');
+//     const data = e.data.json();
+//     self.registration.showNotification(data.title, data.payload);
+//   });
+  
+//   self.addEventListener('notificationclick', function(e) {
+//     var notification = e.notification;
+//     var action = e.action;
+  
+//     if (action === 'close') {
+//       notification.close();
+//     } else if (action === 'go') {
+//       console.log(e.data, notification);
+//       clients.openWindow(`${notification.data.url}`);
+//       notification.close();
+//     }
+//   });
 
-
-// ENHANCED:
+// OLD:
 // // EVENT LISTENER:
 // self.addEventListener('push', function(e) {
 //     console.log('Hi pushhhhh');
