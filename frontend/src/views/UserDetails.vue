@@ -4,7 +4,7 @@
       <div :style="profilePic" class="user-img"/>
       <div class="user-info">
         <h2>{{user.firstname}}&nbsp;{{user.lastname}}</h2>
-        <h3>{{user.birthdate | calcAge}}, {{user.from | countryCodeToName}}</h3>
+        <h3>{{user.birthdate | calcAge}}<span v-if="user.birthdate && user.from">, </span> {{user.from | countryCodeToName}}</h3>
       </div>
 
       <div class="likes-container">

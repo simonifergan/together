@@ -118,11 +118,9 @@ function getEmpty() {
         destinations: {countries: [], cities: []},
         startsAt: '',
         duration: '',
-        openTo: {},
         activities: [],
         members: [],
         pending: [],
-        comments: [],
         groupSize: 1,
     }
 }
@@ -132,7 +130,7 @@ function getActivities() {
 }
 
 function getCountries() {
-    return ['ES', 'US', 'FR', 'TH', 'PT']
+    return ['ES', 'US', 'FR', 'MX', 'PT']
 }
 
 async function getPlacesAutocomplete(query, types) {

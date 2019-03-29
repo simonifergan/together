@@ -43,7 +43,7 @@
       <ul>
         <li v-for="country in trip.destinations.countries" :key="country">{{country | countryCodeToName}}<button type="button" @click="deleteCountry(country)">X</button></li>
       </ul>
-      <our-super-awesome-map v-if="trip.destinations.countries" :enable="true" v-model="trip.destinations.countries"/>
+      <our-super-awesome-map v-if="trip.destinations.countries && isDesktop" :enable="true" v-model="trip.destinations.countries"/>
         <h2>Give your trip a title:</h2>
         <el-input
           placeholder="Type your trip's title. e.g.: 'My trip to Lapland in 3 months!'"
@@ -75,7 +75,8 @@ import _ from 'lodash';
 export default {
   name: "trip-edit",
   components: {
-    OurSuperAwesomeMap, ActivityPrefs
+    OurSuperAwesomeMap, 
+    ActivityPrefs
   },
   data() {
     return {
@@ -130,6 +131,9 @@ export default {
   computed: {
     user() {
       return this.$store.getters.loggedUser;
+    },
+    isDesktop() {
+      return window.matchMedia("(min-width: 750px)").matches;
     }
   },
   async created() {

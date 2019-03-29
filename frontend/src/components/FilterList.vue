@@ -1,17 +1,20 @@
 <template>
   <ul class="filter-list">
     <div class="top-container">
-
-    <h2>{{title}}</h2>
-    <div class="filters-container">
-      <button @click="moveSlide('-')"><i class="fas fa-chevron-left"></i></button>
-      <div class="inner-container">
-        <ul class="filter-previews" :style="pagination">
-          <filter-preview v-for="filter in filters" :key="filter.title" :filter="filter"/>
-        </ul>
+      <h2>{{title}}</h2>
+      <div class="filters-container">
+        <button @click="moveSlide('-')">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="inner-container">
+          <ul class="filter-previews" :style="pagination">
+            <filter-preview v-for="filter in filters" :key="filter.title" :filter="filter"/>
+          </ul>
+        </div>
+        <button @click="moveSlide('+')">
+          <i class="fas fa-chevron-right"></i>
+        </button>
       </div>
-      <button @click="moveSlide('+')"><i class="fas fa-chevron-right"></i></button>
-    </div>
     </div>
   </ul>
 </template>
@@ -35,8 +38,7 @@ export default {
   },
   data() {
     return {
-      page: 0,
-      itemWidth: 220
+      page: 0
     };
   },
   computed: {
@@ -47,22 +49,24 @@ export default {
       return { left: this.slidePos };
     },
     itemsPerPage() {
-      return 5; // TODO : fit to client width
+      return 5;
+    },
+    itemWidth() {
+      if (window.matchMedia("(min-width: 1100px)").matches) return 220;
+      else if (window.matchMedia("(min-width: 900px)").matches) return 170;
+      else return 132;
     }
   },
   methods: {
     moveSlide(diff) {
       // console.log(this.page, this.filters.length - this.itemsPerPage)
-      if (
-        diff === "+" &&
-        (this.page < this.filters.length - this.itemsPerPage)
-      ) {
+      if (diff === "+" && this.page < this.filters.length - this.itemsPerPage) {
         this.page = this.page + 1;
       } else if (diff === "-" && this.page > 0) {
         this.page = this.page - 1;
       }
       return;
     }
-  },
+  }
 };
 </script>
