@@ -1,120 +1,147 @@
 .filter-list {
     position: relative;
     margin-top: 20px;
-    padding: 20px;
-    overflow: hidden;
     align-items: center;
+    width: 420px;
+    margin: 0 auto;
     @include flex(column, flex-start, center);
-    h2 {
-        font-weight: 1000;
-        margin: 0 0 30px 5px;
-        font-size: 1.2em;
-        text-transform: capitalize;
-        align-self: flex-start;
-    }
-    .filters-container {
-        position: relative;
-        width: 660px;
-        height: 260px;
-        .inner-container {
-            position: relative;
-            overflow: hidden;
-            height: 100%;
-            width: 100%;
-        }
-        button {
-            background-color: #ffffff;
-            border: none;
-            box-shadow: 0 0 2px 0.5px black;
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
+    .top-container {
+        width: 100%;
+        h2 {
+            font-weight: 1000;
+            margin: 0 0 30px 5px;
             font-size: 1.2em;
-            z-index: 1;
-            top: 50%;
-            transform: translateY(-50%);
-            position: absolute;
-            &:first-of-type {
-                left: -24px;
-            }
-            &:last-of-type {
-                right: -24px;
-            }
+            text-transform: capitalize;
+            align-self: flex-start;
         }
-        .filter-previews {
-            @include flex();
-            position: absolute;
-            transition: .6s ease;
-            .filter-preview {
-                cursor: pointer;
-                width: 125px;
-                height: 100%;
-                @include flex(column);
-                font-family: $font-open-sans;
-                margin-right: 7px;
-                line-height: 20px;
+        .filters-container {
+            position: relative;
+            // width: 660px;
+            // height: 260px;
+            width: 100%;
+            height: 260px;
+            .inner-container {
                 position: relative;
-                .filter-preview-img {
-                    width: 125px;
-                    height: 260px;
-                    background-size: cover;
-                    background-position: center top;
-                    position: relative;
-                    border-radius: 3px;
-                    &::after {
-                        content: "";
-                        position: absolute;
-                        width: 100%;
-                        height: 100%;
-                        background: linear-gradient(to bottom, rgba(76,76,76,0.1) 0%,rgba(89,89,89,0.1) 12%,rgba(102,102,102,0.1) 25%,rgba(71,71,71,0.1) 39%,rgba(44,44,44,0.1) 45%,rgba(43,43,43,0.1) 60%,rgba(43,43,43,0.24) 66%,rgba(17,17,17,0.33) 70%,rgba(19,19,19,1) 100%);
-                    }
+                overflow: hidden;
+                height: 100%;
+                width: 100%;
+            }
+            button {
+                background-color: #ffffff;
+                border: none;
+                box-shadow: 0 0 2px 0.5px black;
+                border-radius: 50%;
+                width: 48px;
+                height: 48px;
+                font-size: 1.2em;
+                z-index: 1;
+                top: 50%;
+                transform: translateY(-50%);
+                position: absolute;
+                &:first-of-type {
+                    left: -24px;
                 }
-                h3 {
-                    overflow-wrap: break-word;
-                    font-family: $font-open-sans-bold;
-                    font-size: 1.125em;
-                    align-self: center;
-                    text-align: center;
-                    text-transform: capitalize;
-                    position: absolute;
-                    color: #fff;
-                    bottom: 20px;
+                &:last-of-type {
+                    right: -24px;
+                }
+            }
+            .filter-previews {
+                @include flex();
+                position: absolute;
+                transition: .6s ease;
+                .filter-preview {
+                    cursor: pointer;
+                    // width: 125px;
+                    width: 200px;
+                    height: 100%;
+                    @include flex(column);
+                    font-family: $font-open-sans;
+                    // margin-right: 7px;
+                    margin-right: 20px;
+                    line-height: 20px;
+                    position: relative;
+                    .filter-preview-img {
+                        // width: 125px;
+                        width: 200px;
+                        height: 260px;
+                        background-size: cover;
+                        background-position: center top;
+                        position: relative;
+                        border-radius: 3px;
+                        &::after {
+                            content: "";
+                            position: absolute;
+                            width: 100%;
+                            height: 100%;
+                            background: linear-gradient(to bottom, rgba(76,76,76,0.1) 0%,rgba(89,89,89,0.1) 12%,rgba(102,102,102,0.1) 25%,rgba(71,71,71,0.1) 39%,rgba(44,44,44,0.1) 45%,rgba(43,43,43,0.1) 60%,rgba(43,43,43,0.24) 66%,rgba(17,17,17,0.33) 70%,rgba(19,19,19,1) 100%);
+                        }
+                    }
+                    h3 {
+                        overflow-wrap: break-word;
+                        font-family: $font-open-sans-bold;
+                        font-size: 1.125em;
+                        align-self: center;
+                        text-align: center;
+                        text-transform: capitalize;
+                        position: absolute;
+                        color: #fff;
+                        bottom: 20px;
+                    }
                 }
             }
         }
     }
     
-    @media (min-width: 900px) {
-        width: 840px;
+    @media (min-width: 730px) {
+        // width: 840px;
+        width: 640px;
         margin: 0 auto;
         .filters-container {
-            width: 840px;
+            width: 100%;
             height: 260px;
-            .filter-previews {
-                .filter-preview {
-                    width: 160px;
-                    margin-right: 10px;
-                    .filter-preview-img {
-                        width: 160px;
-                    }
-                } 
-            }
+            // .filter-previews {
+            //     .filter-preview {
+            //         width: 160px;
+            //         margin-right: 10px;
+            //         .filter-preview-img {
+            //             width: 160px;
+            //         }
+            //     } 
+            // }
+        }
+    }
+    @media (min-width: 1000px) {
+        // width: 840px;
+        width: 860px;
+        margin: 0 auto;
+        .filters-container {
+            width: 100%;
+            height: 260px;
+            // .filter-previews {
+            //     .filter-preview {
+            //         width: 160px;
+            //         margin-right: 10px;
+            //         .filter-preview-img {
+            //             width: 160px;
+            //         }
+            //     } 
+            // }
         }
     }
     @media (min-width: 1100px) {
         width: 1080px;
-        .filters-container {
-            width: 1080px;
-            height: 260px;
-            .filter-previews {
-                .filter-preview {
-                    width: 200px;
-                    margin-right: 20px;
-                    .filter-preview-img {
-                        width: 200px;
-                    }
-                }  
-            }
-        }
+        // .filters-container {
+        //     width: 1080px;
+        //     height: 260px;
+        //     .filter-previews {
+        //         .filter-preview {
+        //             width: 200px;
+        //             margin-right: 20px;
+        //             .filter-preview-img {
+        //                 width: 200px;
+        //             }
+        //         }  
+        //     }
+        // }
     }
 }

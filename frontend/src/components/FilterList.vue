@@ -49,12 +49,16 @@ export default {
       return { left: this.slidePos };
     },
     itemsPerPage() {
-      return 5;
+      if (window.matchMedia("(min-width: 1100px)").matches) return 5;
+      else if (window.matchMedia("(min-width: 1000px)").matches) return 4;
+      else if (window.matchMedia("(min-width: 730px)").matches) return 3;
+      else return 2;
     },
     itemWidth() {
-      if (window.matchMedia("(min-width: 1100px)").matches) return 220;
-      else if (window.matchMedia("(min-width: 900px)").matches) return 170;
-      else return 132;
+      // if (window.matchMedia("(min-width: 1100px)").matches) return 220;
+      // else if (window.matchMedia("(min-width: 900px)").matches) return 170;
+      // else return 132;
+      return 220;
     }
   },
   methods: {
