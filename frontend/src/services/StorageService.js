@@ -1,5 +1,6 @@
 function getFromLocal(key) {
-    return JSON.parse(localStorage.getItem(key));
+    const res = localStorage.getItem(key)
+    return res ? JSON.parse(localStorage.getItem(key)) : null
 }
 
 function saveToLocal(key, value) {

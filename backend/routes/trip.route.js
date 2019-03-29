@@ -13,6 +13,14 @@ module.exports = (app) => {
             .catch(err => res.end(err));
     });
 
+    // Get Pending reqs for user
+    app.get(`${BASE_URL}/pending/:userId`, (req, res) => {
+        const {userId} = req.params
+        tripService.getPending(userId)
+            .then(reqs => res.json(reqs))
+            .catch(err => res.end(err));
+    });
+
     // Get trending trips
     app.get(`${BASE_URL}/trending`, (req, res) => {
         tripService.getTrending()

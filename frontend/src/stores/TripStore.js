@@ -8,7 +8,8 @@ export default {
         tripToDisplay: null,
         searchResults: null,
         activityFilters: [],
-        destinationFilters: []
+        destinationFilters: [],
+        userRequests: []
     },
     mutations: {
         // trips section:
@@ -74,7 +75,10 @@ export default {
         },
         setDestinationFilters(state, { filterImgs }) {
             state.destinationFilters = filterImgs
-        }
+        },
+        setUserRequests(state, { requests }) {
+            state.userRequests = requests
+        },
     },
     getters: {
         trips(state) {
@@ -104,6 +108,9 @@ export default {
         },
         searchResults(state) {
             return state.searchResults
+        },
+        userRequests(state) {
+            return state.userRequests;
         }
     },
     actions: {
@@ -400,6 +407,11 @@ export default {
         async getCitiesByCountry(context, { country }) {
             const cities = await TripService.getByCountry(country)
             return cities
+        },
+        async getUserRequests({getters, commit}) {
+            const requests = await TripService.getRequests(getters.loggedUser._id)
+            commit({ type: 'setUserRequests', requests });
+            // SocketService.emit(SocketService.CHAT_REGISTER_ROOMS, chats);
         }
     }
 }

@@ -1,8 +1,4 @@
-import Axios from 'axios'
-
-const axios = Axios.create({
-    withCredentials: true
-})
+import StorageService from './StorageService.js'
 
 // const API_KEY = 'AIzaSyAXeo5fckdLgf_cfKs78MtTsARYWluZM7U';  // YANAI KEY
 const API_KEY = 'AIzaSyCHshynsRoN_NeY7RLOs8wZv9AOgUGHi2A';  // simon key
@@ -60,17 +56,22 @@ async function getPlaceDetails(placeId) {
 }
 
 async function getGoogleLocation(query, fields) {
+    const cachedRes = StorageService.getFromLocal(query)
+    if (cachedRes) return cachedRes
     const elImg = document.createElement('img')
     var request = {
         query,
         fields,
     };
-    await new Promise((res, rej) => setTimeout(res, Math.random()*30000))
+    // await new Promise((res, rej) => setTimeout(res, Math.random()*30000))
     const service = new google.maps.places.PlacesService(elImg);
     return new Promise((res, rej) => {
         service.findPlaceFromQuery(request, (results, status) => {
-            // console.log(query, results, status);
-            if (results && results[0].photos) res(results[0].photos[0].getUrl())
+            if (results && results[0].photos) {
+                const photoSrc = results[0].photos[0].getUrl()
+                // StorageService.saveToLocal(query, photoSrc)
+                res(photoSrc)
+            }
             else res(null)
         })
     })
