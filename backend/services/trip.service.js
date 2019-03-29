@@ -560,6 +560,7 @@ function update(trip) {
         });
 }
 
+
 async function updateUserOnTrip({ trip, user, action }) {
     const objTripId = new ObjectId(trip._id);
     
