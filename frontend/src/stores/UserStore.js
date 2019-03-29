@@ -1,5 +1,6 @@
 import UserService from '@/services/UserService'
 import FacebookService from '@/services/FacebookService'
+import NotificationService from '@/services/NotificationService';
 
 export default {
     state: {
@@ -134,7 +135,7 @@ export default {
                 commit({ type: 'setLoggedUser', user: backupUser })
             }
         },
-        async toggleUserLike({ commit, getters }, { userId }) {
+        async toggleUserLike({ commit, getters, dispatch }, { userId }) {
             const loggedUserId = getters.loggedUser._id;
             let action = 'like';
             // update on trip store
@@ -164,6 +165,15 @@ export default {
                 }
                 const updatedUser = await UserService.updateLikesToUser(like, userId);
                 console.log(updatedUser);
+                if (action === 'like') {
+                    const payload = {
+                        action: NotificationService.USER_LIKE_USER,
+                        user: getters.loggedUser,
+                        // tripId: updatedTrip._id,
+                    }
+                    console.log('sending payload to socket-notifi:', payload)
+                    dispatch({ type: 'socketSendNotification', userId, payload });
+                }
                 return updatedUser;
             } catch {
                 console.log('rollback');

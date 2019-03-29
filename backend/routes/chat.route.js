@@ -17,6 +17,7 @@ module.exports = (app) => {
     // get single chat by id
     app.get('/api/chat/:chatId', async (req, res) => {
         const {chatId} = req.params;
+        console.log('chatID', chatId)
         try {
             const chat = await chatService.getById(chatId);
             if (chat) res.json(chat);

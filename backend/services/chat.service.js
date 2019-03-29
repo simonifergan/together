@@ -46,7 +46,6 @@ async function query(userId) {
 
                 },
             },
-           
             {
                 $lookup:
                 {
@@ -60,7 +59,7 @@ async function query(userId) {
         const modifiedChats = chats.map(chat => {
             if (!chat.trip.length) {
                 delete chat.trip;
-            } else chat.trip = chat.trip[0];
+            } else chat.trip = {...chat.trip[0]};
             return chat;
         })
         return modifiedChats;
@@ -107,11 +106,10 @@ async function getById(chatId) {
                     as: 'trip'
                 }
             },
-            {
-                $unwind: '$trip'
-            }
         ]).toArray()
-        return chat[0];
+        if (!chat[0].trip.length) delete chat[0].trip;
+        else chat[0].trip = {...chat[0].trip[0]};
+        return {...chat[0]};
     } catch {
         return null;
     }
@@ -124,8 +122,8 @@ async function createChat(chat) {
         const db = await mongoService.connect();
         const { insertedId } = await db.collection(chatsCollection).insertOne(chat);
         chat._id = insertedId;
-        chat.users = await Promise.all(chat.users.map(async _id => { 
-            const userInfo =  db.collection(usersCollection).findOne({ _id });
+        chat.users = await Promise.all(chat.users.map(async _id => {
+            const userInfo = db.collection(usersCollection).findOne({ _id });
             return userInfo;
         }));
         chat.users = chat.users.map(user => {
@@ -151,14 +149,14 @@ async function updateTripChat(chatId, users) {
     try {
         const db = await mongoService.connect();
         const res = await db.collection(chatsCollection).updateOne(
-            {_id},
+            { _id },
             {
-                $set : {
+                $set: {
                     'users': users
                 }
             }
-        ) 
-    } catch(err) {
+        )
+    } catch (err) {
         console.log('updateTripChat error:', err);
 
     }

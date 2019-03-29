@@ -395,6 +395,8 @@ button {
             background: none;
             border: none;
             padding: 5px;
+            margin-right: 2px;
+            margin-top: 2px;
             float: right;
             transition: .3s;
             i {
@@ -412,7 +414,7 @@ button {
             padding: 20px;
             cursor: pointer;
             .user-img {
-                margin-right: 5px;
+                margin-right: 10px;
                 @include userImg(64px,64px);
                 border-radius: 2px;
             }
