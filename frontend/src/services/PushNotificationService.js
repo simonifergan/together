@@ -1,18 +1,23 @@
-// // ask for notifications' permission:
-// self.Notification.requestPermission()
-//     .then(res => {
-//         // has user granted permission
-//         console.log(res);
-//     });;
+// ask for notifications' permission:
+self.Notification.requestPermission()
+    .then(res => {
+        // has user granted permission
+        console.log(res);
+    });;
 
-// self.addEventListener('push', function (e) {
-//     console.log('Hi');
-//     const data = e.data.json();
-//     self.registration.showNotification(data.title, {
-//         body: 'Notified by Simon',
-//         icon: 'http://res.cloudinary.com/dcv2jyqvl/image/upload/v1553769707/user_imgs/xyuzf1b6morbgzeg0zwh.jpg'
-//     });
-// });
+self.addEventListener('push', function (e) {
+    console.log('Hi');
+    const data = e.data.json();
+    self.registration.showNotification(data.title, {
+        body: 'Notified by Simon',
+        icon: 'http://res.cloudinary.com/dcv2jyqvl/image/upload/v1553769707/user_imgs/xyuzf1b6morbgzeg0zwh.jpg'
+    });
+});
+
+import Axios from 'axios';
+const axios = Axios.create({
+  withCredentials: true
+});
 
 const BACKEND_SUBSCRIBE = (process.env.NODE_ENV !== 'development')
     ? '/subscribe'
@@ -50,7 +55,7 @@ if ('Notification' in window) {
   
         return reg.pushManager.subscribe({
           userVisibleOnly: true,
-          applicationServerKey: convertedVapidPublicKey
+          applicationServerKey: convertedVapidKey
         });
       })
       .then(newSub => {

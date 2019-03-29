@@ -11,11 +11,7 @@ const axios = Axios.create({
   withCredentials: true
 });
 
-
-
-console.log('registration', self.registration);
-
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'development') {
   register(`${process.env.BASE_URL}service-worker.js`, {
     ready (sw) {
       sw.pushManager.subscribe({
