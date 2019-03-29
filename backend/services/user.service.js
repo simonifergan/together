@@ -126,11 +126,9 @@ async function signup(user) {
 
 async function update(user) {
     const strId = user._id;
-    const trips = [...user.trips];
     const pendingIn = [...user.pendingIn];
     const likes = [...user.likes];
     user._id = new ObjectId(user._id);
-    user.trips = user.trips.map(tripId => new ObjectId(tripId))
     user.pendingIn = user.pendingIn.map(tripId => new ObjectId(tripId))
     user.likes = user.likes.map(userId => {
         if (userId) return new ObjectId(userId)
@@ -164,7 +162,6 @@ async function update(user) {
         await db.collection(usersCollection).updateOne({ _id: user._id }, { $set: user })
 
         user._id = strId;
-        user.trips = trips;
         user.pendingIn = pendingIn;
         user.likes = likes;
         delete user.password;

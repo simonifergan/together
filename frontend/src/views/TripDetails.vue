@@ -2,24 +2,23 @@
   <section v-if="trip" class="trip-details">
     <div class="user-section">
       <router-link :to="'/user/' + trip.userId" tag="div" class="profile-img" :style="profilePic"/>
-      <router-link :to="'/user/' + trip.userId" tag="h2">{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</router-link>
-      <h3>{{trip.user.birthdate | calcAge}}, {{trip.user.from | countryCodeToName}}</h3>
-
-      <div class="btns-like-msg">
-        <button
-          v-if="!loggedInUser || (loggedInUser && trip.userId !== loggedInUser._id)"
-          @click="initChat(trip.userId)"
-          :title="'Start a chat with ' + trip.user.firstname"
-        >
-          <i class="far fa-comment-dots"></i>
-        </button>
-
-        <p class="likes-count">
-          <button :title="'Like ' + trip.user.firstname" @click="toggleUserLike">
-            <i :class="isLike"></i>
+      <div class="user-details-content">
+        <router-link :to="'/user/' + trip.userId" tag="h2">{{trip.user.firstname}}&nbsp;{{trip.user.lastname}}</router-link>
+        <h3>{{trip.user.birthdate | calcAge}}, {{trip.user.from | countryCodeToName}}</h3>
+        <div class="btns-like-msg">
+          <button
+            v-if="!loggedInUser || (loggedInUser && trip.userId !== loggedInUser._id)"
+            @click="initChat(trip.userId)"
+            :title="'Start a chat with ' + trip.user.firstname">
+            <i class="far fa-comment-dots"></i>
           </button>
-          <span>&nbsp;({{this.trip.user.likes.length}})</span>
-        </p>
+          <p class="likes-count">
+            <button :title="'Like ' + trip.user.firstname" @click="toggleUserLike">
+              <i :class="isLike"></i>
+            </button>
+            <span>&nbsp;({{this.trip.user.likes.length}})</span>
+          </p>
+        </div>
       </div>
     </div>
 
@@ -50,7 +49,7 @@
       </div>
 
       <div class="map">
-        <our-super-awesome-map :enable="false" :value="trip.destinations.countries"/>
+        <our-super-awesome-map v-if="isDesktop" :enable="false" :value="trip.destinations.countries"/>
       </div>
     </div>
 
@@ -233,6 +232,9 @@ export default {
       if (maxGroupSize - membersSize <= 0) return 'No spots remaining.'
       else if (membersSize === 0) return 'Be The First one to join!'
       else return `Only ${maxGroupSize - membersSize} out of ${maxGroupSize} spots left!`
+    },
+    isDesktop() {
+      return window.matchMedia("(min-width: 750px)").matches;
     }
   },
   watch: {

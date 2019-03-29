@@ -1,8 +1,6 @@
 <template>
   <ul class="msgs-dropdown">
-    <header>
-      <!-- TODO: 2 buttons for group chats -->
-    </header>
+    <header/>
     <!-- v-show="chat.msgs.length" -->
     <message-preview
       v-for="(chat, index) in chats"
@@ -12,7 +10,8 @@
       @click.native="initChat(chat._id)"
     />
     <footer v-if="!isExpanded">
-      <router-link to="/messages">See all messages</router-link>
+      <router-link v-if="chats.length" to="/messages">See all messages</router-link>
+      <p v-else>No messages</p>
     </footer>
   </ul>
 </template>

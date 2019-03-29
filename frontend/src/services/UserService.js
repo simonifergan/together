@@ -86,7 +86,6 @@ function getEmptyUser() {
         password: '',
         firstname: '',
         lastname: '',
-        trips: [],
         pendingIn: [],
         memberIn: [],
         birthdate: '',
