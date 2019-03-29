@@ -72,8 +72,6 @@ module.exports = (io) => {
             }
         });
 
-       
-
         socket.on(CHAT_SEND_MSG, async payload => {
             payload.msg.sender = socket.userId;
             // TODO: Force socket to reconnect to his room upon message sent and referred to him
