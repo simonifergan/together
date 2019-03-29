@@ -3,13 +3,13 @@
     <router-link title="Homepage" tag="div" class="logo" to="/">
       <!-- <i class="fas fa-map-marker-alt"></i> -->
       <!-- <img src="@/assets/svg/person_pin_circle.svg"> -->
-      <svg @click.stop="" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
+      <svg @click.stop="isNavOpen = !isNavOpen" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
         <path fill="none" d="M0 0h24v24H0V0z" />
         <path :fill="svgColor" d="M12 1C7.59 1 4 4.59 4 9c0 5.57 6.96 13.34 7.26 13.67l.74.82.74-.82C13.04 22.34 20 14.57 20 9c0-4.41-3.59-8-8-8zm0 19.47C9.82 17.86 6 12.54 6 9c0-3.31 2.69-6 6-6s6 2.69 6 6c0 3.83-4.25 9.36-6 11.47zM12 9c.83 0 1.5-.67 1.5-1.5S12.83 6 12 6s-1.5.68-1.5 1.5c0 .83.67 1.5 1.5 1.5zm0 1c-1 0-3 .5-3 1.5v.12c.73.84 1.8 1.38 3 1.38s2.27-.54 3-1.38v-.12c0-1-2-1.5-3-1.5z" />
       </svg>
       <h1>Travel Maker</h1>
     </router-link>
-    <nav>
+    <nav :class="{show: isNavOpen}">
       <router-link to="/">Home</router-link>
       <a href="#">About</a>
       <router-link to="/signup" v-if="!user">Sign up</router-link>

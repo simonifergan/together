@@ -66,11 +66,20 @@ button {
             font-family: $font-open-sans;
             font-weight: 550;
             font-size: 14px;
-            top: 70px;
+            top: 72px;
             color: #333;
             position: fixed;
             width: 150px;
             height: 100vh;
+            opacity: 0;
+            transform: translate(-200%, 0);
+            visibility: hidden;
+            transition: .6s ease;
+            &.show {
+                transform: translate(0, 0);
+                opacity: 1;
+                visibility: visible;
+            }
             div {
                 text-align: center;
                 padding: 20px 0;
@@ -212,6 +221,11 @@ button {
                 width: auto;
                 top: 0;
                 color: #fff;
+                opacity: 1;
+                visibility: visible;
+                transform: translate(0, 0);
+                transition: 0s;
+
                 div {
                     color: #333;
                    
