@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.fd841e3c334d92d883067cfa6812d8d9.js"
+  "/precache-manifest.6b53c959a50f0fc30e478710c3ee9b1b.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "bridge"});
@@ -27,3 +27,23 @@ workbox.core.setCacheNameDetails({prefix: "bridge"});
 self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
+
+// EVENT LISTENER:
+self.addEventListener('push', function(e) {
+  console.log('Hi pushhhhh');
+  const data = e.data.json();
+  self.registration.showNotification(data.title, data.payload);
+});
+
+self.addEventListener('notificationclick', function(e) {
+  var notification = e.notification;
+  var action = e.action;
+
+  if (action === 'close') {
+    notification.close();
+  } else if (action === 'go') {
+    console.log(e.data, notification);
+    clients.openWindow(`${notification.data.url}`);
+    notification.close();
+  }
+});

@@ -1,5 +1,6 @@
 const chatService = require('./chat.service');
 const notificationService = require('./notification.service');
+const pushService = require('../services/push.service');
 
 // EVENTS LIST:
 // REPORT MUKI
@@ -22,6 +23,9 @@ const NOTIFICATION_RECEIVE = 'notification-receive';
 const NOTIFICATION_SEND = 'notification-send';
 const NOTIFICATION_ADD = 'notification-add';
 const NOTIFICATION_ADDED = 'notification-added';
+
+const PUSH_NOTIFICATION = 'push-notification';
+
 
 const connectedSockets = [];
 
@@ -65,10 +69,10 @@ module.exports = (io) => {
                 } catch {
 
                 }
-
             }
+        });
 
-        })
+       
 
         socket.on(CHAT_SEND_MSG, async payload => {
             payload.msg.sender = socket.userId;
@@ -99,6 +103,12 @@ module.exports = (io) => {
                 recipientSocket.emit(NOTIFICATION_RECEIVE, payload);
                 console.log('recipientIs:', recipientSocket.userId, userId)
             }
+        })
+
+        // PUSH NOTIFICATIONS:
+        socket.on(PUSH_NOTIFICATION, async ({userId, notification}) => {
+            console.log('GOT TO SOCKET WITH NOTIFICATION PAYLOAD TO:'. userId, notification)
+            pushService.send(userId, notification);
         })
     });
 }

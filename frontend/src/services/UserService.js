@@ -19,6 +19,7 @@ export default {
 }
 
 const USER_KEY = 'loggedUser';
+const SUB_KEY = 'pushSub';
 
 const API_USER = (process.env.NODE_ENV !== 'development')
     ? '/api'
@@ -44,6 +45,9 @@ async function updateLikesToUser(like, userId) {
 }
 
 async function login(credentials) {
+    let pushSub = StorageService.getFromLocal(SUB_KEY);
+    if (pushSub) credentials.pushSub = pushSub;
+    console.log('sending to user service:', pushSub);
     const { data } = await axios.post(API_USER + '/login', credentials)
     StorageService.saveToLocal(USER_KEY, data);
     return data

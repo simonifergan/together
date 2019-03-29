@@ -11,11 +11,13 @@ module.exports = {
     update,
     updateTripToUser,
     updateLikesToUser,
+    findSubscriber,
     remove
 }
 
 const usersCollection = 'users';
 const tripsCollection = 'trips';
+const subscribersCollection = 'subscribers';
 
 function query(userIds) {
     let mongoQuery = {}
@@ -31,8 +33,8 @@ function query(userIds) {
         );
 }
 
-function login(credentials) {
-
+async function login(credentials) {
+    console.log(credentials);
     return mongoService.connect()
         .then(db => db.collection(usersCollection)
             .findOne({ email: credentials.email })
@@ -42,9 +44,38 @@ function login(credentials) {
             const isAuth = await bcrypt.compare(credentials.password, user.password)
             if (isAuth) {
                 delete user.password;
+                await updateSubscriber(user._id, credentials.pushSub);
                 return user;
             } else return null;
         });
+}
+
+async function findSubscriber(userId) {
+    const db = await mongoService.connect();
+    const subscriber = await db.collection(subscribersCollection).findOne({ userId: new ObjectId(userId) });
+    return subscriber;
+}
+
+async function updateSubscriber(userId, pushSub) {
+    console.log('GOT TO UPDATESUBSCRIBER WITH:');
+    console.log('USERID:', userId);
+    console.log('pushSub:', pushSub);
+    const subscriber = await findSubscriber(userId);
+    if (subscriber) {
+        console.log('subscriber exists:', subscriber);
+        subscriber.pushSub = pushSub;
+        subscriber.userId = new ObjectId(subscriber.userId);
+        const db = await mongoService.connect();
+        await db.collection(subscribersCollection).updateOne({ _id: subscriber._id }, { $set: subscriber });
+    } else {
+        let newSubscriber = {
+            userId: new ObjectId(userId),
+            pushSub
+        };
+        console.log('subscriber doesnt exist, new:', newSubscriber);
+        const db = await mongoService.connect();
+        await db.collection(subscribersCollection).insertOne(newSubscriber);
+    }
 }
 
 async function loginWithFacebook(user) {

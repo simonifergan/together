@@ -1,28 +1,18 @@
 /* eslint-disable no-console */
-console.log('baseURL:', process.env.BASE_URL)
-const BACKEND_SUBSCRIBE = (process.env.NODE_ENV !== 'development')
-    ? '/subscribe'
-    : '//localhost:3003/subscribe';
 
 import { register } from 'register-service-worker'
 import {convertedVapidKey} from './services/PushNotificationService'
-import Axios from 'axios';
-const axios = Axios.create({
-  withCredentials: true
-});
 
-if (process.env.NODE_ENV === 'development') {
+const SUB_KEY = 'pushSub'
+
+if (process.env.NODE_ENV === 'production') {
   register(`${process.env.BASE_URL}service-worker.js`, {
     ready (sw) {
       sw.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: convertedVapidKey
       }).then(sub => {
-        console.log('sending sub', sub)
-        axios.post(BACKEND_SUBSCRIBE, sub)
-        .then(res => {
-          console.log('axios returned', res);
-        });
+        localStorage.setItem(SUB_KEY, JSON.stringify(sub));
       })
     },
     registered (gotit) {

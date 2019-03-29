@@ -1,6 +1,7 @@
 import TripService from '@/services/TripService';
 import NotificationService from '@/services/NotificationService';
 import GoogleService from '@/services/GoogleService';
+import { PUSH_URL ,getEmptyPushNotification } from '@/services/PushNotificationService';
 
 export default {
     state: {
@@ -225,6 +226,23 @@ export default {
                 }
                 dispatch({ type: 'socketSendNotification', userId: userIdToJoin, payload });
 
+                // PUSH NOTIFICATION
+                let notification = getEmptyPushNotification();
+                // Looks like:
+                //   return {
+                //       title: 'Travel Maker',
+                //       payload: {
+                //           body: '',
+                //           icon: '',
+                //       } ,
+                //   }
+                notification.title = `Travel Maker`;
+                notification.payload.body = `${updatedTrip.user.firstname} ${updatedTrip.user.lastname} has approved you to: ${updatedTrip.title}`
+                notification.payload.icon = `${updatedTrip.user.profilePic}`
+                notification.payload.actions.unshift({action: 'go', title: `See ${getters.loggedUser.firstname}'s profile.`},)
+                notification.payload.data.url = `${PUSH_URL}/trip/${updatedTrip._id}`; 
+                dispatch({type: 'socketPushNotification', userId: userIdToJoin, notification});
+
             } catch(err) {
                 // rollback
                 console.log('I ROLLED BACK IN APPROVE:', err)
@@ -340,6 +358,21 @@ export default {
                     tripId: updatedTrip._id,
                 }
                 dispatch({ type: 'socketSendNotification', userId: updatedTrip.userId, payload });
+                let notification = getEmptyPushNotification();
+                // Looks like:
+                //   return {
+                //       title: 'Travel Maker',
+                //       payload: {
+                //           body: '',
+                //           icon: '',
+                //       } ,
+                //   }
+                notification.title = `Travel Maker`;
+                notification.payload.body = `${user.firstname} ${user.lastname} has requested to join your trip!`
+                notification.payload.icon = `${user.profilePic}`
+                notification.payload.actions.unshift({action: 'go', title: `See ${user.firstname}'s profile.`},)
+                notification.payload.data.url = `${PUSH_URL}/user/${user._id}`; 
+                dispatch({type: 'socketPushNotification', userId: updatedTrip.userId, notification});
             } catch {
                 commit({ type: 'toggleUserFromPendingList', userId: user._id });
             }

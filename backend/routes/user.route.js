@@ -1,8 +1,21 @@
 const userService = require('../services/user.service');
+const pushService = require('../services/push.service');
 
 const BASE = '/api';
 
 module.exports = (app) => {
+
+    // Push notifications:
+
+    // app.post('/subscribe', (req, res) => {
+    //     const subscription = req.body;
+    //     console.log(subscription);
+    //     // send 201 status
+    //     res.status(201).json({ 'see': 'see this?' });
+    // })
+
+
+
     // all users
     app.get(`${BASE}/user`, (req, res) => {
         userService.query()
@@ -11,19 +24,19 @@ module.exports = (app) => {
     });
 
     app.post(`${BASE}/user`, (req, res) => {
-        const {userIds} = req.body
+        const { userIds } = req.body
         userService.query(userIds)
             .then(users => res.json(users))
             .catch(err => res.end(err));
     });
 
     app.get(`${BASE}/user/:userId`, (req, res) => {
-        const {userId} = req.params;
+        const { userId } = req.params;
         userService.getById(userId)
-        .then(user => {
-            if (user) return res.json(user);
-            else res.status(404).end();
-        })
+            .then(user => {
+                if (user) return res.json(user);
+                else res.status(404).end();
+            })
     });
 
     app.put(`${BASE}/user/:userId`, async (req, res) => {
@@ -31,16 +44,16 @@ module.exports = (app) => {
         try {
             const updatedUser = await userService.update(userToUpdate);
             if (updatedUser) return res.json(updatedUser);
-        } catch(err) {
+        } catch (err) {
             res.status(err).end();
         }
     })
 
     // remove trip from pendingIn to memberIn
     app.patch(`${BASE}/user_trip/:userId`, (req, res) => {
-        
+
         const userToTripId = req.body;
-        
+
         userService.updateTripToUser(userToTripId)
             .then(updatedUser => {
                 if (updatedUser) return res.json(updatedUser);
@@ -52,7 +65,7 @@ module.exports = (app) => {
     // Add or remove user from userId likes array
     app.patch(`${BASE}/user_like/:userId`, async (req, res) => {
         console.log('HI')
-        const {userId} = req.params;
+        const { userId } = req.params;
         const like = req.body;
         console.log(userId, like)
         try {
@@ -64,7 +77,9 @@ module.exports = (app) => {
     })
 
     app.post(`${BASE}/login`, async (req, res) => {
+        console.log('hi login');
         const credentials = req.body;
+        console.log(credentials)
         // IF USER LOGGED IN WITH FACEBOOK:
         if (credentials && credentials.facebookId) {
             // return res.end();
@@ -72,7 +87,7 @@ module.exports = (app) => {
                 const user = await userService.loginWithFacebook(credentials);
                 req.session.user = user;
                 if (user) return res.json(user);
-                else throw new Error ('Problem with authentication');
+                else throw new Error('Problem with authentication');
             } catch (err) {
                 return res.status(401).end(err);
             }
@@ -80,11 +95,12 @@ module.exports = (app) => {
 
         // IF USER LOGGED IN THROUGH OUR WEBSITE
         userService.login(credentials)
-            .then((user) => {
+            .then(async (user) => {
                 if (!user) return res.status(401).end();
                 req.session.user = user;
                 // console.log('user logged:', user);
-                
+                // pushService.send(user._id, null);
+
                 res.json(user)
             })
             .catch(err => res.end(err));
