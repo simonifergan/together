@@ -124,11 +124,9 @@ function getEmpty() {
         destinations: {countries: [], cities: []},
         startsAt: '',
         duration: '',
-        openTo: {},
         activities: [],
         members: [],
         pending: [],
-        comments: [],
         groupSize: 1,
     }
 }
