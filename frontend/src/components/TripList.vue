@@ -28,7 +28,14 @@ export default {
   },
   computed: {
     tripsToDisplay() {
-      return this.trips.slice(0,4);
+      let numOfTrip = this.numOfTrip;
+      return this.trips.slice(0, numOfTrip);
+    },
+    numOfTrip() {
+      if (window.matchMedia("(min-width: 1100px)").matches) return 4;
+      else if (window.matchMedia("(min-width: 1000px)").matches) return 3;
+      else if (window.matchMedia("(min-width: 730px)").matches) return 2;
+      else return 1;
     }
   },
   components: {
