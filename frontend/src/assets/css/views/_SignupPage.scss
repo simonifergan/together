@@ -1,8 +1,12 @@
 .signup-page {
     min-height: calc(100vh - 70px);
-    @include wrapper();
+    background-color: #fbfbfb;
+    @include wrapper(860px);
+    padding: 30px 40px;
+    border-right: 1px solid $box-shadow-gray;
+    border-left: 1px solid $box-shadow-gray;
     h1 {
-        margin: 40px 0;
+        margin-bottom: 30px;
         font-weight: 1000;
         font-size: 2em;
         color: #333;
@@ -11,12 +15,15 @@
         }
     }
     form {
-        padding: 20px;
         input, select, label {
-            margin: 10px 0;
+            margin: 15px 0;
         }
         button {
             margin-top: 20px;
+            @include button;
+            font-size: 18px;
+            color: #fff;
+            background-color: $clr1;
             float: right;
         }
     }

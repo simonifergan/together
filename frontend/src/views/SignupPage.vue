@@ -14,21 +14,6 @@
             <label for="">Last Name
                 <el-input v-model="newUser.lastname" placeholder="Last Name" />
             </label>
-            <!-- <label for="">Birth Date<br>
-                <el-date-picker
-                    v-model="newUser.birthDate"
-                    type="date"
-                    value-format="timestamp"
-                    placeholder="Pick a day">
-                </el-date-picker>
-            </label><br>
-            <label for="">Gender<br>
-                <el-select v-model="newUser.gender">
-                    <el-option value="Male">Male</el-option>
-                    <el-option value="Female">Female</el-option>
-                    <el-option value="null">Rather not say</el-option>
-                </el-select>
-            </label><br> -->
             <button type="submit">Sign Up</button>
         </form>
     </section>
