@@ -6,7 +6,8 @@ const axios = Axios.create({
 
 export default {
     getChats,
-    getById
+    getById,
+    removeUserFromUnread
 }
 
 const CHAT_API = (process.env.NODE_ENV !== 'development')
@@ -15,11 +16,18 @@ const CHAT_API = (process.env.NODE_ENV !== 'development')
 
 async function getChats(userId) {
     let queryStr = '?userId=' + userId
-    const {data} = await axios.get(CHAT_API + queryStr)
+    const { data } = await axios.get(CHAT_API + queryStr)
     return data;
 }
 
 async function getById(chatId) {
-    const {data} = await axios.get(`${CHAT_API}/${chatId}`);
+    const { data } = await axios.get(`${CHAT_API}/${chatId}`);
+    return data;
+}
+
+async function removeUserFromUnread(chatId, userId) {
+    console.log(userId)
+    const { data } = await axios.patch(`${CHAT_API}/${chatId}`, {userId});
+    console.log('Remove user from unread was:', data)
     return data;
 }

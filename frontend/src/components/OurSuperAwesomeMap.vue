@@ -4,12 +4,12 @@
             {{toolTipTxt | countryCodeToName}}
         </div>
         <map-tools
-        @zoomIn="mapView.zoom -= 100"
-        @zoomOut="mapView.zoom += 100"
-        @panUp="mapView.y -= 100"
-        @panLeft="mapView.x -= 100"
-        @panDown="mapView.y += 100"
-        @panRight="mapView.x += 100"
+        @zoomIn="zoomIn(0.5, 0.5)"
+        @zoomOut="zoomOut(0.5, 0.5)"
+        @panUp="panMap('up')"
+        @panLeft="panMap('left')"
+        @panDown="panMap('down')"
+        @panRight="panMap('right')"
         ></map-tools>
         <svg ref="mapSvg" @wheel.prevent="zoom" @mousedown="startDrag" @mousemove="handleMousemove" @mouseup="stopDrag" @mouseleave="handleMouseLeave" @click="selectCountry" :viewBox="viewBoxVal"
         width="100%" height="100%" preserveAspectRatio="xMidYMin slice" xmlns="http://www1.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
@@ -394,17 +394,23 @@ export default {
             let frX = (event.offsetX/maxAspect)
             let frY = (event.offsetY/maxAspect)
             if (event.deltaY > 0) {
-                this.mapView.zoom += 100
-                this.mapView.x -= frX*100
-                this.mapView.y -= frY*100
+                this.zoomOut(frX, frY)
             }
             else {
-                if (this.mapView.zoom - 100 <= 0) return
+                this.zoomIn(frX, frY)
+            }
+        },
+        zoomIn(frX, frY) {
+            if (this.mapView.zoom - 100 <= 0) return
                 this.mapView.zoom -= 100
                 this.mapView.x += frX*100
                 this.mapView.y += frY*100
-            }
-            
+        },
+        zoomOut(frX, frY) {
+            if (this.mapView.zoom > 1000) return
+                this.mapView.zoom += 100
+                this.mapView.x -= frX*100
+                this.mapView.y -= frY*100
         },
         startDrag(event) {
             this.clickPos = {diffX: event.offsetX/this.sizeRatio + this.mapView.x,
@@ -413,13 +419,37 @@ export default {
         },
         drag(event) {
             if (!this.isDragging) return
-            this.mapView.x = this.clickPos.diffX - event.offsetX/this.sizeRatio
-            this.mapView.y = this.clickPos.diffY - event.offsetY/this.sizeRatio
+            const newX = this.clickPos.diffX - event.offsetX/this.sizeRatio
+            const newY = this.clickPos.diffY - event.offsetY/this.sizeRatio
+            if (newX > this.panBound.minX && newX < this.panBound.maxX) this.mapView.x = newX
+            if (newY > this.panBound.minY && newY < this.panBound.maxY) this.mapView.y = newY
             this.didDrag = true
         },
         stopDrag() {
             this.isDragging = false
             this.clickPos = null
+        },
+        panMap(dir) {
+            let newX
+            let newY
+            switch (dir) {
+                case 'down':
+                newY = this.mapView.y + 100
+                if (newY < this.panBound.maxY) this.mapView.y = newY
+                break;
+                case 'right':
+                newX = this.mapView.x + 100
+                if (newX < this.panBound.maxX) this.mapView.x = newX
+                break;
+                case 'up':
+                newY = this.mapView.y - 100
+                if (newY > this.panBound.minY) this.mapView.y = newY
+                break;
+                case 'left':
+                newX = this.mapView.x - 100
+                if (newX > this.panBound.minX) this.mapView.x = newX
+                break;
+            }
         }
     },
     computed: {
@@ -434,6 +464,14 @@ export default {
         },
         sizeRatio() {
             return Math.max(this.mapView.sizeX, this.mapView.sizeY)/this.mapView.zoom
+        },
+        panBound() {
+            return {
+                minX: this.mapView.zoom/-3,
+                minY: this.mapView.zoom/-3,
+                maxX: this.mapView.zoom*2/-3 + 1000,
+                maxY: this.mapView.zoom*2/-3 + 800
+            }
         }
     }
 }

@@ -25,9 +25,13 @@ export default {
             if (idx === -1) state.userChats.push(chat);
             else state.userChats.splice(idx, 1, chat);
         },
-        activateChat(state, { chatId }) {
+        activateChat(state, { chatId, userId }) {
             const chat = state.userChats.find(chat => chat._id === chatId);
-            if (chat) chat.isActive = true;
+            if (chat) {
+                chat.isActive = true;
+                const idx = chat.unread.findIndex(unreadId => unreadId === userId);
+                if (idx !== -1) chat.unread.splice(idx, 1);
+            }
         },
         deactivateChat(state, { chatId }) {
             const chat = state.userChats.find(chat => chat._id === chatId);
@@ -72,7 +76,7 @@ export default {
             })
             SocketService.on(SocketService.CHAT_RECEIVE_MSG, async ({ chatId, msg }) => {
                 if (!context.getters.userChats.some(chat => chat._id === chatId)) await context.dispatch({ type: 'loadChatById', chatId })
-                context.commit({ type: 'addMsg', msg, chatId });
+                else context.commit({ type: 'addMsg', msg, chatId });
             })
             SocketService.on(SocketService.NOTIFICATION_ADDED, (addedNotification) => {
                 context.commit({ type: 'addNotification', addedNotification });
@@ -164,11 +168,19 @@ export default {
         async loadChatById({ commit }, { chatId }) {
             const chat = await ChatService.getById(chatId);
             if (chat) commit({ type: 'addNewChat', chat });
-
-
         },
-        activateChat({ commit }, { chatId }) {
-            commit({ type: 'activateChat', chatId })
+        async activateChat({ commit, getters }, { chatId }) {
+            const userId = getters.loggedUser._id;
+            commit({ type: 'activateChat', chatId, userId})
+            try {
+                console.log(chatId, userId)
+                const res = await ChatService.removeUserFromUnread(chatId, userId);
+                console.log('Is all:', res);
+            } catch (err) {
+                console.log('failed in activateChat:', err);
+            }
+
+
         },
         addNotification(context, { newNotification }) {
             SocketService.emit(SocketService.NOTIFICATION_ADD, newNotification);

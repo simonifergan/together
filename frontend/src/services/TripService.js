@@ -41,9 +41,7 @@ async function getRecommended(prefs) {
     return data;
 }
 
-async function query(searchQuery, tripDate) {
-    console.log('tripDate:', tripDate);
-    
+async function query(searchQuery, tripDate) {    
     let tripQuery = tripDate ? `&tripDate=${tripDate}` : ''
     let queryStr = '?searchQuery=' + searchQuery + tripQuery
     const {data} = await axios.get(TRIP_API + queryStr);
@@ -144,19 +142,20 @@ async function getPlacesAutocomplete(query, types) {
     return autocomplete
 }
 
-async function getCountryCode(placeId) {
-    console.log('placeId trip service: ',placeId);
-    
+async function getCountryCode(placeId) {    
     const countryCode = await GoogleService.getPlaceDetails(placeId, ['photos'])
     return countryCode
 }
 
 async function getImgs(query, type) {    
-    // if (type === 'destinations') query = UtilService.worldCodeMap.get(query)
     const filter = {}
     filter.title = query
     if (type === 'destinations') {
-        filter.imgSrc = await GoogleService.getGoogleLocation(query, ['photos'])
+        const timeout = Date.now() + 10000
+        while (!filter.imgSrc) {
+            filter.imgSrc = await GoogleService.getGoogleLocation(query, ['photos'])
+            if (Date.now() >= timeout) break;
+        }
     } else {
         filter.imgSrc = _getActivityImg(query)
     }

@@ -19,11 +19,6 @@ export default {
       chatId: null
     };
   },
-  mounted() {
-       this.$nextTick(() => {
-           this.$store.dispatch({ type: "activateChat", chatId: this.chatId });
-       });
-  },
   beforeDestroy() {
     this.$store.commit({ type: "deactivateChat", chatId: this.chatId });
   },
@@ -44,6 +39,11 @@ export default {
     selectedChat() {
       if (!this.chatId && this.chats) return this.chats[0];
       else return this.chats.find(chat => chat._id === this.chatId);
+    }
+  },
+  watch: {
+    chats(newVal, oldVal) {
+      if (!oldVal && newVal) this.$store.dispatch({ type: "activateChat", chatId: this.chats[0]._id });
     }
   }
 };
