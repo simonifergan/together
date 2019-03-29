@@ -22,7 +22,8 @@ export default {
     getActivities,
     getRecommended,
     getCountries,
-    getByCountry
+    getByCountry,
+    getRequests
     // getCategories
 }
 
@@ -82,6 +83,11 @@ async function getByCountry(country) {
 async function getById(id) {
     const {data} = await axios.get(`${TRIP_API}/${id}`);
     return data;
+}
+
+async function getRequests(userId) {
+    const {data} = await axios.get(`${TRIP_API}/pending/${userId}`)
+    return data
 }
 
 async function save(trip) {

@@ -13,7 +13,15 @@
       <router-link to="/">Home</router-link>
       <a href="#">About</a>
       <router-link to="/signup" v-if="!user">Sign up</router-link>
-      <div class="msgs-container" v-else>
+      <div class="requests-container" v-if="user">
+        <a @click.stop="showReqs">Requests</a>
+        <request-list
+          v-show="isShowReqs" 
+          :requests="requests"
+          :user="user"
+        />
+      </div>
+      <div class="msgs-container" v-if="user">
         <a @click.stop="showMsgs">Messages</a>
         <message-list
           v-show="isShowMsgs" 
@@ -40,18 +48,21 @@
 <script>
 import Login from "@/components/Login";
 import MessageList from "@/components/MessageList";
+import RequestList from "@/components/RequestList";
 
 export default {
   name: "MainHeader",
   components: {
     Login,
-    MessageList
+    MessageList,
+    RequestList
   },
   data() {
     return {
       isHome: true,
       isShowDropdown: false,
       isShowMsgs: false,
+      isShowReqs: false
     };
   },
   methods: {
@@ -98,10 +109,25 @@ export default {
         return;
       }
       this.isShowMsgs = true;
+      document.querySelector("#app").addEventListener("click", this.closeMsgs);
+    },
+    closeReqs() {
+      this.isShowReqs = false;
       document
         .querySelector("#app")
-        .addEventListener("click", this.closeMsgs);
-    }
+        .removeEventListener("click", this.closeReqs);
+    },
+    showReqs() {
+      if (this.isShowDropdown) {
+        this.closeDropdown();
+      }
+      if (this.isShowReqs) {
+        this.closeMsgs();
+        return;
+      }
+      this.isShowReqs = true;
+      document.querySelector("#app").addEventListener("click", this.closeReqs);
+    },
   },
   created() {
     if (this.$route.name !== "home") this.isHome = false;
@@ -128,6 +154,9 @@ export default {
     },
     chats() {
       return this.$store.getters.userChats;
+    },
+    requests() {
+      return this.$store.getters.userRequests;
     }
   },
   watch: {

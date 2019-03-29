@@ -15,7 +15,8 @@ module.exports = {
     getTrending,
     getByActivity,
     getRecommended,
-    getTripsByCountry
+    getTripsByCountry,
+    getPending
 }
 
 const tripsCollection = 'trips';
@@ -226,6 +227,35 @@ async function getTrending() {
             {
                 $limit: 10
             }
+        ]).toArray()
+        return trips
+    } catch {
+
+    }
+}
+
+async function getPending(userId) {
+    userId = new ObjectId(userId)    
+    try {
+        const db = await mongoService.connect()
+        const trips = await db.collection(tripsCollection).aggregate([
+            {
+                $match: { userId }
+            },
+            {
+                $project: {
+                    pending: 1,
+                    title: 1
+                },
+            },
+            {
+                $lookup: {
+                from: usersCollection,
+                localField: "pending",
+                foreignField: "_id",
+                as: "pendingusers"
+                }
+            },
         ]).toArray()
         return trips
     } catch {

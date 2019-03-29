@@ -29,6 +29,9 @@ export default {
     chats() {
       return this.$store.getters.userChats;
     },
+    requests() {
+      return this.$store.getters.requests;
+    },
     getNotifications() {
       return this.$store.getters.notifications;
     },
@@ -43,6 +46,7 @@ export default {
     if (this.loggedUser) {
       this.$store.dispatch({ type: "socketConnect" });
       this.$store.dispatch({ type: "getUserChats" });
+      this.$store.dispatch({ type: "getUserRequests" });
       this.$store.dispatch({ type: "loadNotification" });
     }
     if (!this.loggedUser) {

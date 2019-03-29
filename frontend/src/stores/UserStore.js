@@ -25,7 +25,6 @@ export default {
         setUsersToDisplay(state, { users }) {
             state.usersToDisplay = users;
         },
-
         // ONE USER TO DISPLAY:
         setUserToDisplay(state, { user }) {
             state.userToDisplay = user;
@@ -69,6 +68,7 @@ export default {
             commit({ type: 'setLoggedUser', user })
             dispatch({ type: "socketConnect" });
             dispatch({ type: "getUserChats" });
+            dispatch({ type: "getUserRequests" });
             dispatch({ type: "loadNotification" });
         },
 
