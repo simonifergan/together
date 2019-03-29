@@ -2,15 +2,15 @@
 self.Notification.requestPermission()
   .then(res => {
     // has user granted permission
-    console.log(res);
-  });;
+    // console.log(res);
+  });
 
-self.addEventListener('push', function (e) {
-  console.log('Hi pushhhhh', e);
-  const data = e.data.json();
-  console.log(data.payload);
-  self.registration.showNotification(data.title, data.payload);
-});
+// self.addEventListener('push', function (e) {
+//   console.log('Hi pushhhhh', e);
+//   const data = e.data.json();
+//   // console.log(data.payload);
+//   self.registration.showNotification(data.title, data.payload);
+// });
 
 
 

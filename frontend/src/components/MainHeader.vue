@@ -22,7 +22,7 @@
         />
       </div>
       <div class="msgs-container" v-if="user">
-        <a @click.stop="showMsgs">Messages</a>
+        <a @click.stop="showMsgs">Messages<span class="unread-msgs">{{unreadChats}}</span></a>
         <message-list
           v-show="isShowMsgs" 
           :chats="chats"
@@ -154,6 +154,11 @@ export default {
     },
     chats() {
       return this.$store.getters.userChats;
+    },
+    unreadChats() {
+      return this.chats.reduce((acc,chat) => {
+        return (chat.unread.some(userId => userId === this.user._id))? ++acc : acc;
+      }, 0)
     },
     requests() {
       return this.$store.getters.userRequests;

@@ -7,6 +7,7 @@ module.exports = {
     createChat,
     addMsg,
     updateTripChat,
+    removeUserFromUnread,
 }
 
 const chatsCollection = 'chats';
@@ -59,7 +60,7 @@ async function query(userId) {
         const modifiedChats = chats.map(chat => {
             if (!chat.trip.length) {
                 delete chat.trip;
-            } else chat.trip = {...chat.trip[0]};
+            } else chat.trip = { ...chat.trip[0] };
             return chat;
         })
         return modifiedChats;
@@ -108,8 +109,8 @@ async function getById(chatId) {
             },
         ]).toArray()
         if (!chat[0].trip.length) delete chat[0].trip;
-        else chat[0].trip = {...chat[0].trip[0]};
-        return {...chat[0]};
+        else chat[0].trip = { ...chat[0].trip[0] };
+        return { ...chat[0] };
     } catch {
         return null;
     }
@@ -118,6 +119,7 @@ async function getById(chatId) {
 
 async function createChat(chat) {
     chat.users = chat.users.map(user => new ObjectId(user));
+    chat.unread = [];
     try {
         const db = await mongoService.connect();
         const { insertedId } = await db.collection(chatsCollection).insertOne(chat);
@@ -163,7 +165,7 @@ async function updateTripChat(chatId, users) {
 
 }
 
-async function addMsg({ msg, chatId }) {
+async function addMsg({ msg, chatId, unread }) {
     chatId = new ObjectId(chatId);
     msg.sender = new ObjectId(msg.sender);
     try {
@@ -174,11 +176,28 @@ async function addMsg({ msg, chatId }) {
                 $push: {
                     msgs: msg
                 }
+            },
+            {
+                $set:
+                {
+                    'unread': unread
+                }
             }
         )
         return res;
     } catch (err) {
         return 'We had a problem';
     }
+}
 
+async function removeUserFromUnread(chatId, userId) {
+    console.log('removeUserFromUnread:')
+    console.log(chatId, userId);
+    chatId = new ObjectId(chatId);
+    userId = new ObjectId(userId);
+    const db = await mongoService.connect();
+    const res = await db.collection(chatsCollection).updateOne(
+        { _id: chatId },
+        { $pull: { unread: userId } }
+    )
 }

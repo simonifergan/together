@@ -76,11 +76,13 @@ module.exports = (io) => {
 
         socket.on(CHAT_SEND_MSG, async payload => {
             payload.msg.sender = socket.userId;
+            payload.unread = [];
             // TODO: Force socket to reconnect to his room upon message sent and referred to him
             payload.recipients.forEach(recipient => {
                 if (recipient._id !== socket.userId) {
                     const recipientSocket = connectedSockets.find(inSocket => inSocket.userId === recipient._id);
                     if (recipientSocket) recipientSocket.join(payload.chatId);
+                    else payload.unread.push(recipient._id);
                 }
             })
             await chatService.addMsg(payload);
