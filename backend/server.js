@@ -8,7 +8,6 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
-
 // Import Routes
 const tripRoute = require('./routes/trip.route')
 const userRoute = require('./routes/user.route')
@@ -31,6 +30,8 @@ app.use(session({
 }))
 
 app.use(express.static('public'));
+
+
 // Use routes
 tripRoute(app);
 userRoute(app);
@@ -38,12 +39,13 @@ chatRoute(app);
 notificationRoute(app);
 
 app.get('/', (req, res) => {
-    res.send('Hello Toy Backend!')
+    res.send('Hello Travel Maker Backend!')
 })
+
 
 // Init sockets
 const socketService = require('./services/socket.service.js')
-const server = app.listen(PORT, () => console.log(`Bridge app listening on port ${PORT}`))
+const server = app.listen(PORT, () => console.log(`Travel Maker app listening on port ${PORT}`))
 const io = require('socket.io')(server);
 
 // Use socket services

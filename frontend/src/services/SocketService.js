@@ -21,13 +21,16 @@ const TRIP_JOIN_REQUEST = 'trip-join-request';
 
 const NOTIFICATION_RECEIVE = 'notification-receive';
 const NOTIFICATION_SEND = 'notification-send';
-const NOTIFICATION_ADD = 'notification-add'
-const NOTIFICATION_ADDED = 'notification-added'
+const NOTIFICATION_ADD = 'notification-add';
+const NOTIFICATION_ADDED = 'notification-added';
+
+const PUSH_NOTIFICATION = 'push-notification';
 
 export default {
     on,
     emit,
     off,
+    
     // SOCKET EVENTS
     SOCKET_CONNECT, 
     SOCKET_DISCONNECT, 
@@ -45,6 +48,7 @@ export default {
     NOTIFICATION_SEND,
     NOTIFICATION_ADD,
     NOTIFICATION_ADDED,
+    PUSH_NOTIFICATION,
 }
 // TODO: All ids should be converted by backend to ObjId, and all msgs should be stored in the DB like this:
 // msgObj: {
@@ -70,3 +74,4 @@ function off() {
 // function send(msg) {
 //     socket.emit(CHAT_SEND_MSG, msg)
 // }
+
