@@ -46,6 +46,7 @@ button {
             color: #fff;
         }
         .logo {
+            padding: 20px;
             @include flex(row, flex-start, center);
             cursor: pointer;
             img {
@@ -211,7 +212,9 @@ button {
         @media (min-width: 860px) {
             padding: 5px 20px 1px 20px;
             color: #333;
-           
+            .logo {
+                padding: 0;
+            }
             nav {
                 box-shadow: none;
                 position: relative;
@@ -261,6 +264,16 @@ button {
                     }
                 }
             }
+            
+            .user-dashboard {
+                .dropdown {
+                    a{
+                        text-align: left;
+                    }
+                }
+            }
+
+
         }
         
     }
