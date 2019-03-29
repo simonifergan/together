@@ -4,6 +4,7 @@
         "user-section"
         "trip-section"
         "trip-members";
+    height: calc(100vh - 70px);
     color: #333;
     .user-section {
         grid-area: user-section;
@@ -129,14 +130,12 @@
     .trip-users {
         grid-area: trip-members;
         padding: 30px 20px 0 20px;
+        border-top: 1px solid $box-shadow-gray;
         h3 {
             margin-bottom: 20px;
             text-align: center;
             font-family: $font-ubuntu-s-bold;
             font-size: 1.3em;
-        }
-        h3:last-of-type {
-            margin-top: 30px;
         }
         .registered {
             text-align: center;
@@ -182,6 +181,9 @@
             .profile-img {
                 margin: 20px auto;
             }
+        }
+        .trip-users {
+            border-top: none;
         }
     }
     @media (min-width: 1000px) {
