@@ -3,7 +3,7 @@
     <router-link title="Homepage" tag="div" class="logo" to="/">
       <!-- <i class="fas fa-map-marker-alt"></i> -->
       <!-- <img src="@/assets/svg/person_pin_circle.svg"> -->
-      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
+      <svg @click.stop="" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
         <path fill="none" d="M0 0h24v24H0V0z" />
         <path :fill="svgColor" d="M12 1C7.59 1 4 4.59 4 9c0 5.57 6.96 13.34 7.26 13.67l.74.82.74-.82C13.04 22.34 20 14.57 20 9c0-4.41-3.59-8-8-8zm0 19.47C9.82 17.86 6 12.54 6 9c0-3.31 2.69-6 6-6s6 2.69 6 6c0 3.83-4.25 9.36-6 11.47zM12 9c.83 0 1.5-.67 1.5-1.5S12.83 6 12 6s-1.5.68-1.5 1.5c0 .83.67 1.5 1.5 1.5zm0 1c-1 0-3 .5-3 1.5v.12c.73.84 1.8 1.38 3 1.38s2.27-.54 3-1.38v-.12c0-1-2-1.5-3-1.5z" />
       </svg>
@@ -22,15 +22,15 @@
         />
       </div>
       <div class="msgs-container" v-if="user">
-        <a @click.stop="showMsgs">Messages<span class="unread-msgs">{{unreadChats}}</span></a>
+        <a @click.stop="showMsgs">Messages&nbsp;<span class="unread-msgs" v-if="unreadChats">{{unreadChats}}</span></a>
         <message-list
           v-show="isShowMsgs" 
           :chats="chats"
           :user="user" 
         />
       </div>
-      <div class="login-container">
-        <router-link :to="currentRoute + '#login'" v-if="!user">Log in</router-link>
+      <div class="login-container" v-if="!user">
+        <router-link :to="currentRoute + '#login'">Log in</router-link>
         <login v-if="isShowLogin"/>
       </div>
       <div v-if="user" class="user-dashboard" :style="profilePic" @click.stop="showDropdown">
@@ -62,7 +62,8 @@ export default {
       isHome: true,
       isShowDropdown: false,
       isShowMsgs: false,
-      isShowReqs: false
+      isShowReqs: false,
+      isNavOpen: false,
     };
   },
   methods: {
@@ -82,6 +83,9 @@ export default {
         .removeEventListener("click", this.closeDropdown);
     },
     showDropdown() {
+       if (this.isShowReqs) {
+        this.closeReqs();
+      }
        if (this.isShowMsgs) {
         this.closeMsgs();
       }
@@ -101,6 +105,9 @@ export default {
         .removeEventListener("click", this.closeMsgs);
     },
     showMsgs() {
+      if (this.isShowReqs) {
+        this.closeReqs();
+      }
       if (this.isShowDropdown) {
         this.closeDropdown();
       }
@@ -121,9 +128,8 @@ export default {
       if (this.isShowDropdown) {
         this.closeDropdown();
       }
-      if (this.isShowReqs) {
+      if (this.showMsgs) {
         this.closeMsgs();
-        return;
       }
       this.isShowReqs = true;
       document.querySelector("#app").addEventListener("click", this.closeReqs);

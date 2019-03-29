@@ -18,7 +18,7 @@
         <div class="members-txt" v-if="spotsLeft > 0">joined, {{spotsLeft}} spots remaining!</div>
         <div class="members-txt" v-else>No spots remaining.</div>
     </div>
-    <p v-else>Be the first one to join!</p>
+    <p v-else>Be the first to join!</p>
     
   </router-link>
 </template>

@@ -1,6 +1,5 @@
 .signup-page {
     min-height: calc(100vh - 70px);
-    @include wrapper();
     h1 {
         margin: 40px 0;
         font-weight: 1000;
