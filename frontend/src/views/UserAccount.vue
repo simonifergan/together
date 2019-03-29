@@ -1,7 +1,7 @@
 <template>
-  <section class="signup-page">
+  <section class="account-page">
+    <h1>Account Settings</h1>
     <form @submit.prevent="saveUser" v-if="user">
-      <h2>Account Settings</h2>
       <label>
         Email
         <el-input type="email" v-model="user.email" placeholder="Email" required/>
@@ -16,16 +16,25 @@
       </label>
       <h2>Profile picture</h2>
       <upload-image :profilePic="user.profilePic" @setProfilePic="setProfilePic"/>
-        <h2>Change password</h2>
+      <h2>Change password</h2>
       <label class="change-password">
-        Confirm password <span>(required)</span>
-        <el-input type="password" v-model="user.confirmPassword" placeholder="Type your current password" req/>
+        Confirm password
+        <span>(required)</span>
+        <el-input
+          type="password"
+          v-model="user.confirmPassword"
+          placeholder="Type your current password"
+          req
+        />
       </label>
       <label>
         New password
         <el-input type="password" v-model="user.newPassword" placeholder="Type a new password"/>
       </label>
-      <h2>Personal information <span>(optional)</span></h2>
+      <h2>
+        Personal information
+        <span>(optional)</span>
+      </h2>
       <label>
         Birthdate
         <br>
@@ -51,7 +60,11 @@
         Country of residence
         <br>
         <el-select placeholder="Select a country" v-model="user.from">
-          <el-option v-for="(country, idx) in worldCountries" :key="idx + country+ idx" :value="country" >{{country}}</el-option>
+          <el-option
+            v-for="(country, idx) in worldCountries"
+            :key="idx + country+ idx"
+            :value="country"
+          >{{country}}</el-option>
         </el-select>
       </label>
       <br>
@@ -93,7 +106,7 @@
 
 <script>
 import ImageService from "@/services/ImageService.js";
-import UtilService from '@/services/UtilService.js'
+import UtilService from "@/services/UtilService.js";
 
 import ActivityPrefs from "@/components/ActivityPrefs";
 import UploadImage from "@/components/UploadImage";
@@ -112,12 +125,13 @@ export default {
   },
   methods: {
     async saveUser() {
-      if (this.newImage) this.user.profilePic = await ImageService.uploadImage(this.newImage);
+      if (this.newImage)
+        this.user.profilePic = await ImageService.uploadImage(this.newImage);
       await this.$store.dispatch({ type: "saveUser", user: this.user });
       this.$router.go(-1);
     },
     setProfilePic(img) {
-      this.newImage = img
+      this.newImage = img;
     }
   },
   async created() {
@@ -130,7 +144,7 @@ export default {
     worldCountries() {
       return Array.from(UtilService.worldCodeMap.values());
     }
-  },
+  }
 };
 </script>
 
