@@ -1,6 +1,8 @@
 import UserService from '@/services/UserService'
 import FacebookService from '@/services/FacebookService'
 import NotificationService from '@/services/NotificationService';
+import { PUSH_URL ,getEmptyPushNotification } from '@/services/PushNotificationService';
+
 
 export default {
     state: {
@@ -135,6 +137,8 @@ export default {
                 commit({ type: 'setLoggedUser', user: backupUser })
             }
         },
+
+
         async toggleUserLike({ commit, getters, dispatch }, { userId }) {
             const loggedUserId = getters.loggedUser._id;
             let action = 'like';
@@ -173,6 +177,22 @@ export default {
                     }
                     console.log('sending payload to socket-notifi:', payload)
                     dispatch({ type: 'socketSendNotification', userId, payload });
+
+                    let notification = getEmptyPushNotification();
+                    // Looks like:
+                    //   return {
+                    //       title: 'Travel Maker',
+                    //       payload: {
+                    //           body: '',
+                    //           icon: '',
+                    //       } ,
+                    //   }
+                    notification.title = `Travel Maker`;
+                    notification.payload.body = `${getters.loggedUser.firstname} ${getters.loggedUser.lastname} has liked your profile!`
+                    notification.payload.icon = `${getters.loggedUser.profilePic}`
+                    notification.payload.actions.unshift({action: 'go', title: `See ${getters.loggedUser.firstname}'s profile.`},)
+                    notification.payload.data.url = `${PUSH_URL}/user/${loggedUserId}`; 
+                    dispatch({type: 'socketPushNotification', userId, notification});
                 }
                 return updatedUser;
             } catch {
@@ -182,6 +202,8 @@ export default {
             }
 
         },
+
+
         // SOCIAL MEDIA user behavior:
         async checkFacebookUser({ commit }) {
             const userFBInfo = await FacebookService.getUserInfo();

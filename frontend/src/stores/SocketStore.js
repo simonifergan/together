@@ -29,7 +29,7 @@ export default {
             const chat = state.userChats.find(chat => chat._id === chatId);
             if (chat) chat.isActive = true;
         },
-        deactivateChat(state, {chatId}) {
+        deactivateChat(state, { chatId }) {
             const chat = state.userChats.find(chat => chat._id === chatId);
             if (chat) chat.isActive = false;
         },
@@ -71,7 +71,7 @@ export default {
                 context.commit({ type: 'activateChat', chatId })
             })
             SocketService.on(SocketService.CHAT_RECEIVE_MSG, async ({ chatId, msg }) => {
-                if (!context.getters.userChats.some(chat => chat._id === chatId)) await context.dispatch({type: 'loadChatById', chatId })
+                if (!context.getters.userChats.some(chat => chat._id === chatId)) await context.dispatch({ type: 'loadChatById', chatId })
                 context.commit({ type: 'addMsg', msg, chatId });
             })
             SocketService.on(SocketService.NOTIFICATION_ADDED, (addedNotification) => {
@@ -80,7 +80,7 @@ export default {
             SocketService.on(SocketService.NOTIFICATION_RECEIVE, payload => {
                 if (payload.tripId) {
                     if (context.getters.tripToDisplay && context.getters.tripToDisplay._id === payload.tripId) {
-                        context.dispatch({type: 'loadTrip', tripId: payload.tripId})
+                        context.dispatch({ type: 'loadTrip', tripId: payload.tripId })
                     }
                 }
                 console.log(payload);
@@ -96,14 +96,22 @@ export default {
         socketUserConnect({ getters }) {
             SocketService.emit(SocketService.SOCKET_CONNECT, getters.loggedUser._id);
         },
+
         socketSendMsg({ commit }, { msg, chatId, recipients }) {
             msg._id = UtilService.generateId()
             // commit({type: 'addMsg', msg, chatId})
             SocketService.emit(SocketService.CHAT_SEND_MSG, { msg, chatId, recipients });
         },
+
+        socketPushNotification(context, { userId, notification }) {
+            SocketService.emit(SocketService.PUSH_NOTIFICATION, { userId, notification })
+        },
+
         socketSendNotification(context, { userId, payload }) {
             SocketService.emit(SocketService.NOTIFICATION_SEND, { userId, payload });
         },
+
+
         socketJoinPrivateChat(context, { userId }) {
             const chat = context.getters.userChats.find(chat => {
                 if (chat.trip && chat.trip.title) return false;
@@ -153,9 +161,9 @@ export default {
             const notifications = await NotificationService.query();
             commit({ type: 'setNotification', notifications });
         },
-        async loadChatById({commit}, {chatId}) {
+        async loadChatById({ commit }, { chatId }) {
             const chat = await ChatService.getById(chatId);
-            if (chat) commit({type: 'addNewChat', chat});
+            if (chat) commit({ type: 'addNewChat', chat });
 
 
         },
