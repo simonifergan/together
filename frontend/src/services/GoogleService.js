@@ -64,9 +64,11 @@ async function getGoogleLocation(query, fields) {
         query,
         fields,
     };
+    await new Promise((res, rej) => setTimeout(res, Math.random()*30000))
     const service = new google.maps.places.PlacesService(elImg);
     return new Promise((res, rej) => {
         service.findPlaceFromQuery(request, (results, status) => {
+            // console.log(query, results, status);
             if (results && results[0].photos) res(results[0].photos[0].getUrl())
             else res(null)
         })
