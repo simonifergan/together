@@ -1,9 +1,8 @@
 .filter-list {
     position: relative;
-    margin-top: 20px;
+    margin: 20px auto;
     align-items: center;
     width: 420px;
-    margin: 0 auto;
     @include flex(column, flex-start, center);
     .top-container {
         width: 100%;
@@ -26,11 +25,12 @@
             }
             button {
                 background-color: #ffffff;
+                color: $clr3;
                 border: none;
-                box-shadow: 0 0 2px 0.5px black;
+                box-shadow: 0 0 1px #0000008c;
                 border-radius: 50%;
-                width: 48px;
-                height: 48px;
+                width: 40px;
+                height: 40px;
                 font-size: 1.2em;
                 z-index: 1;
                 top: 50%;
@@ -49,17 +49,14 @@
                 transition: .6s ease;
                 .filter-preview {
                     cursor: pointer;
-                    // width: 125px;
                     width: 200px;
                     height: 100%;
                     @include flex(column);
                     font-family: $font-open-sans;
-                    // margin-right: 7px;
                     margin-right: 20px;
                     line-height: 20px;
                     position: relative;
                     .filter-preview-img {
-                        // width: 125px;
                         width: 200px;
                         height: 260px;
                         background-size: cover;

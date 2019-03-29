@@ -3,7 +3,7 @@
     <div class="top-container">
       <h2>{{title}}</h2>
       <div class="filters-container">
-        <button @click="moveSlide('-')">
+        <button @click="moveSlide('-')" :style="isHiddenLeft">
           <i class="fas fa-chevron-left"></i>
         </button>
         <div class="inner-container">
@@ -11,7 +11,7 @@
             <filter-preview v-for="filter in filters" :key="filter.title" :filter="filter"/>
           </ul>
         </div>
-        <button @click="moveSlide('+')">
+        <button @click="moveSlide('+')" :style="isHiddenRight">
           <i class="fas fa-chevron-right"></i>
         </button>
       </div>
@@ -55,15 +55,19 @@ export default {
       else return 2;
     },
     itemWidth() {
-      // if (window.matchMedia("(min-width: 1100px)").matches) return 220;
-      // else if (window.matchMedia("(min-width: 900px)").matches) return 170;
-      // else return 132;
       return 220;
+    },
+    isHiddenRight() {
+      if (this.page === this.filters.length - this.itemsPerPage) return {opacity: '0'}
+      return {opacity: '1'}
+    },
+    isHiddenLeft() {
+      if (!this.page) return {opacity: '0'}
+      else return {opacity: '1'}
     }
   },
   methods: {
     moveSlide(diff) {
-      // console.log(this.page, this.filters.length - this.itemsPerPage)
       if (diff === "+" && this.page < this.filters.length - this.itemsPerPage) {
         this.page = this.page + 1;
       } else if (diff === "-" && this.page > 0) {

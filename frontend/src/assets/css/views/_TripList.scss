@@ -1,7 +1,7 @@
 
 .trip-list {
     @include flex(column, center, center);
-    width: 640px;
+    width: 420px;
     margin: 20px auto;
     h2 {
         align-self: flex-start;
@@ -16,15 +16,15 @@
             @include flex();
             width: 100%;
             .trip-preview {
-                width: 305px;
+                width: 420px;
                 @include flex(column, space-between);
                 font-family: $font-open-sans;
                 margin-right: 30px;
                 line-height: 20px;
                 cursor: pointer;
                 .profile-img-container {
-                    width: 305px;
-                    height: 200px;
+                    width: 420px;
+                    height: 270px;
                     margin-bottom: 5px;
                     .profile-img {
                         width: 100%;
