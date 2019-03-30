@@ -23,7 +23,10 @@
     <article v-for="(list, idx) in listsForDisplay" :key="list.title + idx" :class="'article-' + list.type">
       <component :is="list.type" :title="list.title | countryCodeToName" :trips="list.trips" :filters="list.filters" />
     </article>
-    <infinite-loading @infinite="infiniteHandler"></infinite-loading>
+    <infinite-loading spinner="waveDots" @infinite="infiniteHandler">
+        <div slot="no-more"></div>
+        <!-- <div slot="no-results">No results message</div> -->
+    </infinite-loading>
   </section>
 </template>
 
@@ -43,7 +46,6 @@ export default {
   },
   data() {
     return {
-      // showPage: false,
       page: 0,
       listsForDisplay: [],
       searchQuery: '',
@@ -56,35 +58,15 @@ export default {
         ...this.$store.getters.activities
       ],
       filterLists: [
-        // beachCities: [],
         'activities',
         ...this.$store.getters.countries
       ],
-      // countries: this.$store.getters.countries
     };
   },
   computed: {
     loggedUser() {
       return this.$store.getters.loggedUser
     },
-    // listsForRender() {
-    //   const lists = []
-    //   for (let tripList in this.tripLists) {
-    //     lists.push({title: tripList, trips: this.tripLists[tripList], type: 'tripList'})
-    //   }
-    //   for (let filterList in this.filterLists) {
-    //     lists.push({title: filterList, filters: this.filterLists[filterList], type: 'filterList'})
-    //   }
-    //   let n = 1
-    //   lists.forEach((list, idx) => {
-    //     if (list.type === 'filterList') {
-    //       lists.splice(2*n - 1, 0, lists.splice(idx, 1)[0])
-    //       n++
-    //       }
-    //   })
-    //   // return lists
-    //   return lists.filter(list => (list.filters && list.filters.length) || (list.trips && list.trips.length))
-    // },
     searchQueryWithDate() {
       return "/search?q=" + this.searchQuery + "&tripDate=" + this.tripDate
     }
@@ -102,17 +84,11 @@ export default {
     async getActivityTrips(activity) {
       const activityTrips = await this.$store.dispatch({ type: "getActivityTrips", activity })
       return activityTrips
-      // this.tripLists = Object.assign({}, this.tripLists, {
-      //   [activity]: activityTrips,
-      // })
     },
     async getFiltersForCountry(country) {
       const cities = await this.$store.dispatch({type: 'getCitiesByCountry', country})
       const citiesWithImgs = await this.$store.dispatch( {type: 'getFilterImgs', filterType: 'destinations', filters: cities })
       return citiesWithImgs
-      // this.filterLists = Object.assign({}, this.filterLists, {
-      //   [country]: citiesWithImgs,
-      // })
     },
     onInput() {      
       this.throttled()
@@ -140,7 +116,6 @@ export default {
             type: 'filterList'
           }
         } else if (filterList) {
-          // console.log(filterList)
           filterList = {
             title: filterList,
             filters: await this.getFiltersForCountry(filterList),
@@ -187,15 +162,6 @@ export default {
     if (!window.google) {
       await this.$store.dispatch({ type: "connectToGoogle" });
     }
-    // this.tripLists.trending = await this.$store.dispatch({ type: "getTrendingTrips" });
-    // if (this.$store.getters.loggedUser) {      
-    //   this.tripLists.recommended = await this.$store.dispatch({ type: "getRecommendedTrips" })
-    // }
-    // to infinite scroll:
-    // this.filterLists.activities = await this.$store.dispatch( {type: 'getFilterImgs', filterType: 'activities', filters: activities })
-    // this.filterLists.activities.forEach(activity => this.getActivityTrips(activity.title));
-    // to infinite scroll
-    // this.countries.forEach(country => this.getFiltersForCountry(country))
   }
 };
 </script>
