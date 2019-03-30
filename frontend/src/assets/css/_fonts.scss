@@ -2,10 +2,6 @@
     font-family: 'Lobster';
     src: url('../fonts/Lobster/Lobster-Regular.ttf');
 }
-@font-face {
-    font-family: 'Pacifico';
-    src: url('../fonts/Pacifico/Pacifico-Regular.ttf');
-}
 
 @font-face {
     font-family: 'Open Sans';
@@ -42,23 +38,8 @@
     src: url('../fonts/Ubuntu/Ubuntu-Bold.ttf');
 }
 
-@font-face {
-    font-family: 'Roboto';
-    src: url('../fonts/Roboto/Roboto-Regular.ttf');
-}
-
-@font-face {
-    font-family: 'Roboto Bold';
-    src: url('../fonts/Roboto/Roboto-Bold.ttf');
-}
-
-@font-face {
-    font-family: 'Roboto Black';
-    src: url('../fonts/Roboto/Roboto-Black.ttf');
-}
 
 $font-lobster: 'Lobster', cursive;
-$font-pacifico: 'Pacifico', cursive;
 $font-open-sans: 'Open Sans', sans-serif;
 $font-open-sans-bold: 'Open Sans Bold', sans-serif;
 $font-open-sans-light: 'Open Sans Light', sans-serif;
@@ -66,6 +47,3 @@ $font-ubuntu: 'Ubuntu', sans-serif;
 $font-ubuntu-light: 'Ubuntu Light', sans-serif;
 $font-ubuntu-bold: 'Ubuntu Bold', sans-serif;
 $font-ubuntu-s-bold: 'Ubuntu Semi Bold', sans-serif;
-$font-roboto: 'Roboto';
-$font-roboto-bold: 'Roboto Bold';
-$font-roboto-black: 'Roboto Black';
