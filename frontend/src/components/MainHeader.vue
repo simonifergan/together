@@ -170,9 +170,14 @@ export default {
       if (this.isShowDropdown) {
         this.closeDropdown();
       }
-      if (this.showMsgs) {
+      if (this.isShowMsgs) {
         this.closeMsgs();
       }
+      if (this.isShowReqs) {
+        this.closeReqs();
+        return;
+      }
+
       this.isShowReqs = true;
       document.querySelector("#app").addEventListener("click", this.closeReqs);
     },

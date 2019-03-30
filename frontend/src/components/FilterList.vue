@@ -64,11 +64,11 @@ export default {
       return 220;
     },
     isHiddenRight() {
-      if (this.page >= this.maxPage) return {opacity: '0'}
+      if (this.page > this.maxPage - 1) return {opacity: '0'}
       return {opacity: '1'}
     },
     isHiddenLeft() {
-      if (this.page <= 0) return {opacity: '0'}
+      if (this.page < 1) return {opacity: '0'}
       else return {opacity: '1'}
     },
     maxPage() {

@@ -31,18 +31,37 @@
         </label>
       </div>
       <h2>Where would you like to travel to?</h2>
-      <el-input type="text" v-model="searchQuery" @input="onInput" placeholder="Type a city or a country. How about a new place?"/>
-      <ul v-if="autocomplete">
-        <li v-for="(city, idx) in autocomplete" :key="idx" @click="chooseCity(city)">
-          <h3>{{city.description}}</h3>
-        </li>
-      </ul>
-      <ul>
-        <li v-for="city in trip.destinations.cities" :key="city">{{city}}<button type="button" @click="deleteCity(city)">X</button></li>
-      </ul>
-      <ul>
-        <li v-for="country in trip.destinations.countries" :key="country">{{country | countryCodeToName}}<button type="button" @click="deleteCountry(country)">X</button></li>
-      </ul>
+      <div class="autocomplete-container">
+        <el-input type="text" v-model="searchQuery" @input="onInput" placeholder="Type a city or a country. How about a new place?"/>
+        <transition name="fade" mode="out-in">
+          <ul v-if="autocomplete" class="autocomplete">
+            <p>Click on a city below to choose it</p>
+            <li :title="city.description" v-for="(city, idx) in autocomplete" :key="idx" @click="chooseCity(city)">
+              <div>{{city.description}}</div>
+            </li>
+          </ul>
+        </transition>
+      </div>
+      <div class="selected-places">
+        <ul>
+          <h4>Selected cities:</h4>
+          <transition-group name="list" tag="div" class="selection-container">
+            <li v-for="city in trip.destinations.cities" :key="city">
+              {{city | cityWithCountryToCity}}
+              <button :title="'Deselect ' + city | cityWithCountryToCity" type="button" @click="deleteCity(city)"><i class="fas fa-times"></i></button>
+            </li>
+          </transition-group>
+        </ul>
+        <ul>
+          <h4>Selected countries:</h4>
+          <transition-group name="list" tag="div" class="selection-container">
+            <li v-for="country in trip.destinations.countries" :key="country">
+              {{country | countryCodeToName}}
+              <button :title="'Deselect ' + country | countryCodeToName" type="button" @click="deleteCountry(country)"><i class="fas fa-times"></i></button>
+            </li>
+          </transition-group>
+        </ul>
+      </div>
       <our-super-awesome-map v-if="trip.destinations.countries && isDesktop" :enable="true" v-model="trip.destinations.countries"/>
         <h2>Give your trip a title:</h2>
         <el-input
@@ -134,7 +153,8 @@ export default {
     },
     isDesktop() {
       return window.matchMedia("(min-width: 750px)").matches;
-    }
+    },
+  
   },
   async created() {
     const { tripId } = this.$route.params;
