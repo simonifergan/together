@@ -18,34 +18,51 @@
             width: 100%;
             h1 {
                 font-family: $font-roboto-bold;
-                font-size: 36px;
+                font-size: 24px;
                 line-height: 48px;
                 line-height: 1.3;
                 letter-spacing: 2px;
                 font-weight: 600;
                 color: #fff;
                 margin-bottom: 40px;
+                @media (min-width: 730px) {
+                    font-size: 36px;
+                }
             }
+            
             .intro-form {
                 font-family: $font-ubuntu-light;
                 box-shadow: 0 16px 40px rgba(0,0,0,0.12);
                 height: 150px;
                 color: #484848;
                 form {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    line-height: 30px;
+                    font-size: 14px;
                     background-color: #fff;
                     border-radius: 2px;
                     display: flex;
                     max-width: 100%;
+                    .el-icon-date {
+                        line-height: 30px;
+                    }
                     input {
                         border: none;
                         font-family: $font-ubuntu;
-                        font-size: 18px;
+                        font-size: inherit;
+                        line-height: inherit;
+                        height: 30px;
                     }
-                    .input-text {
+                    .el-input {
                         @include input();
                         border: none;
                         border-radius: 2px;
-                        width: 100%;
+                        // width: 100%;
+                        font-size: inherit;
+                        line-height: inherit;
+                        height: 30px;
+                        padding: 0;
                     }
                     datalist {
                         width: 100%;
@@ -65,7 +82,18 @@
                         align-items: center;
                         justify-content: center;
                     }
-                    @include flex(row, space-between, center)
+                    @include flex(row, space-between, center);
+                    @media (min-width: 730px) {
+                        font-size: 18px;
+                        line-height: 40px;
+                        grid-template-columns: 3fr 1fr;
+                        .el-input {
+                            height: 40px;
+                        }
+                        .el-icon-date {
+                            line-height: 40px;
+                        }
+                    }
                 }
             }
         }
