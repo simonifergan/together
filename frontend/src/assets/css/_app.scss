@@ -33,19 +33,31 @@ button {
     position:relative;
     // GLOBAL HEADER
     .main-header {
+        .wrapper {
+            @include wrapper(1080px);
+            @include flex(row, space-between, center);
+            width: 100%;
+        }
         @include flex(row, space-between, center);
         position: relative;
         height: 70px;
         width: 100%;
         z-index: 2;
         color: #333;
-        box-shadow: 0px .5px 1px #676767;  
+        box-shadow: 0px .5px 1px #676767;
         &.on-homepage {
             box-shadow: none;
             position: absolute;
             color: #fff;
         }
         .logo {
+            .btn-nav {
+                display: none;
+                margin-right: 5px;
+                @media (max-width: 860px) {
+                    display: block;
+                }
+            }
             padding: 20px;
             @include flex(row, flex-start, center);
             cursor: pointer;
@@ -53,10 +65,11 @@ button {
                 width: 40px;
             }
             h1 {
-                font-family: $font-roboto;
-                font-size: 1.7em;
+                font-family: $font-lobster;
+                font-size: 2em;
                 padding-left: 5px;
             }
+            
         }
 
         // START NAV //
@@ -211,6 +224,7 @@ button {
                     }
                 }
             }
+            
            
         }
         .user-dashboard-mobile { 
@@ -338,6 +352,7 @@ button {
 
 
         }
+        
         
     }
 
