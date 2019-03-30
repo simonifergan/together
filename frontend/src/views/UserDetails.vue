@@ -36,43 +36,35 @@
         :key="trip._id"
         :trip="trip"
         :user="user"
-        :loggedInUser="loggedInUser">
+        :loggedInUser="loggedInUser"
+      >
         <!-- <pending-list
             slot="pending-list"
             @requestPendingUsers="requestPendingUsers"
             @requestApproved="requestApproved"
             @requestRejected="requestRejected"
             v-if="loggedInUser && loggedInUser._id === user._id"
-        /> -->
+        />-->
       </user-trip-preview>
     </ul>
-    <ul class="members-in">
-      <h3>Members in</h3>
-      <div class="trip-items">
-        <div v-for="trip in user.memberIn" :key="trip._id">
-          <!-- <div class="profile-img" :style="{ backgroundImage: `url('${trip.user.profilePic}')` }" /> -->
-          <!-- <p>{{trip.user.firstname}} {{trip.user.lastname}}</p>
-          <p>{{trip.title}}</p> -->
-          <p>On {{trip.startsAt | monthAndYearName}}, for a {{trip.duration}}</p>
-        </div>
-      </div>
-    </ul>
-
-    <!-- <ul class="user-trips">
-      <h2>{{user.firstname}}'s testimonies</h2>
-    </ul>-->
+    <div class="member-in">
+      <ul>
+        <member-pending-in v-for="trip in user.memberIn" :key="trip._id" :trip="trip" />
+      </ul>
+    </div>
+    
   </section>
 </template>
 
 <script>
 // CMPS
 import UserTripPreview from "@/components/UserTripPreview";
-import TripList from "@/components/TripList";
+import MemberPendingIn from "@/components/MemberPendingIn";
 
 export default {
   components: {
     UserTripPreview,
-    
+    MemberPendingIn
   },
   methods: {
     async initUser() {

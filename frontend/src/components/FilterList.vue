@@ -58,11 +58,11 @@ export default {
       return 220;
     },
     isHiddenRight() {
-      if (this.page === this.filters.length - this.itemsPerPage) return {opacity: '0'}
+      if ((this.page === this.filters.length - this.itemsPerPage) || (this.filters.length < this.itemsPerPage)) return {opacity: '0'}
       return {opacity: '1'}
     },
     isHiddenLeft() {
-      if (!this.page) return {opacity: '0'}
+      if (!this.page || this.filters.length < this.itemsPerPage) return {opacity: '0'}
       else return {opacity: '1'}
     }
   },

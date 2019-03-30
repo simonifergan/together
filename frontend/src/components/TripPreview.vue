@@ -6,7 +6,7 @@
     <p>{{trip.user.firstname}} {{trip.user.lastname}}<span>({{totalLikes}})&nbsp;<i class="far fa-heart"></i></span></p>
     <p>{{trip.title}}</p>
     <p>On {{trip.startsAt | monthAndYearName}}, for a {{trip.duration}}</p>
-    <div class="members-container" v-if="trip.members.length > 0">
+    <div class="members-container" v-if="trip.members.length" >
       <div 
         class="member-img"
         v-for="member in firstThree" 
@@ -40,17 +40,6 @@ export default {
       return this.trip.user.likes.length;
     },
     profilePic() {
-      // THIS COSTS MONEY!!! Yanai: build a feature to "crop" images!!
-      // if (!this.trip || !this.trip.user || !this.trip.user.profilePic) return {};
-      // let init = this.trip.user.profilePic;
-      // let regEx = /upload\//;
-      // console.log(init);
-      // let { index } = init.match(regEx);
-      // let first = init.substr(0, index + 7);
-      // let second = init.substr(index + 7);
-      // let middle = "w_800,h_600/";
-      // let url = first + middle + second;
-      // return { "background-image": `url('${url}')` };
       return { "background-image": `url('${this.trip.user.profilePic}')` };
     },
     spotsLeft() {
@@ -59,7 +48,9 @@ export default {
 
     },
     firstThree() {
+      console.log(this.trip.members);
       return this.trip.members.slice(0, 3);
+      
     }
   }
 };
