@@ -33,6 +33,11 @@ button {
     position:relative;
     // GLOBAL HEADER
     .main-header {
+        .wrapper {
+            @include wrapper(1080px);
+            @include flex(row, space-between, center);
+            width: 100%;
+        }
         @include flex(row, space-between, center);
         position: relative;
         height: 70px;
@@ -46,6 +51,13 @@ button {
             color: #fff;
         }
         .logo {
+            .btn-nav {
+                display: none;
+                margin-right: 5px;
+                @media (max-width: 860px) {
+                    display: block;
+                }
+            }
             padding: 20px;
             @include flex(row, flex-start, center);
             cursor: pointer;
@@ -57,6 +69,7 @@ button {
                 font-size: 2em;
                 padding-left: 5px;
             }
+            
         }
 
         // START NAV //
@@ -70,7 +83,7 @@ button {
             top: 72px;
             color: #333;
             position: fixed;
-            width: 150px;
+            width: 200px;
             height: 100vh;
             opacity: 0;
             transform: translate(-200%, 0);
@@ -107,11 +120,16 @@ button {
                     color: #fff;
                 }
             }
+          
             .user-dashboard {
                 @include userImg(35px, 35px);
                 margin: 0;
                 position: relative;
                 cursor: pointer;
+                display: none;
+                @media (min-width: 860px) {
+                    display: block;
+                }
                 .dropdown {
                     @include flex(column);
                     z-index: 2;
@@ -206,7 +224,66 @@ button {
                     }
                 }
             }
+            
            
+        }
+        .user-dashboard-mobile { 
+            display: none;
+        }
+
+        @media (max-width: 860px) {
+            .user-dashboard-mobile {
+                @include userImg(40px, 40px);
+                position: relative;
+                margin-right: 30px;
+                display: block;
+                padding: 0;
+                cursor: pointer;
+                .dropdown-mobile {
+                    @include flex(column);
+                    z-index: 2;
+                    position: fixed;
+                    visibility: hidden;
+                    height: 0;
+                    background-color: #fff;
+                    overflow: hidden;
+                    color: #333;
+                    width: 200px;
+                    top: 72px;
+                    right: 0;
+                    padding: 0;
+                    border-radius: 0 0 1px 1px;
+                    box-shadow: 0 0 1px 1px $box-shadow-gray;
+                    transition: .6s ease;
+                    &.show {
+                        height: 230px;
+                        visibility: visible;
+                    }
+                    * {
+                        margin: 0;
+                    }
+                    a {
+
+                        font-family: $font-open-sans;
+                        text-decoration: none;
+                        padding: 20px 10px;
+                        font-weight: normal;
+                        color: #676767;
+                        box-shadow: 0 1px 0px $box-shadow-gray;
+                        &:hover {
+                            box-shadow: 0px 1px 0px #333;
+                        }
+                        &:last-child {
+                            box-shadow: none;
+                            margin-bottom: 2px;
+                            &:hover {
+                                box-shadow: 0 1px 0px #333;
+                            }
+                        }
+                    }
+                   
+                }
+            }
         }
        
         @media (min-width: 860px) {
@@ -264,7 +341,7 @@ button {
                     }
                 }
             }
-            
+
             .user-dashboard {
                 .dropdown {
                     a{
@@ -275,6 +352,7 @@ button {
 
 
         }
+        
         
     }
 
