@@ -125,6 +125,7 @@
        .member-list, .pending-list {
         margin: 0 auto;
         display: grid;
+        justify-content: center;
         grid-template-columns: repeat(auto-fill, 220px);
         grid-gap: 30px;
         .trip-preview {

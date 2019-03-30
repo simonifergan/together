@@ -86,9 +86,7 @@ button {
             font-family: $font-open-sans;
             font-weight: 550;
             font-size: 14px;
-            @media (min-width: 1200px) {
-                font-size: 16px;
-            }
+       
             top: 72px;
             color: #333;
             position: fixed;
@@ -365,8 +363,6 @@ button {
 
 
         }
-        
-        
     }
 
 
@@ -393,7 +389,7 @@ button {
                 padding: 5px;
                 @include flex(row, flex-start, center);
                 margin: 0;
-                font-size: 12px;
+                font-size: 14px;
                 cursor: pointer;
                 &:hover {
                     background-color: #f6f6f6;
@@ -429,6 +425,7 @@ button {
                 .sent-at {
                     padding-right: 5px;
                     margin-left: auto;
+                    font-size: 12px;
                 }
             }
             footer {
