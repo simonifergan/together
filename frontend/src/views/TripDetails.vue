@@ -137,7 +137,7 @@ export default {
     },
     requestApproved(pendingUser) {
       this.$store.dispatch({
-        type: "ApproveUserToTrip",
+        type: "approveUserToTrip",
         userToJoin: pendingUser,
         tripIdToJoin: this.trip._id
       });

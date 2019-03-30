@@ -21,7 +21,7 @@
       <a href="#">About</a>
       <router-link to="/signup" v-if="!user">Sign up</router-link>
       <div class="requests-container" v-if="user">
-        <a @click.stop="showReqs">Requests&nbsp;<span class="unread-msgs" v-if="requests.length">{{requests.length}}</span></a>
+        <a @click.stop="showReqs">Requests&nbsp;<span class="unread-msgs" v-if="pendingRequests">{{pendingRequests}}</span></a>
         <request-list v-show="isShowReqs" :requests="requests" :user="user"/>
       </div>
       <div class="msgs-container" v-if="user">
@@ -44,6 +44,7 @@
         </div>
       </div>
     </nav>
+    <login class="login-mobile" :class="{show: isShowLogin}" />
     <div v-if="user" class="user-dashboard-mobile" :style="profilePic" @click.stop="showDropdown">
       <div class="dropdown-mobile" :class="{show: isShowDropdown}">
         <router-link to="/edit">Add a new trip</router-link>
@@ -220,6 +221,12 @@ export default {
     },
     requests() {
       return this.$store.getters.userRequests;
+    },
+    pendingRequests() {
+      const acc =this.requests.reduce((acc, tripReqs) => {
+        return acc += tripReqs.pendingusers.length;
+      }, 0);
+      return acc;
     },
     isOnMobile() {
       return this.isMobile();

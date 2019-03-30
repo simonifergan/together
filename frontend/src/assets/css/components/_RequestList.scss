@@ -26,6 +26,10 @@
         &:hover {
             background-color: #f6f6f6;
         }
+        .user-img {
+            @include userImg(40px, 40px);
+            background-repeat: no-repeat;
+        }
         .req-content {
             @include flex(column, flex-start, center);
             h3 {

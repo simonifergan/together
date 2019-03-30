@@ -64,6 +64,7 @@ async function send(userId, notification) {
         console.log(notification)
         const subscriber = await userService.findSubscriber(userId);
         if (subscriber) {
+            if (!subscriber.pushSub) return;
             webpush.sendNotification(subscriber.pushSub, JSON.stringify(notification))
                 .then(something => {
                     console.log('WORKED?')
