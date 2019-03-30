@@ -44,7 +44,7 @@
         <member-pending-in v-for="trip in user.memberIn" :key="trip._id" :trip="trip" />
       </ul>
     </div>
-    <div class="pending-in" v-if="loggedInUser._id === user._id && user.pendingIn.length">
+    <div class="pending-in" >
       <h3>Pending in</h3>
       <ul class="pending-list">
         <member-pending-in v-for="trip in user.pendingIn" :key="trip._id" :trip="trip" />
