@@ -57,6 +57,7 @@
 // CMPS
 import UserTripPreview from "@/components/UserTripPreview";
 import MemberPendingIn from "@/components/MemberPendingIn";
+import PendingList from "@/components/PendingList";
 
 export default {
   components: {
