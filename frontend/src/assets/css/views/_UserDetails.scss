@@ -17,7 +17,6 @@
         .user-details-content {
             @include flex(column, flex-start, center);
             .user-info {
-                // margin-left: 50px;
                 text-align: center;
                 @include flex(column);
                 h2 {
@@ -95,7 +94,7 @@
             }
             .expand-container {
                 @include flex(row);
-                .pending-list, .member-list {
+                .member-list {
                     display: grid;
                     grid-template-columns: repeat(3, 1fr);
                     grid-template-rows: 1fr repeat(min-content);
@@ -105,6 +104,7 @@
                     .user-item {
                         grid-row-start: 2;
                         padding: 10px 10px 10px 30px;
+                        @include flex(column, center, center);
                         .user-img {
                             @include userImg(50px, 50px);
                         }
