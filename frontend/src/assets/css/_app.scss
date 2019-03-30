@@ -229,6 +229,15 @@ button {
                         .btns-container {
                             @include flex(row, space-between, center)
                         }
+                        p {
+                            margin-bottom: 5px;
+                            span {
+                                cursor: pointer;
+                                &:hover {
+                                    text-decoration: underline;
+                                }
+                            }
+                        }
                     }
                     .btn-sns-container {
                         .fb {
@@ -332,15 +341,16 @@ button {
                 }
                 .cancel {
                     margin-top: 5px;
-                    align-self: flex-end;
                     margin-bottom: 5px;
                     background: none;
-                    border: none;            
+                    border: none;    
+                    float: right;
                 }
                 h1 {
                     padding: 20px;
                 }
                 form {
+                    margin-top: 30px;
                     padding: 0 10px 10px 10px;
                     .el-input {
                         margin: 0;
@@ -349,7 +359,7 @@ button {
                         display: grid;
                         grid-template-columns: 80px 1fr;
                         margin: 0;
-                        margin-bottom: 5px;
+                        margin-bottom: 10px;
                         align-items: center;
                         &:last-of-type {
                             margin: 10px 0;
@@ -362,6 +372,15 @@ button {
                     }
                     .btns-container {
                         @include flex(row, space-between, center)
+                    }
+                    p {
+                        margin-bottom: 5px;
+                        span {
+                            cursor: pointer;
+                            &:hover {
+                                text-decoration: underline;
+                            }
+                        }
                     }
                 }
                 .btn-sns-container {
