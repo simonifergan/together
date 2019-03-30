@@ -37,22 +37,25 @@
         :trip="trip"
         :user="user"
         :loggedInUser="loggedInUser">
-        <pending-list
+        <!-- <pending-list
             slot="pending-list"
             @requestPendingUsers="requestPendingUsers"
             @requestApproved="requestApproved"
             @requestRejected="requestRejected"
             v-if="loggedInUser && loggedInUser._id === user._id"
-        />
+        /> -->
       </user-trip-preview>
     </ul>
-    <ul class="user-trips">
+    <ul class="members-in">
       <h3>Members in</h3>
-      <ul>
-        <li v-for="trip in user.memberIn" :key="trip._id">
-          
-        </li>
-      </ul>
+      <div class="trip-items">
+        <div v-for="trip in user.memberIn" :key="trip._id">
+          <!-- <div class="profile-img" :style="{ backgroundImage: `url('${trip.user.profilePic}')` }" /> -->
+          <!-- <p>{{trip.user.firstname}} {{trip.user.lastname}}</p>
+          <p>{{trip.title}}</p> -->
+          <p>On {{trip.startsAt | monthAndYearName}}, for a {{trip.duration}}</p>
+        </div>
+      </div>
     </ul>
 
     <!-- <ul class="user-trips">
@@ -62,11 +65,14 @@
 </template>
 
 <script>
+// CMPS
 import UserTripPreview from "@/components/UserTripPreview";
+import TripList from "@/components/TripList";
 
 export default {
   components: {
-    UserTripPreview
+    UserTripPreview,
+    
   },
   methods: {
     async initUser() {
