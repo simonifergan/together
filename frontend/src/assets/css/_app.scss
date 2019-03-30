@@ -39,7 +39,7 @@ button {
         width: 100%;
         z-index: 2;
         color: #333;
-        box-shadow: 0px .5px 1px #676767;  
+        box-shadow: 0px .5px 1px #676767;
         &.on-homepage {
             box-shadow: none;
             position: absolute;
@@ -57,8 +57,8 @@ button {
                 width: 40px;
             }
             h1 {
-                font-family: $font-roboto;
-                font-size: 1.7em;
+                font-family: $font-lobster;
+                font-size: 2em;
                 padding-left: 5px;
             }
         }
