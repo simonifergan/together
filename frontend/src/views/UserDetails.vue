@@ -48,7 +48,11 @@
     </ul>
     <ul class="user-trips">
       <h3>Members in</h3>
-      
+      <ul>
+        <li v-for="trip in user.memberIn" :key="trip._id">
+          
+        </li>
+      </ul>
     </ul>
 
     <!-- <ul class="user-trips">

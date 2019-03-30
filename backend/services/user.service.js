@@ -96,15 +96,50 @@ async function loginWithFacebook(user) {
 
 }
 
-function getById(id) {
+// GET USER BY ID WITH MEMBERIN TRIPS AND PENDINGIN TRIPS:
+async function getById(id) {
     const _id = new ObjectId(id);
-    return mongoService.connect()
-        .then(db => db.collection(usersCollection).findOne({ _id }))
-        .then(user => {
-            if (user) delete user.password;
-            return user;
-        });
+    const db = await mongoService.connect();
+    const user = await db.collection(usersCollection).aggregate([
+        {
+            $match: {_id}
+        },
+        {
+            $lookup:
+            {
+                from: tripsCollection,
+                localField: 'memberIn',
+                foreignField: '_id',
+                as: 'memberIn'
+
+            }
+        },
+        {
+            $lookup:
+            {
+                from: tripsCollection,
+                localField: 'pendingIn',
+                foreignField: '_id',
+                as: 'pendingIn'
+
+            }
+        },
+       
+    ]).toArray();
+    if (user[0]) delete user[0].password;
+    return user[0];
 }
+
+// BACKUP:
+// function getById(id) {
+//     const _id = new ObjectId(id);
+//     return mongoService.connect()
+//         .then(db => db.collection(usersCollection).findOne({ _id }))
+//         .then(user => {
+//             if (user) delete user.password;
+//             return user;
+//         });
+// }
 
 async function signup(user) {
     const db = await mongoService.connect();
