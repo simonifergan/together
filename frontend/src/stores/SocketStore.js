@@ -85,6 +85,7 @@ export default {
                 if (payload.tripId) {
                     if (context.getters.tripToDisplay && context.getters.tripToDisplay._id === payload.tripId) {
                         context.dispatch({ type: 'loadTrip', tripId: payload.tripId })
+                        context.dispatch({ type: "getUserRequests" });
                     }
                 }
                 console.log(payload);

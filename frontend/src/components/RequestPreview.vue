@@ -1,5 +1,5 @@
 <template>
-  <li class="req-preview" :title="request.user.firstName">
+  <li class="req-preview" :title="request.user.firstName" v-if="request">
     <span class="user-img-container">
       <div class="user-img" :style="{'background-image': `url(${request.user.profilePic})`}"/>
     </span>
@@ -8,10 +8,10 @@
       <router-link class="title" :title="'Go to ' + request.trip.title" tag="h4" :to="'/trip/' + request.trip.id">In: <span>{{request.trip.title}}</span></router-link>
     </div>
     <div class="btns-container">
-      <button :title="`Approve ${request.user.firstname}`" @click="requestApproved(request.user)">
+      <button :title="`Approve ${request.user.firstname}`" @click="requestApproved(request.user, request.trip.id)">
         Approve
       </button>
-      <button :title="`Reject ${request.user.firstname}`" @click="requestRejected(request.user)">
+      <button :title="`Reject ${request.user.firstname}`" @click="requestRejected(request.user, request.trip.id)">
         Reject
       </button>
     </div>
@@ -27,21 +27,12 @@ export default {
     }
   },
   methods: {
-    requestApproved(pendingUser) {
-      this.$emit("requestApproved", pendingUser);
+    requestApproved(pendingUser, tripId) {
+      this.$emit("requestApproved", {pendingUser, tripId});
     },
-    requestRejected(pendingUser) {
-      this.$emit("requestRejected", pendingUser);
+    requestRejected(pendingUser, tripId) {
+      this.$emit("requestRejected", {pendingUser, tripId});
     }
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.user-img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-size: cover;
-}
-</style>

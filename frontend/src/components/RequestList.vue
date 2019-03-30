@@ -1,10 +1,12 @@
 <template>
   <ul class="request-dropdown">
     <request-preview
+      @requestApproved="requestApproved"
+      @requestRejected="requestRejected"
       v-for="request in requestsForRender"
       :request="request"
       :key="request.tripId + request.user.userId"
-      @click.stop=""
+      @click.stop
     />
     <footer v-if="!isExpanded">
       <router-link to="/requests">See all requests</router-link>
@@ -36,43 +38,38 @@ export default {
     RequestPreview
   },
   methods: {
-      requestApproved(pendingUser) {
+    requestApproved({ pendingUser, tripId }) {
       this.$store.dispatch({
-        type: "ApproveUserToTrip",
+        type: "approveUserToTrip",
         userToJoin: pendingUser,
-        tripIdToJoin: this.trip._id
+        tripIdToJoin: tripId
       });
     },
-    requestRejected(pendingUser) {
+    requestRejected({ pendingUser, tripId }) {
       this.$store.dispatch({
         type: "removeUserFromTrip",
         userToLeave: pendingUser,
-        tripIdToLeave: this.trip._id
+        tripIdToLeave: tripId
       });
-    },
+    }
   },
   computed: {
     isExpanded() {
-        return (this.$route.path === '/messages')
+      return this.$route.path === "/messages";
     },
     requestsForRender() {
-        const reqs = []
-        this.requests.forEach(tripReqs => {
-            tripReqs.pendingusers.forEach(user => {
-                reqs.push({user, trip: {id: tripReqs._id, title: tripReqs.title }})
-            })
-        })
-        return reqs
+      const reqs = [];
+      this.requests.forEach(tripReqs => {
+        tripReqs.pendingusers.forEach(user => {
+          reqs.push({
+            user,
+            trip: { id: tripReqs._id, title: tripReqs.title }
+          });
+        });
+      });
+      return reqs;
     }
   },
-  
-  methods: {
-    // initChat(chatId) {
-    //   if (this.isExpanded) {
-    //     this.$emit('changeChat', chatId);
-    //   } else this.$store.dispatch({ type: "activateChat", chatId });
-    // }
-  }
 };
 </script>
 

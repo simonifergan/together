@@ -178,7 +178,7 @@ export default {
             commit({ type: 'removeTrip', tripId: trip._id })
         },
         // Admin approve user request
-        async ApproveUserToTrip({ commit, getters, dispatch }, { userToJoin, tripIdToJoin }) {
+        async approveUserToTrip({ commit, getters, dispatch }, { userToJoin, tripIdToJoin }) {
             const userIdToJoin = userToJoin._id;
             // get trip
             var tripToJoin = await TripService.getById(tripIdToJoin)
@@ -232,6 +232,9 @@ export default {
                     tripId: updatedTrip._id,
                 }
                 dispatch({ type: 'socketSendNotification', userId: userIdToJoin, payload });
+
+                // NOT OPTIMISTIC YET: GET REQUESTS AGAIN
+                dispatch({ type: "getUserRequests" });
 
                 // PUSH NOTIFICATION
                 let notification = getEmptyPushNotification();

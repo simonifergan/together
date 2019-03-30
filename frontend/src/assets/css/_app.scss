@@ -181,15 +181,18 @@ button {
                     margin: 0;
                     @include flex(column);
                     z-index: 2;
-                    position: absolute;
                     background-color: #fff;
                     padding: 0 10px;
                     color: #333;
                     width: 300px;
+                    position: absolute;
                     top: 51px;
                     right: -5px;
                     border-radius: 0 0 1px 1px;
                     box-shadow: 0 0 1px 1px $box-shadow-gray;
+                    @media (min-width: 860px) {
+
+                    }
                     > * {
                         margin: 0;
                     }
@@ -226,6 +229,15 @@ button {
                         .btns-container {
                             @include flex(row, space-between, center)
                         }
+                        p {
+                            margin-bottom: 5px;
+                            span {
+                                cursor: pointer;
+                                &:hover {
+                                    text-decoration: underline;
+                                }
+                            }
+                        }
                     }
                     .btn-sns-container {
                         .fb {
@@ -238,9 +250,13 @@ button {
             
            
         }
+
         .user-dashboard-mobile { 
             display: none;
         }
+
+        
+        
 
         @media (max-width: 860px) {
             .user-dashboard-mobile {
@@ -293,6 +309,85 @@ button {
                         }
                     }
                    
+                }
+            }
+        }
+
+        .login-mobile.login-form {
+            display: none;
+        }
+
+        @media (max-width: 860px) {
+            .login-form.show {
+                margin: 0;
+                @include flex(column);
+                z-index: 2;
+                background-color: #fff;
+                padding: 0 10px;
+                color: #333;
+                width: 300px;
+                display: block;
+                position: fixed;
+                top: 50%;
+                right: 50%;
+                transform: translate(50%, -50%);
+                border-radius: 0 0 1px 1px;
+                box-shadow: 0 0 1px 1px $box-shadow-gray;
+                @media (min-width: 860px) {
+
+                }
+                > * {
+                    margin: 0;
+                }
+                .cancel {
+                    margin-top: 5px;
+                    margin-bottom: 5px;
+                    background: none;
+                    border: none;    
+                    float: right;
+                }
+                h1 {
+                    padding: 20px;
+                }
+                form {
+                    margin-top: 30px;
+                    padding: 0 10px 10px 10px;
+                    .el-input {
+                        margin: 0;
+                    }
+                    label {
+                        display: grid;
+                        grid-template-columns: 80px 1fr;
+                        margin: 0;
+                        margin-bottom: 10px;
+                        align-items: center;
+                        &:last-of-type {
+                            margin: 10px 0;
+                        }
+                    }
+                    button {
+                        float: right;
+                        margin-top: 5px;
+                        @include button;
+                    }
+                    .btns-container {
+                        @include flex(row, space-between, center)
+                    }
+                    p {
+                        margin-bottom: 5px;
+                        span {
+                            cursor: pointer;
+                            &:hover {
+                                text-decoration: underline;
+                            }
+                        }
+                    }
+                }
+                .btn-sns-container {
+                    .fb {
+                        background-color: #4267b2;
+                        color: #fff;
+                    }
                 }
             }
         }

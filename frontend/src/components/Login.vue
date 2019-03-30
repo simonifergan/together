@@ -12,12 +12,12 @@
             </label>
             <p>
                 Not registered yet?
-                <router-link tag="span" to="/signup">
+                <router-link tag="span" to="/signup" title="Sign up">
                     Sign up
                 </router-link>
             </p>
             <div class="btns-container">
-                <SNSLogin type="button" />
+                <SNSLogin title="Login with Facebook" type="button" />
                 <button title="Press to login" type="submit">Login</button>
             </div>
         </form>
