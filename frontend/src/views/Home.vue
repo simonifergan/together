@@ -21,7 +21,7 @@
       </div>
     </header>
     <article v-for="(list, idx) in listsForDisplay" :key="list.title + idx" :class="'article-' + list.type">
-      <component :is="list.type" :title="list.title | countryCodeToName" :trips="list.trips" :filters="list.filters" />
+      <component :is="list.type" :title="list.title | countryCodeToName" :trips="list.trips" :filters="list.filters" v-if="list.trips || list.filters" />
     </article>
     <infinite-loading spinner="waveDots" @infinite="infiniteHandler">
         <div slot="no-more"></div>

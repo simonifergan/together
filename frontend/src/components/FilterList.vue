@@ -7,7 +7,7 @@
           <i class="fas fa-chevron-left"></i>
         </button>
         <div class="inner-container">
-          <ul class="filter-previews" :style="pagination">
+          <ul class="filter-previews" :style="pagination" @touchstart="startDrag" @touchmove="drag" @touchend="stopDrag">
             <filter-preview v-for="filter in filters" :key="filter.title" :filter="filter"/>
           </ul>
         </div>
@@ -38,12 +38,15 @@ export default {
   },
   data() {
     return {
-      page: 0
+      page: 0,
+      touchPos: null,
+      didDrag: false,
+      startPage: null
     };
   },
   computed: {
     slidePos() {
-      return `-${this.page * this.itemWidth}px`;
+      return `${this.page * this.itemWidth * -1}px`;
     },
     pagination() {
       return { left: this.slidePos };
@@ -58,22 +61,50 @@ export default {
       return 220;
     },
     isHiddenRight() {
-      if (this.page === this.filters.length - this.itemsPerPage) return {opacity: '0'}
+      if (this.page === this.maxPage) return {opacity: '0'}
       return {opacity: '1'}
     },
     isHiddenLeft() {
       if (!this.page) return {opacity: '0'}
       else return {opacity: '1'}
+    },
+    maxPage() {      
+      return this.filters.length - this.itemsPerPage
     }
   },
   methods: {
     moveSlide(diff) {
-      if (diff === "+" && this.page < this.filters.length - this.itemsPerPage) {
+      if (diff === "+" && this.page < this.maxPage) {
         this.page = this.page + 1;
       } else if (diff === "-" && this.page > 0) {
         this.page = this.page - 1;
       }
       return;
+    },
+    startDrag(ev) {
+      this.touchPos = ev.touches[0].clientX
+      this.startPage = this.page
+    },
+    drag(ev) {
+      ev.preventDefault()
+      
+      const diff = (ev.touches[0].clientX - this.touchPos)
+      if (diff > 10) this.didDrag = true
+      this.page = this.startPage - diff/this.itemWidth
+      console.log(this.page);
+    },
+    stopDrag() {
+      if (this.page > this.maxPage) this.page = this.maxPage
+      else if (this.page < 0) this.page = 0
+      else this.page = Math.round(this.page)
+      this.didDrag = false
+    },
+    beforeRouteLeave (to, from, next) {
+      if (!didDrag) {
+        next()
+      } else {
+        next(false)
+      }
     }
   }
 };
