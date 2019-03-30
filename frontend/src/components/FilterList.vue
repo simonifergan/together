@@ -1,5 +1,5 @@
 <template>
-  <ul class="filter-list">
+  <section class="filter-list">
     <div class="top-container">
       <h2>{{title}}</h2>
       <div class="filters-container">
@@ -16,7 +16,7 @@
         </button>
       </div>
     </div>
-  </ul>
+  </section>
 </template>
 
 <script>
@@ -61,7 +61,7 @@ export default {
       else return 2;
     },
     itemWidth() {
-      return 220;
+      return (window.matchMedia("(min-width: 500px)").matches) ? 220 : 130
     },
     isHiddenRight() {
       if (this.page > this.maxPage - 1) return {opacity: '0'}

@@ -3,22 +3,24 @@
     <div class="profile-img-container">
       <div class="profile-img" :style="profilePic"></div>
     </div>
-    <p>{{trip.user.firstname}} {{trip.user.lastname}}<span>({{totalLikes}})&nbsp;<i class="far fa-heart"></i></span></p>
-    <p>{{trip.title}}</p>
-    <p>On {{trip.startsAt | monthAndYearName}}, for a {{trip.duration}}</p>
-    <div class="members-container" v-if="trip.members.length" >
-      <div 
-        class="member-img"
-        v-for="member in firstThree" 
-        :key="member._id"
-        :style="{ backgroundImage: `url('${member.profilePic}')` }"
-        :title="member.firstname"
-        />
-        <div class="placeholder-div"></div>
-        <div class="members-txt" v-if="spotsLeft > 0">joined, {{spotsLeft}} spots remaining!</div>
-        <div class="members-txt" v-else>No spots remaining.</div>
+    <div class="trip-details-container">
+      <p>{{trip.user.firstname}} {{trip.user.lastname}}<span>({{totalLikes}})&nbsp;<i class="far fa-heart"></i></span></p>
+      <p>{{trip.title}}</p>
+      <p>On {{trip.startsAt | monthAndYearName}}, for a {{trip.duration}}</p>
+      <div class="members-container" v-if="trip.members.length" >
+        <div 
+          class="member-img"
+          v-for="member in firstThree" 
+          :key="member._id"
+          :style="{ backgroundImage: `url('${member.profilePic}')` }"
+          :title="member.firstname"
+          />
+          <div class="placeholder-div"></div>
+          <div class="members-txt" v-if="spotsLeft > 0">joined, {{spotsLeft}} spots remaining!</div>
+          <div class="members-txt" v-else>No spots remaining.</div>
+      </div>
+      <p v-else>Be the first to join!</p>
     </div>
-    <p v-else>Be the first to join!</p>
     
   </router-link>
 </template>

@@ -1,15 +1,15 @@
 <template>
-  <ul class="trip-list">
+  <section class="trip-list">
     <div class="trip-container">
       <h2>{{title}}</h2>
-      <div class="trip-items">
+      <ul class="trip-items">
         <trip-preview v-for="trip in tripsToDisplay" :key="trip._id" :trip="trip" />
-      </div>
+      </ul>
       <router-link title="See all available trips" class="show-all" tag="div" to="/search?q=">
         Show all
       </router-link>
     </div>
-  </ul>
+  </section>
 </template>
 
 <script>
@@ -37,7 +37,7 @@ export default {
       if (window.matchMedia("(min-width: 1100px)").matches) return 4;
       else if (window.matchMedia("(min-width: 1000px)").matches) return 3;
       else if (window.matchMedia("(min-width: 730px)").matches) return 2;
-      else return 1;
+      else return 4;
     }
   },
   components: {
