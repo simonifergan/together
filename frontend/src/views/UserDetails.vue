@@ -36,23 +36,20 @@
         :key="trip._id"
         :trip="trip"
         :user="user"
-        :loggedInUser="loggedInUser"
-      >
-        <!-- <pending-list
-            slot="pending-list"
-            @requestPendingUsers="requestPendingUsers"
-            @requestApproved="requestApproved"
-            @requestRejected="requestRejected"
-            v-if="loggedInUser && loggedInUser._id === user._id"
-        />-->
-      </user-trip-preview>
+        :loggedInUser="loggedInUser" />
     </ul>
     <div class="member-in">
-      <ul>
+      <h3>Member in</h3>
+      <ul class="member-list">
         <member-pending-in v-for="trip in user.memberIn" :key="trip._id" :trip="trip" />
       </ul>
     </div>
-    
+    <div class="pending-in" >
+      <h3>Pending in</h3>
+      <ul class="pending-list">
+        <member-pending-in v-for="trip in user.pendingIn" :key="trip._id" :trip="trip" />
+      </ul>
+    </div>
   </section>
 </template>
 

@@ -4,33 +4,79 @@
 }
 
 .request-dropdown {
+    font-family: $font-open-sans;
     margin: 0;
     @include flex(column);
     z-index: 2;
     position: absolute;
     background-color: #fff;
     color: #333;
-    width: 430px;
+    width: 500px;
     min-height: 200px;
     max-height: 500px;
     top: 63px;
     right: 65px;
-    padding: 5px;
     border-radius: 0 0 1px 1px;
     box-shadow: 0 0 1px 1px $box-shadow-gray;
     overflow-y: scroll;
     .req-preview {
+        width: 100%;
+        padding: 5px;
         @include flex(row, space-between, center);
+        &:hover {
+            background-color: #f6f6f6;
+        }
         .req-content {
+            @include flex(column, flex-start, center);
             h3 {
+                font-weight: 600;
+              
+                cursor: pointer;
+                margin-bottom: 5px;
+            }
+            h4 {
+                cursor: pointer;
                 white-space: nowrap; 
                 overflow: hidden;
                 text-overflow: ellipsis;
+                width: 170px;
+                span {
+                    white-space: nowrap; 
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                &:hover {
+                    span {
+                        text-decoration: underline;
+                        
+                    }
+                }
             }
-            @include flex(column, flex-start, center)
         }
-        .see-all {
-            cursor: pointer;
+        .btns-container {
+            button {
+                font-family: $font-ubuntu-s-bold;
+                color: white;
+                background-color: $clr1;
+                border: none;
+                font-size: 1em;
+                border-radius: 2px;
+                transition: .3s;
+                width: 84px;
+                padding: 10px 5px;
+                &:first-of-type {
+                    margin-right: 5px;
+                }
+                &:last-of-type {
+                    background-color: $clr3;
+                    &:hover {
+                        background-color: #989898;
+                    }
+                }
+                &:hover {
+                    background-color: rgba($clr1, .7);
+                }
+            }
         }
     }
 }
