@@ -100,7 +100,7 @@ async function loginWithFacebook(user) {
 async function getById(id) {
     const _id = new ObjectId(id);
     const db = await mongoService.connect();
-    const user = await db.collection(usersCollection).aggregate([
+    const userInDB = await db.collection(usersCollection).aggregate([
         {
             $match: {_id}
         },
@@ -115,6 +115,24 @@ async function getById(id) {
             }
         },
         {
+            $lookup: {
+                from: usersCollection,
+                localField: 'memberIn.userId',
+                foreignField: '_id',
+                as: 'memberInUsers'
+            }
+        },
+        {
+            $project: {
+                memberIn: {
+                    user: {
+                        password: 0
+                    }
+                }
+            }
+        },
+    
+        {
             $lookup:
             {
                 from: tripsCollection,
@@ -124,10 +142,41 @@ async function getById(id) {
 
             }
         },
+        {
+            $lookup: {
+                from: usersCollection,
+                localField: 'pendingIn.userId',
+                foreignField: '_id',
+                as: 'pendingInUsers'
+            }
+        },
        
     ]).toArray();
-    if (user[0]) delete user[0].password;
-    return user[0];
+    let user = null;
+    // FIX THE MESS
+    if (userInDB[0]) {
+        user = {...userInDB[0]};
+        user.memberIn = user.memberIn.map(trip => {
+            let tripUser = user.memberInUsers.find(user => user._id.toString() === trip.userId.toString() );
+            if (tripUser) {
+                delete tripUser.password;
+                trip.user = tripUser;
+                return trip;
+            }
+        });
+        user.pendingIn = user.pendingIn.map(trip => {
+            let tripUser = user.pendingInUsers.find(user => user._id.toString() === trip.userId.toString() );
+            if (tripUser) {
+                delete tripUser.password;
+                trip.user = tripUser;
+                return trip;
+            }
+        });
+        delete user.memberInUsers;
+        delete user.pendingInUsers;
+        delete user.password;
+    }
+    return user;
 }
 
 // BACKUP:
