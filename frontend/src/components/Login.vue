@@ -8,8 +8,14 @@
                 <el-input type="email" v-model="email" placeholder="Email" />
             </label>
             <label title="Enter your password">Password<br>
-            <el-input type="password" v-model="password" placeholder="Password" />
-                </label>
+                <el-input type="password" v-model="password" placeholder="Password" />
+            </label>
+            <p>
+                Not registered yet?
+                <router-link tag="span" to="/signup">
+                    Sign up
+                </router-link>
+            </p>
             <div class="btns-container">
                 <SNSLogin type="button" />
                 <button title="Press to login" type="submit">Login</button>

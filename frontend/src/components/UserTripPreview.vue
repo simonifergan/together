@@ -9,17 +9,8 @@
     </div>
     <transition name="fade">
       <div class="expand-container" @click.stop="" v-show="isExpanded">
-        <ul class="pending-list" v-if="(loggedInUser && loggedInUser._id === user._id)">
-          <h5>Pending</h5>
-          <div @click.stop class="accordion-container">
-            <li class="user-item" v-for="(pender) in trip.pending" :key="pender._id+trip._id">
-              <div class="user-img" :style="{backgroundImage: `url('${pender.profilePic}')`}"/>
-              <span>{{pender.firstname}}&nbsp;{{pender.lastname}}</span>
-            </li>
-          </div>
-        </ul>
+        <h5>Members</h5>
         <ul class="member-list">
-          <h5>Members</h5>
           <div @click.stop class="accordion-container">
             <li class="user-item" v-for="(member) in trip.members" :key="member._id+trip._id">
               <div class="user-img" :style="{backgroundImage: `url('${member.profilePic}')`}"/>
