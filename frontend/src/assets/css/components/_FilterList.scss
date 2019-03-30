@@ -47,7 +47,7 @@
             .filter-previews {
                 @include flex();
                 position: absolute;
-                transition: .6s ease;
+                // transition: transform .6s ease;
                 .filter-preview {
                     cursor: pointer;
                     width: 200px;

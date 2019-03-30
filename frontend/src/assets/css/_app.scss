@@ -34,7 +34,9 @@ button {
     // GLOBAL HEADER
     .main-header {
         .wrapper {
-            @include wrapper(1080px);
+            @media(min-width: 1200px) {
+                @include wrapper(1080px);
+            }
             @include flex(row, space-between, center);
             width: 100%;
         }
@@ -44,7 +46,8 @@ button {
         width: 100%;
         z-index: 2;
         color: #333;
-        box-shadow: 0px .5px 1px #676767;
+        box-shadow: 0px 0px 1px .5px #676767;
+
         &.on-homepage {
             box-shadow: none;
             position: absolute;
@@ -68,6 +71,9 @@ button {
                 font-family: $font-lobster;
                 font-size: 2em;
                 padding-left: 5px;
+                @media (min-width: 1200px) {
+                    font-size: 2.5em;
+                }
             }
             
         }
@@ -80,11 +86,14 @@ button {
             font-family: $font-open-sans;
             font-weight: 550;
             font-size: 14px;
+            @media (min-width: 1200px) {
+                font-size: 16px;
+            }
             top: 72px;
             color: #333;
             position: fixed;
             width: 200px;
-            height: 100vh;
+            height: calc(100vh - 70px);
             opacity: 0;
             transform: translate(-200%, 0);
             visibility: hidden;
@@ -123,6 +132,10 @@ button {
           
             .user-dashboard {
                 @include userImg(35px, 35px);
+                @media (min-width: 1200px) {
+                    @include userImg(40px, 40px);
+
+                }
                 margin: 0;
                 position: relative;
                 cursor: pointer;
@@ -138,7 +151,7 @@ button {
                     padding: 0 10px;
                     color: #333;
                     width: 230px;
-                    top: 51px;
+                    top: 55px;
                     right: -5px;
                     border-radius: 0 0 1px 1px;
                     box-shadow: 0 0 1px 1px $box-shadow-gray;
@@ -368,7 +381,7 @@ button {
             position: absolute;
             background-color: #fff;
             color: #333;
-            width: 430px;
+            width: 500px;
             min-height: 85px;
             max-height: 500px;
             top: 42px;

@@ -1,9 +1,5 @@
 <template>
-  <ul class="msgs-dropdown">
-    <header>
-      <!-- TODO: 2 buttons for group chats -->
-    </header>
-    <!-- v-show="chat.msgs.length" -->
+  <ul class="request-dropdown">
     <request-preview
       v-for="request in requestsForRender"
       :request="request"
@@ -11,7 +7,7 @@
       @click.stop=""
     />
     <footer v-if="!isExpanded">
-      <router-link to="/messages">See all requests</router-link>
+      <router-link to="/requests">See all requests</router-link>
     </footer>
   </ul>
 </template>
@@ -39,6 +35,22 @@ export default {
   components: {
     RequestPreview
   },
+  methods: {
+      requestApproved(pendingUser) {
+      this.$store.dispatch({
+        type: "ApproveUserToTrip",
+        userToJoin: pendingUser,
+        tripIdToJoin: this.trip._id
+      });
+    },
+    requestRejected(pendingUser) {
+      this.$store.dispatch({
+        type: "removeUserFromTrip",
+        userToLeave: pendingUser,
+        tripIdToLeave: this.trip._id
+      });
+    },
+  },
   computed: {
     isExpanded() {
         return (this.$route.path === '/messages')
@@ -53,6 +65,7 @@ export default {
         return reqs
     }
   },
+  
   methods: {
     // initChat(chatId) {
     //   if (this.isExpanded) {
