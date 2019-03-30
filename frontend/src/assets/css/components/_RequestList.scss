@@ -1,0 +1,36 @@
+
+.request-container {
+    position: relative;
+}
+
+.request-dropdown {
+    margin: 0;
+    @include flex(column);
+    z-index: 2;
+    position: absolute;
+    background-color: #fff;
+    color: #333;
+    width: 430px;
+    min-height: 200px;
+    max-height: 500px;
+    top: 63px;
+    right: 65px;
+    padding: 5px;
+    border-radius: 0 0 1px 1px;
+    box-shadow: 0 0 1px 1px $box-shadow-gray;
+    overflow-y: scroll;
+    .req-preview {
+        @include flex(row, space-between, center);
+        .req-content {
+            h3 {
+                white-space: nowrap; 
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            @include flex(column, flex-start, center)
+        }
+        .see-all {
+            cursor: pointer;
+        }
+    }
+}

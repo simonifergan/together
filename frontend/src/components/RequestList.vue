@@ -1,9 +1,5 @@
 <template>
-  <ul class="msgs-dropdown">
-    <header>
-      <!-- TODO: 2 buttons for group chats -->
-    </header>
-    <!-- v-show="chat.msgs.length" -->
+  <ul class="request-dropdown">
     <request-preview
       v-for="request in requestsForRender"
       :request="request"
@@ -11,7 +7,7 @@
       @click.stop=""
     />
     <footer v-if="!isExpanded">
-      <router-link to="/messages">See all requests</router-link>
+      <router-link to="/requests">See all requests</router-link>
     </footer>
   </ul>
 </template>

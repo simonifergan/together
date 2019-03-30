@@ -18,15 +18,19 @@ Vue.filter('cityList', cities => {
     return cities.reduce((acc, city, idx) => {
         if (idx < cities.length - 2) return acc + city + ', ';
         else if (idx === cities.length - 2) return acc + city + ' & ';
-        else return acc + city ;
+        else return acc + city;
     }, '');
+})
+
+Vue.filter('cityWithCountryToCity', city => {
+    return city.match(/^.*?(?=[,\-]|$)/)[0];
 })
 
 Vue.filter('monthAndYearName', (monthYearStr) => {
     let monthNumStart = +monthYearStr.substring(5);
     let monthNameStart = UtilService.getMonthName(monthNumStart);
-    let yearNumStart = +monthYearStr.substring(0,4);
-   
+    let yearNumStart = +monthYearStr.substring(0, 4);
+
     return `${monthNameStart} ${yearNumStart}`;
 })
 
@@ -34,7 +38,7 @@ Vue.filter('msgSender', (senderId, chatters) => {
     return chatters.find(user => user._id === senderId).firstname;
 })
 
-Vue.filter('notificationAction', (action)=>{
+Vue.filter('notificationAction', (action) => {
     switch (action) {
         case 'trip_request':
             return 'has asked to join a trip.';
@@ -63,7 +67,7 @@ Vue.filter('notificationAction', (action)=>{
     }
 });
 
-Vue.filter('fromNow', (timestamp)=>{
+Vue.filter('fromNow', (timestamp) => {
     return moment(timestamp).fromNow();
 });
 

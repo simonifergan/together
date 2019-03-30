@@ -54,13 +54,13 @@
     </div>
 
     <div class="trip-users">
-      <h3 v-if="loggedInUser && trip.pending.length > 0 && trip.user._id === loggedInUser._id">Pending:</h3>
+      <h3 v-if="loggedInUser && trip.pending.length && trip.userId === loggedInUser._id">Pending:</h3>
       <pending-list
         :isSpotsLeft="isSpotsLeft"
         @requestPendingUsers="requestPendingUsers"
         @requestApproved="requestApproved"
         @requestRejected="requestRejected"
-        v-if="loggedInUser && loggedInUser._id === trip.userId"
+        v-if="loggedInUser && loggedInUser._id === trip.userId && trip.pending.length"
       />
       <h3>Group members:</h3>
       <div class="registered">

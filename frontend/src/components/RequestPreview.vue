@@ -1,16 +1,16 @@
 <template>
   <li class="req-preview" :title="request.user.firstName">
-    <div class="user-img-container">
+    <span class="user-img-container">
       <div
         class="user-img"
         :style="{'background-image': `url(${request.user.profilePic})`}"
       />
+    </span>
+    <div class="req-content">
+      <h3>{{request.trip.title}}</h3>
+      <span>{{request.user.firstname}}</span>
     </div>
-    <h3>{{request.trip.title}}</h3>
-    <p>{{request.user.firstname}}</p>
-    <router-link :to="'/trip/' + request.trip.id">View Trip</router-link>
-    <div class="msg-content">
-    </div>
+      <router-link class="see-all" tag="span" :to="'/trip/' + request.trip.id">View Trip</router-link>
   </li>
 </template>
 
