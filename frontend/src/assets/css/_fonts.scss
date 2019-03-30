@@ -1,4 +1,8 @@
 @font-face {
+    font-family: 'Lobster';
+    src: url('../fonts/Lobster/Lobster-Regular.ttf');
+}
+@font-face {
     font-family: 'Pacifico';
     src: url('../fonts/Pacifico/Pacifico-Regular.ttf');
 }
@@ -48,7 +52,7 @@
     src: url('../fonts/Roboto/Roboto-Bold.ttf');
 }
 
-
+$font-lobster: 'Lobster', cursive;
 $font-pacifico: 'Pacifico', cursive;
 $font-open-sans: 'Open Sans', sans-serif;
 $font-open-sans-bold: 'Open Sans Bold', sans-serif;

@@ -6,47 +6,54 @@
     .top-fold {
         border-bottom: 1px solid $box-shadow-gray;
         padding: 20px 30px 10px 30px;
-        @include flex(row, flex-start, center);
+        @include flex(row, center, center);
         .user-img {
             @include userImg(230px, 230px);
             box-shadow: 0 0 1px 1px #333;
             background-repeat: no-repeat;
             border: 3px solid #fff;
         }
-        .user-info {
-            margin-left: 50px;
-            @include flex(column);
-            h2 {
-                font-weight: bold;
-                font-family: $font-open-sans;
-                font-size: 1.4em;
-                margin-bottom: 5px;
-            }
-            h3 {
-                font-size: 1em;
-                margin-bottom: 5px;
-                font-family: $font-open-sans;
-            }
-        }
-        .likes-container {
-            margin-left: 50px;
-            button {
-                width: 50px;
-                height: 50px;
-                background: none;
-                border: none;
-                font-size: 1.5em;
-            }
-            .likes-count {
-                @include flex(row, flex-start, center);
-                font-size: .9em; 
-                i {
-                    color: #d04343;
+        .user-details-content {
+            @include flex(column, flex-start, center);
+            .user-info {
+                margin-left: 50px;
+                @include flex(column);
+                h2 {
+                    font-weight: bold;
+                    font-family: $font-open-sans;
+                    font-size: 1.4em;
+                    margin-bottom: 5px;
                 }
-                span {
-                    position: relative;
-                    left: -13px;
-                    top: -1px;
+                h3 {
+                    font-size: 1em;
+                    margin-bottom: 5px;
+                    font-family: $font-open-sans;
+                }
+            }
+            .btns-like-msg {
+                @include flex(row, center, center);
+                button {
+                    width: 50px;
+                    height: 50px;
+                    background: none;
+                    border: none;
+                    font-size: 1.5em;
+                }
+                i {
+                    font-size: 1em;
+                    color: #373866;
+                }
+                .likes-count {
+                    @include flex(row, flex-start, center);
+                    font-size: .9em; 
+                    i {
+                        color: #d04343;
+                    }
+                    span {
+                        position: relative;
+                        left: -13px;
+                        top: -1px;
+                    }
                 }
             }
         }

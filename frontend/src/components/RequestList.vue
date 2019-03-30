@@ -8,7 +8,7 @@
       v-for="request in requestsForRender"
       :request="request"
       :key="request.tripId + request.user.userId"
-      @click.native=""
+      @click.stop=""
     />
     <footer v-if="!isExpanded">
       <router-link to="/messages">See all requests</router-link>
