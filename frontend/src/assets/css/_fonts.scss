@@ -52,6 +52,11 @@
     src: url('../fonts/Roboto/Roboto-Bold.ttf');
 }
 
+@font-face {
+    font-family: 'Roboto Black';
+    src: url('../fonts/Roboto/Roboto-Black.ttf');
+}
+
 $font-lobster: 'Lobster', cursive;
 $font-pacifico: 'Pacifico', cursive;
 $font-open-sans: 'Open Sans', sans-serif;
@@ -63,3 +68,4 @@ $font-ubuntu-bold: 'Ubuntu Bold', sans-serif;
 $font-ubuntu-s-bold: 'Ubuntu Semi Bold', sans-serif;
 $font-roboto: 'Roboto';
 $font-roboto-bold: 'Roboto Bold';
+$font-roboto-black: 'Roboto Black';
