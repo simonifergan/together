@@ -35,6 +35,22 @@ export default {
   components: {
     RequestPreview
   },
+  methods: {
+      requestApproved(pendingUser) {
+      this.$store.dispatch({
+        type: "ApproveUserToTrip",
+        userToJoin: pendingUser,
+        tripIdToJoin: this.trip._id
+      });
+    },
+    requestRejected(pendingUser) {
+      this.$store.dispatch({
+        type: "removeUserFromTrip",
+        userToLeave: pendingUser,
+        tripIdToLeave: this.trip._id
+      });
+    },
+  },
   computed: {
     isExpanded() {
         return (this.$route.path === '/messages')
@@ -49,6 +65,7 @@ export default {
         return reqs
     }
   },
+  
   methods: {
     // initChat(chatId) {
     //   if (this.isExpanded) {

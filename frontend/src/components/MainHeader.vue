@@ -21,7 +21,7 @@
       <a href="#">About</a>
       <router-link to="/signup" v-if="!user">Sign up</router-link>
       <div class="requests-container" v-if="user">
-        <a @click.stop="showReqs">Requests</a>
+        <a @click.stop="showReqs">Requests&nbsp;<span class="unread-msgs" v-if="requests.length">{{requests.length}}</span></a>
         <request-list v-show="isShowReqs" :requests="requests" :user="user"/>
       </div>
       <div class="msgs-container" v-if="user">

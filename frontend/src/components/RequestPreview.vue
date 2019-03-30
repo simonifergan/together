@@ -1,16 +1,20 @@
 <template>
   <li class="req-preview" :title="request.user.firstName">
     <span class="user-img-container">
-      <div
-        class="user-img"
-        :style="{'background-image': `url(${request.user.profilePic})`}"
-      />
+      <div class="user-img" :style="{'background-image': `url(${request.user.profilePic})`}"/>
     </span>
     <div class="req-content">
-      <h3>{{request.trip.title}}</h3>
-      <span>{{request.user.firstname}}</span>
+      <router-link :title="`See ${request.user.firstname}'s profile`" tag="h3" :to="'/user/' + request.user._id">{{request.user.firstname}}</router-link>
+      <router-link class="title" :title="'Go to ' + request.trip.title" tag="h4" :to="'/trip/' + request.trip.id">In: <span>{{request.trip.title}}</span></router-link>
     </div>
-      <router-link class="see-all" tag="span" :to="'/trip/' + request.trip.id">View Trip</router-link>
+    <div class="btns-container">
+      <button :title="`Approve ${request.user.firstname}`" @click="requestApproved(request.user)">
+        Approve
+      </button>
+      <button :title="`Reject ${request.user.firstname}`" @click="requestRejected(request.user)">
+        Reject
+      </button>
+    </div>
   </li>
 </template>
 
@@ -22,17 +26,22 @@ export default {
       required: true
     }
   },
-  computed: {
-
-  }
+  methods: {
+    requestApproved(pendingUser) {
+      this.$emit("requestApproved", pendingUser);
+    },
+    requestRejected(pendingUser) {
+      this.$emit("requestRejected", pendingUser);
+    }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-    .user-img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background-size: cover;
-    }
+.user-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-size: cover;
+}
 </style>
