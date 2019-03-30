@@ -360,7 +360,7 @@ export default {
                 this.didDrag = false
                 return
             }
-            const id = ev.path[0].id;
+            const id = ev.target.id;
             if (!id) return;
             const idx = this.value.findIndex(selectedIds => selectedIds === id)
             if (idx !== -1) {
@@ -377,7 +377,7 @@ export default {
             this.$emit('input', this.value);
         },
         handleTooltip(ev) {
-            const id = ev.path[0].id;
+            const id = ev.target.id;
             if (id) {
                 this.toolTipTxt = id;
                 this.mousePos.x = ev.clientX;

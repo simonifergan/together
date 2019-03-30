@@ -99,7 +99,7 @@
         <span>(recommended)</span>
       </h2>
       <activity-prefs v-model="user.tripPrefs.activities"/>
-      <button type="submit">Save</button>
+      <button v-if="!isProcessing" type="submit">Save</button>
     </form>
   </section>
 </template>
@@ -120,7 +120,8 @@ export default {
   data() {
     return {
       user: null,
-      newImage: null
+      newImage: null,
+      isProcessing: false,
     };
   },
   methods: {
@@ -128,6 +129,7 @@ export default {
       if (this.newImage)
         this.user.profilePic = await ImageService.uploadImage(this.newImage);
       await this.$store.dispatch({ type: "saveUser", user: this.user });
+      this.isProcessing = false;
       this.$router.go(-1);
     },
     setProfilePic(img) {
