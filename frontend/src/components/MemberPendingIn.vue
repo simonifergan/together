@@ -1,8 +1,6 @@
 <template>
   <router-link tag="li" :to="'/trip/' + trip._id" class="trip-preview">
-    <div class="profile-img-container">
-      <img class="profile-img" :src="trip.user.profilePic">
-    </div>
+    <img class="profile-img" :src="trip.user.profilePic">
     <p>{{trip.user.firstname}} {{trip.user.lastname}}</p>
     <p>{{trip.title}}</p>
     <p>On {{trip.startsAt | monthAndYearName}}, for a {{trip.duration}}</p>
