@@ -45,7 +45,7 @@ app.get('/', (req, res) => {
 
 // Init sockets
 const socketService = require('./services/socket.service.js')
-const server = app.listen(PORT, () => console.log(`Travel Maker app listening on port ${PORT}`))
+const server = app.listen(PORT, () => console.log(`Together app listening on port ${PORT}`))
 const io = require('socket.io')(server);
 
 // Use socket services
