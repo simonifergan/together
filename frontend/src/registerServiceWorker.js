@@ -2,6 +2,7 @@
 
 import { register } from 'register-service-worker'
 import {convertedVapidKey} from './services/PushNotificationService'
+// EVENT LISTENER:
 
 const SUB_KEY = 'pushSub'
 
@@ -15,8 +16,14 @@ if (process.env.NODE_ENV === 'production') {
         localStorage.setItem(SUB_KEY, JSON.stringify(sub));
       })
     },
-    registered (gotit) {
-      console.log('Service worker has been registered.', gotit)
+    registered (sw) {
+      console.log('Service worker has been registered.')
+      sw.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: convertedVapidKey
+      }).then(sub => {
+        localStorage.setItem(SUB_KEY, JSON.stringify(sub));
+      })
       
     },
     cached () {
@@ -26,13 +33,13 @@ if (process.env.NODE_ENV === 'production') {
       console.log('New content is downloading.')
     },
     updated (sup) {
-      console.log('New content is available; please refresh.', sup)
+      console.log('New content is available; please refresh.')
     },
     offline () {
       console.log('No internet connection found. App is running in offline mode.')
     },
     error (error) {
-      console.error('Error during service worker registration:', error)
+      console.error('Error during service worker registration:')
     }
   })
 }
