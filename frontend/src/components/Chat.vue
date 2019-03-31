@@ -21,11 +21,11 @@
       </button>
     </header>
     <ul ref="msgsBlock">
-      <li
-        v-for="(msg, index) in msgs"
-        :key="index">
-          <div class="sender" v-show="msg.sender && msg.sender !== loggedUser._id && chattingWith.length > 1">{{msg.sender | msgSender(chat.users)}}</div>
-          <div v-show="!msg.sender">{{msg.txt}}</div>
+      <li v-for="(msg, index) in msgs" :key="index">
+          <div class="sender" v-if="msg.sender && msg.sender !== loggedUser._id && chattingWith.length > 1">
+            {{msg.sender | msgSender(chat.users)}}
+          </div>
+          <div v-if="!msg.sender">{{msg.txt}}</div>
           <div :class="{'not-user': (msg.sender !== loggedUser._id)}" class="txt-container">
             <span>{{msg.txt}}</span>
           </div>
