@@ -5,7 +5,7 @@
       @requestRejected="requestRejected"
       v-for="request in requestsForRender"
       :request="request"
-      :key="request.tripId + request.user.userId"
+      :key="request.trip._id + request.user._id"
       @click.stop
     />
     <footer v-if="!isExpanded">

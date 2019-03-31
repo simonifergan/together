@@ -76,7 +76,7 @@ export default {
   },
   computed: {
     loggedUser() {
-      return this.$store.getters.loggedUser;
+      return this.$store.getters.loggedUser
     },
     searchQueryWithDate() {
       return "/search?q=" + this.searchQuery + "&tripDate=" + this.tripDate;
@@ -84,11 +84,12 @@ export default {
   },
   watch: {
     async loggedUser() {
-      if (this.listsForDisplay.recommended)
-        this.listsForDisplay.recommended = await this.$store.dispatch({
+      const idx = this.listsForDisplay.findIndex(list => list.title === 'recommended')
+      if (idx !== -1)
+        this.listsForDisplay[idx].trips = await this.$store.dispatch({
           type: "getRecommendedTrips"
         });
-    }
+      }
   },
   methods: {
     setHeader(ev) {
@@ -197,7 +198,7 @@ export default {
       const currList = filterList || tripList;
       if (currList) {
         this.page++;
-        this.listsForDisplay.push(currList);
+        this.listsForDisplay.push(currList);        
         $state.loaded();
       } else {
         $state.complete();

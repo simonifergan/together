@@ -1,5 +1,5 @@
 <template>
-  <section class="trip-list">
+  <section class="trip-list" v-if="!isEmpty">
     <div class="trip-container">
       <h2>{{title}}</h2>
       <ul class="trip-items">
@@ -29,6 +29,9 @@ export default {
     }
   },
   computed: {
+    isEmpty() {
+      return this.trips.length === 0
+    },
     tripsToDisplay() {
       let numOfTrip = this.numOfTrip;
       return this.trips.slice(0, numOfTrip);
