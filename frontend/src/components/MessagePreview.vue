@@ -45,10 +45,13 @@ export default {
       return this.chat.msgs[this.chat.msgs.length - 1];
     },
     lastSender() {
-      if (!this.lastMsg) return '';
+      if (!this.lastMsg && !this.lastMsg.sender) return '';
       const senderId = this.lastMsg.sender;
       if (senderId === this.user._id) return 'You:';
-      else if(this.chattingWith.length) return this.chattingWith.find(user => user._id === senderId).firstname + ':';
+      else if(this.chattingWith.length)  {
+        const sender = this.chattingWith.find(user => user._id === senderId);
+        return (sender)? sender.firstname + ':': '';
+      }
       else return '';
       
     }

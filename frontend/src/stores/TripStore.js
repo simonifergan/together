@@ -204,11 +204,12 @@ export default {
                 })
                 // Need to update group chat
                 const updatedChat = await dispatch({type: 'loadChatById', chatId: updatedTrip.chatId });
+                console.log(updatedChat);
                 dispatch({
                     type: "socketSendMsg",
                     msg: { txt: `${userToJoin.firsname} has joined the group!`, sentAt: Date.now(), isRead: false, forGroup: true },
-                    chatId: this.chat._id,
-                    recipients: this.chat.users
+                    chatId: updatedChat._id,
+                    recipients: updatedChat.users,
                   });
                
 
