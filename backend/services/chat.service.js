@@ -168,21 +168,21 @@ async function updateTripChat(chatId, users) {
 async function addMsg({ msg, chatId, unread }) {
     chatId = new ObjectId(chatId);
     msg.sender = (msg.sender)? new ObjectId(msg.sender) : null;
+    console.log('addmsgUNREAD:', unread);
+    unread = unread.map(userId => new ObjectId(userId));
     try {
         const db = await mongoService.connect();
         const res = await db.collection(chatsCollection).updateOne(
             { _id: chatId },
             {
+                $set:
+                {
+                    'unread': unread,
+                },
                 $push: {
                     msgs: msg
                 }
             },
-            {
-                $set:
-                {
-                    'unread': unread
-                }
-            }
         )
         return res;
     } catch (err) {
