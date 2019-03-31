@@ -7,12 +7,13 @@ module.exports = (app) => {
 
     // Push notifications:
 
-    // app.post('/subscribe', (req, res) => {
-    //     const subscription = req.body;
-    //     console.log(subscription);
-    //     // send 201 status
-    //     res.status(201).json({ 'see': 'see this?' });
-    // })
+    app.post('/subscribe', (req, res) => {
+        const { pushSub } = req.body;
+        req.session.pushSub = pushSub;
+        console.log('I AM IN BACKEND WITH PUSHSUB:', req.session.pushSub);
+        // send 201 status
+        res.status(201).json({ 'see': 'see this?' });
+    })
 
 
 
@@ -79,10 +80,10 @@ module.exports = (app) => {
     app.post(`${BASE}/login`, async (req, res) => {
         console.log('hi login');
         const credentials = req.body;
-        console.log(credentials)
+        credentials.pushSub = req.session.pushSub;
+        console.log('YOU TRIED TO LOG IN:', credentials)
         // IF USER LOGGED IN WITH FACEBOOK:
         if (credentials && credentials.facebookId) {
-            // return res.end();
             try {
                 const user = await userService.loginWithFacebook(credentials);
                 req.session.user = user;

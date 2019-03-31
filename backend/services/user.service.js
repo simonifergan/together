@@ -80,14 +80,21 @@ async function updateSubscriber(userId, pushSub) {
 
 async function loginWithFacebook(user) {
     try {
+        const {pushSub} = user;
         const db = await mongoService.connect();
         const userInDB = await db.collection(usersCollection).findOne({ email: user.email });
         if (!userInDB) {
+            if (pushSub) delete user.pushSub;
             const { insertedId } = await db.collection(usersCollection).insertOne(user);
             user._id = insertedId;
+            updateSubscriber(insertedId, pushSub);
+            console.log('facebookuser registered:', user);
             return user;
         } else {
-            if (userInDB.facebookId === user.facebookId) return userInDB;
+            if (userInDB.facebookId === user.facebookId) {
+                updateSubscriber(userInDB._id, pushSub);
+                return userInDB;
+            }
             else throw new Error('User already exists, please log in using your Username and Password');
         }
     } catch (err) {

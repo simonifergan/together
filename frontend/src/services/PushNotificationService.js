@@ -9,6 +9,9 @@ export const PUSH_URL = (process.env.NODE_ENV !== 'development')
     ? 'https://together-pwa.herokuapp.com/#'
     : 'http://localhost:3003/#';
 
+export const SUB_API = (process.env.NODE_ENV !== 'development')
+    ? '/subscribe'
+    : 'http://localhost:3003/subscribe';
 
 
 function urlBase64ToUint8Array(base64String) {

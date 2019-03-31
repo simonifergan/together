@@ -1,7 +1,7 @@
 import UserService from '@/services/UserService'
 import FacebookService from '@/services/FacebookService'
 import NotificationService from '@/services/NotificationService';
-import { PUSH_URL ,getEmptyPushNotification } from '@/services/PushNotificationService';
+import { PUSH_URL, getEmptyPushNotification } from '@/services/PushNotificationService';
 
 
 export default {
@@ -184,9 +184,9 @@ export default {
                     notification.title = `Together`;
                     notification.payload.body = `${getters.loggedUser.firstname} ${getters.loggedUser.lastname} has liked your profile!`
                     notification.payload.icon = `${getters.loggedUser.profilePic}`
-                    notification.payload.actions.unshift({action: 'go', title: `See ${getters.loggedUser.firstname}'s profile.`},)
-                    notification.payload.data.url = `${PUSH_URL}/user/${loggedUserId}`; 
-                    dispatch({type: 'socketPushNotification', userId, notification});
+                    notification.payload.actions.unshift({ action: 'go', title: `See ${getters.loggedUser.firstname}'s profile.` })
+                    notification.payload.data.url = `${PUSH_URL}/user/${loggedUserId}`;
+                    dispatch({ type: 'socketPushNotification', userId, notification });
                 }
                 return updatedUser;
             } catch {
@@ -197,10 +197,12 @@ export default {
 
 
         // SOCIAL MEDIA user behavior:
-        async checkFacebookUser({ commit }) {
-            const userFBInfo = await FacebookService.getUserInfo();
+        async checkFacebookUser({ commit }, { userFBInfo }) {
+            console.log('here after status check?');
+            if (!userFBInfo) userFBInfo = await FacebookService.getUserInfo();
             if (!userFBInfo) return false;
             else {
+                console.log('first try fb info?', userFBInfo);
                 // Prepare object for our database and decide whether to register or auth him
                 const { id, first_name, last_name, picture, email } = userFBInfo;
                 let user = UserService.getEmptyUser();
@@ -212,11 +214,15 @@ export default {
                 try {
                     const loggedUser = await UserService.login(user);
                     commit({ type: 'setLoggedUser', user: loggedUser });
+                    dispatch({ type: "socketConnect" });
+                    dispatch({ type: "getUserChats" });
+                    dispatch({ type: "getUserRequests" });
+                    dispatch({ type: "loadNotification" });
+                    return true;
 
                 } catch (err) {
                     // TODO simon
                 }
-                return true;
             }
 
         }
