@@ -1,5 +1,5 @@
 <template>
-  <li class="msg-preview" :title="(chat.trip)? chat.trip.title: chattingWith[0].firstname">
+  <li class="msg-preview" :title="(chat.trip && chattingWith.length)? chat.trip.title: chattingWith[0].firstname">
     <div class="user-img-container">
       <div
         class="user-img"
@@ -11,7 +11,7 @@
     <div
       class="msg-content"
     >
-      <h4 v-if="!chat.trip">{{`${chattingWith[0].firstname} ${chattingWith[0].lastname}`}}</h4>
+      <h4 v-if="chattingWith.length && !chat.trip">{{`${chattingWith[0].firstname} ${chattingWith[0].lastname}`}}</h4>
       <h4 v-else>{{chat.trip.title}}</h4>
       <div v-if="lastMsg">{{lastSender}}&nbsp;{{lastMsg.txt}}</div>
     </div>
@@ -41,16 +41,19 @@ export default {
       return this.chattingWith.map(user => user.profilePic).slice(0,3);
     },
     lastMsg() {
-      if (!this.chat.msgs.length) return '';
-      return this.chat.msgs[this.chat.msgs.length - 1];
+      if (!this.filteredChat.length) return '';
+      return this.filteredChat[this.filteredChat.length - 1];
     },
     lastSender() {
-      if (!this.lastMsg) return '';
+      if (!this.lastMsg && !this.lastMsg.sender) return '';
       const senderId = this.lastMsg.sender;
       if (senderId === this.user._id) return 'You:';
       else if(this.chattingWith.length) return this.chattingWith.find(user => user._id === senderId).firstname + ':';
       else return '';
       
+    },
+    filteredChat() {
+      return this.chat.msgs.filter(msg => msg.sender && msg.txt)
     }
   }
 };
