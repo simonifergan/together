@@ -21,7 +21,6 @@
     </router-link>
     <nav :class="{show: isNavOpen}">
       <router-link to="/">Home</router-link>
-      <a href="#">About</a>
       <router-link to="/signup" v-if="!user">Sign up</router-link>
       <div class="requests-container" v-if="user">
         <a @click.stop="showReqs">Requests&nbsp;<span class="unread-msgs" v-if="pendingRequests">{{pendingRequests}}</span></a>
@@ -181,7 +180,6 @@ export default {
         this.closeReqs();
         return;
       }
-
       this.isShowReqs = true;
       document.querySelector("#app").addEventListener("click", this.closeReqs);
     },

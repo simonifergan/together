@@ -104,8 +104,7 @@ button {
             font-family: $font-open-sans;
             font-weight: 550;
             font-size: 14px;
-       
-            top: 71px;
+            top: 70px;
             color: #333;
             position: fixed;
             width: 200px;
@@ -194,6 +193,9 @@ button {
 
             .login-container {
                 position:relative;
+                a {
+                    padding: 20px 70px;
+                }
                   // LOGIN FORM
                 .login-form {
                     margin: 0;
@@ -208,9 +210,6 @@ button {
                     right: -5px;
                     border-radius: 0 0 1px 1px;
                     box-shadow: 0 0 1px 1px $box-shadow-gray;
-                    @media (min-width: 860px) {
-
-                    }
                     > * {
                         margin: 0;
                     }
@@ -264,6 +263,11 @@ button {
                         }
                     }
                 }
+                @media (min-width: 860px) {
+                    a {
+                        padding: 20px 0;
+                    }
+                }
             }
             
            
@@ -294,7 +298,7 @@ button {
                     overflow: hidden;
                     color: #333;
                     width: 200px;
-                    top: 71px;
+                    top: 70px;
                     right: 0;
                     padding: 0;
                     border-radius: 0 0 1px 1px;
@@ -308,7 +312,6 @@ button {
                         margin: 0;
                     }
                     a {
-
                         font-family: $font-open-sans;
                         text-decoration: none;
                         padding: 20px 10px;
@@ -432,7 +435,6 @@ button {
 
                 div {
                     color: #333;
-                   
                     text-align: left;
                     padding: 0;
                     box-shadow: none;
