@@ -207,7 +207,7 @@ export default {
                 console.log(updatedChat);
                 dispatch({
                     type: "socketSendMsg",
-                    msg: { txt: `${userToJoin.firsname} has joined the group!`, sentAt: Date.now(), isRead: false, forGroup: true },
+                    msg: { txt: `${userToJoin.firstname} has joined the group!`, sentAt: Date.now(), isRead: false, forGroup: true },
                     chatId: updatedChat._id,
                     recipients: updatedChat.users,
                   });
