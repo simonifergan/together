@@ -1,5 +1,5 @@
 <template>
-  <header class="main-header" :class="isAbsolute">
+  <header class="main-header">
     <div class="wrapper">
 
     <router-link title="Homepage" tag="div" class="logo" to="/">
@@ -193,9 +193,6 @@ export default {
     if (this.$route.name !== "home") this.isHome = false;
   },
   computed: {
-    isAbsolute() {
-      return { "on-homepage": this.isHome };
-    },
     svgColor() {
       return (this.isHome) ? "white" : "black";
     },
@@ -235,14 +232,6 @@ export default {
       return this.isMobile();
     }
   },
-  watch: {
-    $route: {
-      handler(newRoute) {
-        if (newRoute.name !== "home") this.isHome = false;
-        else this.isHome = true;
-      }
-    },
-  }
 };
 </script>
 

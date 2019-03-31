@@ -1,7 +1,12 @@
 <template>
   <section class="search-page">
-    <h2 v-if="searchQuery">Showing results for: <span>"{{searchQuery}}"</span></h2>
-    <h2 v-else>Browse all possibilities</h2>
+    <h2>
+      <span v-if="searchQuery || tripDate">Showing results for:&nbsp;</span>
+      <span v-if="searchQuery && tripDate">"{{searchQuery}} from {{tripDate}}"</span>
+      <span v-else-if="searchQuery">"{{searchQuery}}"</span>
+      <span v-else-if="tripDate">"{{tripDate}}"</span>
+      <span v-if="!searchQuery && !tripDate">Browse all possibilities</span>
+    </h2>
     <article v-if="results" class="trips-container">
       <trip-preview v-for="(trip, idx) in results" :key="trip._id + idx" :trip="trip" />
     </article>
@@ -37,7 +42,7 @@ export default {
       searchQuery: this.searchQuery,
       tripDate: this.tripDate
     });
-  }
+  },
 };
 </script>
 

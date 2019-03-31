@@ -73,8 +73,6 @@ module.exports = (io) => {
         });
 
         socket.on(CHAT_SEND_MSG, async payload => {
-            console.log('////////////////////');
-            console.log(payload.msg.forGroup);
             if (payload.msg.forGroup) payload.msg.sender = null;
             else payload.msg.sender = socket.userId;
             payload.unread = [];

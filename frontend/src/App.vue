@@ -1,9 +1,9 @@
 <template>
   <div id="app" class="app-container" ref="topOfPage">
-    <main-header />
+    <main-header :class="isHomepage" />
     <user-msg />
     <transition name="fade" mode="out-in">
-      <router-view class="main-view"/>
+      <router-view class="main-view" :class="isHomepage" />
     </transition>
     <div class="chat-container" v-if="!isMessagesPage">
       <chat v-for="(chat,index) in chats" :chat="chat" :key="chat._id+index"/>
@@ -23,6 +23,11 @@ export default {
     UserMsg,
     Chat
   },
+  data() {
+    return {
+      isHome: true,
+    };
+  },
   computed: {
     chats() {
       return this.$store.getters.userChats;
@@ -39,6 +44,9 @@ export default {
     isMessagesPage() {
       return this.$route.path === '/messages';
     },
+    isHomepage() {
+      return { "on-homepage": this.isHome };
+    },
   },
   created() {
     if (this.loggedUser) {
@@ -53,6 +61,14 @@ export default {
       });
     }
   },
+  watch: {
+    $route: {
+      handler(newRoute) {
+        if (newRoute.name !== "home") this.isHome = false;
+        else this.isHome = true;
+      }
+    },
+  }
 };
 </script>
 
