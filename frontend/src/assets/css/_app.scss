@@ -32,11 +32,6 @@ button {
 .app-container {
     position:relative;
     // GLOBAL HEADER
-    @media (max-width: 860px) {
-        .main-view {
-            margin-top: 70px;
-        }
-    }
     .main-header {
         .wrapper {
             @media(min-width: 1200px) {
@@ -55,6 +50,7 @@ button {
         box-shadow: 0px 0px 1px .5px #676767;
         @media(max-width: 860px) {
             position: fixed;
+            top: 0;
         }
         &.on-homepage {
             box-shadow: none;
@@ -63,6 +59,7 @@ button {
             color: #fff;
             @media(max-width: 860px) {
                 position: fixed;
+                top: unset;
             }
         }
         .logo {
@@ -724,6 +721,17 @@ button {
                 @include userImg(64px,64px);
                 border-radius: 2px;
             }
+        }
+    }
+
+    .main-view {
+        @media(max-width: 860px) {
+            margin-top: 70px;
+        }
+        &.on-homepage {
+            @media(max-width: 860px) {
+                margin-top: 0;
+            } 
         }
     }
 }
