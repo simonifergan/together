@@ -73,7 +73,8 @@ module.exports = (io) => {
         });
 
         socket.on(CHAT_SEND_MSG, async payload => {
-            payload.msg.sender = socket.userId;
+            if (payload.msg.forGroup) payload.msg.sender = null;
+            else payload.msg.sender = socket.userId;
             payload.unread = [];
             // TODO: Force socket to reconnect to his room upon message sent and referred to him
             payload.recipients.forEach(recipient => {

@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === 'production') {
         userVisibleOnly: true,
         applicationServerKey: convertedVapidKey
       }).then(sub => {
-        localStorage.setItem(SUB_KEY, JSON.stringify(sub));
+        sessionStorage.setItem(SUB_KEY, JSON.stringify(sub));
       })
     },
     registered (sw) {
@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'production') {
         userVisibleOnly: true,
         applicationServerKey: convertedVapidKey
       }).then(sub => {
-        localStorage.setItem(SUB_KEY, JSON.stringify(sub));
+        sessionStorage.setItem(SUB_KEY, JSON.stringify(sub));
       })
       
     },
@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === 'production') {
     updatefound () {
       console.log('New content is downloading.')
     },
-    updated (sup) {
+    updated () {
       console.log('New content is available; please refresh.')
     },
     offline () {

@@ -1,36 +1,12 @@
 // ask for notifications' permission:
 self.Notification.requestPermission()
-  .then(res => {
-    // has user granted permission
-    // console.log(res);
+  .then(() => {
+    // User has agreed, hopefully.
   });
 
-// self.addEventListener('push', function (e) {
-//   console.log('Hi pushhhhh', e);
-//   const data = e.data.json();
-//   // console.log(data.payload);
-//   self.registration.showNotification(data.title, data.payload);
-// });
-
-
-
-// if ('Notification' in window) {
-//   console.log('Notification is supported!');
-
-//   // if you using sw, better to add this 'navigator.serviceWorker.ready' before the request to permissions
-//   Notification.requestPermission(results => {
-//     console.log('notifications permisstions: ', results);
-
-//     if (results === 'denied') {
-//       console.log('notifications permisstions denied!');
-//       return;
-//     }
-
-//   });
-// }
 
 export const PUSH_URL = (process.env.NODE_ENV !== 'development')
-    ? 'https://travel-maker-app.herokuapp.com/#'
+    ? 'https://together-pwa.herokuapp.com/#'
     : 'http://localhost:3003/#';
 
 
@@ -55,7 +31,7 @@ export const convertedVapidKey = urlBase64ToUint8Array(publicKey);
 
 export function getEmptyPushNotification() {
   return {
-      title: 'Travel Maker',
+      title: 'Together',
       payload: {
           body: '',
           icon: '',

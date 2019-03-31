@@ -45,18 +45,27 @@ button {
         height: 70px;
         width: 100%;
         z-index: 2;
+        background-color: #fff;
         color: #333;
         box-shadow: 0px 0px 1px .5px #676767;
-
+        @media(max-width: 860px) {
+            position: fixed;
+        }
         &.on-homepage {
             box-shadow: none;
             position: absolute;
+            background: transparent;
             color: #fff;
+            @media(max-width: 860px) {
+                position: fixed;
+            }
         }
         .logo {
             .btn-nav {
+                color: #333;
                 display: none;
                 margin-right: 5px;
+                font-size: 1.5em;
                 @media (max-width: 860px) {
                     display: block;
                 }
@@ -77,6 +86,13 @@ button {
             }
             
         }
+        &.on-homepage {
+            .logo {
+                .btn-nav {
+                    color: #fff;
+                }
+            }
+        }
 
         // START NAV //
         nav {
@@ -87,7 +103,7 @@ button {
             font-weight: 550;
             font-size: 14px;
        
-            top: 72px;
+            top: 71px;
             color: #333;
             position: fixed;
             width: 200px;
@@ -276,7 +292,7 @@ button {
                     overflow: hidden;
                     color: #333;
                     width: 200px;
-                    top: 72px;
+                    top: 71px;
                     right: 0;
                     padding: 0;
                     border-radius: 0 0 1px 1px;

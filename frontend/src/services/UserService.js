@@ -44,7 +44,7 @@ async function updateLikesToUser(like, userId) {
 }
 
 async function login(credentials) {
-    let pushSub = StorageService.getFromLocal(SUB_KEY);
+    let pushSub = StorageService.getFromSession(SUB_KEY);
     if (pushSub) credentials.pushSub = pushSub;
     const { data } = await axios.post(API_USER + '/login', credentials)
     StorageService.saveToLocal(USER_KEY, data);
