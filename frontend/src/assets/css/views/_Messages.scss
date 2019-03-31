@@ -121,6 +121,12 @@
                     margin-left: 5px;
                     font-size: 11px;
                 }
+                .general-msg {
+                    margin: 0 auto;
+                    background-color: rgba($clr1, .7);
+                    color: #fff;
+                    font-size: 11px;
+                }
                 .txt-container {
                     overflow-wrap: break-word;
                     white-space: pre-wrap;
@@ -139,13 +145,9 @@
                         align-self: flex-start;
                         background: #f2f1f1;
                         color: #333;
-                        
                     }
-
                 }
-                
             }
-            
         }
         form {
             padding: 5px 8px 5px 8px;
