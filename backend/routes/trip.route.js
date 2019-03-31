@@ -61,7 +61,6 @@ module.exports = (app) => {
             if (trips.length) res.json(trips);
             else res.status(404).end('User has no trips');
         } catch (err) {
-            console.log(err);
             res.status(404).end('There was a problem');
         }
 
@@ -94,7 +93,6 @@ module.exports = (app) => {
 
     // Update existing trip
     app.put(`${BASE_URL}/:tripId`, isUser, checkUser, (req, res) => {
-        console.log('passed middleware');
         const trip = req.body;
         tripService.update(trip)
             .then(updatedTrip => {

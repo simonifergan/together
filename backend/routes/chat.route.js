@@ -4,7 +4,6 @@ module.exports = (app) => {
     // EXPERIMENT WITH CHATS DB
     app.get('/api/chat', async (req, res) => {
         const { userId } = req.query
-        // console.log('userId:', userId);
         try {
             const chats = await chatService.query(userId);
             res.json(chats);
@@ -17,7 +16,6 @@ module.exports = (app) => {
     // get single chat by id
     app.get('/api/chat/:chatId', async (req, res) => {
         const { chatId } = req.params;
-        console.log('chatID', chatId)
         try {
             const chat = await chatService.getById(chatId);
             if (chat) res.json(chat);
@@ -51,13 +49,11 @@ module.exports = (app) => {
     app.patch('/api/chat/:chatId', async (req, res) => {
         const { chatId } = req.params;
         const {userId} = req.body;
-        console.log(req.params, req.body)
         try {
             await chatService.removeUserFromUnread(chatId, userId);
             res.json('Success');
 
         } catch (err) {
-            console.log('Something went wrong:', err)
             res.status(500).end();
         }
     })

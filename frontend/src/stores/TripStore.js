@@ -60,8 +60,6 @@ export default {
             else state.tripToDisplay.user.likes.push(userId);
         },
         toggleUserFromPendingList(state, { userId }) {
-            console.log('toggle:', userId);
-
             const idx = state.tripToDisplay.pending.findIndex(existingUser => existingUser === userId);
             if (idx !== -1) state.tripToDisplay.pending.splice(idx, 1);
             else state.tripToDisplay.pending.push(userId);
@@ -117,13 +115,11 @@ export default {
     actions: {
         async getTrendingTrips({ commit }) {
             const trendingTrips = await TripService.getTrending()
-            // Todo Yanai: When trending trips return empty
             if (!trendingTrips) return [];
             return trendingTrips
         },
         async getRecommendedTrips({ getters }) {
-            // TODO Yanai: fix case of none logged user to return some type of recommended trips...
-            if (!getters.loggedUser) return []; // I added this for now (Simon).
+            if (!getters.loggedUser) return [];
             const prefs = getters.loggedUser.tripPrefs
             if (!prefs.activities.length && !prefs.gender && !prefs.age) return []
             const recommendedTrips = await TripService.getRecommended(prefs)
@@ -139,23 +135,18 @@ export default {
             const newTrip = await TripService.save(trip)
             if (trip._id) {
                 commit({ type: 'updateTrip', trip: newTrip })
-                // userId, trip id, actions - updated a trip,
                 let newNotification = {
                     userId: getters.loggedUser,
                     tripId: trip._id,
                     action: NotificationService.TRIP_MODIFIED
                 }
-                // dispatch({ type: 'addNotification', newNotification }) // caused error
             }
             else {
-                // commit({ type: 'addTrip', trip: newTrip })
-                // userId, trip id, actions - add new trip,
                 let newNotification = {
                     userId: getters.loggedUser,
                     tripId: trip._id,
                     action: NotificationService.TRIP_CREATED
                 }
-                // dispatch({ type: 'addNotification', newNotification }) // caused error
             }
             return (newTrip._id)? newTrip._id : trip._id;
         },
@@ -203,7 +194,6 @@ export default {
             try {
                 // update user & trip
                 const updatedTrip = await TripService.save(tripToJoin);
-                console.log('trip returned fine????', updatedTrip);
                 const updatedUser = await dispatch({
                     type: 'joinLeaveTripToUser',
                     userToTripId: {
@@ -212,17 +202,8 @@ export default {
                         action: 'approve'
                     }
                 })
-                console.log('user returned find?', updatedUser)
                 // Need to update group chat
                 await dispatch({type: 'loadChatById', chatId: updatedTrip.chatId });
-
-                // general notification (activity log) REMOVED FOR NOW
-                // let newNotification = {
-                //     userId: userIdToJoin,
-                //     tripId: getters.tripToDisplay._id,
-                //     action: NotificationService.TRIP_JOINED
-                // }
-                // dispatch({ type: 'addNotification', newNotification })
 
                 // User personal notification
                 // send to socket with userId and tripId
@@ -233,7 +214,7 @@ export default {
                 }
                 dispatch({ type: 'socketSendNotification', userId: userIdToJoin, payload });
 
-                // NOT OPTIMISTIC YET: GET REQUESTS AGAIN
+                // NOT OPTIMISTIC : GET REQUESTS AGAIN
                 dispatch({ type: "getUserRequests" });
 
                 // PUSH NOTIFICATION
@@ -255,7 +236,6 @@ export default {
 
             } catch(err) {
                 // rollback
-                console.log('I ROLLED BACK IN APPROVE:', err)
                 commit({ type: 'toggleUserFromPendingList', userId: userIdToJoin })
             }
         },
@@ -325,7 +305,6 @@ export default {
                     action
                 };
                 const updatedTrip = await TripService.updateUserOnTrip(userIdToTrip);
-                console.log('trip store- got updatedTrip: ', updatedTrip);
                 const updatedUser = await dispatch({
                     type: 'joinLeaveTripToUser',
                     userToTripId: {
@@ -371,13 +350,13 @@ export default {
                 let notification = getEmptyPushNotification();
                 // Looks like:
                 //   return {
-                //       title: 'Travel Maker',
+                //       title: 'Together',
                 //       payload: {
                 //           body: '',
                 //           icon: '',
                 //       } ,
                 //   }
-                notification.title = `Travel Maker`;
+                notification.title = `Together`;
                 notification.payload.body = `${user.firstname} ${user.lastname} has requested to join your trip!`
                 notification.payload.icon = `${user.profilePic}`
                 notification.payload.actions.unshift({action: 'go', title: `See ${user.firstname}'s profile.`},)
@@ -425,8 +404,6 @@ export default {
         async getFilterImgs({ commit }, { filterType, filters }) {
             const filterImgs = await Promise.all(filters.map(filter => TripService.getImgs(filter, filterType)))
             return filterImgs
-            // if (filterType === 'activities') commit({ type: 'setActivityFilters', filterImgs })
-            // else if (filterType === 'destinations') commit({ type: 'setDestinationFilters', filterImgs })
         },
         async connectToGoogle() {
             return GoogleService.connectGoogleApi()
@@ -446,7 +423,6 @@ export default {
         async getUserRequests({getters, commit}) {
             const requests = await TripService.getRequests(getters.loggedUser._id)
             commit({ type: 'setUserRequests', requests });
-            // SocketService.emit(SocketService.CHAT_REGISTER_ROOMS, chats);
         }
     }
 }

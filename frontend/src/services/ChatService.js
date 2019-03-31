@@ -26,8 +26,6 @@ async function getById(chatId) {
 }
 
 async function removeUserFromUnread(chatId, userId) {
-    console.log(userId)
     const { data } = await axios.patch(`${CHAT_API}/${chatId}`, {userId});
-    console.log('Remove user from unread was:', data)
     return data;
 }

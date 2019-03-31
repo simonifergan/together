@@ -121,7 +121,6 @@ export default {
       this.autocomplete = null
     },
     infiniteHandler($state) {
-      console.log('handling')
       const currList = this.listsForRender[this.page]
       if (currList) {
         this.page += 1;

@@ -218,7 +218,6 @@ export default {
           else acc[country] = city.match(/^.*?(?=[,\-]|$)/)
         }
         else acc[city] = []
-        // console.log(city, acc, country, splitComma, splitDash);
         return acc
       }, {})
       return cities

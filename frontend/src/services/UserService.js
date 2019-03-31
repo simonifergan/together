@@ -34,7 +34,6 @@ async function update(userToUpdate) {
 }
 
 async function updateTripToUser(userToTripId) {
-    console.log('got to user service- updateTripToUser : ', userToTripId);
     const { data } = await axios.patch(`${API_USER}/user_trip/${userToTripId.user._id}`, userToTripId)
     return data
 }
@@ -47,7 +46,6 @@ async function updateLikesToUser(like, userId) {
 async function login(credentials) {
     let pushSub = StorageService.getFromLocal(SUB_KEY);
     if (pushSub) credentials.pushSub = pushSub;
-    console.log('sending to user service:', pushSub);
     const { data } = await axios.post(API_USER + '/login', credentials)
     StorageService.saveToLocal(USER_KEY, data);
     return data

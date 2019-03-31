@@ -144,20 +144,16 @@ export default {
             let action = 'like';
             // update on trip store
             let trip = JSON.parse(JSON.stringify(getters.tripToDisplay));
-            console.log(trip);
             if (trip) {
                 const idx = trip.user.likes.findIndex(currUserId => currUserId === loggedUserId);
-                console.log(idx);
                 if (idx !== -1) action = 'unlike';
                 commit({ type: 'toggleUserLikeTrip', userId: loggedUserId });
             }
 
             // update on user store
             let user = JSON.parse(JSON.stringify(getters.userToDisplay));
-            console.log(user);
             if (user) {
                 const idx = user.likes.findIndex(currUserId => currUserId === loggedUserId);
-                console.log(idx);
                 if (idx !== -1) action = 'unlike';
                 commit({ type: 'toggleUserLikeUser', userId: loggedUserId });
             }
@@ -168,26 +164,24 @@ export default {
                     likingUserId: loggedUserId
                 }
                 const updatedUser = await UserService.updateLikesToUser(like, userId);
-                console.log(updatedUser);
                 if (action === 'like') {
                     const payload = {
                         action: NotificationService.USER_LIKE_USER,
                         user: getters.loggedUser,
                         // tripId: updatedTrip._id,
                     }
-                    console.log('sending payload to socket-notifi:', payload)
                     dispatch({ type: 'socketSendNotification', userId, payload });
 
                     let notification = getEmptyPushNotification();
                     // Looks like:
                     //   return {
-                    //       title: 'Travel Maker',
+                    //       title: 'Together',
                     //       payload: {
                     //           body: '',
                     //           icon: '',
                     //       } ,
                     //   }
-                    notification.title = `Travel Maker`;
+                    notification.title = `Together`;
                     notification.payload.body = `${getters.loggedUser.firstname} ${getters.loggedUser.lastname} has liked your profile!`
                     notification.payload.icon = `${getters.loggedUser.profilePic}`
                     notification.payload.actions.unshift({action: 'go', title: `See ${getters.loggedUser.firstname}'s profile.`},)
@@ -196,11 +190,9 @@ export default {
                 }
                 return updatedUser;
             } catch {
-                console.log('rollback');
                 if (trip) commit({ type: 'toggleUserLikeTrip', userId: loggedUserId });
                 else if (user) commit({ type: 'toggleUserLikeUser', userId: loggedUserId });
             }
-
         },
 
 
@@ -222,8 +214,8 @@ export default {
                     commit({ type: 'setLoggedUser', user: loggedUser });
 
                 } catch (err) {
+                    // TODO simon
                 }
-
                 return true;
             }
 

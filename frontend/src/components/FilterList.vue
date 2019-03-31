@@ -79,7 +79,6 @@ export default {
   methods: {
     async moveSlide(diff) {
       await this.transitionPrm
-      console.log('sliding');
       if (diff === "+" && this.page <= this.maxPage - 1) {
         this.animateScroll(this.page, this.page + 1)
       } else if (diff === "-" && this.page > 0) {

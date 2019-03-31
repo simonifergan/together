@@ -9,9 +9,6 @@
             <datalist id="autocompleteList" v-if="autocomplete">
               <option v-for="(city, idx) in autocomplete" :value="city.description" :key="idx" @click.prevent="cityClicked(city)" />
             </datalist>
-            <!-- <div id="autocompleteList" v-if="autocomplete">
-              <p v-for="(city, idx) in autocomplete" :key="idx" @click.prevent="cityClicked(city)">{{city.description}}</p>
-            </div> -->
             <el-date-picker placeholder="Anytime" v-model="tripDate" type="month" value-format="yyyy-M"></el-date-picker>
             <button type="submit" title="Search">
               <img src="@/assets/svg/search.svg">
@@ -25,7 +22,6 @@
     </article>
     <infinite-loading spinner="waveDots" @infinite="infiniteHandler">
         <div slot="no-more"></div>
-        <!-- <div slot="no-results">No results message</div> -->
     </infinite-loading>
   </section>
 </template>
@@ -103,7 +99,6 @@ export default {
       this.autocomplete = null
     },
     async infiniteHandler($state) {
-      console.log('handling')
       let page = this.page
       let filterList
       let tripList

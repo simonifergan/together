@@ -50,9 +50,7 @@ export default {
 
     },
     firstThree() {
-      console.log(this.trip.members);
       return this.trip.members.slice(0, 3);
-      
     }
   }
 };

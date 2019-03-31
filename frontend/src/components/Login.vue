@@ -41,7 +41,6 @@ export default {
     },
     methods: {
         login() {
-            console.log('Hi')
             this.isAlive = false;
             this.$store.dispatch({type: 'login', credentials: {email: this.email, password: this.password}})
             .then(res => {

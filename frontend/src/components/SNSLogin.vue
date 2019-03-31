@@ -8,7 +8,6 @@
 export default {
   methods: {
     success(response) {
-      console.log(response);
       if (response === 'connected') {
         this.$store.dispatch('checkFacebookUser')
         .then(isAuth => {

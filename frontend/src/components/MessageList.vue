@@ -46,7 +46,6 @@ export default {
   },
   methods: {
     initChat(chatId) {
-      console.log('Init chat:', chatId)
       if (this.isExpanded) {
         this.$emit('changeChat', chatId);
       } else this.$store.dispatch({ type: "activateChat", chatId });

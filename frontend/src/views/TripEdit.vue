@@ -112,11 +112,9 @@ export default {
         if (tripId) this.$router.push(`/trip/${tripId}`);
         else this.$router.push(this.$route.path + '#login');
       } catch(err) {
-        console.log('Trip edit err', err);
       }
     },
     onInput() {
-      console.log('throttled');
       if (!this.searchQuery) {
         this.autocomplete = null
         this.throttled.cancel()
@@ -125,8 +123,6 @@ export default {
       this.throttled()
     },
     searchPlaces() {
-      console.log('searching places');
-      
       this.$store
         .dispatch({ type: "getPlacesAutocomplete", query: this.searchQuery, types: ['(cities)'] })
         .then(res => (this.autocomplete = res));

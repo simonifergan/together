@@ -68,8 +68,6 @@ export default {
         for (let activity in this.activities) {
           if (this.activities[activity]) output.push(activity);
         }
-        console.log('output', output);
-        
         this.$emit("input", output);
       },
       deep: true

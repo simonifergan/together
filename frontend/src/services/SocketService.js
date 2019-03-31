@@ -50,20 +50,12 @@ export default {
     NOTIFICATION_ADDED,
     PUSH_NOTIFICATION,
 }
-// TODO: All ids should be converted by backend to ObjId, and all msgs should be stored in the DB like this:
-// msgObj: {
-//     roomId: String,
-//     txt: String,
-//     senderId: String,
-//     receiverId: String,
-// }
 
 function on(eventName, cb) {
     socket.on(eventName, cb)
 }
 
 function emit(eventName, payload) {
-    // console.log('emittin event:', eventName, 'payload:', payload);
     socket.emit(eventName, payload);
 }
 
@@ -71,7 +63,3 @@ function off() {
     socket.off();
     socket.emit(SOCKET_DISCONNECT);
 }
-// function send(msg) {
-//     socket.emit(CHAT_SEND_MSG, msg)
-// }
-
