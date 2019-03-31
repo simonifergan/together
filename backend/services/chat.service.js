@@ -167,7 +167,7 @@ async function updateTripChat(chatId, users) {
 
 async function addMsg({ msg, chatId, unread }) {
     chatId = new ObjectId(chatId);
-    msg.sender = new ObjectId(msg.sender);
+    msg.sender = (msg.sender)? new ObjectId(msg.sender) : null;
     try {
         const db = await mongoService.connect();
         const res = await db.collection(chatsCollection).updateOne(

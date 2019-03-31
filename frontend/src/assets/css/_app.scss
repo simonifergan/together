@@ -32,6 +32,11 @@ button {
 .app-container {
     position:relative;
     // GLOBAL HEADER
+    @media (max-width: 860px) {
+        .main-view {
+            margin-top: 70px;
+        }
+    }
     .main-header {
         .wrapper {
             @media(min-width: 1200px) {
