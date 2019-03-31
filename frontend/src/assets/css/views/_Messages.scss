@@ -123,9 +123,12 @@
                 }
                 .general-msg {
                     margin: 0 auto;
-                    background-color: rgba($clr1, .7);
+                    padding: 7px 5px;
+                    border-radius: 3px;
+                    margin-bottom: 10px;
+                    background-color: rgba($clr1, .9);
                     color: #fff;
-                    font-size: 11px;
+                    font-size: 13px;
                 }
                 .txt-container {
                     overflow-wrap: break-word;

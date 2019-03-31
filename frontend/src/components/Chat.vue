@@ -24,10 +24,9 @@
       <li
         v-for="(msg, index) in msgs"
         :key="index">
-        {{msg.sender}}
           <div class="sender" v-show="msg.sender && msg.sender !== loggedUser._id && chattingWith.length > 1">{{msg.sender | msgSender(chat.users)}}</div>
-          <div v-if="!msg.sender" :class="{'general-msg': (!msg.sender)}">{{msg.txt}}</div>
-          <div v-if="msg.sender" :class="{'not-user': (msg.sender !== loggedUser._id)}" class="txt-container">
+          <div v-if="!msg.sender" class="general-msg">{{msg.txt}}</div>
+          <div v-else :class="{'not-user': (msg.sender !== loggedUser._id)}" class="txt-container">
             <span>{{msg.txt}}</span>
           </div>
       </li>
