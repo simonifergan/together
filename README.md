@@ -1,6 +1,6 @@
-<h1>Live page: <a href="https://travel-maker-app.herokuapp.com">https://travel-maker-app.herokuapp.com</a></h1>
+<h1>Live page: <a href="https://together-pwa.herokuapp.com">https://together-pwa.herokuapp.com</a></h1>
 
-<h1>Travel Maker Repository</h1>
+<h1>Together PWA Repository</h1>
 
 <h2>Created by:</h2>
 <ul>

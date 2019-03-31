@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="app-container" ref="topOfPage">
-    <main-header/>
+    <main-header />
     <user-msg />
     <transition name="fade" mode="out-in">
       <router-view/>
@@ -8,7 +8,6 @@
     <div class="chat-container" v-if="!isMessagesPage">
       <chat v-for="(chat,index) in chats" :chat="chat" :key="chat._id+index"/>
     </div>
-    <!-- <notification-list :notifications="getNotifications"/> -->
   </div>
 </template>
 
@@ -16,7 +15,6 @@
 import MainHeader from "@/components/MainHeader";
 import Chat from "@/components/Chat";
 import UserMsg from '@/components/UserMsg';
-// import NotificationList from "@/components/NotificationList";
 
 export default {
   name: "App",
@@ -40,7 +38,7 @@ export default {
     },
     isMessagesPage() {
       return this.$route.path === '/messages';
-    }
+    },
   },
   created() {
     if (this.loggedUser) {

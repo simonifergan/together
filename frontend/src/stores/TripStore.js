@@ -214,7 +214,14 @@ export default {
                 })
                 console.log('user returned find?', updatedUser)
                 // Need to update group chat
-                await dispatch({type: 'loadChatById', chatId: updatedTrip.chatId });
+                const updatedChat = await dispatch({type: 'loadChatById', chatId: updatedTrip.chatId });
+                dispatch({
+                    type: "socketSendMsg",
+                    msg: { txt: `${userToJoin.firsname} has joined the group!`, sentAt: Date.now(), isRead: false, forGroup: true },
+                    chatId: this.chat._id,
+                    recipients: this.chat.users
+                  });
+               
 
                 // general notification (activity log) REMOVED FOR NOW
                 // let newNotification = {

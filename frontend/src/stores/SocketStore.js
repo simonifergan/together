@@ -168,7 +168,10 @@ export default {
         },
         async loadChatById({ commit }, { chatId }) {
             const chat = await ChatService.getById(chatId);
-            if (chat) commit({ type: 'addNewChat', chat });
+            if (chat) {
+                commit({ type: 'addNewChat', chat });
+                return chat;
+            }
         },
         async activateChat({ commit, getters }, { chatId }) {
             const userId = getters.loggedUser._id;
