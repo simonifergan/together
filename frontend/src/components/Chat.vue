@@ -4,10 +4,10 @@
       <div class="user-img-container">
         <div
           class="user-img"
-          v-for="user in chattingWith"
-          :key="user._id+user.firstname"
+          v-for="(user, idx) in chattingWith"
+          :key="idx + user._id+ idx * 7"
           :style="{ backgroundImage: `url('${user.profilePic}')` }"
-          :title="user.firstname"
+          :title="(user.firstname)? user.firstname: ''"
         />
       </div>
       <span
@@ -25,8 +25,8 @@
         v-for="(msg, index) in msgs"
         :key="index">
           <div class="sender" v-show="msg.sender && msg.sender !== loggedUser._id && chattingWith.length > 1">{{msg.sender | msgSender(chat.users)}}</div>
-          <div v-show="!msg.sender">{{msg.txt}}</div>
-          <div :class="{'not-user': (msg.sender !== loggedUser._id)}" class="txt-container">
+          <div v-if="!msg.sender">{{msg.txt}}</div>
+          <div v-if="msg.sender" :class="{'not-user': (msg.sender !== loggedUser._id)}" class="txt-container">
             <span>{{msg.txt}}</span>
           </div>
       </li>

@@ -35,7 +35,8 @@ Vue.filter('monthAndYearName', (monthYearStr) => {
 })
 
 Vue.filter('msgSender', (senderId, chatters) => {
-    return chatters.find(user => user._id === senderId).firstname;
+    const sender = chatters.find(user => user._id === senderId);
+    return (sender)? sender.firstname : '';
 })
 
 Vue.filter('notificationAction', (action) => {
