@@ -27,14 +27,16 @@ const NOTIFICATION_ADDED = 'notification-added';
 const PUSH_NOTIFICATION = 'push-notification';
 
 
-const connectedSockets = [];
+var connectedSockets = [];
 
 module.exports = (io) => {
 
     io.on('connection', socket => {
         socket.on(SOCKET_CONNECT, userId => {
             socket.userId = userId;
-            connectedSockets.push(socket)
+            // see if already exists:
+            connectedSockets = connectedSockets.filter(inSocket => inSocket.userId !== userId)
+            connectedSockets.push(socket);
             console.log('Hello user:', userId, 'in socket:', socket.userId);
         })
 

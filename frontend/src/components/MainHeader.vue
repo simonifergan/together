@@ -210,6 +210,7 @@ export default {
       return this.$store.getters.userRequests;
     },
     pendingRequests() {
+      if (!this.requests && !this.requests.length) return 0;
       const acc =this.requests.reduce((acc, tripReqs) => {
         return acc += tripReqs.pendingusers.length;
       }, 0);
