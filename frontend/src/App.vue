@@ -25,7 +25,7 @@ export default {
   },
   data() {
     return {
-      isHome: true,
+      isHome: false,
     };
   },
   computed: {
@@ -49,6 +49,7 @@ export default {
     },
   },
   created() {
+    if (this.$route.path === '/') this.isHome = true;
     if (this.loggedUser) {
       this.$store.dispatch({ type: "socketConnect" });
       this.$store.dispatch({ type: "getUserChats" });
