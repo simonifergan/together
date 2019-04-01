@@ -229,7 +229,7 @@ export default {
       let maxGroupSize = this.trip.groupSize;
       let membersSize = this.trip.members.length;
       if (maxGroupSize - membersSize <= 0) return 'No spots remaining.'
-      else if (membersSize === 0) return 'Be The First one to join!'
+      else if (membersSize === 0) return 'Be the first  to join!'
       else return `Only ${maxGroupSize - membersSize} out of ${maxGroupSize} spots left!`
     },
     isDesktop() {
