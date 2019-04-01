@@ -9,7 +9,8 @@
       @click.stop
     />
     <footer v-if="!isExpanded">
-      <router-link to="/requests">See all requests</router-link>
+      <router-link class="see-all-reqs" v-if="requests.length" to="/requests">See all requests</router-link>
+      <p v-else>No requests</p>
     </footer>
   </ul>
 </template>
@@ -37,25 +38,9 @@ export default {
   components: {
     RequestPreview
   },
-  methods: {
-    // requestApproved({ pendingUser, tripId }) {
-    //   this.$store.dispatch({
-    //     type: "approveUserToTrip",
-    //     userToJoin: pendingUser,
-    //     tripIdToJoin: tripId
-    //   });
-    // },
-    // requestRejected({ pendingUser, tripId }) {
-    //   this.$store.dispatch({
-    //     type: "removeUserFromTrip",
-    //     userToLeave: pendingUser,
-    //     tripIdToLeave: tripId
-    //   });
-    // }
-  },
   computed: {
     isExpanded() {
-      return this.$route.path === "/messages";
+      return this.$route.path === "/requests";
     },
     requestsForRender() {
       const reqs = [];

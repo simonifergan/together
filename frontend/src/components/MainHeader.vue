@@ -164,6 +164,11 @@ export default {
         .removeEventListener("click", this.closeReqs);
     },
     showReqs() {
+      if (this.isMobile()) {
+        this.$router.push("/requests");
+        this.isNavOpen = false;
+        return;
+      }
       if (this.isShowDropdown) {
         this.closeDropdown();
       }
