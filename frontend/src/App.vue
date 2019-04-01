@@ -53,10 +53,10 @@ export default {
       this.$store.dispatch({ type: "socketConnect" });
       this.$store.dispatch({ type: "getUserChats" });
       this.$store.dispatch({ type: "getUserRequests" });
-      this.$store.dispatch({ type: "loadNotification" });
+      // this.$store.dispatch({ type: "loadNotification" });
     }
     if (!this.loggedUser) {
-      this.$store.dispatch("checkFacebookUser").then(res => {
+      this.$store.dispatch({type: "checkFacebookUser", userFBInfo: null}).then(res => {
         if (res) this.$router.push(this.$route.path);
       });
     }

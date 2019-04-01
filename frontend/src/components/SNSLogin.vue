@@ -8,10 +8,10 @@
 export default {
   methods: {
     success(response) {
-      if (response === 'connected') {
-        this.$store.dispatch('checkFacebookUser')
-        .then(isAuth => {
-          this.$router.push(this.$route.path);
+      console.log('HI RESPONSE', response);
+      if (response.status === 'connected') {
+         FB.api('/me', 'GET', { fields: 'first_name, last_name, name, id, email, picture.width(300).height(300)' }, response => {
+           this.authUser(response);
         });
       }
     },
@@ -22,6 +22,12 @@ export default {
           return_scopes: true
         }
       );
+    },
+    authUser(response) {
+      this.$store.dispatch({type: 'checkFacebookUser', userFBInfo: response})
+        .then(isAuth => {
+          this.$router.push(this.$route.path);
+        });
     }
   }
 };

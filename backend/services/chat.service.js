@@ -191,8 +191,6 @@ async function addMsg({ msg, chatId, unread }) {
 }
 
 async function removeUserFromUnread(chatId, userId) {
-    console.log('removeUserFromUnread:')
-    console.log(chatId, userId);
     chatId = new ObjectId(chatId);
     userId = new ObjectId(userId);
     const db = await mongoService.connect();

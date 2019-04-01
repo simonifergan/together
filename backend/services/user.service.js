@@ -80,14 +80,21 @@ async function updateSubscriber(userId, pushSub) {
 
 async function loginWithFacebook(user) {
     try {
+        const {pushSub} = user;
         const db = await mongoService.connect();
         const userInDB = await db.collection(usersCollection).findOne({ email: user.email });
         if (!userInDB) {
+            if (pushSub) delete user.pushSub;
             const { insertedId } = await db.collection(usersCollection).insertOne(user);
             user._id = insertedId;
+            updateSubscriber(insertedId, pushSub);
+            console.log('facebookuser registered:', user);
             return user;
         } else {
-            if (userInDB.facebookId === user.facebookId) return userInDB;
+            if (userInDB.facebookId === user.facebookId) {
+                updateSubscriber(userInDB._id, pushSub);
+                return userInDB;
+            }
             else throw new Error('User already exists, please log in using your Username and Password');
         }
     } catch (err) {
@@ -302,34 +309,3 @@ function remove(id) {
     return mongoService.connect()
         .then(db => db.collection(usersCollection).remove({ _id }));
 }
-
-
-
-
-// scrap code:
-
-// async function updateTripToUser({tripId, user}) {
-//     const objTripId = new ObjectId(tripId);
-//     const objUserId = new ObjectId(user._id)
-//     try {
-//         const db = await mongoService.connect()
-//         var user = await db.collection(usersCollection).findOne({_id: objUserId});
-//         const idxTripInPending = user.pendingIn.findIndex(trip => trip._id === tripId);
-//         const idxTripInMember = user.memberIn.findIndex(trip => trip._id === tripId);
-//         console.log('idxTripInPending:', idxTripInPending, ', idxTripInMember:', idxTripInMember);
-
-//         if (idxTripInPending === -1 && idxTripInMember === -1) {
-//             console.log('not pending not member - insert to pending');
-//             user.pendingIn.push(tripId);
-//         } else if (idxTripInPending !== -1 && idxTripInMember === -1) {
-//             user.pendingIn.splice(idxTripInPending, 1);
-//             user.memberIn.push(tripId);
-//         } else if (idxTripInPending === -1 && idxTripInMember !== -1) {
-//             user.memberIn.splice(idxTripInMember, 1);
-//         }
-//         await db.collection(usersCollection).updateOne({_id: objUserId}, {$set: user});
-//         return user;
-//     } catch {
-
-//     }
-// }
