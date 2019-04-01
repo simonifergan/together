@@ -35,12 +35,12 @@ module.exports = (io) => {
         socket.on(SOCKET_CONNECT, userId => {
             socket.userId = userId;
             // see if already exists:
-            connectedSockets = connectedSockets.filter(inSocket => inSocket.userId !== userId)
             connectedSockets.push(socket);
-            console.log('Hello user:', userId, 'in socket:', socket.userId);
+            console.log('Connected user:', userId, 'in socket:', socket.userId);
         })
 
         socket.on(SOCKET_DISCONNECT, () => {
+            connectedSockets = connectedSockets.filter(inSocket => inSocket.id !== socket.id);
             socket.userId = null;
         })
 
@@ -51,7 +51,7 @@ module.exports = (io) => {
         })
 
         socket.on('disconnect', () => {
-            console.log('bye user', socket.userId);
+            console.log('Disconnected socket user', socket.userId);
             const socketIdx = connectedSockets.findIndex(inSocket => inSocket.id === socket.id);
             if (socketIdx !== -1) connectedSockets.splice(socketIdx, 1);
         })
@@ -78,17 +78,13 @@ module.exports = (io) => {
             if (payload.msg.forGroup) payload.msg.sender = null;
             else payload.msg.sender = socket.userId;
             payload.unread = [];
-            // TODO: Force socket to reconnect to his room upon message sent and referred to him
-            console.log('RECIPIENTSSSSSS', payload.recipients);
-            
+            // Force socket to reconnect to his room upon message sent and referred to him
             payload.recipients.forEach(recipient => {
                 if (recipient._id !== socket.userId) {
-                    const recipientSocket = connectedSockets.find(inSocket => inSocket.userId === recipient._id);
-                    if (recipientSocket) recipientSocket.join(payload.chatId);
+                    const recipientSockets = connectedSockets.filter(inSocket => inSocket.userId === recipient._id);
+                    if (recipientSockets.length) recipientSockets.forEach(recipientSocket => recipientSocket.join(payload.chatId));
                     else payload.unread.push(recipient._id);
-
                 }
-            
             })
             await chatService.addMsg(payload);
             io.in(payload.chatId).emit(CHAT_RECEIVE_MSG, payload);
@@ -103,18 +99,15 @@ module.exports = (io) => {
         });
 
         socket.on(NOTIFICATION_SEND, async ({ userId, payload }) => {
-            console.log('got this notification for user:', userId, 'and his load:', payload);
-            // send it to him:
-            const recipientSocket = connectedSockets.find(inSocket => inSocket.userId === userId);
-            if (recipientSocket) {
-                recipientSocket.emit(NOTIFICATION_RECEIVE, payload);
-                console.log('recipientIs:', recipientSocket.userId, userId)
+            // send it to recipient userId:
+            const recipientSockets = connectedSockets.filter(inSocket => inSocket.userId === userId);
+            if (recipientSockets.length) {
+                recipientSockets.forEach(recipientSocket => recipientSocket.emit(NOTIFICATION_RECEIVE, payload));
             }
         })
 
         // PUSH NOTIFICATIONS:
         socket.on(PUSH_NOTIFICATION, async ({userId, notification}) => {
-            console.log('GOT TO SOCKET WITH NOTIFICATION PAYLOAD TO:'. userId, notification)
             pushService.send(userId, notification);
         })
     });

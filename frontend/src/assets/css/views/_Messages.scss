@@ -1,14 +1,16 @@
 .messages-page {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    grid-template-rows: minmax(calc(100vh - 70px), 1fr);
+    @media (min-width: 860px) {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        grid-template-rows: minmax(calc(100vh - 70px), 1fr);
+    }
     .msgs-dropdown {
         margin: 0;
         @include flex(column);
         background-color: #fff;
         color: #333;
         border-radius: 0 0 1px 1px;
-        box-shadow: 0 0 1px 1px $box-shadow-gray;
+        box-shadow: 1px 0 1px 1px $box-shadow-gray;
         border-right: 1px solid $box-shadow-gray;
         &.allow-scroll {
             overflow-y: scroll;
@@ -32,7 +34,7 @@
                 }
             }
             .msg-content{
-                margin-left: 20px;
+                margin-left: 35px;
                 
                 h4 {
                     font-weight: bold;
@@ -60,11 +62,25 @@
     }
 
     .chat-box {
-        max-height: calc(100vh - 70px);
         display: grid;
-        grid-template-rows: 54px 1fr 40px;
         border-radius: 8px 8px 0 0;
+        grid-template-rows: 58px 1fr 40px;
         background: #fff;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 11;
+        @media (min-width: 860px) {
+            top: unset;
+            left: unset;
+            z-index: 0;
+            width: auto;
+            height: auto;
+            position: static;
+            max-height: calc(100vh - 70px);
+        }
         header {
             margin-bottom: 10px;
             position: relative;
@@ -72,6 +88,20 @@
             padding: 10px 5px 8px 10px;
             box-shadow: 0 2px 1px rgba(0, 0, 0, .1);
             @include flex(row, flex-start, center);
+            .mobile-btn-back {
+                display: block;
+                width: 50px;
+                height: 50px;
+                background: none;
+                border: none;
+                font-size: 1.5em;
+                margin-right: 15px;
+            }
+            @media (min-width: 860px) {
+                .mobile-btn-back {
+                    display: none;
+                }
+            }
             .user-img-container {
                 display: grid;
                 grid-template-columns: repeat(3, 15px);
@@ -88,7 +118,7 @@
                 white-space: nowrap; 
                 overflow: hidden;
             }
-            button {
+            .btn-close-chat {
                 display: none;
                 background: none;
                 border: none;

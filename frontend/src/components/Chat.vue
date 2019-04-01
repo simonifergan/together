@@ -1,6 +1,9 @@
 <template>
   <aside class="chat-box" @click="focusInput" v-if="chat && chat.isActive">
     <header>
+       <button class="mobile-btn-back" @click.stop="closeChat">
+        <i class="fas fa-less-than"></i>
+      </button>
       <div class="user-img-container">
         <div
           class="user-img"
@@ -16,7 +19,7 @@
         :key="user._id+index"
       >{{`${user.firstname} ${user.lastname}`}}</span>
       <span v-if="chat.trip">{{chat.trip.title}}</span>
-      <button :class="{'is-focused': isFocused}" @click.stop="closeChat">
+      <button class="btn-close-chat" :class="{'is-focused': isFocused}" @click.stop="closeChat">
         <i class="fas fa-times"></i>
       </button>
     </header>
@@ -24,9 +27,9 @@
       <li
         v-for="(msg, index) in msgs"
         :key="index">
-          <div class="sender" v-show="msg.sender && msg.sender !== loggedUser._id && chattingWith.length > 1">{{msg.sender | msgSender(chat.users)}}</div>
-          <div v-if="!msg.sender" class="general-msg">{{msg.txt}}</div>
-          <div v-else :class="{'not-user': (msg.sender !== loggedUser._id)}" class="txt-container">
+          <div @click.stop="" class="sender" v-show="msg.sender && msg.sender !== loggedUser._id && chattingWith.length > 1">{{msg.sender | msgSender(chat.users)}}</div>
+          <div @click.stop="" v-if="!msg.sender" class="general-msg">{{msg.txt}}</div>
+          <div @click.stop="" v-else :class="{'not-user': (msg.sender !== loggedUser._id)}" class="txt-container">
             <span>{{msg.txt}}</span>
           </div>
       </li>

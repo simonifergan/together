@@ -99,11 +99,12 @@ export default {
         header.style.backgroundColor = '#fff';
         header.style.color = '#333';
         btnNav.style.color ='#333';
+        header.style.boxShadow = '0px 0px 1px .5px #676767';
       } else {
         header.style.backgroundColor = '';
         header.style.color = '';
+        header.style.boxShadow = '';
         btnNav.style.color ='';
-
       }
     },
     search() {
@@ -217,6 +218,7 @@ export default {
     const btnNav = document.querySelector('.btn-nav');
     header.style.backgroundColor = '';
     header.style.color = '';
+    header.style.boxShadow = '';
     btnNav.style.color = '';
   }
 };

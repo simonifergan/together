@@ -48,10 +48,10 @@ export default {
         EventBusService.$on(SHOW_NOTIFICATION, payload => {
             this.payload = payload;
             this.isActive = true;
-            clearTimeout(this.interval);
+            if (this.interval) clearTimeout(this.interval);
             this.interval = setTimeout( () => {
                 this.closeMsg();
-            }, 1000 * 3)
+            }, 1000 * 7)
 
         })
     },

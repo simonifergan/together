@@ -580,6 +580,9 @@ button {
                 padding: 10px 5px 8px 10px;
                 box-shadow: 0 2px 1px rgba(0, 0, 0, .1);
                 @include flex(row, flex-start, center);
+                .mobile-btn-back {
+                    display: none;
+                }
                 .user-img-container {
                     display: grid;
                     grid-template-columns: repeat(3, 15px);
@@ -627,6 +630,7 @@ button {
                         margin-top: 5px;
                         margin-left: 5px;
                         font-size: 11px;
+                        max-width: 50px;
                     }
                     .general-msg {
                         margin: 0 auto;
