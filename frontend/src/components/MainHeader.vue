@@ -13,7 +13,12 @@
       <router-link to="/signup" v-if="!user">Sign up</router-link>
       <div class="requests-container" v-if="user">
         <a @click.stop="showReqs">Requests&nbsp;<span class="unread-msgs" v-if="pendingRequests">{{pendingRequests}}</span></a>
-        <request-list v-show="isShowReqs" :requests="requests" :user="user"/>
+        <request-list 
+          v-show="isShowReqs" 
+          :requests="requests" 
+          :user="user"
+          @requestApproved="requestApproved"
+          @requestRejected="requestRejected"/>
       </div>
       <div class="msgs-container" v-if="user">
         <a @click.stop="showMsgs">
@@ -174,6 +179,20 @@ export default {
     },
     isMobile() {
       return window.matchMedia("(max-width: 860px)").matches;
+    },
+    requestApproved({ pendingUser, tripId }) {
+      this.$store.dispatch({
+        type: "approveUserToTrip",
+        userToJoin: pendingUser,
+        tripIdToJoin: tripId
+      });
+    },
+    requestRejected({ pendingUser, tripId }) {
+      this.$store.dispatch({
+        type: "removeUserFromTrip",
+        userToLeave: pendingUser,
+        tripIdToLeave: tripId
+      });
     }
   },
   created() {

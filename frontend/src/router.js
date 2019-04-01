@@ -7,6 +7,7 @@ import SignupPage from '@/views/SignupPage';
 import SearchPage from '@/views/SearchPage';
 import UserDetails from '@/views/UserDetails';
 import Messages from '@/views/Messages';
+import Requests from '@/views/Requests';
 import UserAccount from '@/views/UserAccount';
 
 Vue.use(Router)
@@ -52,6 +53,11 @@ export default new Router({
       path: '/messages',
       name: 'Messages',
       component: Messages
+    },
+    {
+      path: '/requests',
+      name: 'Requests',
+      component: Requests
     },
     
   ],

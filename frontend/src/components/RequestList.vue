@@ -1,8 +1,8 @@
 <template>
   <ul class="request-dropdown">
     <request-preview
-      @requestApproved="requestApproved"
-      @requestRejected="requestRejected"
+      @requestApproved="$emit('requestApproved', $event)"
+      @requestRejected="$emit('requestRejected', $event)"
       v-for="request in requestsForRender"
       :request="request"
       :key="request.trip._id + request.user._id"
@@ -38,20 +38,20 @@ export default {
     RequestPreview
   },
   methods: {
-    requestApproved({ pendingUser, tripId }) {
-      this.$store.dispatch({
-        type: "approveUserToTrip",
-        userToJoin: pendingUser,
-        tripIdToJoin: tripId
-      });
-    },
-    requestRejected({ pendingUser, tripId }) {
-      this.$store.dispatch({
-        type: "removeUserFromTrip",
-        userToLeave: pendingUser,
-        tripIdToLeave: tripId
-      });
-    }
+    // requestApproved({ pendingUser, tripId }) {
+    //   this.$store.dispatch({
+    //     type: "approveUserToTrip",
+    //     userToJoin: pendingUser,
+    //     tripIdToJoin: tripId
+    //   });
+    // },
+    // requestRejected({ pendingUser, tripId }) {
+    //   this.$store.dispatch({
+    //     type: "removeUserFromTrip",
+    //     userToLeave: pendingUser,
+    //     tripIdToLeave: tripId
+    //   });
+    // }
   },
   computed: {
     isExpanded() {
