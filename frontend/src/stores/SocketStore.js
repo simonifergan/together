@@ -88,7 +88,6 @@ export default {
                         context.dispatch({ type: "getUserRequests" });
                     }
                 }
-                console.log(payload);
                 EventBusService.$emit(SHOW_NOTIFICATION, payload);
             })
             context.dispatch({ type: 'socketUserConnect' })
@@ -122,7 +121,6 @@ export default {
                 if (chat.trip && chat.trip.title) return false;
                 return chat.users.find(user => user._id === userId);
             })
-            console.log(chat);
             let payload;
             if (chat) {
                 payload = {
@@ -144,7 +142,6 @@ export default {
         async socketInitGroupChat({ commit }, { chatId }) {
             try {
                 const chat = await ChatService.getById(chatId);
-                console.log('I AM IN SOCKET INIT GROUP', chat);
                 SocketService.emit(SocketService.CHAT_REGISTER_ROOMS, [chatId])
                 if (chat) commit({ type: 'addNewChat', chat });
             } catch {
@@ -177,11 +174,8 @@ export default {
             const userId = getters.loggedUser._id;
             commit({ type: 'activateChat', chatId, userId})
             try {
-                console.log(chatId, userId)
                 const res = await ChatService.removeUserFromUnread(chatId, userId);
-                console.log('Is all:', res);
             } catch (err) {
-                console.log('failed in activateChat:', err);
             }
 
 

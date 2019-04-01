@@ -69,7 +69,7 @@ export default {
             dispatch({ type: "socketConnect" });
             dispatch({ type: "getUserChats" });
             dispatch({ type: "getUserRequests" });
-            dispatch({ type: "loadNotification" });
+            // dispatch({ type: "loadNotification" });
         },
 
         async logout(context) {
@@ -78,6 +78,7 @@ export default {
                 context.commit({ type: 'setLoggedUser', user: null });
                 context.commit({ type: 'setUserChats', chats: [] });
                 context.commit({ type: 'setNotification', notifications: [] });
+                context.commit({type: 'setUserRequests', requests: []});
                 context.dispatch('socketDisconnect');
                 return true;
             } catch {
@@ -197,12 +198,10 @@ export default {
 
 
         // SOCIAL MEDIA user behavior:
-        async checkFacebookUser({ commit }, { userFBInfo }) {
-            console.log('here after status check?');
+        async checkFacebookUser({ commit, dispatch }, { userFBInfo }) {
             if (!userFBInfo) userFBInfo = await FacebookService.getUserInfo();
             if (!userFBInfo) return false;
             else {
-                console.log('first try fb info?', userFBInfo);
                 // Prepare object for our database and decide whether to register or auth him
                 const { id, first_name, last_name, picture, email } = userFBInfo;
                 let user = UserService.getEmptyUser();
@@ -217,7 +216,7 @@ export default {
                     dispatch({ type: "socketConnect" });
                     dispatch({ type: "getUserChats" });
                     dispatch({ type: "getUserRequests" });
-                    dispatch({ type: "loadNotification" });
+                    // dispatch({ type: "loadNotification" });
                     return true;
 
                 } catch (err) {

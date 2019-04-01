@@ -10,8 +10,8 @@ export default {
     success(response) {
       console.log('HI RESPONSE', response);
       if (response.status === 'connected') {
-         FB.api('/me', 'GET', { fields: 'first_name, last_name, name, id, email, picture.width(300).height(300)' }, function (response) {
-           
+         FB.api('/me', 'GET', { fields: 'first_name, last_name, name, id, email, picture.width(300).height(300)' }, response => {
+           this.authUser(response);
         });
       }
     },

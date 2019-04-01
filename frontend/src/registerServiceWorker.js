@@ -14,6 +14,7 @@ const SUB_KEY = 'pushSub'
 if (process.env.NODE_ENV === 'production') {
   register(`${process.env.BASE_URL}service-worker.js`, {
     ready(sw) {
+      console.log('Service worker is ready');
       sw.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: convertedVapidKey
