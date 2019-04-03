@@ -11,8 +11,10 @@
             font-weight: 1000;
             margin-bottom: 30px;
             font-size: 1.2em;
-            text-transform: capitalize;
             align-self: flex-start;
+            &::first-letter {
+                text-transform: capitalize;
+            }
         }
         .filters-container {
             position: relative;

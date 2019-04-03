@@ -500,10 +500,11 @@ button {
             box-shadow: 0 0 1px 1px $box-shadow-gray;
             overflow-y: scroll;
             .msg-preview {
-                padding: 5px;
+                padding: 10px 10px;
                 @include flex(row, flex-start, center);
                 margin: 0;
                 font-size: 14px;
+                box-shadow: 0 0 .5px .5px $box-shadow-gray;
                 cursor: pointer;
                 &:hover {
                     background-color: #f6f6f6;
@@ -544,11 +545,14 @@ button {
             }
             footer {
                 
-                margin-top: 10px;
+                margin: 10px;
                 padding: 5px;
                 a {
                     color: #333;
                     padding: 0;
+                    &:hover {
+                        text-decoration: underline;
+                    }
                 }
             }
         }
@@ -597,7 +601,7 @@ button {
                     text-overflow: ellipsis;
                     white-space: nowrap; 
                     overflow: hidden;
-                    max-width: 170px;
+                    max-width: 165px;
                 }
                 button {
                     background: none;

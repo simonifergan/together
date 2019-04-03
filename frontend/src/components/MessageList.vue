@@ -3,7 +3,7 @@
     <header/>
     <!-- v-show="chat.msgs.length" -->
     <message-preview
-      v-for="(chat, index) in chats"
+      v-for="(chat, index) in sortedChats"
       :chat="chat"
       :key="chat._id + index + 3"
       :user="user"
@@ -43,6 +43,16 @@ export default {
     isExpanded() {
       return (this.$route.path === '/messages');
     },
+    sortedChats() {
+      var copyChats = JSON.parse(JSON.stringify(this.chats));
+      if (!copyChats.length) return [];
+      copyChats = copyChats.filter(chat => chat.msgs.length);
+      return copyChats.sort((chatA,chatB) => {
+                const lastMsgA = (chatA.msgs.length && chatA.msgs[chatA.msgs.length -1])? chatA.msgs[chatA.msgs.length -1].sentAt : -1;
+                const lastMsgB = (chatB.msgs.length && chatB.msgs[chatB.msgs.length -1])? chatB.msgs[chatB.msgs.length -1].sentAt : -1;
+                return lastMsgB - lastMsgA;
+            });
+    }
   },
   methods: {
     initChat(chatId) {
