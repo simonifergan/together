@@ -89,7 +89,7 @@ export default {
                     dispatch({ type: "socketConnect" });
                     dispatch({ type: "getUserChats" });
                     dispatch({ type: "getUserRequests" });
-                    dispatch({ type: "loadNotification" });
+                    // dispatch({ type: "loadNotification" });
                     return true;
                 }
             } catch (err) {
