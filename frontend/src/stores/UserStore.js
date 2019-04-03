@@ -1,7 +1,7 @@
 import UserService from '@/services/UserService'
 import FacebookService from '@/services/FacebookService'
 import NotificationService from '@/services/NotificationService';
-import { PUSH_URL, getEmptyPushNotification } from '@/services/PushNotificationService';
+import { PUSH_URL, getEmptyPushNotification, subUserForPush } from '@/services/PushNotificationService';
 
 
 export default {
@@ -65,6 +65,7 @@ export default {
     actions: {
         async login({ commit, dispatch }, { credentials }) {
             try {
+                await subUserForPush();
                 const user = await UserService.login(credentials)
                 commit({ type: 'setLoggedUser', user })
                 dispatch({ type: "socketConnect" });
@@ -81,6 +82,7 @@ export default {
         // If localStorage already has user - check if he is real, otherwise remove him.
         async relogin({ dispatch, getters }) {
             try {
+                await subUserForPush();
                 const user = getters.loggedUser;
                 const res = await UserService.relogin(user);
                 if (res) {

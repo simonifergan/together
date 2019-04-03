@@ -12,6 +12,7 @@ module.exports = {
     updateTripToUser,
     updateLikesToUser,
     updateSubscriber,
+    findSubscriber,
     remove
 }
 
@@ -60,7 +61,6 @@ async function updateSubscriber(userId, pushSub) {
     console.log('GOT TO UPDATESUBSCRIBER WITH:');
     console.log('USERID:', userId);
     console.log('pushSub:', pushSub);
-    if (!pushSub) return;
     const subscriber = await findSubscriber(userId);
     if (subscriber) {
         console.log('subscriber exists:', subscriber);

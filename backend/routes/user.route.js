@@ -9,6 +9,7 @@ module.exports = (app) => {
 
     app.post('/subscribe', (req, res) => {
         const { pushSub } = req.body;
+        console.log('PUSHSUB HERE', pushSub);
         req.session.pushSub = pushSub;
         // send 201 status
         res.status(201).json({ 'see': 'see this?' });
@@ -106,6 +107,7 @@ module.exports = (app) => {
         const isExisting = await userService.getById(user._id);
         if (isExisting) {
             req.session.user = user;
+            console.log('DO I HAVE EVEN A PUSHSUB?', req.session.pushSub);
             if (req.session.pushSub) await userService.updateSubscriber(user._id, req.session.pushSub);
             res.status(201).end();
         } else res.status(401).end();
