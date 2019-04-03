@@ -11,7 +11,7 @@ module.exports = {
     update,
     updateTripToUser,
     updateLikesToUser,
-    findSubscriber,
+    updateSubscriber,
     remove
 }
 
@@ -60,6 +60,7 @@ async function updateSubscriber(userId, pushSub) {
     console.log('GOT TO UPDATESUBSCRIBER WITH:');
     console.log('USERID:', userId);
     console.log('pushSub:', pushSub);
+    if (!pushSub) return;
     const subscriber = await findSubscriber(userId);
     if (subscriber) {
         console.log('subscriber exists:', subscriber);
@@ -105,97 +106,90 @@ async function loginWithFacebook(user) {
 
 // GET USER BY ID WITH MEMBERIN TRIPS AND PENDINGIN TRIPS:
 async function getById(id) {
-    const _id = new ObjectId(id);
-    const db = await mongoService.connect();
-    const userInDB = await db.collection(usersCollection).aggregate([
-        {
-            $match: {_id}
-        },
-        {
-            $lookup:
+    try {
+        const _id = new ObjectId(id);
+        const db = await mongoService.connect();
+        const userInDB = await db.collection(usersCollection).aggregate([
             {
-                from: tripsCollection,
-                localField: 'memberIn',
-                foreignField: '_id',
-                as: 'memberIn'
-
-            }
-        },
-        {
-            $lookup: {
-                from: usersCollection,
-                localField: 'memberIn.userId',
-                foreignField: '_id',
-                as: 'memberInUsers'
-            }
-        },
-        {
-            $project: {
-                memberIn: {
-                    user: {
-                        password: 0
+                $match: {_id}
+            },
+            {
+                $lookup:
+                {
+                    from: tripsCollection,
+                    localField: 'memberIn',
+                    foreignField: '_id',
+                    as: 'memberIn'
+    
+                }
+            },
+            {
+                $lookup: {
+                    from: usersCollection,
+                    localField: 'memberIn.userId',
+                    foreignField: '_id',
+                    as: 'memberInUsers'
+                }
+            },
+            {
+                $project: {
+                    memberIn: {
+                        user: {
+                            password: 0
+                        }
                     }
                 }
-            }
-        },
-    
-        {
-            $lookup:
+            },
+        
             {
-                from: tripsCollection,
-                localField: 'pendingIn',
-                foreignField: '_id',
-                as: 'pendingIn'
-
-            }
-        },
-        {
-            $lookup: {
-                from: usersCollection,
-                localField: 'pendingIn.userId',
-                foreignField: '_id',
-                as: 'pendingInUsers'
-            }
-        },
-       
-    ]).toArray();
-    let user = null;
-    // FIX THE MESS
-    if (userInDB[0]) {
-        user = {...userInDB[0]};
-        user.memberIn = user.memberIn.map(trip => {
-            let tripUser = user.memberInUsers.find(user => user._id.toString() === trip.userId.toString() );
-            if (tripUser) {
-                delete tripUser.password;
-                trip.user = tripUser;
-                return trip;
-            }
-        });
-        user.pendingIn = user.pendingIn.map(trip => {
-            let tripUser = user.pendingInUsers.find(user => user._id.toString() === trip.userId.toString() );
-            if (tripUser) {
-                delete tripUser.password;
-                trip.user = tripUser;
-                return trip;
-            }
-        });
-        delete user.memberInUsers;
-        delete user.pendingInUsers;
-        delete user.password;
+                $lookup:
+                {
+                    from: tripsCollection,
+                    localField: 'pendingIn',
+                    foreignField: '_id',
+                    as: 'pendingIn'
+    
+                }
+            },
+            {
+                $lookup: {
+                    from: usersCollection,
+                    localField: 'pendingIn.userId',
+                    foreignField: '_id',
+                    as: 'pendingInUsers'
+                }
+            },
+           
+        ]).toArray();
+        let user = null;
+        // FIX THE MESS
+        if (userInDB[0]) {
+            user = {...userInDB[0]};
+            user.memberIn = user.memberIn.map(trip => {
+                let tripUser = user.memberInUsers.find(user => user._id.toString() === trip.userId.toString() );
+                if (tripUser) {
+                    delete tripUser.password;
+                    trip.user = tripUser;
+                    return trip;
+                }
+            });
+            user.pendingIn = user.pendingIn.map(trip => {
+                let tripUser = user.pendingInUsers.find(user => user._id.toString() === trip.userId.toString() );
+                if (tripUser) {
+                    delete tripUser.password;
+                    trip.user = tripUser;
+                    return trip;
+                }
+            });
+            delete user.memberInUsers;
+            delete user.pendingInUsers;
+            delete user.password;
+        }
+        return user;
+    } catch(err) {
+        return null;
     }
-    return user;
 }
-
-// BACKUP:
-// function getById(id) {
-//     const _id = new ObjectId(id);
-//     return mongoService.connect()
-//         .then(db => db.collection(usersCollection).findOne({ _id }))
-//         .then(user => {
-//             if (user) delete user.password;
-//             return user;
-//         });
-// }
 
 async function signup(user) {
     const db = await mongoService.connect();

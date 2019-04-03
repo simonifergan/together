@@ -42,7 +42,7 @@ export default {
             const idx = state.userToDisplay.likes.findIndex(id => id === userId);
             if (idx !== -1) state.userToDisplay.likes.splice(idx, 1);
             else state.userToDisplay.likes.push(userId);
-        }
+        },
     },
     getters: {
         loggedUser(state) {
@@ -64,12 +64,36 @@ export default {
     },
     actions: {
         async login({ commit, dispatch }, { credentials }) {
-            const user = await UserService.login(credentials)
-            commit({ type: 'setLoggedUser', user })
-            dispatch({ type: "socketConnect" });
-            dispatch({ type: "getUserChats" });
-            dispatch({ type: "getUserRequests" });
+            try {
+                const user = await UserService.login(credentials)
+                commit({ type: 'setLoggedUser', user })
+                dispatch({ type: "socketConnect" });
+                dispatch({ type: "getUserChats" });
+                dispatch({ type: "getUserRequests" });
+                return true;
+            } catch {
+                return false;
+            }
             // dispatch({ type: "loadNotification" });
+        },
+
+
+        // If localStorage already has user - check if he is real, otherwise remove him.
+        async relogin({ dispatch, getters }) {
+            try {
+                const user = getters.loggedUser;
+                const res = await UserService.relogin(user);
+                if (res) {
+                    dispatch({ type: "socketConnect" });
+                    dispatch({ type: "getUserChats" });
+                    dispatch({ type: "getUserRequests" });
+                    dispatch({ type: "loadNotification" });
+                    return true;
+                }
+            } catch (err) {
+                dispatch({ type: 'logout'});
+                return false;
+            }
         },
 
         async logout(context) {
@@ -78,7 +102,7 @@ export default {
                 context.commit({ type: 'setLoggedUser', user: null });
                 context.commit({ type: 'setUserChats', chats: [] });
                 context.commit({ type: 'setNotification', notifications: [] });
-                context.commit({type: 'setUserRequests', requests: []});
+                context.commit({ type: 'setUserRequests', requests: [] });
                 context.dispatch('socketDisconnect');
                 return true;
             } catch {

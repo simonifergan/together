@@ -7,6 +7,7 @@ import StorageService from './StorageService.js';
 
 export default {
     login,
+    relogin,
     signup,
     logout,
     getById,
@@ -44,9 +45,22 @@ async function updateLikesToUser(like, userId) {
 }
 
 async function login(credentials) {
-    const { data } = await axios.post(API_USER + '/login', credentials)
-    StorageService.saveToLocal(USER_KEY, data);
-    return data
+    try {
+        const { data } = await axios.post(`${API_USER}/login`, credentials)
+        StorageService.saveToLocal(USER_KEY, data);
+        return data
+    } catch (err) {
+        throw false;
+    }
+}
+
+async function relogin(user) {
+    try {
+        const {data} = await axios.post(`${API_USER}/relogin`, user);
+        return true;
+    } catch {
+        throw false;
+    }
 }
 
 async function signup(newUser) {

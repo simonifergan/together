@@ -157,7 +157,7 @@ export default {
     if (tripId) {
       await this.$store.dispatch({ type: "loadTrip", tripId })
       if (this.$store.getters.tripToEdit.userId !== this.user._id) this.$router.push('/');
-      else this.trip = this.$store.getters.tripToEdit;
+      else this.trip = JSON.parse(JSON.stringify(this.$store.getters.tripToEdit));
     }
     if (!window.google) {
       this.$store.dispatch({ type: "connectToGoogle" });

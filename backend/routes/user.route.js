@@ -10,7 +10,6 @@ module.exports = (app) => {
     app.post('/subscribe', (req, res) => {
         const { pushSub } = req.body;
         req.session.pushSub = pushSub;
-        console.log('I AM IN BACKEND WITH PUSHSUB:', req.session.pushSub);
         // send 201 status
         res.status(201).json({ 'see': 'see this?' });
     })
@@ -78,10 +77,8 @@ module.exports = (app) => {
     })
 
     app.post(`${BASE}/login`, async (req, res) => {
-        console.log('hi login');
         const credentials = req.body;
         credentials.pushSub = req.session.pushSub;
-        console.log('YOU TRIED TO LOG IN:', credentials)
         // IF USER LOGGED IN WITH FACEBOOK:
         if (credentials && credentials.facebookId) {
             try {
@@ -99,13 +96,20 @@ module.exports = (app) => {
             .then(async (user) => {
                 if (!user) return res.status(401).end();
                 req.session.user = user;
-                // console.log('user logged:', user);
-                // pushService.send(user._id, null);
-
                 res.json(user)
             })
             .catch(err => res.end(err));
     });
+
+    app.post(`${BASE}/relogin`, async (req,res) => {
+        const user = req.body;
+        const isExisting = await userService.getById(user._id);
+        if (isExisting) {
+            req.session.user = user;
+            if (req.session.pushSub) await userService.updateSubscriber(user._id, req.session.pushSub);
+            res.status(201).end();
+        } else res.status(401).end();
+    })
 
     app.post(`${BASE}/signup`, (req, res) => {
         const newUser = req.body;

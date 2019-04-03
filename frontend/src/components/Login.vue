@@ -4,6 +4,7 @@
             <i class="fas fa-times"></i>
         </button>
         <form @submit.prevent="login">
+            <div class="error" v-if="isError">Wrong e-mail and/or password.</div>
             <label title="Enter your e-mail address" for="">Email<br>
                 <el-input type="email" v-model="email" placeholder="Email" />
             </label>
@@ -37,26 +38,30 @@ export default {
             email: '',
             password: '',
             isAlive: true,
+            isError: false,
         }
     },
     methods: {
-        login() {
-            this.isAlive = false;
-            this.$store.dispatch({type: 'login', credentials: {email: this.email, password: this.password}})
-            .then(res => {
+        async login() {
+            const res = await this.$store.dispatch({type: 'login', credentials: {email: this.email, password: this.password}})
+            if (res) {
+                this.isAlive = false;
                 this.$router.push(this.$route.path);
-            })
-            .catch(() => {
+            } else {
                 this.isAlive = true;
-            });
+                this.showError();
+            }
         },
         cancel() {
             this.$router.push(this.$route.path)
+        },
+        showError() {
+            this.isError = true;
+            setTimeout( () => {
+                this.isError = false;
+            }, 3000)
         }
     },
-    created() {
-        
-    }
 }
 </script>
 

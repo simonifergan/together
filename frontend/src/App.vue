@@ -48,18 +48,13 @@ export default {
       return { "on-homepage": this.isHome };
     },
   },
-  created() {
+  async created() {
     if (this.$route.path === '/') this.isHome = true;
     if (this.loggedUser) {
-      this.$store.dispatch({ type: "socketConnect" });
-      this.$store.dispatch({ type: "getUserChats" });
-      this.$store.dispatch({ type: "getUserRequests" });
-      // this.$store.dispatch({ type: "loadNotification" });
-    }
-    if (!this.loggedUser) {
-      this.$store.dispatch({type: "checkFacebookUser", userFBInfo: null}).then(res => {
-        if (res) this.$router.push(this.$route.path);
-      });
+      this.$store.dispatch({type: 'relogin'});
+    } else {
+      const res = await this.$store.dispatch({type: "checkFacebookUser", userFBInfo: null})
+      if (res) this.$router.push(this.$route.path);
     }
   },
   watch: {

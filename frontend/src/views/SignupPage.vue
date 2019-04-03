@@ -34,8 +34,8 @@ export default {
         }
     },
     created() {
-        this.newUser = this.$store.getters.getEmptyUser
-    }
+        this.newUser = JSON.parse(JSON.stringify(this.$store.getters.getEmptyUser));
+    },
 }
 </script>
 
