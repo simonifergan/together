@@ -5,6 +5,5 @@ module.exports = {
       workboxOptions: {
           swSrc: 'src/service-worker.js'
       },
-      themeColor: '#8bc34a'
     },
   }
