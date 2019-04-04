@@ -235,7 +235,7 @@ export default {
                 //           icon: '',
                 //       } ,
                 //   }
-                notification.title = `Travel Maker`;
+                notification.title = `Together`;
                 notification.payload.body = `${updatedTrip.user.firstname} ${updatedTrip.user.lastname} has approved you to: ${updatedTrip.title}`
                 notification.payload.icon = `${updatedTrip.user.profilePic}`
                 notification.payload.actions.unshift({action: 'go', title: `See ${getters.loggedUser.firstname}'s profile.`},)

@@ -56,7 +56,7 @@ export function subUserForPush() {
       Notification.requestPermission(results => {
 
         if (results === 'denied') {
-          return reject(false);
+          return resolve(false);
         }
 
         configurePushSub();

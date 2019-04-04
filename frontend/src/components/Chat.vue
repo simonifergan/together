@@ -7,7 +7,7 @@
       <div class="user-img-container">
         <div
           class="user-img"
-          v-for="(user, idx) in chattingWith"
+          v-for="(user, idx) in chattersProfile"
           :key="idx + user._id+ idx * 7"
           :style="{ backgroundImage: `url('${user.profilePic}')` }"
           :title="(user.firstname)? user.firstname: ''"
@@ -70,6 +70,9 @@ export default {
     profilePic() {
       let picUrl = this.chattingWith[0].profilePic;
       return { backgroundImage: `url('${picUrl}')` };
+    },
+    chattersProfile() {
+      return this.chattingWith.slice(0,3);
     }
   },
   methods: {
@@ -77,6 +80,7 @@ export default {
       this.$store.commit({ type: "closeChat", chatId: this.chat._id });
     },
     send() {
+      if (!this.newMsg) return;
       this.$store.dispatch({
         type: "socketSendMsg",
         msg: { txt: this.newMsg, sentAt: Date.now(), isRead: false },

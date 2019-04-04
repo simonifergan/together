@@ -43,6 +43,7 @@ export default {
     },
     methods: {
         async login() {
+            console.log('I am inside login')
             const res = await this.$store.dispatch({type: 'login', credentials: {email: this.email, password: this.password}})
             if (res) {
                 this.isAlive = false;
