@@ -18,7 +18,7 @@
         v-for="(user, index) in chattingWith"
         :key="user._id+index"
       >{{`${user.firstname} ${user.lastname}`}}</span>
-      <span v-if="chat.trip">{{chat.trip.title}}</span>
+      <router-link tag="span" :to="'/trip/' + chat.trip._id" v-if="chat.trip">{{chat.trip.title}}</router-link>
       <button class="btn-close-chat" :class="{'is-focused': isFocused}" @click.stop="closeChat">
         <i class="fas fa-times"></i>
       </button>
@@ -125,14 +125,6 @@ export default {
       }
     }
   }
-  // watch: {
-  //   msgs: {
-  //     handler(newVal, oldVal) {
-  //       this.scrollToBottom();
-  //     },
-  //     deep: true,
-  //   }
-  // },
 };
 </script>
 

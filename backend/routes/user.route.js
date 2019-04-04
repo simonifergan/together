@@ -9,7 +9,6 @@ module.exports = (app) => {
 
     app.post('/subscribe', (req, res) => {
         const { pushSub } = req.body;
-        console.log('PUSHSUB HERE', pushSub);
         req.session.pushSub = pushSub;
         // send 201 status
         res.status(201).json({ 'see': 'see this?' });
@@ -65,10 +64,8 @@ module.exports = (app) => {
 
     // Add or remove user from userId likes array
     app.patch(`${BASE}/user_like/:userId`, async (req, res) => {
-        console.log('HI')
         const { userId } = req.params;
         const like = req.body;
-        console.log(userId, like)
         try {
             const isSuccess = await userService.updateLikesToUser(userId, like)
             res.json('Success');
